@@ -16,7 +16,7 @@ const Underlying = ({underlying}) => {
             <div>
                 {underlying.map((disease, index) => (
                     <div key={index}>
-                        {disease.code}{disease.name}
+                        {disease.disease_code}{disease.disease_name}
                     </div>
                 ))}
             </div>

@@ -31,16 +31,16 @@ const Clinic = () => {
     return (
         <>
             <Paper sx={{margin: 2}} elevation={3}>
-                <Patient reception={reception} patient={patient}/>
+                <Patient reception={reception} patient={patient} />
                 <Box sx={{display: 'flex'}}>
-                    <Underlying underlying={underlying}/>
-                    <Drug_Taking drug_taking={drug_taking}/>
+                    <Underlying underlying={underlying} />
+                    <Drug_Taking drug_taking={drug_taking} />
                 </Box>
             </Paper>
             <Paper sx={{margin: 2}} elevation={3}>
                 <Box sx={{display: 'flex'}}>
-                    <Diagnosis/>
-                    <Prescription/>
+                    <Diagnosis />
+                    <Prescription />
                 </Box>
                 <>
                     증상
