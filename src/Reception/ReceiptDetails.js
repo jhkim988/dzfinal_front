@@ -25,7 +25,7 @@ const rows2 = [
 export default function DenseTable() {
   return (
     <>
-    <h2>수납내역</h2>
+    <h3>수납내역</h3>
     <TableContainer component={Paper}>
       <Table sx={{ maxWidth: 430 }} size="small" aria-label="a dense table">
         <TableHead>
@@ -51,7 +51,7 @@ export default function DenseTable() {
         </TableBody>
       </Table>
     </TableContainer>
-    <h2>결제내역</h2>
+    <h3>결제내역</h3>
     <TableContainer component={Paper}>
       <Table sx={{ maxWidth: 430 }} size="small" aria-label="a dense table">
         <TableHead>
