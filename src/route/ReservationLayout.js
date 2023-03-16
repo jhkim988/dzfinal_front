@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { Grid } from "@mui/material";
-import ReservationMonth from "../component/ReservationMonth";
+import ReservationMonth from "../component/ReservationCalendar";
 import ReservationDay from "../component/ReservationDay";
+import ReservationModel from "../model/ReservationModel";
 
 const ReservationLayout = () => {
-  const [viewDate, setViewDate] = useState(new Date());
-  const [daySchedule, setDaySchedule] = useState([]);
+  const [reservationModel, reservationController] = ReservationModel();
+
   return (
     <Grid container spacing={2} sx={{ maxHeight: 700 }}>
       <Grid item xs={8}>
-        <ReservationMonth viewDate={viewDate} setViewDate={setViewDate} setDaySchedule={setDaySchedule}/>
+        <ReservationMonth reservationModel={reservationModel} reservationController={reservationController}/>
       </Grid>
       <Grid item xs={3}>
-        <ReservationDay viewDate={viewDate} daySchedule={daySchedule}/>
+        <ReservationDay reservationModel={reservationModel} reservationController={reservationController}/>
       </Grid>
     </Grid>
   );

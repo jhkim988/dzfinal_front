@@ -2,12 +2,11 @@ import { Paper } from "@mui/material";
 import { Scheduler, DayView, Appointments } from '@devexpress/dx-react-scheduler-material-ui';
 import { ViewState } from "@devexpress/dx-react-scheduler";
 
-const ReservationDay = ({ viewDate, daySchedule }) => {
-  console.log(daySchedule);
+const ReservationDay = ({ reservationModel, reservationController }) => {
   return (
     <Paper sx={{ height: 1 }}>
-      <Scheduler data={daySchedule}>
-        <ViewState currentDate={viewDate} />
+      <Scheduler data={reservationModel.daySchedule}>
+        <ViewState currentDate={reservationModel.viewDate} />
         <DayView
           startDayHour={9}
           endDayHour={18}

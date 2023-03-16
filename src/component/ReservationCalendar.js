@@ -48,35 +48,26 @@ const Appointment = ({children, style, ...restProps}) => {
   </Appointments.Appointment>
 }
 
-const ReservationMonth = ({ viewDate, setViewDate, setDaySchedule }) => {
+const ReservationCalendar = ({ reservationModel, reservationController }) => {
+
   const MonthCell = useCallback((props) => {
     const { startDate } = props;
     const date = new Date(startDate.getTime() - startDate.getTimezoneOffset()*60_000);
-    const clickDate = () => {
-      console.log("call: ", `/api/reservation/day?target=${date.toISOString().slice(0, 10)}`);
-      axios.get(`/api/reservation/day?target=${date.toISOString().slice(0, 10)}`)
-        .then(({data}) => {
-          setDaySchedule(data.map((el, idx) => ({ startDate: `${date.toISOString().slice(0, 10)} ${el.time}`, title: data.patient_name })));
-          setViewDate(date);
-        })
-    }
+    const dateString = date.toISOString().slice(0, 10);
     return (compareDate(date, new Date()) < 0)
-    ? <StyledMonthViewTimeTableCell {...props} className={`prevDays day${date.getDay()}`} isShaded={true} otherMonth={false} onClick={clickDate}/>
-    : <StyledMonthViewTimeTableCell {...props} className={`nextDays day${date.getDay()}`} otherMonth={false} onClick={clickDate}/>
+    ? <StyledMonthViewTimeTableCell {...props} className={`prevDays day${date.getDay()}`} isShaded={true} otherMonth={false} onClick={reservationController.clickDate} data-date={dateString}/>
+    : <StyledMonthViewTimeTableCell {...props} className={`nextDays day${date.getDay()}`} otherMonth={false} onClick={reservationController.clickDate} data-date={dateString}/>
   }, []);
   
-  const minusMonth = () => {
-    viewDate.setMonth(viewDate.getMonth()-1);
-    setViewDate(new Date(viewDate.toISOString()));
-  }
-  const plusMonth = () => {
-    viewDate.setMonth(viewDate.getMonth()+1);
-    setViewDate(new Date(viewDate.toISOString()));
-  }
-
   const [appointments, setAppointments] = useState([]);
   useEffect(() => {
-    axios.get(`/api/reservation/month?start=${'2023-02-26'}&end=${'2023-04-08'}`)
+    const start = new Date();
+    start.setDate(1);
+    start.setDate(-start.getDay()+1);
+    const end = new Date(start.getTime());
+    end.setDate(end.getDate() + 41);
+    
+    axios.get(`/api/reservation/month?start=${start.toISOString().slice(0, 10)}&end=${end.toISOString().slice(0, 10)}`)
     .then(({data}) => {
       const val = data.map((el, idx) => ({
         id: idx,
@@ -91,9 +82,9 @@ const ReservationMonth = ({ viewDate, setViewDate, setDaySchedule }) => {
   return (
       <Paper sx={{ height: 1 }}>
         <Scheduler data={appointments}>
-          <ViewState currentDate={viewDate} />
-          <Button onClick={minusMonth}>prev</Button>
-          <Button onClick={plusMonth}>next</Button>
+          <ViewState currentDate={reservationModel.viewState} />
+          <Button onClick={() => console.log('todo')}>prev</Button>
+          <Button onClick={() => console.log('todo')}>next</Button>
           <MonthView timeTableCellComponent={MonthCell}/>
           <WeekView
             startDayHour={9}
@@ -117,4 +108,4 @@ const ReservationMonth = ({ viewDate, setViewDate, setDaySchedule }) => {
   );
 };
 
-export default ReservationMonth;
+export default ReservationCalendar;
