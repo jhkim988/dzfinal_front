@@ -26,13 +26,11 @@ const Clinic = () => {
     const [drug_taking, setDrug_taking] = useState([]);
 
     useEffect(() => {
-        axios.get(`/api/clinic/loadpatient?id=${reception}`)
+        axios.get(`/api/clinic/${reception}`)
             .then(response => {
-                setPatient(response.data.patient);
-                setUnderlying(response.data.underlying);
-                setDrug_taking(response.data.drug_taking);
-
-                console.log(response.data);
+                setPatient(response.data);
+                setUnderlying(response.data.underlyingList);
+                setDrug_taking(response.data.drug_takingList);
             })
             .catch(error => {
                 console.log(error);

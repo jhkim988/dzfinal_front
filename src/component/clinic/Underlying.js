@@ -11,6 +11,7 @@ const Underlying = ({underlying}) => {
     function handleKeyUp(event) {
         const searchText = event.target.value;
 
+        if (searchText.size)
         console.log(searchText);
     }
 

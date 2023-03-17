@@ -17,11 +17,11 @@ const Patient = (props) => {
                 <TextField disabled size='small' value={patient.back_registration_number} sx={{ width: 100 }}/>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                키 <TextField disabled size='small' sx={{ width: 100 }}/>
-                체중 <TextField disabled size='small' sx={{ width: 100 }}/>
-                BMI <TextField disabled size='small' sx={{ width: 100 }}/>
-                혈압 <TextField disabled size='small' sx={{ width: 100 }}/>
-                혈당 <TextField disabled size='small' sx={{ width: 100 }}/>
+                키 <TextField disabled size='small' value={patient.height} sx={{ width: 100 }}/>
+                체중 <TextField disabled size='small' value={patient.weight} sx={{ width: 100 }}/>
+                BMI <TextField disabled size='small' value={patient.bmi} sx={{ width: 100 }}/>
+                혈압 <TextField disabled size='small' value={`${patient.diastolic}/${patient.systolic}`} sx={{ width: 100 }}/>
+                혈당 <TextField disabled size='small' value={patient.blood_sugar} sx={{ width: 100 }}/>
             </Box>
         </Box>
     );
