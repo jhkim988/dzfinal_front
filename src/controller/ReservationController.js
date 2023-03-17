@@ -10,8 +10,18 @@ const ReservationController = ({ state, dispatch }) => {
         })
     }
 
+    const setReservationFormModal = (val) => {
+        dispatch({ type: 'setReservationFormModal', reservationFormModal: val });
+    }
+
+    const setDateTimePickerModal = (val) => {
+        dispatch({ type: 'setDateTimePickerModal', dateTimePickerModal: val });
+    }
+
     return {
-        clickDate
+        clickDate,
+        setReservationFormModal,
+        setDateTimePickerModal,
     }
 }
 

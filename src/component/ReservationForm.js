@@ -1,33 +1,25 @@
-import { useState } from "react";
-import { styled } from "@mui/material/styles";
+import React from "react";
 import {
   Button,
   Paper,
   Grid,
   Modal,
-  Box,
   TextareaAutosize,
   FormControl,
   InputLabel,
   Input,
   Select,
   MenuItem,
-  TextField,
-  InputBase,
 } from "@mui/material";
 
 const style = { margin: "20px 0px" };
 
-const ReservationForm = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+const ReservationForm = ({ reservationModel, reservationController, reservationFormData, setReservationFormData }) => {
   return (
     <>
-      <Button onClick={handleOpen}>Open modal</Button>
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={reservationModel.reservationFormModal}
+        onClose={() => reservationController.setReservationFormModal(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -45,44 +37,49 @@ const ReservationForm = () => {
             <Grid item xs={12} style={style}>
               <FormControl>
                 <InputLabel htmlFor="patient_name">예약자 성함</InputLabel>
-                <Input id="patient_name" />
+                <Input id="patient_name" onChange={e => setReservationFormData({...reservationFormData, patient_name: e.currentTarget.value })}/>
               </FormControl>
             </Grid>
 
             <Grid item xs={12} style={style}>
-              <FormControl>
                 <Grid container spacing={2}>
                   <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
+                  <FormControl>
                     <InputLabel id="phone-label1">연락처</InputLabel>
-                    <Input id="phone1" labelId="phone-label1"/>
+                    <Input id="phone1" />
+                  </FormControl>
                   </Grid>
                   <Grid item xs={1} style={{ alignSelf: "flex-end" }}>
                     -
                   </Grid>
                   <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
+                  <FormControl>
                     <Input id="phone2" />
+                    </FormControl>
                   </Grid>
                   <Grid item xs={1} style={{ alignSelf: "flex-end" }}>
                     -
                   </Grid>
                   <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
+                    <FormControl>
                     <Input id="phone3" />
+                    </FormControl>
+
                   </Grid>
                 </Grid>
-              </FormControl>
             </Grid>
 
             <Grid item xs={6} style={style}>
               <FormControl>
                 <InputLabel id="date-time">예약날짜/시간</InputLabel>
-                <Input readOnly />
+                <Input readOnly onClick={() => reservationController.setDateTimePickerModal(true)} value={reservationFormData.date_time} />
               </FormControl>
             </Grid>
 
             <Grid item xs={3} style={style}>
               <FormControl>
-                <InputLabel id="state">예약 상태</InputLabel>
-                <Select labelId="state" defaultValue="예약중">
+                <InputLabel id="state">상태</InputLabel>
+                <Select labelId="state" label="state" defaultValue="예약중">
                   <MenuItem value="예약중">예약중</MenuItem>
                   <MenuItem value="완료">완료</MenuItem>
                   <MenuItem value="취소">취소</MenuItem>
@@ -92,7 +89,6 @@ const ReservationForm = () => {
 
             <Grid item xs={3} style={style}>
               <FormControl>
-                <Grid item xs={6}>
                   <InputLabel id="doctor_label">담당의</InputLabel>
                   <Select
                     id="doctor-select"
@@ -103,7 +99,6 @@ const ReservationForm = () => {
                     <MenuItem value="doctor1">김더존</MenuItem>
                     <MenuItem value="doctor2">최을지</MenuItem>
                   </Select>
-                </Grid>
               </FormControl>
             </Grid>
 
@@ -120,7 +115,7 @@ const ReservationForm = () => {
             <Grid item xs={8}></Grid>
             <Grid item xs={4} style={style}>
               <Button>등록</Button>
-              <Button onClick={handleClose}>취소</Button>
+              <Button onClick={() => reservationController.setReservationFormModal(false)}>취소</Button>
             </Grid>
           </Grid>
         </Paper>
@@ -129,4 +124,4 @@ const ReservationForm = () => {
   );
 };
 
-export default ReservationForm;
+export default React.memo(ReservationForm);

@@ -108,4 +108,4 @@ const ReservationCalendar = ({ reservationModel, reservationController }) => {
   );
 };
 
-export default ReservationCalendar;
+export default React.memo(ReservationCalendar);

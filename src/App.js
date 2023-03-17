@@ -1,8 +1,7 @@
 import ReservationLayout from "./route/ReservationLayout";
-import ReservationForm from './component/ReservationForm';
+  
 const App = () => {
-  // return <ReservationLayout/>;
-  return <ReservationForm/>
+  return <ReservationLayout/>
 };
 
 export default App;
