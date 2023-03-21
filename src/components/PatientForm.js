@@ -19,13 +19,10 @@ const gender = [
     }
 ];
 
-const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionData }) => {
+const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionData, selectedAddress, setSelectedAddress }) => {
     const [isInsuranceChecked, setInsuranceChecked] = useState(false);
     const [popup, setPopup] = useState(false);
-    const [selectedAddress, setSelectedAddress] = useState({
-        zip_code: '',
-        address: ''
-    });
+
 
     const resetHandler = (event) => {
         setPatientData({

@@ -17,20 +17,38 @@ const AutoCompleteForm = ({ setPatientData, setReceptionData }) => {
 
     const handleDropDownKey = (event) => {
         event.preventDefault();
-        if (patient_name.length > 1) {
-            axios.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
-                .then((response) => {
-                    setAutoCompleteList(response.data);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } else {
-            setAutoCompleteList([]);
-        }
+        if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter") {
+            if (patient_name.length > 1) {
+                axios.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
+                    .then((response) => {
+                        setAutoCompleteList(response.data);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else {
+                setAutoCompleteList([]);
+            }
 
+        }
     }
+    // const handleKeyDown = (event) => {
+    //     if (event.key === "ArrowDown") {
+    //         patient_name((prevIndex) =>
+    //             prevIndex < autoCompleteList.length - 1 ? prevIndex + 1 : prevIndex
+    //         );
+    //     } else if (event.key === "ArrowUp") {
+    //         patient_name((prevIndex) =>
+    //             prevIndex > 0 ? prevIndex - 1 : prevIndex
+    //         );
+    //     } else if (event.key === "Enter") {
+    //         removeAutoCompleteList();
+    //         //resetInputValue();
+    //     }
+    // };
+
     const removeAutoCompleteList = () => {
+        setPatient_name('');
         setAutoCompleteList([]);
     }
 
@@ -44,20 +62,32 @@ const AutoCompleteForm = ({ setPatientData, setReceptionData }) => {
                 console.log("자동완성 환자정보:", response.data);
                 setPatientData(prev => ({ ...response.data }));
                 setReceptionData(prev => ({ ...response.data }));
-                removeAutoCompleteList();
+                //removeAutoCompleteList();
             })
             .catch((error) => {
                 console.error(error);
             });
 
     }
+    // useEffect(() => {
+    //     const handleClickOutside = (e) => {
+    //         if (autoCompleteList.current && !autoCompleteList.current.contains(e.target)) {
+    //             setAutoCompleteList([]);
+    //         }
+    //     };
+    //     document.addEventListener("mousedown", handleClickOutside);
 
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClickOutside);
+    //     };
+    // }, [autoCompleteList]);
     return (
         <div>
             <TextField value={patient_name}
                 onChange={handleChange}
                 //onClick={handleSearch}
                 onKeyUp={handleDropDownKey}
+            //onKeyDown={handleKeyDown}
             />
             {autoCompleteList.length > 0 && (
                 <Table style={{ width: "150px", height: "10px" }}>
@@ -66,7 +96,7 @@ const AutoCompleteForm = ({ setPatientData, setReceptionData }) => {
                             <TableRow
                                 key={patient.patient_id}
                                 hover
-                                onClick={() => selectedSearchPatient(patient.patient_id)}
+                                onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
 
                             >
                                 <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>

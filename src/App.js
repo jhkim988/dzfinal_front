@@ -10,6 +10,10 @@ import Test from './components/Test';
 function App() {
   const [patient_id, setPatient_id] = useState(null);
   const [selectedReservationDetails, setSelectedReservationDetails] = useState({});
+  const [selectedAddress, setSelectedAddress] = useState({
+    zip_code: '',
+    address: ''
+  });
   const [patientData, setPatientData] = useState({
     patient_name: '',
     front_registration_number: '',
@@ -43,8 +47,21 @@ function App() {
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <DailyReservationList setSelectedReservationDetails={setSelectedReservationDetails} setPatientData={setPatientData} setReceptionData={setReceptionData} />
           <Box>
-            <PatientForm setPatient_id={setPatient_id} setReceptionData={setReceptionData} selectedReservationDetails={selectedReservationDetails} patientData={patientData} setPatientData={setPatientData} />
-            <ReceptionForm patient_id={patient_id} receptionData={receptionData} setReceptionData={setReceptionData} patientData={patientData} />
+            <PatientForm setPatient_id={setPatient_id}
+              setReceptionData={setReceptionData}
+              selectedReservationDetails={selectedReservationDetails}
+              patientData={patientData}
+              setPatientData={setPatientData}
+              selectedAddress={selectedAddress}
+              setSelectedAddress={setSelectedAddress}
+            />
+            <ReceptionForm patient_id={patient_id}
+              receptionData={receptionData}
+              setReceptionData={setReceptionData}
+              patientData={patientData}
+              setPatientData={setPatientData}
+              setSelectedAddress={setSelectedAddress}
+            />
           </Box>
         </Box>
       </Paper>

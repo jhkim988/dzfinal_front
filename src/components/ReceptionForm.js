@@ -20,7 +20,7 @@ const doctors = [
 
 const Reception_API_BASE_URL = "/api/reception";
 
-const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData }) => {
+const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData, setSelectedAddress }) => {
     //console.log(patient_id);
 
     const resetHandler = (event) => {
@@ -35,6 +35,25 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
             doctor: '',
             treatment_reason: ''
         });
+        setPatientData({
+            patient_name: '',
+            front_registration_number: '',
+            back_registration_number: '',
+            gender: '',
+            phone_number1: '',
+            phone_number2: '',
+            phone_number3: '',
+            insurance: '',
+
+            detail_address: '',
+            insurance: ''
+        });
+        setSelectedAddress({
+            zip_code: '',
+            address: ''
+
+        });
+
     };
 
     const handleChange = (event) => {
@@ -54,13 +73,31 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                 alert(response.data.message);
                 console.log(response.data);
                 resetHandler(event);
+                //화면 새로고침 reduce..
+                //상태와 프로퍼티(props)를 변경하여 자동으로 화면을 다시 렌더링
+                // window.location.reload();
             })
             .catch((error) => {
                 alert("접수등록실패");
                 console.error(error);
             });
     };
-
+    const receptDataHandleSubmit = (event) => {
+        event.preventDefault();
+        axios.post(Reception_API_BASE_URL, receptionData)
+            .then((response) => {
+                alert(response.data.message);
+                console.log(response.data);
+                resetHandler(event);
+                //화면 새로고침 reduce..
+                //상태와 프로퍼티(props)를 변경하여 자동으로 화면을 다시 렌더링
+                // window.location.reload();
+            })
+            .catch((error) => {
+                alert("접수등록실패");
+                console.error(error);
+            });
+    }
 
     return (
         <div>
@@ -71,8 +108,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
             </div>
 
             <Paper sx={{ marginBottom: 1 }} elevation={2} style={{ width: "450px", height: "200px" }}>
-                <form onSubmit={handleSubmit}>
-                    {receptionData != null && patient_id == null && (
+
+                {receptionData != null && patient_id == null && (
+                    <form onSubmit={receptDataHandleSubmit}>
                         <Box component="form"
                             sx={{
                                 '& > :not(style)': { m: 0.5, width: 60 },
@@ -88,8 +126,48 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                             <TextField id="outlined-basic" label="최저" name="diastolic" onChange={handleChange} value={receptionData.diastolic || ''} variant="outlined" size='small' />
                             <TextField id="outlined-basic" label="혈당" name="blood_sugar" onChange={handleChange} value={receptionData.blood_sugar || ''} variant="outlined" size='small' />
                         </Box>
-                    )}
-                    {receptionData != null && patient_id != null && (
+                        <Box component="form"
+                            sx={{
+                                '& > :not(style)': { m: 1, width: 60 },
+                            }}
+                            noValidate
+                            autoComplete="off"
+                        >
+                            <TextField
+                                id="outlined-select-currency"
+                                select
+                                label="담당의"
+                                size='small'
+                                name="doctor"
+                                onChange={handleChange}
+                                value={receptionData.doctor || ''}
+                                style={{ width: "100px", height: "10px" }}
+                            //helperText="담당의를 입력하세요"
+                            >
+                                {doctors.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                //fullWidth
+                                label="내원사유"
+                                multiline
+                                rows={1}
+                                style={{ width: 300 }}
+                                size='small'
+                                name="treatment_reason"
+                                onChange={handleChange}
+                                value={receptionData.treatment_reason || ''}
+                            />
+                        </Box>
+                        <Button type="submit" variant="contained">접수</Button>
+                        <Button type="reset" variant="contained" color="error" onClick={resetHandler}>취소</Button>
+                    </form>
+                )}
+                {receptionData != null && patient_id != null && (
+                    <form onSubmit={handleSubmit}>
                         <Box component="form"
                             sx={{
                                 '& > :not(style)': { m: 0.5, width: 60 },
@@ -106,46 +184,48 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                             <TextField id="outlined-basic" label="최저" name="diastolic" onChange={handleChange} value={receptionData.diastolic || ''} variant="outlined" size='small' />
                             <TextField id="outlined-basic" label="혈당" name="blood_sugar" onChange={handleChange} value={receptionData.blood_sugar || ''} variant="outlined" size='small' />
                         </Box>
-                    )}
-                    <Box component="form"
-                        sx={{
-                            '& > :not(style)': { m: 1, width: 60 },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField
-                            id="outlined-select-currency"
-                            select
-                            label="담당의"
-                            size='small'
-                            name="doctor"
-                            onChange={handleChange}
-                            value={receptionData.doctor || ''}
-                            style={{ width: "100px", height: "10px" }}
-                        //helperText="담당의를 입력하세요"
+                        <Box component="form"
+                            sx={{
+                                '& > :not(style)': { m: 1, width: 60 },
+                            }}
+                            noValidate
+                            autoComplete="off"
                         >
-                            {doctors.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        <TextField
-                            //fullWidth
-                            label="내원사유"
-                            multiline
-                            rows={1}
-                            style={{ width: 300 }}
-                            size='small'
-                            name="treatment_reason"
-                            onChange={handleChange}
-                            value={receptionData.treatment_reason || ''}
-                        />
-                    </Box>
-                    <Button type="submit" variant="contained">접수</Button>
-                    <Button type="reset" variant="contained" color="error" onClick={resetHandler}>취소</Button>
-                </form>
+                            <TextField
+                                id="outlined-select-currency"
+                                select
+                                label="담당의"
+                                size='small'
+                                name="doctor"
+                                onChange={handleChange}
+                                value={receptionData.doctor || ''}
+                                style={{ width: "100px", height: "10px" }}
+                            //helperText="담당의를 입력하세요"
+                            >
+                                {doctors.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                //fullWidth
+                                label="내원사유"
+                                multiline
+                                rows={1}
+                                style={{ width: 300 }}
+                                size='small'
+                                name="treatment_reason"
+                                onChange={handleChange}
+                                value={receptionData.treatment_reason || ''}
+                            />
+                        </Box>
+                        <Button type="submit" variant="contained">접수</Button>
+                        <Button type="reset" variant="contained" color="error" onClick={resetHandler}>취소</Button>
+                    </form>
+
+                )}
+
             </Paper>
         </div >
     );
