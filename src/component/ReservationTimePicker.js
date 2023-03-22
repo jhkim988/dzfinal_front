@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Grid, ToggleButtonGroup } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Grid } from "@mui/material";
 import { Button, Paper } from "@mui/material";
-
+import axios from "axios";
 const compare = (t1, t2) => {
   return t1.getTime() - t2.getTime();
 };
@@ -23,8 +23,24 @@ const getTimeArr = (start, end, intervalMinutes) => {
 const ReservationTimePicker = ({
   reservationFormData,
   setReservationFormData,
+  pickDate,
+  doctor,
 }) => {
   const timeArr = getTimeArr("09:00:00", "18:00:00", 20);
+  const [impossible, setImpossible] = useState(new Set());
+  useEffect(() => {
+    const offsetCal = new Date(pickDate);
+    offsetCal.setTime(offsetCal.getTime() + offsetCal.getTimezoneOffset()*60_000);
+    axios.get(`/api/reservation/impossible/time`, {
+      params: {
+        doctor,
+        date: offsetCal.toISOString().slice(0, 10)
+      }
+    }).then(({ data }) => {
+      setImpossible(new Set(data));
+    })
+  }, [pickDate])
+
   return (
     <Paper style={{ width: 320, padding: 10, margin: "auto" }}>
       <Grid container>
@@ -40,20 +56,20 @@ const ReservationTimePicker = ({
             <Grid item xs={3} key={`${timeStr}#reservationTime`}>
               <Button
                 variant={
-                  reservationFormData.time === timeStr
+                  reservationFormData.wish_time === timeStr
                     ? "contained"
                     : "outlined"
                 }
-                disabled={time.getHours() === 9}
+                disabled={impossible.has(timeStr)}
                 style={{ width: 80, margin: "3px" }}
                 key={`reservationTimeSelect#${timeStr}`}
                 value={timeStr}
-                onClick={(e) =>
+                onClick={(e) =>{
                   setReservationFormData({
                     ...reservationFormData,
-                    date_time: `${reservationFormData.date} ${e.currentTarget.value}`,
-                    time: e.currentTarget.value,
-                  })
+                    date_time: `${reservationFormData.wish_date} ${e.currentTarget.value}`,
+                    wish_time: e.currentTarget.value,
+                  })}
                 }
               >
                 {timeStr}
@@ -66,4 +82,4 @@ const ReservationTimePicker = ({
   );
 };
 
-export default ReservationTimePicker;
+export default React.memo(ReservationTimePicker);
