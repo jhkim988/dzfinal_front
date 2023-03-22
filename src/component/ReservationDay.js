@@ -16,7 +16,6 @@ import {
 import axios from "axios";
 import { compareDate, offsetDate, offsetString, offsetDateObj } from './../utils/dateUtils';
 import ReservationForm from './ReservationForm';
-import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
 
 const appointmentBackground = {
   '1': "#F29D94",
@@ -40,24 +39,12 @@ const ReservationDay = ({
 }) => {
   const [reservationFormModal, setReservationFormModal] = useState({
     modalState: false,
-    mode: 'POST' // POST or PUT
+    mode: 'POST', // POST or PUT
+    doctor: 1
   });
-  const [reservationFormData, setReservationFormData] = useState({
-    patient_id: 0,
-    patient_name: '',
-    phone1: '',
-    phone2: '',
-    phone3: '',
-    date_time: '',
-    wish_date: '',
-    wish_time: '',
-    state: "예약중",
-    doctor: 1,
-    treatment_reason: '',
-  });
-  const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
-  const [pickDate, setPickDate] = useState(new Date(reservationFormData.wish_date));
-  const [pickTime, setPickTime] = useState(new Date(reservationFormData.wish_time));
+
+  const [pickDate, setPickDate] = useState(new Date());
+  const [pickTime, setPickTime] = useState('');
 
   // month/week
   const loadCalendar = useCallback(() => {
@@ -83,7 +70,6 @@ const ReservationDay = ({
             doctor: el.doctor,
           };
         });
-        console.log(val);
         setCalendarAppointments(val);
       });
     } else if (viewDate.viewCalendar === "week") {
@@ -137,25 +123,16 @@ const ReservationDay = ({
       minimumIntegerDigits: 2,
       useGrouping: false,
     })}`;
-    setReservationFormModal({ modalState: true, mode: "POST" });
-    setReservationFormData({
-      patient_id: 0,
-      patient_name: '',
-      phone1: '',
-      phone2: '',
-      phone3: '',
-      date_time: `${date} ${time}`,
-      wish_date: date,
-      wish_time: time,
-      state: "예약중",
-      treatment_reason: '',
-      doctor: e.currentTarget.dataset.doctor,
-    });
     setPickDate(dateObj);
     setPickTime(time);
+    console.log("clickEmptyCell: ", e.currentTarget.dataset.doctor);
+    setReservationFormModal({ modalState: true, mode: "POST", doctor: parseInt(e.currentTarget.dataset.doctor) });
   }, []);
 
   const Appointment = ({ children, style, ...restProps }) => {
+    const onClick = (e) => {
+      setReservationFormModal({ modalState: true, mode: 'PUT', reservation_id: restProps.data.reservation_id });
+    }
     return (
     <Appointments.Appointment
       {...restProps}
@@ -166,28 +143,7 @@ const ReservationDay = ({
         backgroundColor: appointmentBackground[restProps.data.doctor] || "blue",
         borderRadius: "8px",
       }}
-      onClick={() => {
-        axios.get(`/api/reservation/${restProps.data.reservation_id}`)
-          .then(({data}) => {
-            const data_date = new Date(data.wish_date);
-            const wish_date = offsetDate(data_date);
-            setReservationFormData({
-              reservation_id: data.reservation_id,
-              patient_id: data.patient_id,
-              patient_name: data.patient_name,
-              phone1: data.phone1,
-              phone2: data.phone2,
-              phone3: data.phone3,
-              date_time: `${wish_date} ${data.wish_time}`,
-              wish_date: wish_date,
-              wish_time: data.wish_time,
-              state: data.state,
-              doctor: data.doctor,
-              treatment_reason: data.treatment_reason,
-            });
-            setReservationFormModal({ modalState: true, mode: 'PUT'});
-        });
-      }}>
+      onClick={onClick}>
       <div>{restProps.data.title}</div>
     </Appointments.Appointment>
   )};
@@ -239,22 +195,12 @@ const ReservationDay = ({
     <ReservationForm
       reservationFormModal={reservationFormModal}
       setReservationFormModal={setReservationFormModal}
-      reservationFormData={reservationFormData}
-      setReservationFormData={setReservationFormData}
-      setDateTimePickerModal={setDateTimePickerModal}
-      pickDate={pickDate}
-      loadCalendar={loadCalendar}
-      loadDayAppointments={loadDayAppointments}
-    />
-    <ReservationDateTimePickerModal
-      setDateTimePickerModal={setDateTimePickerModal}
-      dateTimePickerModal={dateTimePickerModal}
-      reservationFormData={reservationFormData}
-      setReservationFormData={setReservationFormData}
       pickDate={pickDate}
       setPickDate={setPickDate}
       pickTime={pickTime}
       setPickTime={setPickTime}
+      loadCalendar={loadCalendar}
+      loadDayAppointments={loadDayAppointments}
     />
     </>
   );

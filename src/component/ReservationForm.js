@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   Paper,
@@ -12,19 +12,36 @@ import {
   MenuItem,
 } from "@mui/material";
 import axios from "axios";
+import { offsetDate } from "../utils/dateUtils";
+import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
 
 const style = { margin: "20px 0px" };
 
 const ReservationForm = ({
   reservationFormModal,
   setReservationFormModal,
-  reservationFormData,
-  setReservationFormData,
-  setDateTimePickerModal,
   pickDate,
+  setPickDate,
+  pickTime,
+  setPickTime,
   loadCalendar,
   loadDayAppointments,
 }) => {
+  const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
+  const [reservationFormData, setReservationFormData] = useState({
+    patient_id: 0,
+    patient_name: '',
+    phone1: '',
+    phone2: '',
+    phone3: '',
+    date_time: '',
+    wish_date: '',
+    wish_time: '',
+    state: "예약중",
+    doctor: 0,
+    treatment_reason: '',
+  });
+  
   const formOnChange = useCallback((e) => {
     setReservationFormData((prev) => ({
       ...prev,
@@ -54,18 +71,57 @@ const ReservationForm = ({
   }, [reservationFormData]);
 
   useEffect(() => {
-    console.log('ReservationForm Update: ', pickDate)
-  }, [pickDate])
+    if (reservationFormModal.mode === "POST") {
+      console.log(reservationFormData.doctor, reservationFormModal.doctor);
+      const date = pickDate.toISOString().slice(0, 10);
+      setReservationFormData({
+        patient_id: 0,
+        patient_name: '',
+        phone1: '',
+        phone2: '',
+        phone3: '',
+        date_time: `${date} ${pickTime}`,
+        wish_date: date,
+        wish_time: pickTime,
+        state: "예약중",
+        treatment_reason: '',
+        doctor: reservationFormModal.doctor,
+      });
+  
+    } else if (reservationFormModal.mode === "PUT") {
+      axios.get(`/api/reservation/${reservationFormModal.reservation_id}`)
+        .then(({data}) => {
+          const data_date = new Date(data.wish_date);
+          const wish_date = offsetDate(data_date);
+          setReservationFormData({
+            reservation_id: data.reservation_id,
+            patient_id: data.patient_id,
+            patient_name: data.patient_name,
+            phone1: data.phone1,
+            phone2: data.phone2,
+            phone3: data.phone3,
+            date_time: `${wish_date} ${data.wish_time}`,
+            wish_date: wish_date,
+            wish_time: data.wish_time,
+            state: data.state,
+            doctor: data.doctor,
+            treatment_reason: data.treatment_reason,
+          });
+      });
+    }
+  }, [reservationFormModal.modalState])
   return (
     <>
       <Modal
         open={reservationFormModal.modalState}
-        onClose={() =>
+        onClose={() => {
+          console.log("modal close");
           setReservationFormModal({
             ...reservationFormModal,
             modalState: false,
           })
-        }
+          setReservationFormData({});
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -219,8 +275,18 @@ const ReservationForm = ({
           </Grid>
         </Paper>
       </Modal>
+      <ReservationDateTimePickerModal
+        setDateTimePickerModal={setDateTimePickerModal}
+        dateTimePickerModal={dateTimePickerModal}
+        reservationFormData={reservationFormData}
+        setReservationFormData={setReservationFormData}
+        pickDate={pickDate}
+        setPickDate={setPickDate}
+        pickTime={pickTime}
+        setPickTime={setPickTime}
+      />
     </>
   );
 };
 
-export default React.memo(ReservationForm);
+export default ReservationForm;

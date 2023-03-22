@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { Button, Paper } from "@mui/material";
 import axios from "axios";
+import { offsetDate } from "../utils/dateUtils";
 const compare = (t1, t2) => {
   return t1.getTime() - t2.getTime();
 };
@@ -17,7 +18,16 @@ const getTimeArr = (start, end, intervalMinutes) => {
   ) {
     ret.push(time);
   }
-  return ret;
+  return ret.map(
+    (time) =>
+      `${time.getHours().toLocaleString("en-US", {
+        minimumIntegerDigits: 2,
+        useGrouping: false,
+      })}:${time.getMinutes().toLocaleString("en-US", {
+        minimumIntegerDigits: 2,
+        useGrouping: false,
+      })}`
+  );
 };
 
 const ReservationTimePicker = ({
@@ -27,56 +37,47 @@ const ReservationTimePicker = ({
   doctor,
 }) => {
   const timeArr = getTimeArr("09:00:00", "18:00:00", 20);
-  const [impossible, setImpossible] = useState(new Set());
+  const [impossible, setImpossible] = useState(new Set(timeArr));
   useEffect(() => {
-    const offsetCal = new Date(pickDate);
-    offsetCal.setTime(offsetCal.getTime() + offsetCal.getTimezoneOffset()*60_000);
-    axios.get(`/api/reservation/impossible/time`, {
-      params: {
-        doctor,
-        date: offsetCal.toISOString().slice(0, 10)
-      }
-    }).then(({ data }) => {
-      setImpossible(new Set(data));
-    })
-  }, [pickDate])
+    axios
+      .get(`/api/reservation/impossible/time`, {
+        params: {
+          doctor,
+          date: offsetDate(pickDate),
+        },
+      })
+      .then(({ data }) => {
+        setImpossible(new Set(data));
+      });
+  }, [pickDate]);
 
   return (
     <Paper style={{ width: 320, padding: 10, margin: "auto" }}>
       <Grid container>
-        {timeArr.map((time) => {
-          const timeStr = `${time.getHours().toLocaleString("en-US", {
-            minimumIntegerDigits: 2,
-            useGrouping: false,
-          })}:${time.getMinutes().toLocaleString("en-US", {
-            minimumIntegerDigits: 2,
-            useGrouping: false,
-          })}`;
-          return (
-            <Grid item xs={3} key={`${timeStr}#reservationTime`}>
-              <Button
-                variant={
-                  reservationFormData.wish_time === timeStr
-                    ? "contained"
-                    : "outlined"
-                }
-                disabled={impossible.has(timeStr)}
-                style={{ width: 80, margin: "3px" }}
-                key={`reservationTimeSelect#${timeStr}`}
-                value={timeStr}
-                onClick={(e) =>{
-                  setReservationFormData({
-                    ...reservationFormData,
-                    date_time: `${reservationFormData.wish_date} ${e.currentTarget.value}`,
-                    wish_time: e.currentTarget.value,
-                  })}
-                }
-              >
-                {timeStr}
-              </Button>
-            </Grid>
-          );
-        })}
+        {timeArr.map((timeStr) => (
+          <Grid item xs={3} key={`${timeStr}#reservationTime`}>
+            <Button
+              variant={
+                reservationFormData.wish_time === timeStr
+                  ? "contained"
+                  : "outlined"
+              }
+              disabled={impossible.has(timeStr)}
+              style={{ width: 80, margin: "3px" }}
+              key={`reservationTimeSelect#${timeStr}`}
+              value={timeStr}
+              onClick={(e) => {
+                setReservationFormData({
+                  ...reservationFormData,
+                  date_time: `${reservationFormData.wish_date} ${e.currentTarget.value}`,
+                  wish_time: e.currentTarget.value,
+                });
+              }}
+            >
+              {timeStr}
+            </Button>
+          </Grid>
+        ))}
       </Grid>
     </Paper>
   );

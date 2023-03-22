@@ -1,40 +1,47 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { LocalizationProvider } from "@mui/x-date-pickers";
+import React, { useCallback, useState, useEffect, useRef } from "react";
+import { DayCalendarSkeleton, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { Paper } from "@mui/material";
+import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import axios from "axios";
 
-import { compareDate } from './../utils/dateUtils';
+import { compareDate, offsetDateObj } from './../utils/dateUtils';
+import dayjs from 'dayjs';
 
 const ReservationDatePicker = ({
   pickDate,
   setPickDate,
   doctor,
 }) => {
+  const requestAbortController = useRef(null);
   const [impossible, setImpossible] = useState(new Set());
+  const [isLoading, setIsLoading] = useState(true);
+
   const getImpossible = useCallback((doctor, year, month) => {
+    const controller = new AbortController();
+    setIsLoading(true);
     axios.get("/api/reservation/impossible/day", {
       params: { doctor, year, month }
     }).then(({ data }) => {
+      setIsLoading(false);
       setImpossible(new Set(data));
     })
-  }, [setImpossible]);
+    requestAbortController.current = controller;
+  }, []);
   
-  const onMonthChange = ({ $y, $M }) => {
+  const onMonthChange = useCallback(({ $y, $M }) => {
+    if (requestAbortController.current) {
+      requestAbortController.current.abort();
+    }
     getImpossible(doctor, $y, $M+1);
-  }
+  }, []);
   
   useEffect(() => {
     getImpossible(doctor, pickDate.getYear()+1900, pickDate.getMonth()+1);
-  }, []);
+    return () => requestAbortController.current?.abort();
+  }, [doctor, getImpossible]);
 
-  const shouldDisableDate = ({ $d }) => {
-    const date = new Date($d);
-    date.setTime(date.getTime() - date.getTimezoneOffset() * 60_000);
-    return compareDate(date, new Date()) <= 0 || impossible.has(date.toISOString().slice(0, 10));
-  };
-  
   const calendarOnChange = useCallback(({ $d }) => {
     setPickDate(new Date($d));
   }, []);
@@ -48,13 +55,32 @@ const ReservationDatePicker = ({
     >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar
-          shouldDisableDate={shouldDisableDate}
-          onChange={calendarOnChange}
           onMonthChange={onMonthChange}
-        />
+          onChange={calendarOnChange}
+          slots={{
+            day: ServerDay
+          }}
+          slotProps={{
+            day: {
+              impossible
+            }
+          }}
+      />
       </LocalizationProvider>
     </Paper>
   );
 };
+
+const ServerDay = ({impossible = new Set(), day, outsideCurrentMonth, ...others}) => {
+  const dateStr = day.format('YYYY-MM-DD');
+  const date = offsetDateObj(dateStr);
+  const disabled = compareDate(date, new Date()) <= 0 || impossible.has(dateStr);
+  return <PickersDay
+    {...others}
+    disabled={disabled}
+    outsideCurrentMonth={outsideCurrentMonth}
+    day={day}
+  />
+}
 
 export default React.memo(ReservationDatePicker);
