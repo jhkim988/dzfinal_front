@@ -13,6 +13,8 @@ import axios from 'axios';
 const Reservation_API_BASE_URL = "/api/reservation";
 
 
+//예약리스트 10개 이상이면 스크롤바 자동 생성
+//예약리스트 조회할 때 초진재진 구분 추가할 수도 있음
 
 const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, setReceptionData }) => {
     const [reservation, setReservation] = useState([]);
@@ -59,7 +61,7 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
                     <Table aria-label="simple table" size='small'>
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>no</TableCell>
+                                {/* <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>no</TableCell> */}
                                 <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>이름</TableCell>
                                 <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>연락처</TableCell>
                                 <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>담당의</TableCell>
@@ -79,7 +81,7 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
                                     onClick={() => handleReservationSelect(list.reservation_id)}
                                     hover={true}
                                 >
-                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{list.reservation_id}</TableCell>
+                                    {/* <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{list.reservation_id}</TableCell> */}
                                     {/* <Link to={{ pathname: `/boardDetail/${board.board_no}`, state: { board_no: `${board.board_no}` } }}>{board.title} </Link> */}
                                     <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{list.patient_name}</TableCell>
                                     <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{list.phone_number1 + "-" + list.phone_number2 + "-" + list.phone_number3}</TableCell>

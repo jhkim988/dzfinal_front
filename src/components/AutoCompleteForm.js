@@ -87,6 +87,7 @@ const AutoCompleteForm = ({ setPatientData, setReceptionData }) => {
                 onChange={handleChange}
                 //onClick={handleSearch}
                 onKeyUp={handleDropDownKey}
+            //autoComplete={false}
             //onKeyDown={handleKeyDown}
             />
             {autoCompleteList.length > 0 && (
