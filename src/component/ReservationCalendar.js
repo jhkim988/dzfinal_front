@@ -58,9 +58,12 @@ const Appointment = ({ children, style, ...restProps }) => (
     {...restProps}
     style={{
       ...style,
+      color: "white",
       backgroundColor: appointmentBackground[restProps.data.doctor] || "blue",
+      padding: "5px",
       borderRadius: "8px",
-      height: 42.5,
+      // height: 42.5,
+      height: '90%'
     }}
   >
   <div>{restProps.data.title}</div>
@@ -92,9 +95,13 @@ const ReservationCalendar = ({
             startDate.setMinutes(appointment.doctor === '1' ? 0 : 1);
             appointment.startDate = startDate;
           } else if (viewDate.viewCalendar === 'week') {
-            startDate.setMinutes(appointment.doctor === '1' ? 0 : 40);
             const endDate = new Date(appointment.endDate);
-            endDate.setMinutes(appointment.doctor === '1' ? 20 : 0);
+            if (startDate.getHours() === endDate.getHours()) {
+              startDate.setMinutes(appointment.doctor === '1' ? 0 : 30);
+              endDate.setMinutes(appointment.doctor === '1' ? 15 : 45);  
+            } else {
+              endDate.setHours(endDate.getHours()-1);
+            }
             appointment.startDate = startDate;
             appointment.endDate = endDate;
           }
@@ -146,6 +153,7 @@ const ReservationCalendar = ({
           timeTableRowComponent={(props) => (
             <WeekView.TimeTableRow {...props} style={{ height: 80 }} />
           )}
+          timeTableCellComponent={(props) => <WeekCell {...props} setViewDate={setViewDate}/>}
         />
         <ViewSwitcher
           switcherComponent={React.memo(({ ...restProps }) => {
@@ -333,4 +341,11 @@ const MonthCell = ({ startDate, setViewDate, ...restProps }) => {
   );
 };
 
+const WeekCell = ({ setViewDate, ...restProps }) => {
+  const { startDate } = restProps;
+  const onClick = e => {
+    setViewDate(new Date(e.currentTarget.dataset.date));
+  }
+  return <WeekView.TimeTableCell {...restProps} data-date={startDate} onClick={onClick}/>
+}
 export default ReservationCalendar;
