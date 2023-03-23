@@ -24,8 +24,8 @@ import {
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { compareDate } from "./../utils/dateUtils";
-import { doctorData } from "./../route/ReservationLayout";
+import { compareDate } from "../../utils/dateUtils";
+import { doctorData } from "../../route/ReservationLayout";
 
 const appointmentBackground = {
   1: "#F29D94",
