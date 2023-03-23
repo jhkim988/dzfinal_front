@@ -1,8 +1,8 @@
 import React, { useState  } from "react";
 import { Grid } from "@mui/material";
-import ReservationCalendar from "../component/ReservationCalendar";
-import ReservationDay from "../component/ReservationDay";
-import useViewDate from '../hoc/useViewDate';
+import ReservationCalendar from "./ReservationCalendar";
+import ReservationDay from "./ReservationDay";
+import useViewDate from './useViewDate';
 
 export const doctorData = [
   { text: "김더존", id: '1', color: "F29D94" },

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import axios from "axios";
-import { offsetDate } from "../utils/dateUtils";
+import { offsetDate } from "./utils/dateUtils";
 import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
 
 const style = { margin: "20px 0px" };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { Button, Paper } from "@mui/material";
 import axios from "axios";
-import { offsetDate } from "../utils/dateUtils";
+import { offsetDate } from "./utils/dateUtils";
 const compare = (t1, t2) => {
   return t1.getTime() - t2.getTime();
 };

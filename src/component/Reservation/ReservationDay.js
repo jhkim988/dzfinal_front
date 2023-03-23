@@ -1,6 +1,7 @@
 import React from "react";
 import { useCallback, useState, useEffect } from "react";
 import { Paper } from "@mui/material";
+import { styled } from '@mui/material/styles';
 import {
   Scheduler,
   DayView,
@@ -14,9 +15,11 @@ import {
   IntegratedGrouping,
 } from "@devexpress/dx-react-scheduler";
 import axios from "axios";
-import { compareDate, offsetDate } from './../utils/dateUtils';
+import { compareDate, offsetDate } from './utils/dateUtils';
 import ReservationForm from './ReservationForm';
-import { doctorData, resources } from "../route/ReservationLayout";
+import { doctorData, resources } from "./Reservation";
+
+const cellHeight = 25;
 
 const appointmentBackground = {
   '1': "#F29D94",
@@ -37,7 +40,6 @@ const ReservationDay = ({
 
   const [pickDate, setPickDate] = useState(new Date());
   const [pickTime, setPickTime] = useState('');
-
   // month/week
   const loadCalendar = useCallback(() => {
     if (viewDate.viewCalendar === "month") {
@@ -143,7 +145,7 @@ const ReservationDay = ({
 
   return (
     <>
-    <Paper sx={{ height: 1 }}>
+    <Paper>
       <Scheduler data={daySchedule}>
         <ViewState currentDate={viewDate.viewDate} />
         <GroupingState grouping={[{ resourceName: "doctor" }]} />
@@ -156,25 +158,29 @@ const ReservationDay = ({
               {...props}
               data-datetime={props.startDate}
               data-doctor={props.groupingInfo[0].id}
-              style={{ height: 30 }}
+              style={{ height: cellHeight }}
               onClick={clickEmptyCell}
             />
           )}
           // timeTableLayoutComponent={(props) => (
-            // <DayView.TimeTableLayout {...props} style={{ height: 800 }} />
+            // <DayView.TimeTableLayout {...props} style={{ height: 640 }} />
           // )}
-          timeScaleLabelComponent={(props) => {
+          timeScaleLabelComponent={styled((props) => {
             if (!props.time)
               return (
-                <DayView.TimeScaleLabel {...props} style={{ height: 15 }} />
+                <DayView.TimeScaleLabel {...props} style={{ height: cellHeight/2 }} />
               );
             else
               return (
-                <DayView.TimeScaleLabel {...props} style={{ height: 30 }} />
+                <DayView.TimeScaleLabel {...props} style={{ height: cellHeight }} />
               );
-          }}
+          })({
+            '&.Label-label': {
+              lineHeight: '0px'
+            }
+          })}
           timeScaleTickCellComponent={() => (
-            <DayView.TimeScaleTickCell style={{ height: 30 }} />
+            <DayView.TimeScaleTickCell style={{ height: cellHeight }} />
           )}
         />
         <Appointments appointmentComponent={Appointment} />

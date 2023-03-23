@@ -24,8 +24,10 @@ import {
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { compareDate } from "../../utils/dateUtils";
-import { doctorData } from "../../route/ReservationLayout";
+import { compareDate } from "./utils/dateUtils";
+import { doctorData } from "./Reservation";
+
+const cellHeight = 70
 
 const appointmentBackground = {
   1: "#F29D94",
@@ -37,11 +39,11 @@ const StyledMonthViewTimeTableCell = styled(MonthView.TimeTableCell)(
     [`&.prevDays`]: {
       backgroundColor: "#E8E8E8",
       opacity: 0.5,
-      height: 125,
+      height: 110,
     },
     [`&.nextDays`]: {
       backgroundColor: "white",
-      height: 125,
+      height: 110,
     },
     [`&.day${0}`]: {
       color: "red",
@@ -82,7 +84,7 @@ const ReservationCalendar = ({
   const [filterSelectorOpen, setFilterSelectorOpen] = useState(false);
 
   return (
-    <Paper sx={{ height: 1 }}>
+    <Paper>
       <Scheduler
         data={calendarAppointments.filter(
           (appointment) => doctorFilter[appointment.doctor]
@@ -138,18 +140,18 @@ const ReservationCalendar = ({
           endDayHour={18}
           cellDuration={60}
           // timeScaleLayoutComponent={(props) => <WeekView.TimeScaleLayout {...props} height={700}/>} // timeScale height 전체 길이
-          // timeTableLayoutComponent={(props) => <WeekView.TimeTableLayout {...props} height={700}/>} // timeTable 전체 길이
+          timeTableLayoutComponent={(props) => <WeekView.TimeTableLayout {...props} height={640}/>} // timeTable 전체 길이
           // timeTableCellComponent={(props) => <WeekView.TimeTableCell {...props} style={{ height: 70 }}/>}
           // timeScaleTickCellComponent={(props) => <WeekView.TimeScaleTickCell {...props} style={{ height: 60 }}/>}
           timeScaleLabelComponent={(props) =>
             props.time ? (
-              <WeekView.TimeScaleLabel {...props} style={{ height: 80 }} />
+              <WeekView.TimeScaleLabel {...props} style={{ height: cellHeight }} />
             ) : (
-              <WeekView.TimeScaleLabel {...props} style={{ height: 40 }} />
+              <WeekView.TimeScaleLabel {...props} style={{ height: cellHeight/2 }} />
             )
           }
           timeTableRowComponent={(props) => (
-            <WeekView.TimeTableRow {...props} style={{ height: 80 }} />
+            <WeekView.TimeTableRow {...props} style={{ height: cellHeight }} />
           )}
           timeTableCellComponent={(props) => <WeekCell {...props} setViewDate={setViewDate}/>}
         />

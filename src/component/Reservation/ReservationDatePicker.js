@@ -6,7 +6,7 @@ import { Paper } from "@mui/material";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import axios from "axios";
 
-import { compareDate, offsetDateObj } from './../utils/dateUtils';
+import { compareDate, offsetDateObj } from './utils/dateUtils';
 import dayjs from 'dayjs';
 
 const ReservationDatePicker = ({
