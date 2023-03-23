@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
-import { DayCalendarSkeleton, LocalizationProvider } from "@mui/x-date-pickers";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { Paper } from "@mui/material";
@@ -17,6 +17,9 @@ const ReservationDatePicker = ({
   const requestAbortController = useRef(null);
   const [impossible, setImpossible] = useState(new Set());
   const [isLoading, setIsLoading] = useState(true);
+  const [viewPickerDate, setViewPickerDate] = useState(pickDate);
+  
+  useEffect(() => { setViewPickerDate(pickDate) }, [pickDate]);
 
   const getImpossible = useCallback((doctor, year, month) => {
     const controller = new AbortController();
@@ -31,6 +34,7 @@ const ReservationDatePicker = ({
   }, []);
   
   const onMonthChange = useCallback(({ $y, $M }) => {
+    setViewPickerDate(null);
     if (requestAbortController.current) {
       requestAbortController.current.abort();
     }
@@ -65,6 +69,7 @@ const ReservationDatePicker = ({
               impossible
             }
           }}
+          value={viewPickerDate && dayjs(viewPickerDate)}
       />
       </LocalizationProvider>
     </Paper>

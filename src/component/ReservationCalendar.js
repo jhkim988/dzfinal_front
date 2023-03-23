@@ -26,7 +26,6 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { compareDate } from "./../utils/dateUtils";
 import { doctorData } from "./../route/ReservationLayout";
-import { offsetDateObj } from "./../utils/dateUtils";
 
 const appointmentBackground = {
   1: "#F29D94",
@@ -88,7 +87,6 @@ const ReservationCalendar = ({
         data={calendarAppointments.filter(
           (appointment) => doctorFilter[appointment.doctor]
         ).map((appointment) => {
-          console.log(appointment);
           const startDate = new Date(appointment.startDate);
           if (viewDate.viewCalendar === 'month') {
             startDate.setHours(9);
@@ -157,7 +155,6 @@ const ReservationCalendar = ({
         />
         <ViewSwitcher
           switcherComponent={React.memo(({ ...restProps }) => {
-            console.log("switcherComponent Rerender");
             return (
               <>
                 <DoctorFilterSelector

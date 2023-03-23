@@ -89,8 +89,8 @@ const ReservationDay = ({
         setCalendarAppointments(val);
       })
     }
-  }, [setCalendarAppointments, viewDate.startDate, viewDate.endDate, viewDate.viewCalendar])
-  useEffect(loadCalendar, [setCalendarAppointments, viewDate.startDate, viewDate.endDate, viewDate.viewCalendar]);
+  }, [setCalendarAppointments, viewDate.startDate, viewDate.endDate, viewDate.viewCalendar]);
+  useEffect(loadCalendar, [loadCalendar, setCalendarAppointments, viewDate.startDate, viewDate.endDate, viewDate.viewCalendar]);
   
   // day
   const loadDayAppointments = useCallback((dateStr) => {

@@ -10,7 +10,9 @@ import {
   Input,
   Select,
   MenuItem,
+  InputAdornment,
 } from "@mui/material";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import axios from "axios";
 import { offsetDate } from "../utils/dateUtils";
 import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
@@ -114,7 +116,6 @@ const ReservationForm = ({
       <Modal
         open={reservationFormModal.modalState}
         onClose={() => {
-          console.log("modal close");
           setReservationFormModal({
             ...reservationFormModal,
             modalState: false,
@@ -236,7 +237,12 @@ const ReservationForm = ({
                   value={reservationFormData.date_time}
                   name="date-time"
                   onChange={formOnChange}
-                />
+                  endAdornment={<InputAdornment position="end">
+                  <CalendarMonthIcon/>
+                </InputAdornment>}
+                >
+                </Input>
+
               </FormControl>
             </Grid>
 

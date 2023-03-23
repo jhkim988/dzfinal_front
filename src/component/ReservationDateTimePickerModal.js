@@ -1,8 +1,7 @@
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback } from "react";
 import { Modal, Button } from "@mui/material";
 import ReservationDatePicker from "./ReservationDatePicker";
 import ReservationTimePicker from "./ReservationTimePicker";
-import dayjs from "dayjs";
 
 const ReservationDateTimePickerModal = ({
   setDateTimePickerModal,
@@ -11,8 +10,6 @@ const ReservationDateTimePickerModal = ({
   setReservationFormData,
   pickDate,
   setPickDate,
-  pickTime,
-  setPickTime,
 }) => {
   const selectEvent = useCallback(() => {
     const date_time = `${reservationFormData.wish_date} ${reservationFormData.wish_time}`;
