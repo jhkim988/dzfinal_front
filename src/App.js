@@ -1,11 +1,23 @@
-import Clinic from './component/clinic/Clinic';
-import Drug_Taking from './component/clinic/Drug_Taking';
-import Patient from './component/clinic/Patient';
-import Underlying from './component/clinic/Underlying';
+import { useSelector } from 'react-redux';
+
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import NavigationScroll from './layout/NavigationScroll';
+import ThemeRoutes from './routes/ThemeRoutes';
+import themes from './themes/theme';
 
 function App() {
+  const customization = useSelector((state) => state.customization);
+
   return (
-    <Clinic/>
+    <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={themes(customization)}>
+                <CssBaseline />
+                <NavigationScroll>
+                    <ThemeRoutes />
+                </NavigationScroll>
+            </ThemeProvider>
+        </StyledEngineProvider>
   );
 }
 
