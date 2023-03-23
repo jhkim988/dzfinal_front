@@ -14,22 +14,14 @@ import {
   IntegratedGrouping,
 } from "@devexpress/dx-react-scheduler";
 import axios from "axios";
-import { compareDate, offsetDate, offsetString, offsetDateObj } from './../utils/dateUtils';
+import { compareDate, offsetDate } from './../utils/dateUtils';
 import ReservationForm from './ReservationForm';
+import { doctorData, resources } from "../route/ReservationLayout";
 
 const appointmentBackground = {
   '1': "#F29D94",
   '2': "#BEDEF3",
 };
-
-const doctorData = [
-  { text: "김더존", id: '1', color: "F29D94" },
-  { text: "이을지", id: '2', color: "BEDEF3" },
-];
-
-const resources = [
-  { fieldName: "doctor", title: "doctor", instances: doctorData },
-];
 
 const ReservationDay = ({
   viewDate,
@@ -61,7 +53,8 @@ const ReservationDay = ({
           const startDate = new Date(`${el.wish_date} ${el.wish_time}`);
           const endDate = new Date(
             `${el.wish_date} ${el.wish_time}`
-          ).setMinutes(startDate.getMinutes() + 20);
+          );
+          endDate.setMinutes(startDate.getMinutes() + 20);
           return {
             id: idx,
             startDate,
@@ -83,7 +76,8 @@ const ReservationDay = ({
           const startDate = new Date(`${el.wish_date} ${el.wish_time}`);
           const endDate = new Date(
             `${el.wish_date} ${el.wish_time}`
-          ).setMinutes(startDate.getMinutes() + 30);
+          );
+          endDate.setMinutes(startDate.getMinutes() + 20);
           return {
             id: idx,
             startDate,
@@ -125,7 +119,6 @@ const ReservationDay = ({
     })}`;
     setPickDate(dateObj);
     setPickTime(time);
-    console.log("clickEmptyCell: ", e.currentTarget.dataset.doctor);
     setReservationFormModal({ modalState: true, mode: "POST", doctor: parseInt(e.currentTarget.dataset.doctor) });
   }, []);
 

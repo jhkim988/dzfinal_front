@@ -72,7 +72,6 @@ const ReservationForm = ({
 
   useEffect(() => {
     if (reservationFormModal.mode === "POST") {
-      console.log(reservationFormData.doctor, reservationFormModal.doctor);
       const date = pickDate.toISOString().slice(0, 10);
       setReservationFormData({
         patient_id: 0,
