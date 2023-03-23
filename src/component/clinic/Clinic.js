@@ -5,14 +5,14 @@ import {
   FormControlLabel,
   Grid,
   Paper,
-  styled,
   TextField,
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import A from "./A";
 import Diagnosis from "./Diagnosis";
-import Drug_Taking from "./Drug_Taking";
+import DrugTaking from "./Drug_Taking";
 import MedicalInfo from "./MedicalInfo";
 import MedicalRecordInquiry from "./MedicalRecordInquiry";
 import Patient from "./Patient";
@@ -20,21 +20,14 @@ import Prescription from "./Prescription";
 import Queue from "./Queue";
 import Underlying from "./Underlying";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
 const Clinic = () => {
-  const [reception, setReception] = useState("1");
+  const [reception, setReception] = useState("");
   const [patient, setPatient] = useState({});
   const [underlying, setUnderlying] = useState([]);
   const [drug_taking, setDrug_taking] = useState([]);
 
   useEffect(() => {
+    setReception("1");
     axios
       .get(`/api/clinic/${reception}`)
       .then((response) => {
@@ -45,12 +38,21 @@ const Clinic = () => {
       .catch((error) => {
         console.log(error);
       });
+  }, [reception]);
+
+  useEffect(() => {
+    axios
+      .get()
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={2} style={{ height: "100vh" }}>
-        <Paper sx={{ marginTop: 2, height: "98vh" }}>
+      <Grid item xs={2} style={{ height: "90vh" }}>
+        <Paper sx={{ height: "90vh" }}>
           <Queue />
         </Paper>
       </Grid>
@@ -60,14 +62,14 @@ const Clinic = () => {
             <MedicalRecordInquiry />
           </Grid>
           <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <Paper sx={{ marginTop: 2, height: "45vh" }} elevation={3}>
+            <Paper sx={{ height: "45vh" }} elevation={3}>
               <Patient reception={reception} patient={patient} />
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <Underlying props={underlying} />
                 </Grid>
                 <Grid item xs={6}>
-                  <Drug_Taking drug_taking={drug_taking} />
+                  <DrugTaking props={drug_taking} />
                 </Grid>
               </Grid>
             </Paper>
@@ -78,36 +80,8 @@ const Clinic = () => {
             <MedicalInfo />
           </Grid>
           <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <Paper elevation={3} sx={{ height: "50vh", marginTop: 2 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={6} style={{ paddingTop: 0 }}>
-                  <Diagnosis />
-                </Grid>
-                <Grid item xs={6} style={{ paddingTop: 0 }}>
-                  <Prescription />
-                </Grid>
-              </Grid>
-              <>
-                증상
-                <TextField
-                  sx={{ width: "100%" }}
-                  multiline
-                  rows={4}
-                  defaultValue=""
-                />
-              </>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Box>
-                  <FormControlLabel control={<Checkbox />} label="처치" />
-                  <FormControlLabel control={<Checkbox />} label="진료의뢰서" />
-                </Box>
-                <>
-                  <Stack spacing={2} direction="row">
-                    <Button variant="contained">확인</Button>
-                    <Button variant="outlined">취소</Button>
-                  </Stack>
-                </>
-              </Box>
+            <Paper elevation={3} sx={{ height: "50vh" }}>
+              <A />
             </Paper>
           </Grid>
         </Grid>

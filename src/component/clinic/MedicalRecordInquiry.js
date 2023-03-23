@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -21,6 +21,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
+import axios from "axios";
 
 const MedicalRecordInquiry = () => {
   // Select
@@ -46,7 +47,7 @@ const MedicalRecordInquiry = () => {
   ];
 
   return (
-    <Paper sx={{ marginTop: 2, height: "45vh" }} elevation={3}>
+    <Paper sx={{ height: "45vh" }} elevation={3}>
       <Box>진료기록조회</Box>
       <Box sx={{ display: "flex" }}>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">

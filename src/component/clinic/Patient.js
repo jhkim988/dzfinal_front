@@ -5,7 +5,7 @@ const Patient = (props) => {
   const { reception, patient } = props;
 
   return (
-    <Box sx={{ margin: 1 }}>
+    <Box>
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
         접수번호
         <TextField

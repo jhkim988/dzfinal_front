@@ -16,15 +16,12 @@ const Underlying = ({ props }) => {
   const [disease_code, setDisease_code] = useState("");
   const [disease_name, setDisease_name] = useState("");
   const [searchList, setSearchList] = useState([]);
-  const [searchText, setSearchText] = useState("");
   const searchListRef = useRef();
   const [underlying, setUnderlying] = useState(props);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
-      setSearchText(e.target.value);
-
       if (e.target.value.length >= 2) {
         axios
           .get(
