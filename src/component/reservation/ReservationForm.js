@@ -30,9 +30,9 @@ const ReservationForm = ({
   const [reservationFormData, setReservationFormData] = useState({
     patient_id: 0,
     patient_name: '',
-    phone1: '',
-    phone2: '',
-    phone3: '',
+    phone_number1: '',
+    phone_number2: '',
+    phone_number3: '',
     date_time: '',
     wish_date: '',
     wish_time: '',
@@ -74,9 +74,9 @@ const ReservationForm = ({
       setReservationFormData({
         patient_id: 0,
         patient_name: '',
-        phone1: '',
-        phone2: '',
-        phone3: '',
+        phone_number1: '',
+        phone_number2: '',
+        phone_number3: '',
         date_time: `${date} ${pickTime}`,
         wish_date: date,
         wish_time: pickTime,
@@ -93,9 +93,9 @@ const ReservationForm = ({
             reservation_id: data.reservation_id,
             patient_id: data.patient_id,
             patient_name: data.patient_name,
-            phone1: data.phone1,
-            phone2: data.phone2,
-            phone3: data.phone3,
+            phone_number1: data.phone_number1,
+            phone_number2: data.phone_number2,
+            phone_number3: data.phone_number3,
             date_time: `${wish_date} ${data.wish_time}`,
             wish_date: wish_date,
             wish_time: data.wish_time,
@@ -149,10 +149,10 @@ const ReservationForm = ({
                   <FormControl>
                     <InputLabel id="phone-label1">연락처</InputLabel>
                     <Input
-                      id="phone1"
-                      name="phone1"
+                      id="phone_number1"
+                      name="phone_number1"
                       onChange={formOnChange}
-                      value={reservationFormData.phone1}
+                      value={reservationFormData.phone_number1}
                     />
                   </FormControl>
                 </Grid>
@@ -162,10 +162,10 @@ const ReservationForm = ({
                 <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
                   <FormControl>
                     <Input
-                      id="phone2"
-                      name="phone2"
+                      id="phone_number2"
+                      name="phone_number2"
                       onChange={formOnChange}
-                      value={reservationFormData.phone2}
+                      value={reservationFormData.phone_number2}
                     />
                   </FormControl>
                 </Grid>
@@ -175,10 +175,10 @@ const ReservationForm = ({
                 <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
                   <FormControl>
                     <Input
-                      id="phone3"
-                      name="phone3"
+                      id="phone_number3"
+                      name="phone_number3"
                       onChange={formOnChange}
-                      value={reservationFormData.phone3}
+                      value={reservationFormData.phone_number3}
                     />
                   </FormControl>
                 </Grid>
