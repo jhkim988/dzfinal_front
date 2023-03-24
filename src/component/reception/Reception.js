@@ -1,3 +1,4 @@
+
 import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
@@ -5,6 +6,7 @@ import AutoCompleteForm from './AutoCompleteForm';
 import DailyReservationList from './DailyReservationList';
 import PatientForm from './PatientForm';
 import ReceptionForm from './ReceptionForm';
+import Receipt from '../receipt/Receipt';
 
 const Reception = () => {
     const [patient_id, setPatient_id] = useState(null);
@@ -65,6 +67,7 @@ const Reception = () => {
                 </Box>
             </Paper>
             {/* <ReceptionList /> */}
+            <Receipt/>
         </div>
     );
 };
