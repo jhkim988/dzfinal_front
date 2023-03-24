@@ -42,29 +42,28 @@ function Receipt() {
 
 
   return (
-    <>
-    <div style={{marginTop: "350px", width: "600px", padding: 2, height: "400px", float: "left"}}>
-      <Paper elevation={3} style={{padding: "20px"}}>
-          <h3>수납내역목록들</h3>
-          <ReceptionList />
-      </Paper>
-    </div>
-    <div style={{width: "395px", height: "400px", float: "right"}}>
-      <Paper elevation={3} style={{padding: "20px"}}>
-        {/* <h2>수납하기</h2> */}
-          {/* 접수정보 */}
-          <ReceptionInformation user={user}/>
-          {/* 다음진료예약 */}
-          <Reservation />
-          {/* 결제내역정보 */}
-          <ReceiptDetails user={user}/>
-          <br/>
-          {/* 결제방식&처방전,진료의뢰서 */}
-          <ReceiptPayment user={user}/>
+    <div style={{width: "1350px", height:"480px"}}>
+      <div style={{ width: "950px", padding: 2, height: "400px", float: "left"}}>
+        <Paper elevation={3} style={{padding: "20px"}}>
+            <ReceptionList user={user}/>
+        </Paper>
+      </div>
+      <div style={{width: "395px", height: "400px", float: "right"}}>
+        <Paper elevation={3} style={{padding: "20px"}}>
+          {/* <h2>수납하기</h2> */}
+            {/* 접수정보 */}
+            <ReceptionInformation user={user}/>
+            {/* 다음진료예약 */}
+            <Reservation />
+            {/* 결제내역정보 */}
+            <ReceiptDetails user={user}/>
+            <br/>
+            {/* 결제방식&처방전,진료의뢰서 */}
+            <ReceiptPayment user={user}/>
 
-      </Paper>
+        </Paper>
+      </div>
     </div>
-    </>
   );
 }
 
