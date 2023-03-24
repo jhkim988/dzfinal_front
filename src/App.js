@@ -1,10 +1,24 @@
-import './App.css';
-import * as React from 'react';
-import Receipt from './receipt/Receipt';
+import { useSelector } from "react-redux";
 
+import { CssBaseline, StyledEngineProvider } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import NavigationScroll from "./template/layout/NavigationScroll";
+import ThemeRoutes from "./template/routes/ThemeRoutes";
+import themes from "./template/themes/theme";
 
 function App() {
-  return <Receipt/>
+  const customization = useSelector((state) => state.customization);
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={themes(customization)}>
+        <CssBaseline />
+        <NavigationScroll>
+          <ThemeRoutes />
+        </NavigationScroll>
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
 }
 
 export default App;

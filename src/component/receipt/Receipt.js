@@ -1,9 +1,9 @@
 import * as React from 'react';
 import axios from "axios";
-import ReceptionInformation from '../receipt/ReceptionInformation';
-import ReceiptPayment from '../receipt/ReceiptPayment';
-import ReceiptDetails from '../receipt/ReceiptDetails';
-import Reservation from '../receipt/Reservation';
+import ReceptionInformation from './ReceptionInformation';
+import ReceiptPayment from './ReceiptPayment';
+import ReceiptDetails from './ReceiptDetails';
+import Reservation from './Reservation';
 import Paper from '@mui/material/Paper';
 import { useState, useEffect } from 'react';
 import ReceptionList from './ReceptionList';
