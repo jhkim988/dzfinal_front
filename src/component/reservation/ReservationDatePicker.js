@@ -10,16 +10,16 @@ import { compareDate, offsetDateObj } from './utils/dateUtils';
 import dayjs from 'dayjs';
 
 const ReservationDatePicker = ({
-  pickDate,
-  setPickDate,
+  reservationFormData,
+  setReservationFormData,
   doctor,
 }) => {
   const requestAbortController = useRef(null);
   const [impossible, setImpossible] = useState(new Set());
   const [isLoading, setIsLoading] = useState(true);
-  const [viewPickerDate, setViewPickerDate] = useState(pickDate);
+  const [viewPickerDate, setViewPickerDate] = useState(offsetDateObj(reservationFormData.date_time));
   
-  useEffect(() => { setViewPickerDate(pickDate) }, [pickDate]);
+  useEffect(() => { setViewPickerDate(offsetDateObj(reservationFormData.date_time)) }, [reservationFormData.date_time]);
 
   const getImpossible = useCallback((doctor, year, month) => {
     const controller = new AbortController();
@@ -42,13 +42,9 @@ const ReservationDatePicker = ({
   }, []);
   
   useEffect(() => {
-    getImpossible(doctor, pickDate.getYear()+1900, pickDate.getMonth()+1);
+    getImpossible(doctor, viewPickerDate.getYear()+1900, viewPickerDate.getMonth()+1);
     return () => requestAbortController.current?.abort();
   }, [doctor, getImpossible]);
-
-  const calendarOnChange = useCallback(({ $d }) => {
-    setPickDate(new Date($d));
-  }, []);
 
   return (
     <Paper
@@ -60,7 +56,6 @@ const ReservationDatePicker = ({
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar
           onMonthChange={onMonthChange}
-          onChange={calendarOnChange}
           slots={{
             day: ServerDay
           }}
