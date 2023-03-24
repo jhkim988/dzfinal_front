@@ -4,30 +4,28 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { Paper } from "@mui/material";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
+import dayjs from 'dayjs';
 import axios from "axios";
 
-import { compareDate, offsetDateObj } from './utils/dateUtils';
-import dayjs from 'dayjs';
+import ReservationTimePicker from "./ReservationTimePicker"; 
+import { compareDate, offsetDate, offsetDateObj } from './utils/dateUtils';
 
 const ReservationDatePicker = ({
-  reservationFormData,
+  pickDate,
+  pickTime,
   setReservationFormData,
   doctor,
 }) => {
   const requestAbortController = useRef(null);
   const [impossible, setImpossible] = useState(new Set());
-  const [isLoading, setIsLoading] = useState(true);
-  const [viewPickerDate, setViewPickerDate] = useState(offsetDateObj(reservationFormData.date_time));
-  
-  useEffect(() => { setViewPickerDate(offsetDateObj(reservationFormData.date_time)) }, [reservationFormData.date_time]);
+  const [viewPickerDate, setViewPickerDate] = useState(pickDate ? offsetDateObj(pickDate) : new Date());
+  useEffect(() => { setViewPickerDate(pickDate ? offsetDateObj(pickDate) : new Date()) }, [pickDate]);
 
   const getImpossible = useCallback((doctor, year, month) => {
     const controller = new AbortController();
-    setIsLoading(true);
     axios.get("/api/reservation/impossible/day", {
       params: { doctor, year, month }
     }).then(({ data }) => {
-      setIsLoading(false);
       setImpossible(new Set(data));
     })
     requestAbortController.current = controller;
@@ -65,8 +63,22 @@ const ReservationDatePicker = ({
             }
           }}
           value={viewPickerDate && dayjs(viewPickerDate)}
+          onChange={({ $d }) => {
+            const date = new Date($d);
+            const offsetDateStr = offsetDate(date);
+            setViewPickerDate(date)
+            setReservationFormData((prev) => ({...prev, wish_date: offsetDateStr, date_time: `${offsetDateStr} ${prev.wish_time}`}))
+          }}
       />
       </LocalizationProvider>
+      
+      <ReservationTimePicker
+        pickTime={pickTime}
+        setReservationFormData={setReservationFormData}
+        viewPickerDate={viewPickerDate}
+        doctor={doctor}
+      />
+
     </Paper>
   );
 };

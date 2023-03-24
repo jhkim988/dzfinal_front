@@ -54,7 +54,7 @@ const ReservationForm = ({
     }).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
-        requestSuccessCallback(reservationFormData);
+        requestSuccessCallback(reservationFormData, res.data);
       }
     });
   }, [reservationFormData]);
@@ -63,14 +63,14 @@ const ReservationForm = ({
     axios.put("/api/reservation", reservationFormData).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
-        requestSuccessCallback(reservationFormData);
+        requestSuccessCallback(reservationFormData, res.data);
       }
     });
   }, [reservationFormData]);
 
   useEffect(() => {
     if (reservationFormModal.mode === "POST") {
-      const date = pickDate.toISOString().slice(0, 10);
+      const date = pickDate ? pickDate.toISOString().slice(0, 10) : null;
       setReservationFormData({
         patient_id: 0,
         patient_name: '',
@@ -229,7 +229,7 @@ const ReservationForm = ({
                   onClick={() =>
                     setDateTimePickerModal(true)
                   }
-                  value={reservationFormData.date_time}
+                  value={reservationFormData.wish_date && reservationFormData.wish_time ? reservationFormData.date_time : ''}
                   name="date-time"
                   onChange={formOnChange}
                   endAdornment={<InputAdornment position="end">
@@ -283,6 +283,8 @@ const ReservationForm = ({
         setDateTimePickerModal={setDateTimePickerModal}
         reservationFormData={reservationFormData}
         setReservationFormData={setReservationFormData}
+        pickDate={pickDate}
+        pickTime={pickTime}
       />
     </>
   );
