@@ -8,7 +8,7 @@ import Loadable from "../ui-component/Loadable";
 // dashboard routing
 const ClinicView = Loadable(lazy(() => import("../../component/clinic/ClinicView")));
 const Reservation = Loadable(lazy(() => import("../../component/reservation/Reservation")))
-const Reception = Loadable(lazy(() => import('../../components/Reception')));
+const Reception = Loadable(lazy(() => import('../../component/reception/Reception')));
 
 // utilities routing
 // const UtilsTypography = Loadable(lazy(() => import('../views/utilities/Typography')));
