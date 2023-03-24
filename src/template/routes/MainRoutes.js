@@ -5,7 +5,7 @@ import MainLayout from "../layout/MainLayout";
 import Loadable from "../ui-component/Loadable";
 
 // dashboard routing
-const Clinic = Loadable(lazy(() => import("../../component/clinic/Clinic")));
+const ClinicView = Loadable(lazy(() => import("../../component/clinic/ClinicView")));
 
 // utilities routing
 // const UtilsTypography = Loadable(lazy(() => import('../views/utilities/Typography')));
@@ -25,7 +25,7 @@ const MainRoutes = {
   children: [
     {
       path: "clinic",
-      element: <Clinic />,
+      element: <ClinicView />,
     },
   ],
 };

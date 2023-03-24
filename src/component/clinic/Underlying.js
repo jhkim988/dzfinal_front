@@ -12,7 +12,7 @@ import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOu
 import { red } from "@mui/material/colors";
 import axios from "axios";
 
-const Underlying = ({ props }) => {
+const Underlying = ({ props, onInsert }) => {
   const [disease_code, setDisease_code] = useState("");
   const [disease_name, setDisease_name] = useState("");
   const [searchList, setSearchList] = useState([]);
@@ -23,15 +23,16 @@ const Underlying = ({ props }) => {
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
       if (e.target.value.length >= 2) {
+        console.log(e.target.name + e.target.value);
         axios
           .get(
-            `/api/clinic/underlying/${e.target.name}/${encodeURIComponent(
+            `/api/clinic/disease/${e.target.name}/${encodeURIComponent(
               e.target.value
             )}`
           )
           .then((response) => {
-            setSearchList(response.data);
             console.log(response.data);
+            setSearchList(response.data);
           })
           .catch((error) => {
             console.log(error);
@@ -57,7 +58,7 @@ const Underlying = ({ props }) => {
       alert("이미 추가된 질병입니다.");
     } else {
       axios
-        .post("/api/clinic/insertUnderlying", {
+        .post("/api/clinic/disease", {
           patient_id: 1,
           disease_id: disease.disease_id,
         })
@@ -71,9 +72,11 @@ const Underlying = ({ props }) => {
 
   function handleRemove(disease_id) {
     axios
-      .post("/api/clinic/deleteUnderlying", {
-        patient_id: 1,
-        disease_id: disease_id,
+      .delete("/api/clinic/disease", {
+        params: {
+          patient_id: 1,
+          disease_id: disease_id,
+        }
       })
       .then((response) => {})
       .catch((error) => {
@@ -96,7 +99,7 @@ const Underlying = ({ props }) => {
         prevIndex > 0 ? prevIndex - 1 : prevIndex
       );
     } else if (e.key === "Enter") {
-      handleAdd(searchList[selectedIndex]);
+      onInsert(searchList[selectedIndex]);
       hideSearchList();
       resetInputValue();
     }
@@ -167,7 +170,7 @@ const Underlying = ({ props }) => {
                   hover
                   selected={selectedIndex === index}
                   onClick={() => {
-                    handleAdd(disease);
+                    onInsert(disease);
                     hideSearchList();
                     resetInputValue();
                   }}

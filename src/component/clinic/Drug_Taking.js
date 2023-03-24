@@ -28,7 +28,7 @@ const DrugTaking = ({ props }) => {
       if (e.target.value.length >= 2) {
         axios
           .get(
-            `/api/clinic/drugtaking/${e.target.name}/${encodeURIComponent(
+            `/api/clinic/drug/${e.target.name}/${encodeURIComponent(
               searchText
             )}`
           )
@@ -60,7 +60,7 @@ const DrugTaking = ({ props }) => {
       alert("이미 추가된 약품입니다.");
     } else {
       axios
-        .post("/api/clinic/insertDrugTaking", {
+        .post("/api/clinic/drug", {
           patient_id: 1,
           drug_id: drug.drug_id,
         })
@@ -74,9 +74,11 @@ const DrugTaking = ({ props }) => {
 
   function handleRemove(drug_id) {
     axios
-      .post("/api/clinic/deleteDrugTaking", {
-        patient_id: 1,
-        drug_id: drug_id,
+      .delete("/api/clinic/drug", {
+        params: {
+          patient_id: 1,
+          drug_id: drug_id,
+        }
       })
       .then((response) => {})
       .catch((error) => {

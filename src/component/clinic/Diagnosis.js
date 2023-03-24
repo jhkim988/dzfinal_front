@@ -21,7 +21,6 @@ const Diagnosis = ({
   const [disease_name, setDisease_name] = useState("");
   const [searchList, setSearchList] = useState([]);
   const searchListRef = useRef();
-  const [underlying, setUnderlying] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   function handleKeyUp(e) {
@@ -29,7 +28,7 @@ const Diagnosis = ({
       if (e.target.value.length >= 2) {
         axios
           .get(
-            `/api/clinic/underlying/${e.target.name}/${encodeURIComponent(
+            `/api/clinic/disease/${e.target.name}/${encodeURIComponent(
               e.target.value
             )}`
           )

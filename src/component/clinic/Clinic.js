@@ -4,89 +4,157 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
-  Paper,
+  Stack,
   TextField,
 } from "@mui/material";
-import { Stack } from "@mui/system";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import A from "./A";
+import React from "react";
+import { useState } from "react";
 import Diagnosis from "./Diagnosis";
-import DrugTaking from "./Drug_Taking";
-import MedicalInfo from "./MedicalInfo";
-import MedicalRecordInquiry from "./MedicalRecordInquiry";
-import Patient from "./Patient";
 import Prescription from "./Prescription";
-import Queue from "./Queue";
-import Underlying from "./Underlying";
 
-const Clinic = () => {
-  const [reception, setReception] = useState("");
-  const [patient, setPatient] = useState({});
-  const [underlying, setUnderlying] = useState([]);
-  const [drug_taking, setDrug_taking] = useState([]);
+const Clinic = ( {setPatient, setReception, onReset} ) => {
+  const [doctor, setDoctor] = useState(0);
+  const [symptom, setSymptom] = useState("");
+  const [treatment, setTreatment] = useState(false);
+  const [clinic_request, setClinic_request] = useState(false);
+  const [diagnosis, setDiagnosis] = useState([]);
+  const [prescription, setPrescription] = useState([]);
 
-  useEffect(() => {
-    setReception("1");
+  const handleDiagnosisAdd = (disease) => {
+    console.log(disease);
+
+    if (diagnosis.some((item) => item.disease_id === disease.disease_id)) {
+      alert("이미 추가된 질병입니다.");
+    } else {
+      setDiagnosis((prev) => [...prev, disease]);
+    }
+  };
+
+  const handlePrescriptionAdd = (drug) => {
+    if (prescription.some((item) => item.drug_id === drug.drug_id)) {
+      alert("이미 추가된 약품입니다.");
+    } else {
+      setPrescription((prev) => [...prev, drug]);
+    }
+  };
+
+  function handleDiagnosisRemove(disease_id) {
+    const newDiagnosis = diagnosis.filter(
+      (disease) => disease.disease_id !== disease_id
+    );
+    setDiagnosis(newDiagnosis);
+  }
+
+  function handlePrescriptionRemove(drug_id) {
+    const newPrescription = prescription.filter(
+      (drug) => drug.drug_id !== drug_id
+    );
+    setPrescription(newPrescription);
+  }
+
+  const handleSymptomChange = (e) => {
+    setSymptom(e.target.value);
+  };
+
+  const handleSymptomSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  const onClick = () => {
+    setDoctor(1);
+    const diseaseIds = diagnosis.map((item) => item.disease_id);
+    const drugIds = prescription.map((item) => item.drug_id);
+
     axios
-      .get(`/api/clinic/${reception}`)
-      .then((response) => {
-        setPatient(response.data);
-        setUnderlying(response.data.underlyingList);
-        setDrug_taking(response.data.drug_takingList);
+      .post("/api/clinic/clinic", {
+        reception_id: 2,
+        symptom: symptom,
+        treatment: treatment,
+        clinic_request: clinic_request,
+        creator: doctor,
+        disease_ids: diseaseIds,
+        drug_ids: drugIds,
       })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [reception]);
-
-  useEffect(() => {
-    axios
-      .get()
       .then((response) => {})
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+      setSymptom("");
+      setTreatment(false);
+      setClinic_request(false);
+      setDiagnosis([]);
+      setPrescription([]);
+      // setPatient();
+      // setReception();
+      // onReset();
+  };
+
+  const onCancel = () => {};
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={2} style={{ height: "90vh" }}>
-        <Paper sx={{ height: "90vh" }}>
-          <Queue />
-        </Paper>
-      </Grid>
-      <Grid item xs={10} style={{ height: "100vh" }}>
-        <Grid container spacing={2}>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <MedicalRecordInquiry />
-          </Grid>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <Paper sx={{ height: "45vh" }} elevation={3}>
-              <Patient reception={reception} patient={patient} />
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Underlying props={underlying} />
-                </Grid>
-                <Grid item xs={6}>
-                  <DrugTaking props={drug_taking} />
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={6} style={{ paddingTop: 0 }}>
+          <Diagnosis
+            handleDiagnosisAdd={handleDiagnosisAdd}
+            diagnosis={diagnosis}
+            handleDiagnosisRemove={handleDiagnosisRemove}
+          />
         </Grid>
-        <Grid container spacing={2}>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <MedicalInfo />
-          </Grid>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <Paper elevation={3} sx={{ height: "50vh" }}>
-              <A />
-            </Paper>
-          </Grid>
+        <Grid item xs={6} style={{ paddingTop: 0 }}>
+          <Prescription
+            handlePrescriptionAdd={handlePrescriptionAdd}
+            prescription={prescription}
+            handlePrescriptionRemove={handlePrescriptionRemove}
+          />
         </Grid>
       </Grid>
-    </Grid>
+      <form onSubmit={handleSymptomSubmit}>
+        <>
+          증상
+          <TextField
+            sx={{ width: "100%" }}
+            multiline
+            rows={4}
+            value={symptom}
+            onChange={handleSymptomChange}
+          />
+        </>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={treatment}
+                  onChange={(e) => setTreatment(e.target.checked)}
+                />
+              }
+              label="처치"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={clinic_request}
+                  onChange={(e) => setClinic_request(e.target.checked)}
+                />
+              }
+              label="진료의뢰서"
+            />
+          </Box>
+          <>
+            <Stack spacing={2} direction="row">
+              <Button variant="contained" onClick={onClick}>
+                확인
+              </Button>
+              <Button variant="outlined" onClick={onCancel}>
+                취소
+              </Button>
+            </Stack>
+          </>
+        </Box>
+      </form>
+    </>
   );
 };
 

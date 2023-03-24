@@ -25,7 +25,6 @@ const Prescription = ({
   const [searchList, setSearchList] = useState([]);
   const [searchText, setSearchText] = useState("");
   const searchListRef = useRef();
-  const [drugTaking, setDrugTaking] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   function handleKeyUp(e) {
@@ -35,7 +34,7 @@ const Prescription = ({
       if (e.target.value.length >= 2) {
         axios
           .get(
-            `/api/clinic/drugtaking/${e.target.name}/${encodeURIComponent(
+            `/api/clinic/drug/${e.target.name}/${encodeURIComponent(
               searchText
             )}`
           )
