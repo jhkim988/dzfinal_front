@@ -156,6 +156,7 @@ const ReservationDay = ({
           timeTableCellComponent={(props) => (
             <DayView.TimeTableCell
               {...props}
+              isShaded={compareDate(props.startDate, new Date()) <= 0}
               data-datetime={props.startDate}
               data-doctor={props.groupingInfo[0].id}
               style={{ height: cellHeight }}
