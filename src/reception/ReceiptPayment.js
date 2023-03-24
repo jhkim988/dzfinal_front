@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import ReactToPrint from "react-to-print";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -10,26 +11,30 @@ import Box from '@mui/material/Box';
 
 
 
-export default function BasicSelect() {
+export default function BasicSelect({user}) {
+  const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
   const [showCardForm, setShowCardForm] = useState(false); // 카드 결제 폼을 보여줄지 여부를 저장할 상태 값을 추가합니다.
-  const [isCashPayment, setIsCashPayment] = useState(true); // 현금결제 상태 값을 추가합니다.
+  const [isCashPayment, setIsCashPayment] = useState(false); // 현금결제 상태 값을 추가합니다.
+  const [isCardPayment, setIsCardPayment] = useState(false);
   
-  const handleCashPayment = () => {
-    setIsCashPayment(true); // 현금결제 버튼을 클릭하면 현금결제 상태 값을 true로 변경합니다.
-    setShowCardForm(false); // 카드결제 폼이 보이는 상태에서는 현금결제 버튼을 눌러도 카드결제 폼이 보이게끔 합니다.
-  };
+  // const handleCashPayment = () => {
+  //   setIsCashPayment(false); // 현금결제 버튼을 클릭하면 현금결제 상태 값을 true로 변경합니다.
+  //   setShowCardForm(true); // 카드결제 폼이 보이는 상태에서는 현금결제 버튼을 눌러도 카드결제 폼이 보이게끔 합니다.
+  // };
 
   const handleCardPayment = () => {
     setIsCashPayment(false); // 카드결제 버튼을 클릭하면 현금결제 상태 값을 false로 변경합니다.
     setShowCardForm(true); // 카드결제 버튼을 클릭하면 카드결제 폼을 보여주도록 상태 값을 변경합니다.
   };
 
-  const handlePayment = async () => {
+  const handleCashPayment = async () => {
     try {
       const response = await axios.post('/api/receipt/insertReceipt', {
-        reception_id: 1,
-        ratio: 1.1,
-        total_amount: 13500,
+        reception_id: user.reception_id,
+        ratio: InsuranceRatio,
+        total_amount: (ClinicPrice+TreatmentPrice)*InsuranceRatio,
+        card_name: '-',
+        card_number: '-',
         mode: '현금',
         creator: 1
       }, {
@@ -37,11 +42,14 @@ export default function BasicSelect() {
           'Content-Type': 'application/json'
         }
       });
+      alert("현금결제가 완료되었습니다.");
       console.log('Payment successful', response.data);
+      setIsCardPayment(true);
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   const style = {
       position: 'absolute',
@@ -49,15 +57,17 @@ export default function BasicSelect() {
       left: '50%',
       transform: 'translate(-50%, -50%)',
       width: 800,
-      height: 700,
+      height: 800,
       bgcolor: 'background.paper',
       border: '2px solid #000',
       boxShadow: 24,
+      overflow: "scroll",
       p: 4,
   };
   const [treatmentModalOpen, setTreatmentModalOpen] = React.useState(false);
   const [clinicRequestModalOpen, setClinicRequestModalOpen] = React.useState(false);
   
+  // 처방전 모달
   const handleTreatmentModalOpen = () => {
     setTreatmentModalOpen(true);
   };
@@ -65,6 +75,7 @@ export default function BasicSelect() {
     setTreatmentModalOpen(false);
   };
 
+  // 진료의뢰서 모달
   const handleClinicRequestModalOpen = () => {
     setClinicRequestModalOpen(true);
   };
@@ -80,14 +91,16 @@ export default function BasicSelect() {
           sx={{backgroundColor: 'green'}}
           variant="contained"
           href="#contained-buttons"
-          disabled={isCashPayment || !showCardForm}
+          disabled={!showCardForm}
           onClick={handleTreatmentModalOpen}
         >
           처방전
         </Button>
-        <Modal open={treatmentModalOpen} onClose={handleTreatmentModalClose}>
+        <Modal open={treatmentModalOpen} 
+               onClose={handleTreatmentModalClose}
+               >
           <Box sx={style}>
-            <Treatment />
+            <Treatment user={user}/>
             <Button onClick={handleTreatmentModalClose}> 확인 </Button>
           </Box>
         </Modal>
@@ -96,14 +109,16 @@ export default function BasicSelect() {
           sx={{backgroundColor: 'green'}}
           variant="contained"
           href="#contained-buttons"
-          disabled={isCashPayment || !showCardForm}
+          disabled={ user.insurance === 1 || !showCardForm }
           onClick={handleClinicRequestModalOpen}
         >
           진료의뢰서
         </Button>
-        <Modal open={clinicRequestModalOpen} onClose={handleClinicRequestModalClose}>
+        <Modal open={clinicRequestModalOpen} 
+               onClose={handleClinicRequestModalClose}
+               >
           <Box sx={style}>
-            <ClinicRequest />
+            <ClinicRequest user={user} />
             <Button onClick={handleClinicRequestModalClose}> 확인 </Button>
           </Box>
         </Modal>
@@ -111,10 +126,7 @@ export default function BasicSelect() {
         <Button variant="contained" onClick={handleCardPayment} > 카드결제 </Button>
       </Stack>
       <br/>
-      {showCardForm && <CardPaymentForm />} {/* 카드 결제 폼을 보여줍니다. */}
-      <>
-          <button onClick={handlePayment}>결제하기</button>
-      </>
+      {showCardForm && <CardPaymentForm user={user}/>} {/* 카드 결제 폼을 보여줍니다. */}
     </>
   );
 };

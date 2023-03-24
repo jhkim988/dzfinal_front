@@ -5,6 +5,7 @@ import InputUnstyled, { inputUnstyledClasses } from '@mui/base/InputUnstyled';
 import { styled } from '@mui/system';
 import Input from '@mui/material/Input';
 
+
 const blue = {
   100: '#DAECFF',
   200: '#80BFFF',
@@ -110,7 +111,7 @@ CustomInput.propTypes = {
 
 const ariaLabel = { 'aria-label': 'description' };
 
-export default function InputAdornments() {
+export default function InputAdornments( {user} ) {
 
   return (
     <Box>
@@ -122,10 +123,11 @@ export default function InputAdornments() {
             noValidate
             autoComplete="off"
         >
-            접수번호 <Input id="reception_id" name="reception_id" inputProps={ariaLabel} value="2023" readOnly />
+            접수번호 <Input id="reception_id" name="reception_id" inputProps={ariaLabel} value={user.reception_id} defaultValue="" readOnly />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            환자이름 <Input id="patient_id" name="patient_id" inputProps={ariaLabel} value="김윤지" readOnly />
+            환자이름 <Input id="patient_id" name="patient_id" inputProps={ariaLabel} value={user.patient_name} defaultValue="" readOnly />
         </Box>
       </Box>
   );
 }
+

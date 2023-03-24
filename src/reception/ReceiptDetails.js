@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,23 +7,26 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import ReceiptPayment from '../reception/ReceiptPayment';
 
 
+export default function DenseTable({user}) {
 
-function createData(name, treatment, clinic_price, total_price, ratio, receipt_price) {
-  return { name, treatment, clinic_price, total_price, ratio, receipt_price};
-}
-const rows = [
-  createData('기본진료비', "기본진료", 5000, "10%"),
-  createData('처치내역', "주사", 10000, "10%")
-];
-const rows2 = [
-    createData('총계', null, null, 15000, "10%", 13500)
-]
+  function createData(name, treatment, clinic_price, total_price, ratio, receipt_price) {
+    return { name, treatment, clinic_price, total_price, ratio, receipt_price };
+  }
+
+  // const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance } = user;
+
+  const rows = [
+    createData('기본진료비', "기본진료", user.ClinicPrice),
+    createData('처치내역', "처치", user.TreatmentPrice)
+  ];
+  const rows2 = [
+      createData('총계', null, null, (user.ClinicPrice + user.TreatmentPrice), user.insurance, (user.ClinicPrice + user.TreatmentPrice) * user.InsuranceRatio)
+  ]
 
 
-
-export default function DenseTable() {
   return (
     <>
     <h3>수납내역</h3>
@@ -79,6 +83,11 @@ export default function DenseTable() {
         </TableBody>
       </Table>
     </TableContainer>
+
+    {/* 결제방식&처방전,진료의뢰서 */}
+    {/* <ReceiptPayment 
+      user={user}
+    /> */}
     </>
   );
 }
