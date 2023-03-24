@@ -22,7 +22,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import axios from "axios";
-import moment from "moment";
 
 const MedicalRecordInquiry = ({ mri, setMedicalInfo }) => {
   // Select
@@ -42,21 +41,18 @@ const MedicalRecordInquiry = ({ mri, setMedicalInfo }) => {
       });
   };
 
-  const onSubmit = () => {
-    axios
-      .get(`/api/clinic/medicalsearch`)
-      .then((response) => {})
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const onSubmit = () => {
+  //   axios
+  //     .get(`/api/clinic/medicalsearch`)
+  //     .then((response) => {})
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
 
-  const [selectedDateRange, setSelectedDateRange] = useState(null);
-
-  const handleDateRangeChange = (start, end) => {
-    console.log(start, end);
-    console.log(moment(start).format("YYYY-MM-DD HH:mm:ss"));
-    console.log(moment(end).format("YYYY-MM-DD HH:mm:ss"));
+  const handleChangeg = (newValue) => {
+    setSelectedDateRange(newValue);
   };
 
   return (
@@ -73,10 +69,16 @@ const MedicalRecordInquiry = ({ mri, setMedicalInfo }) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DateRangePicker"]}>
             <DateRangePicker
-              value={selectedDateRange}
-              onChange={handleDateRangeChange}
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
+              value={selectedDateRange}
+              onChange={handleChangeg}
+              renderInput={(startProps, endProps) => (
+                <>
+                  <input {...startProps} />
+                  <input {...endProps} />
+                </>
+              )}
             />
           </DemoContainer>
         </LocalizationProvider>
@@ -84,7 +86,7 @@ const MedicalRecordInquiry = ({ mri, setMedicalInfo }) => {
         <Button
           variant="contained"
           sx={{ height: "40px", alignSelf: "center" }}
-          onClick={onSubmit()}
+          // onClick={onSubmit()}
         >
           검색
         </Button>

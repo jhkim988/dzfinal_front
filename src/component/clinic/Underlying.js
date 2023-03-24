@@ -76,7 +76,7 @@ const Underlying = ({ props, onInsert }) => {
         params: {
           patient_id: 1,
           disease_id: disease_id,
-        }
+        },
       })
       .then((response) => {})
       .catch((error) => {
@@ -99,7 +99,7 @@ const Underlying = ({ props, onInsert }) => {
         prevIndex > 0 ? prevIndex - 1 : prevIndex
       );
     } else if (e.key === "Enter") {
-      onInsert(searchList[selectedIndex]);
+      handleAdd(searchList[selectedIndex]);
       hideSearchList();
       resetInputValue();
     }
@@ -170,7 +170,7 @@ const Underlying = ({ props, onInsert }) => {
                   hover
                   selected={selectedIndex === index}
                   onClick={() => {
-                    onInsert(disease);
+                    handleAdd(disease);
                     hideSearchList();
                     resetInputValue();
                   }}
