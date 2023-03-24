@@ -4,8 +4,11 @@ import { lazy } from "react";
 import MainLayout from "../layout/MainLayout";
 import Loadable from "../ui-component/Loadable";
 
+
 // dashboard routing
 const ClinicView = Loadable(lazy(() => import("../../component/clinic/ClinicView")));
+const Reservation = Loadable(lazy(() => import("../../component/reservation/Reservation")))
+const Reception = Loadable(lazy(() => import('../../component/reception/Reception')));
 
 // utilities routing
 // const UtilsTypography = Loadable(lazy(() => import('../views/utilities/Typography')));
@@ -20,14 +23,21 @@ const ClinicView = Loadable(lazy(() => import("../../component/clinic/ClinicView
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
-  path: "/",
+  path: '/',
   element: <MainLayout />,
   children: [
     {
       path: "clinic",
       element: <ClinicView />,
     },
-  ],
+    {
+      path: "reservation",
+      element: <Reservation />
+    }, {
+      path: "reception",
+      element: <Reception />,
+    }
+  ]
 };
 
 export default MainRoutes;
