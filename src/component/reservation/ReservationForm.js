@@ -4,7 +4,7 @@ import {
   Paper,
   Grid,
   Modal,
-  TextareaAutosize,
+  TextField,
   FormControl,
   InputLabel,
   Input,
@@ -248,10 +248,11 @@ const ReservationForm = ({
 
             <Grid item xs={12} style={style}>
               <FormControl>
-                <TextareaAutosize
+                <TextField
                   placeholder="예약메모"
                   minRows={5}
-                  style={{ width: 400 }}
+                  multiline
+                  style={{ width: 360 }}
                   name="treatment_reason"
                   onChange={formOnChange}
                   value={reservationFormData.treatment_reason}
@@ -260,12 +261,14 @@ const ReservationForm = ({
             </Grid>
 
             <Grid item xs={8}></Grid>
-            <Grid item xs={4} style={style}>
+            <Grid item xs={2} style={style}>
               {reservationFormModal.mode === "POST" ? (
                 <Button onClick={postReservation}>등록</Button>
               ) : (
                 <Button onClick={putReservation}>수정</Button>
               )}
+            </Grid>
+            <Grid item xs={2} style={style}>
               <Button
                 onClick={(e) => {
                   setReservationFormModal({
