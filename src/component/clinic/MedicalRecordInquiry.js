@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -21,32 +21,30 @@ import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
+import axios from "axios";
 
-const MedicalRecordInquiry = () => {
+const MedicalRecordInquiry = ({ mri, setPatient, setMedicalInfo }) => {
   // Select
   const [type, setType] = useState("");
   const handleChange = (event) => {
     setType(event.target.value);
   };
 
-  // Table
-  function createData(name, doctor, disease_name, drug_name, created_at) {
-    return { name, doctor, disease_name, drug_name, created_at };
-  }
+  const onClick = (reception_id) => {
+    setPatient(reception_id);
 
-  const rows = [
-    createData("이정주", "김을지", "두통", "타이레놀", "2023-03-01"),
-    createData("이정주", "이더존", "복통", "물약", "2023-03-02"),
-    createData("이정주", "김을지", "두통", "타이레놀", "2023-03-03"),
-    createData("이정주", "이더존", "복통", "물약", "2023-03-04"),
-    createData("이정주", "이더존", "복통", "물약", "2023-03-05"),
-    createData("이정주", "김을지", "두통", "타이레놀", "2023-03-06"),
-    createData("이정주", "김을지", "두통", "타이레놀", "2023-03-07"),
-    createData("이정주", "김을지", "두통", "타이레놀", "2023-03-08"),
-  ];
+    axios
+      .get(`/api/clinic/${reception_id}`)
+      .then((response) => {
+        setMedicalInfo(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
-    <Paper sx={{ marginTop: 2, height: "45vh" }} elevation={3}>
+    <Paper sx={{ height: "45vh" }} elevation={3}>
       <Box>진료기록조회</Box>
       <Box sx={{ display: "flex" }}>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -96,18 +94,31 @@ const MedicalRecordInquiry = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {mri.map((row) => (
                 <TableRow
-                  key={row.name}
+                  key={row.reception_id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  onClick={() => onClick(row.reception_id)}
                 >
                   <TableCell component="th" scope="row" align="center">
-                    {row.name}
+                    {row.patient_name}
                   </TableCell>
-                  <TableCell align="center">{row.doctor}</TableCell>
-                  <TableCell align="center">{row.disease_name}</TableCell>
-                  <TableCell align="center">{row.drug_name}</TableCell>
-                  <TableCell align="center">{row.created_at}</TableCell>
+                  <TableCell align="center">{row.employee_name}</TableCell>
+                  <TableCell align="center">
+                    {row.diagnosisList.length > 0 &&
+                      row.diagnosisList[0].disease_name}
+                    {row.diagnosisList.length > 1 &&
+                      ` 외${row.diagnosisList.length - 1}`}
+                  </TableCell>
+                  <TableCell align="center">
+                    {row.prescriptionList.length > 0 &&
+                      row.prescriptionList[0].drug_name}
+                    {row.prescriptionList.length > 1 &&
+                      ` 외${row.prescriptionList.length - 1}`}
+                  </TableCell>
+                  <TableCell align="center">
+                    {row.created_at.substring(0, 10)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

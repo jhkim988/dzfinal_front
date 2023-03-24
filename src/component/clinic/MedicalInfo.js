@@ -10,7 +10,6 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { BorderBottom } from "@material-ui/icons";
 
 function createData(name, unit) {
   return { name, unit };
@@ -27,7 +26,7 @@ const rows = [
   createData("내원사유"),
 ];
 
-const MedicalInfo = () => {
+const MedicalInfo = ({ medicalInfo }) => {
   return (
     <Paper>
       <Grid container>
@@ -39,7 +38,7 @@ const MedicalInfo = () => {
             복사
           </Button>
           <Button variant="contained" sx={{ marginRight: 2 }}>
-            수정하기
+            수정
           </Button>
         </Grid>
         <Grid item xs={6}>
@@ -74,19 +73,19 @@ const MedicalInfo = () => {
             <Box sx={{ margin: 1, height: "33%" }}>
               진단
               <Box sx={{ border: 1, borderRadius: 1, height: "100px" }}>
-                asdfasdfsaf
+                medicalInfo
               </Box>
             </Box>
             <Box sx={{ margin: 1, height: "33%" }}>
               처방
               <Box sx={{ border: 1, borderRadius: 1, height: "100px" }}>
-                asdfasdfsaf
+                medicalInfo
               </Box>
             </Box>
             <Box sx={{ margin: 1, height: "33%" }}>
               증상
               <Box sx={{ border: 1, borderRadius: 1, height: "100px" }}>
-                asdfasdfsaf
+                medicalInfo
               </Box>
             </Box>
           </Box>

@@ -38,7 +38,11 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
   return (
     <Box
       component="nav"
-      sx={{ flexShrink: { md: 0 }, width: matchUpMd ? drawerWidth : "auto" }}
+      sx={{
+        flexShrink: { md: 0 },
+        width: matchUpMd ? drawerWidth : "auto",
+        position: "absolute",
+      }}
       aria-label="mailbox folders"
     >
       <Drawer

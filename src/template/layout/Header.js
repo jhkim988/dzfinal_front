@@ -1,8 +1,9 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
-import { Avatar, Box, ButtonBase } from "@mui/material";
-
+import { Avatar, Box, ButtonBase, TextField } from "@mui/material";
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
 
 const Header = ({ handleLeftDrawerToggle }) => {
@@ -30,7 +31,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
           component="span"
           sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
         >
-          <Box>로고자리</Box>
+          <Box>DREAM_EULJI</Box>
         </Box>
       </Box>
 
@@ -52,17 +53,20 @@ const Header = ({ handleLeftDrawerToggle }) => {
           color="inherit"
         >
           {toggleIcon ? (
-            <IconArrowBarRight stroke={1.5} size="1.3rem" />
-          ) : (
             <IconArrowBarToLeft stroke={1.5} size="1.3rem" />
+          ) : (
+            <IconArrowBarRight stroke={1.5} size="1.3rem" />
           )}
         </Avatar>
       </ButtonBase>
 
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
-
-      <Box>프로필자리</Box>
+      <Box>채팅</Box>
+      <Box>
+        <AccountCircleRoundedIcon style={{ height: 50 }}></AccountCircleRoundedIcon>
+        <TextField id="outlined-basic" label="프로필" name="profile" variant="outlined" />
+      </Box>
     </>
   );
 };
