@@ -1,12 +1,12 @@
-import { lazy } from 'react';
+import { lazy } from "react";
 
 // project imports
-import MainLayout from '../layout/MainLayout';
-import Loadable from '../ui-component/Loadable';
-import Clinic from './../component/clinic/Clinic';
-import Reservation from "../component/reservation/Reservation";
+import MainLayout from "../layout/MainLayout";
+import Loadable from "../ui-component/Loadable";
+
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
+const ClinicView = Loadable(lazy(() => import("../../component/clinic/ClinicView")));
+const Reservation = Loadable(lazy(() => import("../../component/reservation/Reservation")))
 
 // utilities routing
 // const UtilsTypography = Loadable(lazy(() => import('../views/utilities/Typography')));
@@ -21,18 +21,18 @@ const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default'
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
-    path: '/',
-    element: <MainLayout />,
-    children: [
-        {
-            path: "clinic",
-            element: <Clinic />,
-        },
-        {
-            path: "reservation",
-            element: <Reservation/>
-        }
-    ]
+  path: '/',
+  element: <MainLayout />,
+  children: [
+      {
+          path: "clinic",
+          element: <ClinicView />,
+      },
+      {
+          path: "reservation",
+          element: <Reservation/>
+      }
+  ]
 };
 
 export default MainRoutes;

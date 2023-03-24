@@ -5,7 +5,7 @@ const Patient = (props) => {
   const { reception, patient } = props;
 
   return (
-    <Box sx={{ margin: 1 }}>
+    <Box>
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
         접수번호
         <TextField
@@ -37,35 +37,35 @@ const Patient = (props) => {
         />
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        키{" "}
+        키
         <TextField
           disabled
           size="small"
           value={patient.height}
           sx={{ width: 100 }}
         />
-        체중{" "}
+        체중
         <TextField
           disabled
           size="small"
           value={patient.weight}
           sx={{ width: 100 }}
         />
-        BMI{" "}
+        BMI
         <TextField
           disabled
           size="small"
           value={patient.bmi}
           sx={{ width: 100 }}
         />
-        혈압{" "}
+        혈압
         <TextField
           disabled
           size="small"
           value={`${patient.diastolic}/${patient.systolic}`}
           sx={{ width: 100 }}
         />
-        혈당{" "}
+        혈당
         <TextField
           disabled
           size="small"

@@ -52,9 +52,9 @@ const Header = ({ handleLeftDrawerToggle }) => {
           color="inherit"
         >
           {toggleIcon ? (
-            <IconArrowBarRight stroke={1.5} size="1.3rem" />
-          ) : (
             <IconArrowBarToLeft stroke={1.5} size="1.3rem" />
+          ) : (
+            <IconArrowBarRight stroke={1.5} size="1.3rem" />
           )}
         </Avatar>
       </ButtonBase>
