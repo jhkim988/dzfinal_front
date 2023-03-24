@@ -13,13 +13,21 @@ import { useState } from "react";
 import Diagnosis from "./Diagnosis";
 import Prescription from "./Prescription";
 
-const Clinic = ( {setPatient, setReception, onReset} ) => {
+const Clinic = ({
+  setPatient,
+  setReception,
+  onReset,
+  mode,
+  diagnosiss,
+  prescriptions,
+  medicalInfo,
+}) => {
   const [doctor, setDoctor] = useState(0);
   const [symptom, setSymptom] = useState("");
   const [treatment, setTreatment] = useState(false);
   const [clinic_request, setClinic_request] = useState(false);
-  const [diagnosis, setDiagnosis] = useState([]);
-  const [prescription, setPrescription] = useState([]);
+  const [diagnosis, setDiagnosis] = useState(diagnosiss);
+  const [prescription, setPrescription] = useState(prescriptions);
 
   const handleDiagnosisAdd = (disease) => {
     console.log(disease);
@@ -68,7 +76,7 @@ const Clinic = ( {setPatient, setReception, onReset} ) => {
 
     axios
       .post("/api/clinic/clinic", {
-        reception_id: 2,
+        reception_id: 53,
         symptom: symptom,
         treatment: treatment,
         clinic_request: clinic_request,
@@ -80,14 +88,14 @@ const Clinic = ( {setPatient, setReception, onReset} ) => {
       .catch((error) => {
         console.log(error);
       });
-      setSymptom("");
-      setTreatment(false);
-      setClinic_request(false);
-      setDiagnosis([]);
-      setPrescription([]);
-      // setPatient();
-      // setReception();
-      // onReset();
+    setSymptom("");
+    setTreatment(false);
+    setClinic_request(false);
+    setDiagnosis([]);
+    setPrescription([]);
+    // setPatient();
+    // setReception();
+    // onReset();
   };
 
   const onCancel = () => {};
@@ -100,6 +108,8 @@ const Clinic = ( {setPatient, setReception, onReset} ) => {
             handleDiagnosisAdd={handleDiagnosisAdd}
             diagnosis={diagnosis}
             handleDiagnosisRemove={handleDiagnosisRemove}
+            medicalInfo={medicalInfo}
+            mode={mode}
           />
         </Grid>
         <Grid item xs={6} style={{ paddingTop: 0 }}>
@@ -107,6 +117,8 @@ const Clinic = ( {setPatient, setReception, onReset} ) => {
             handlePrescriptionAdd={handlePrescriptionAdd}
             prescription={prescription}
             handlePrescriptionRemove={handlePrescriptionRemove}
+            medicalInfo={medicalInfo}
+            mode={mode}
           />
         </Grid>
       </Grid>
@@ -117,7 +129,7 @@ const Clinic = ( {setPatient, setReception, onReset} ) => {
             sx={{ width: "100%" }}
             multiline
             rows={4}
-            value={symptom}
+            value={mode >= 1 ? symptom || medicalInfo.symptom : symptom}
             onChange={handleSymptomChange}
           />
         </>
@@ -126,7 +138,7 @@ const Clinic = ( {setPatient, setReception, onReset} ) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={treatment}
+                  checked={mode >= 1 ? medicalInfo.treatment : treatment}
                   onChange={(e) => setTreatment(e.target.checked)}
                 />
               }
@@ -135,7 +147,9 @@ const Clinic = ( {setPatient, setReception, onReset} ) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={clinic_request}
+                  checked={
+                    mode >= 1 ? medicalInfo.clinic_request : clinic_request
+                  }
                   onChange={(e) => setClinic_request(e.target.checked)}
                 />
               }
@@ -145,7 +159,7 @@ const Clinic = ( {setPatient, setReception, onReset} ) => {
           <>
             <Stack spacing={2} direction="row">
               <Button variant="contained" onClick={onClick}>
-                확인
+                {mode === 1 ? "등록" : "수정"}
               </Button>
               <Button variant="outlined" onClick={onCancel}>
                 취소

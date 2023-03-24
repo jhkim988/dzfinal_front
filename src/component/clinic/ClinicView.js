@@ -17,10 +17,13 @@ const ClinicView = () => {
   const [drug_taking, setDrug_taking] = useState([]);
   const [mri, setMri] = useState([]);
   const [medicalInfo, setMedicalInfo] = useState({});
+  const [mode, setMode] = useState(0);
+  const [diagnosis, setDiagnosis] = useState([]);
+  const [prescription, setPrescription] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`/api/clinic/${reception}`)
+      .get(`/api/clinic/1`)
       .then((response) => {
         setPatient(response.data);
         onAppend(response.data.underlyingList);
@@ -52,11 +55,7 @@ const ClinicView = () => {
       <Grid item xs={10} style={{ height: "100vh" }}>
         <Grid container spacing={2}>
           <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <MedicalRecordInquiry
-              mri={mri}
-              setPatient={setPatient}
-              setMedicalInfo={setMedicalInfo}
-            />
+            <MedicalRecordInquiry mri={mri} setMedicalInfo={setMedicalInfo} />
           </Grid>
           <Grid item xs={5.9} style={{ height: "50vh" }}>
             <Paper sx={{ height: "45vh" }} elevation={3}>
@@ -74,7 +73,12 @@ const ClinicView = () => {
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <MedicalInfo medicalInfo={medicalInfo} />
+            <MedicalInfo
+              medicalInfo={medicalInfo}
+              setMode={setMode}
+              setDiagnosis={setDiagnosis}
+              setPrescription={setPrescription}
+            />
           </Grid>
           <Grid item xs={5.9} style={{ height: "50vh" }}>
             <Paper elevation={3} sx={{ height: "50vh" }}>
@@ -82,6 +86,10 @@ const ClinicView = () => {
                 setPatient={setPatient}
                 setReception={setReception}
                 onReset={onReset}
+                mode={mode}
+                medicalInfo={medicalInfo}
+                diagnosis={diagnosis}
+                prescription={prescription}
               />
             </Paper>
           </Grid>

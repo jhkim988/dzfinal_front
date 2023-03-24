@@ -14,8 +14,10 @@ import { red } from "@mui/material/colors";
 
 const Diagnosis = ({
   handleDiagnosisAdd,
-  diagnosis,
   handleDiagnosisRemove,
+  diagnosis,
+  medicalInfo,
+  mode,
 }) => {
   const [disease_code, setDisease_code] = useState("");
   const [disease_name, setDisease_name] = useState("");
@@ -53,32 +55,6 @@ const Diagnosis = ({
     setDisease_code("");
     setDisease_name("");
   }
-
-  // const handleAdd = (disease) => {
-  //   if (underlying.some((item) => item.disease_id === disease.disease_id)) {
-  //     // 이미 추가된 질병일 경우
-  //     alert("이미 추가된 질병입니다.");
-  //   } else {
-  //     setUnderlying((prev) => [...prev, disease]);
-  //   }
-  // };
-
-  // function handleRemove(disease_id) {
-  //   axios
-  //     .post("/api/clinic/deleteUnderlying", {
-  //       patient_id: 1,
-  //       disease_id: disease_id,
-  //     })
-  //     .then((response) => {})
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-
-  //   const newUnderlying = underlying.filter(
-  //     (disease) => disease.disease_id !== disease_id
-  //   );
-  //   setUnderlying(newUnderlying);
-  // }
 
   const handleKeyDown = (e) => {
     const scrollRef = searchListRef.current;
@@ -205,20 +181,22 @@ const Diagnosis = ({
         <Box sx={{ minHeight: "220px", overflowY: "auto" }}>
           <Table>
             <TableBody>
-              {diagnosis.map((disease) => (
-                <TableRow key={disease.disease_id}>
-                  <TableCell align="center">{disease.disease_code}</TableCell>
-                  <TableCell align="center">{disease.disease_name}</TableCell>
-                  <TableCell align="center">
-                    <RemoveCircleOutlineIcon
-                      sx={{ color: red[500] }}
-                      onClick={() => {
-                        handleDiagnosisRemove(disease.disease_id);
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {(mode >= 1 ? medicalInfo.diagnosis : diagnosis || []).map(
+                (disease) => (
+                  <TableRow key={disease.disease_id}>
+                    <TableCell align="center">{disease.disease_code}</TableCell>
+                    <TableCell align="center">{disease.disease_name}</TableCell>
+                    <TableCell align="center">
+                      <RemoveCircleOutlineIcon
+                        sx={{ color: red[500] }}
+                        onClick={() => {
+                          handleDiagnosisRemove(disease.disease_id);
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
         </Box>

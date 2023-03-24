@@ -22,8 +22,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import axios from "axios";
+import moment from "moment";
 
-const MedicalRecordInquiry = ({ mri, setPatient, setMedicalInfo }) => {
+const MedicalRecordInquiry = ({ mri, setMedicalInfo }) => {
   // Select
   const [type, setType] = useState("");
   const handleChange = (event) => {
@@ -31,10 +32,8 @@ const MedicalRecordInquiry = ({ mri, setPatient, setMedicalInfo }) => {
   };
 
   const onClick = (reception_id) => {
-    setPatient(reception_id);
-
     axios
-      .get(`/api/clinic/${reception_id}`)
+      .get(`/api/clinic/medicalinfo/${reception_id}`)
       .then((response) => {
         setMedicalInfo(response.data);
       })
@@ -43,11 +42,28 @@ const MedicalRecordInquiry = ({ mri, setPatient, setMedicalInfo }) => {
       });
   };
 
+  const onSubmit = () => {
+    axios
+      .get(`/api/clinic/medicalsearch`)
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const [selectedDateRange, setSelectedDateRange] = useState(null);
+
+  const handleDateRangeChange = (start, end) => {
+    console.log(start, end);
+    console.log(moment(start).format("YYYY-MM-DD HH:mm:ss"));
+    console.log(moment(end).format("YYYY-MM-DD HH:mm:ss"));
+  };
+
   return (
     <Paper sx={{ height: "45vh" }} elevation={3}>
       <Box>진료기록조회</Box>
       <Box sx={{ display: "flex" }}>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
           <InputLabel>분류</InputLabel>
           <Select value={type} onChange={handleChange}>
             <MenuItem value={"patient_name"}>환자이름</MenuItem>
@@ -57,26 +73,18 @@ const MedicalRecordInquiry = ({ mri, setPatient, setMedicalInfo }) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DateRangePicker"]}>
             <DateRangePicker
+              value={selectedDateRange}
+              onChange={handleDateRangeChange}
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
-              sx={{
-                "& .MuiTextField-root": { width: "130px" },
-                "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                  paddingLeft: "10px",
-                },
-                "& .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root": {
-                  height: "40px",
-                },
-                "& .css-ctjfle-MuiStack-root-MuiMultiInputDateRangeField-root":
-                  { marginLeft: "8px" },
-              }}
             />
           </DemoContainer>
         </LocalizationProvider>
-        <TextField label="검색어" size="small" sx={{ alignSelf: "center" }} />
+        <TextField label="검색어" sx={{ alignSelf: "center" }} />
         <Button
           variant="contained"
           sx={{ height: "40px", alignSelf: "center" }}
+          onClick={onSubmit()}
         >
           검색
         </Button>
