@@ -57,7 +57,7 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
             </div>
             <div>
 
-                <TableContainer component={Paper} style={{ width: 430, padding: 2 }}>
+                <TableContainer component={Paper} style={{ width: 475, padding: 2 }}>
                     <Table aria-label="simple table" size='small'>
                         <TableHead>
                             <TableRow>
