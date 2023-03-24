@@ -23,11 +23,8 @@ const ReservationForm = ({
   reservationFormModal,
   setReservationFormModal,
   pickDate,
-  setPickDate,
   pickTime,
-  setPickTime,
-  loadCalendar,
-  loadDayAppointments,
+  requestSuccessCallback,
 }) => {
   const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
   const [reservationFormData, setReservationFormData] = useState({
@@ -57,24 +54,23 @@ const ReservationForm = ({
     }).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
-        loadCalendar();
-        loadDayAppointments(reservationFormData.wish_date);
+        requestSuccessCallback(reservationFormData, res.data);
       }
     });
   }, [reservationFormData]);
+
   const putReservation = useCallback((e) => {
     axios.put("/api/reservation", reservationFormData).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
-        loadCalendar();
-        loadDayAppointments(reservationFormData.wish_date);  
+        requestSuccessCallback(reservationFormData, res.data);
       }
     });
   }, [reservationFormData]);
 
   useEffect(() => {
     if (reservationFormModal.mode === "POST") {
-      const date = pickDate.toISOString().slice(0, 10);
+      const date = pickDate ? pickDate.toISOString().slice(0, 10) : null;
       setReservationFormData({
         patient_id: 0,
         patient_name: '',
@@ -88,7 +84,6 @@ const ReservationForm = ({
         treatment_reason: '',
         doctor: reservationFormModal.doctor,
       });
-  
     } else if (reservationFormModal.mode === "PUT") {
       axios.get(`/api/reservation/${reservationFormModal.reservation_id}`)
         .then(({data}) => {
@@ -110,7 +105,7 @@ const ReservationForm = ({
           });
       });
     }
-  }, [reservationFormModal.modalState])
+  }, [reservationFormModal.modalState, pickDate, pickTime])
   return (
     <>
       <Modal
@@ -234,7 +229,7 @@ const ReservationForm = ({
                   onClick={() =>
                     setDateTimePickerModal(true)
                   }
-                  value={reservationFormData.date_time}
+                  value={reservationFormData.wish_date && reservationFormData.wish_time ? reservationFormData.date_time : ''}
                   name="date-time"
                   onChange={formOnChange}
                   endAdornment={<InputAdornment position="end">
@@ -284,14 +279,12 @@ const ReservationForm = ({
         </Paper>
       </Modal>
       <ReservationDateTimePickerModal
-        setDateTimePickerModal={setDateTimePickerModal}
         dateTimePickerModal={dateTimePickerModal}
+        setDateTimePickerModal={setDateTimePickerModal}
         reservationFormData={reservationFormData}
         setReservationFormData={setReservationFormData}
         pickDate={pickDate}
-        setPickDate={setPickDate}
         pickTime={pickTime}
-        setPickTime={setPickTime}
       />
     </>
   );

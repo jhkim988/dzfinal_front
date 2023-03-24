@@ -143,6 +143,11 @@ const ReservationDay = ({
     </Appointments.Appointment>
   )};
 
+  const requestSuccessCallback = useCallback(({ wish_date }) => {
+    loadCalendar();
+    loadDayAppointments(wish_date);
+  }, []);
+
   return (
     <>
     <Paper>
@@ -199,8 +204,7 @@ const ReservationDay = ({
       setPickDate={setPickDate}
       pickTime={pickTime}
       setPickTime={setPickTime}
-      loadCalendar={loadCalendar}
-      loadDayAppointments={loadDayAppointments}
+      requestSuccessCallback={requestSuccessCallback}
     />
     </>
   );

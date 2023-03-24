@@ -1,15 +1,14 @@
 import React, { useCallback } from "react";
 import { Modal, Button } from "@mui/material";
 import ReservationDatePicker from "./ReservationDatePicker";
-import ReservationTimePicker from "./ReservationTimePicker";
 
 const ReservationDateTimePickerModal = ({
-  setDateTimePickerModal,
   dateTimePickerModal,
+  setDateTimePickerModal,
   reservationFormData,
   setReservationFormData,
   pickDate,
-  setPickDate,
+  pickTime,
 }) => {
   const selectEvent = useCallback(() => {
     const date_time = `${reservationFormData.wish_date} ${reservationFormData.wish_time}`;
@@ -18,18 +17,14 @@ const ReservationDateTimePickerModal = ({
     : setReservationFormData({ ...reservationFormData, date_time: ''});
     setDateTimePickerModal(false);
   }, [setReservationFormData, setDateTimePickerModal, reservationFormData]);
+  
   return (
     <Modal open={dateTimePickerModal} onClose={() => setDateTimePickerModal(false)}>
       <>
         <ReservationDatePicker
           pickDate={pickDate}
-          setPickDate={setPickDate}
-          doctor={reservationFormData.doctor}
-        />
-        <ReservationTimePicker
-          reservationFormData={reservationFormData}
+          pickTime={pickTime}
           setReservationFormData={setReservationFormData}
-          pickDate={pickDate}
           doctor={reservationFormData.doctor}
         />
         <Button
