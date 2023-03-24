@@ -57,13 +57,13 @@ const ClinicRequest = ({user}, ref) => {
                     주민등록번호(앞/뒤): {user.front_registration_number}-{user.back_registration_number}<br/>
                     주소: {user.address}&nbsp;{user.detail_address}<br/>
                     
-                    {/* <div>
+                    <div>
                         <ul>
                             {clinicRequest.map((list) => (
                                 <li key={list.disease_code}>{list.disease_name}</li>
                             ))}
                         </ul>
-                    </div> */}
+                    </div>
 
 
                     출력날짜: {year}-{todayMonth+1}-{todayDate}<br/>

@@ -7,8 +7,9 @@ import ReceiptDetails from './reception/ReceiptDetails';
 import Reservation from './reception/Reservation';
 import Paper from '@mui/material/Paper';
 import { useState, useEffect } from 'react';
-import ReceptionList from './reception/ReceptionList';
 
+// axios를 이 곳에..??
+// 부모컴포넌트를 만들어서 자식 컴포넌트
 
 function App() {
   const [user, setUser] = useState({});
@@ -40,18 +41,9 @@ function App() {
   }, []);
 
 
-
-
   return (
-    <>
-    <div style={{marginTop: "350px", width: "600px", padding: 2, height: "400px", float: "left"}}>
-      <Paper elevation={3} style={{padding: "20px"}}>
-          <h3>수납내역목록들</h3>
-          <ReceptionList />
-      </Paper>
-    </div>
-    <div style={{width: "395px", height: "400px", float: "right"}}>
-      <Paper elevation={3} style={{padding: "20px"}}>
+    <div style={{width: "395px", height: "400px"}}>
+    <Paper elevation={3} style={{padding: "20px"}}>
         {/* <h2>수납하기</h2> */}
           {/* 접수정보 */}
           <ReceptionInformation user={user}/>
@@ -65,7 +57,6 @@ function App() {
 
       </Paper>
     </div>
-    </>
   );
 }
 
