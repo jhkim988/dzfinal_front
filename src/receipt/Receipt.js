@@ -43,10 +43,10 @@ function Receipt() {
 
   return (
     <>
-    <div style={{marginTop: "350px", width: "600px", padding: 2, height: "400px", float: "left"}}>
+    <div style={{ width: "950px", padding: 2, height: "300px", float: "left"}}>
       <Paper elevation={3} style={{padding: "20px"}}>
           <h3>수납내역목록들</h3>
-          <ReceptionList />
+          <ReceptionList user={user}/>
       </Paper>
     </div>
     <div style={{width: "395px", height: "400px", float: "right"}}>
