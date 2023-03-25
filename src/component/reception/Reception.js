@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Paper, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import AutoCompleteForm from './AutoCompleteForm';
@@ -6,6 +6,7 @@ import DailyReservationList from './DailyReservationList';
 import PatientForm from './PatientForm';
 import ReceptionForm from './ReceptionForm';
 import Receipt from '../receipt/Receipt';
+import WaitingQueue from '../waiting/WaitingQueue';
 
 const Reception = () => {
     const [patient_id, setPatient_id] = useState(null);
@@ -41,6 +42,12 @@ const Reception = () => {
 
     return (
         <>
+            <Grid container>
+            <Grid item xs={2}>
+                <WaitingQueue sx={{ width: 260 }}/>
+            </Grid>
+
+            </Grid>
             <Receipt />
         <div style={{ width: "950px", height: "400px" }}>
             <AutoCompleteForm setPatientData={setPatientData} setReceptionData={setReceptionData} />
