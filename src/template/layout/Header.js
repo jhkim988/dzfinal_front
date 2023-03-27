@@ -1,20 +1,34 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
-import { Avatar, Box, ButtonBase, TextField } from "@mui/material";
+import { Avatar, Box, Button, ButtonBase, TextField } from "@mui/material";
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
+import ChatList from "../../components/ChatList";
+
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
   const [toggleIcon, setToggleIcon] = useState(false);
+  // const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => {
+    window.open(<ChatList />, 'target');
+  };
+
+  // const closeModal = () => {
+  //   setModalIsOpen(false);
+  // };
 
   const handleToggleIcon = () => {
     setToggleIcon(!toggleIcon);
     handleLeftDrawerToggle();
   };
 
+  // const handleChatList = () => {
+
+  // }
   return (
     <>
       {/* logo & toggler button */}
@@ -62,7 +76,14 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
-      <Box>채팅</Box>
+      <Box>
+        <Button variant="contained" onClick={openModal}>
+          채팅
+        </Button>
+        {/* {<ChatList isOpen={modalIsOpen} onRequestClose={closeModal}>
+          <button onClick={closeModal}>Close Modal</button>
+        </ChatList>} */}
+      </Box>
       <Box>
         <AccountCircleRoundedIcon style={{ height: 50 }}></AccountCircleRoundedIcon>
         <TextField id="outlined-basic" label="프로필" name="profile" variant="outlined" />
