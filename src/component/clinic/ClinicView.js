@@ -55,7 +55,11 @@ const ClinicView = () => {
       <Grid item xs={10} style={{ height: "100vh" }}>
         <Grid container spacing={2}>
           <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <MedicalRecordInquiry mri={mri} setMedicalInfo={setMedicalInfo} />
+            <MedicalRecordInquiry
+              mri={mri}
+              setMri={setMri}
+              setMedicalInfo={setMedicalInfo}
+            />
           </Grid>
           <Grid item xs={5.9} style={{ height: "50vh" }}>
             <Paper sx={{ height: "45vh" }} elevation={3}>
@@ -85,6 +89,7 @@ const ClinicView = () => {
               <Clinic
                 setPatient={setPatient}
                 setReception={setReception}
+                reception={reception}
                 onReset={onReset}
                 mode={mode}
                 medicalInfo={medicalInfo}

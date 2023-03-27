@@ -17,17 +17,16 @@ const Clinic = ({
   setPatient,
   setReception,
   onReset,
+  reception,
   mode,
-  diagnosiss,
-  prescriptions,
   medicalInfo,
 }) => {
   const [doctor, setDoctor] = useState(0);
   const [symptom, setSymptom] = useState("");
   const [treatment, setTreatment] = useState(false);
   const [clinic_request, setClinic_request] = useState(false);
-  const [diagnosis, setDiagnosis] = useState(diagnosiss);
-  const [prescription, setPrescription] = useState(prescriptions);
+  const [diagnosis, setDiagnosis] = useState([]);
+  const [prescription, setPrescription] = useState([]);
 
   const handleDiagnosisAdd = (disease) => {
     console.log(disease);
@@ -71,23 +70,48 @@ const Clinic = ({
 
   const onClick = () => {
     setDoctor(1);
-    const diseaseIds = diagnosis.map((item) => item.disease_id);
-    const drugIds = prescription.map((item) => item.drug_id);
 
-    axios
-      .post("/api/clinic/clinic", {
-        reception_id: 53,
-        symptom: symptom,
-        treatment: treatment,
-        clinic_request: clinic_request,
-        creator: doctor,
-        disease_ids: diseaseIds,
-        drug_ids: drugIds,
-      })
-      .then((response) => {})
-      .catch((error) => {
-        console.log(error);
-      });
+    if (mode === 1) {
+      const diseaseIds = diagnosis.map((disease) => disease.disease_id);
+      const drugIds = prescription.map((drug) => drug.drug_id);
+
+      axios
+        .post("/api/clinic/clinic", {
+          reception_id: reception,
+          symptom: symptom,
+          treatment: treatment,
+          clinic_request: clinic_request,
+          creator: doctor,
+          disease_ids: diseaseIds,
+          drug_ids: drugIds,
+        })
+        .then((response) => {})
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (mode === 2) {
+      setDiagnosis(medicalInfo.diagnosis);
+      setPrescription(medicalInfo.prescription);
+
+      const diseaseIds = diagnosis.map((disease) => disease.disease_id);
+      const drugIds = prescription.map((drug) => drug.drug_id);
+
+      axios
+        .put("/api/clinic/clinic", {
+          reception_id: medicalInfo.reception_id,
+          symptom: symptom,
+          treatment: treatment,
+          clinic_request: clinic_request,
+          updator: doctor,
+          disease_ids: diseaseIds,
+          drug_ids: drugIds,
+        })
+        .then((response) => {})
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     setSymptom("");
     setTreatment(false);
     setClinic_request(false);

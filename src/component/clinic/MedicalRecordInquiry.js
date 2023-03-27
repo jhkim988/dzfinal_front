@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -15,19 +15,20 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField from "@mui/material/TextField";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import axios from "axios";
+import dayjs from "dayjs";
+import koLocale from "dayjs/locale/ko";
 
-const MedicalRecordInquiry = ({ mri, setMedicalInfo }) => {
-  // Select
+const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
   const [type, setType] = useState("");
-  const handleChange = (event) => {
-    setType(event.target.value);
+  const handleChange = (e) => {
+    setType(e.target.value);
   };
 
   const onClick = (reception_id) => {
@@ -41,18 +42,53 @@ const MedicalRecordInquiry = ({ mri, setMedicalInfo }) => {
       });
   };
 
-  // const onSubmit = () => {
-  //   axios
-  //     .get(`/api/clinic/medicalsearch`)
-  //     .then((response) => {})
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-  const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
+  const [selectedDates, setSelectedDates] = useState({
+    start: dayjs(),
+    end: dayjs(),
+  });
 
-  const handleChangeg = (newValue) => {
-    setSelectedDateRange(newValue);
+  const handleDateChange = (dates) => {
+    setSelectedDates({
+      start: dates[0],
+      end: dates[1],
+    });
+  };
+
+  const formattedDates = {
+    start: selectedDates.start.format("YYYY-MM-DD"),
+    end: selectedDates.end.format("YYYY-MM-DD"),
+  };
+
+  const [keyword, setKeyword] = useState("");
+  const handleInputChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const onSearchList = () => {
+    if (!type) return alert("분류를 정해주세요");
+    console.log(formattedDates.start + "/" + formattedDates.end);
+    axios
+      .post(
+        "/api/clinic/mri/search",
+        {
+          type: type,
+          start: formattedDates?.start || "",
+          end: formattedDates?.end || "",
+          keyword: keyword,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setMri(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -66,27 +102,25 @@ const MedicalRecordInquiry = ({ mri, setMedicalInfo }) => {
             <MenuItem value={"reception_id"}>접수번호</MenuItem>
           </Select>
         </FormControl>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDayjs} locale={koLocale}>
           <DemoContainer components={["DateRangePicker"]}>
             <DateRangePicker
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
-              value={selectedDateRange}
-              onChange={handleChangeg}
-              renderInput={(startProps, endProps) => (
-                <>
-                  <input {...startProps} />
-                  <input {...endProps} />
-                </>
-              )}
+              value={[dayjs(selectedDates.start), dayjs(selectedDates.end)]}
+              onChange={handleDateChange}
             />
           </DemoContainer>
         </LocalizationProvider>
-        <TextField label="검색어" sx={{ alignSelf: "center" }} />
+        <TextField
+          label="검색어"
+          sx={{ alignSelf: "center" }}
+          onChange={handleInputChange}
+        />
         <Button
           variant="contained"
           sx={{ height: "40px", alignSelf: "center" }}
-          // onClick={onSubmit()}
+          onClick={onSearchList}
         >
           검색
         </Button>
