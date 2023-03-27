@@ -112,6 +112,25 @@ const Clinic = ({
         });
     }
 
+    const diseaseIds = diagnosis.map((item) => item.disease_id);
+    const drugIds = prescription.map((item) => item.drug_id);
+
+    if (mode == 1) {
+    }
+    axios
+      .post("/api/clinic/clinic", {
+        reception_id: 53,
+        symptom: symptom,
+        treatment: treatment,
+        clinic_request: clinic_request,
+        creator: doctor,
+        disease_ids: diseaseIds,
+        drug_ids: drugIds,
+      })
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error);
+      });
     setSymptom("");
     setTreatment(false);
     setClinic_request(false);

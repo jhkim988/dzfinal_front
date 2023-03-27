@@ -66,7 +66,7 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
 
   const onSearchList = () => {
     if (!type) return alert("분류를 정해주세요");
-    console.log(formattedDates.start + "/" + formattedDates.end);
+
     axios
       .post(
         "/api/clinic/mri/search",
