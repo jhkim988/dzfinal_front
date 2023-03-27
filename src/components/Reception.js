@@ -2,6 +2,8 @@ import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import AutoCompleteForm from './AutoCompleteForm';
+import ChatList from './ChatList';
+import ChatRoom from './ChatRoom';
 import DailyReservationList from './DailyReservationList';
 import PatientForm from './PatientForm';
 import ReceptionForm from './ReceptionForm';
@@ -39,8 +41,8 @@ const Reception = () => {
     });
 
     return (
-        <div style={{ width: "900px", height: "400px" }}>
-            <AutoCompleteForm setPatientData={setPatientData} setReceptionData={setReceptionData} />
+        <div style={{ width: "900px", height: "620px" }}>
+            {/* <AutoCompleteForm setPatientData={setPatientData} setReceptionData={setReceptionData} /> */}
             {/* <Test /> */}
             <Paper>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -63,6 +65,8 @@ const Reception = () => {
                         />
                     </Box>
                 </Box>
+                {/* <ChatList style={{ width: "300px", height: "510px", border: 1 }} />
+                <ChatRoom /> */}
             </Paper>
             {/* <ReceptionList /> */}
         </div>

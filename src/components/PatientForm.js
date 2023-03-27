@@ -1,4 +1,8 @@
-import { Button, Checkbox, createTheme, Dialog, FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider } from '@mui/material';
+import {
+    Button, Checkbox, createTheme, Dialog,
+    FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider,
+    Table, TableBody, TableCell, TableHead, TableRow
+} from '@mui/material';
 import { Box } from '@mui/system';
 import SearchIcon from "@material-ui/icons/Search";
 import { InputAdornment } from "@material-ui/core";
@@ -7,6 +11,10 @@ import axios from 'axios';
 import PopupDom from './PopupDom';
 import PopupPostCode from './PopupPostCode';
 import zIndex from '@mui/material/styles/zIndex';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const Patient_API_BASE_URL = "/api/patient";
 const gender = [
@@ -22,9 +30,9 @@ const gender = [
 
 const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionData, selectedAddress, setSelectedAddress }) => {
     const [isChecked, setIsChecked] = useState(false);
-    const [popup, setPopup] = useState(false);
-
-
+    const [open, setOpen] = React.useState(false);
+    const [patient_name, setPatient_name] = useState('');
+    const [autoCompleteList, setAutoCompleteList] = useState([]);
 
     const resetHandler = (event) => {
         setPatientData({
@@ -56,7 +64,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
             ...isChecked,
             [name]: value
         }));
-
+        setPatient_name(event.target.value);
     };
 
     const handleSubmit = (event) => {
@@ -79,13 +87,57 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
 
     };
 
+    const handleAlet = () => {
+        alert("해당 환자 이름이 존재하지 않습니다. 초진 환자 입니다. ");
+    }
+
+    //환자이름검색
+    const handleDropDownKey = (event) => {
+        event.preventDefault();
+        if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter") {
+            if (patient_name.length > 1) {
+                axios.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
+                    .then((response) => {
+                        setAutoCompleteList(response.data);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else {
+                setAutoCompleteList([]);
+            }
+
+        }
+    }
+    const removeAutoCompleteList = () => {
+        setPatient_name('');
+        setAutoCompleteList([]);
+    }
+
+    const selectedSearchPatient = (patient_id) => {
+        alert(patient_id);
+        // setPatient_name({
+        //     patient_name: patient_name
+        // });
+        axios.get(Patient_API_BASE_URL + `/${patient_id}`)
+            .then((response) => {
+                console.log("자동완성 환자정보:", response.data);
+                setPatientData(prev => ({ ...response.data }));
+                setReceptionData(prev => ({ ...response.data }));
+                //removeAutoCompleteList();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+    }
 
     //우편번호 검색
     const handleComplete = (data) => {
-        setPopup(!popup);
+        setOpen(true);
     }
     const closePostCode = () => {
-        setPopup(false);
+        setOpen(false);
     }
     const handleInput = (e) => {
         setSelectedAddress({
@@ -115,7 +167,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
 
 
                             <TextField id="outlined-basic"
-                                label="환자이름"
+                                label="환자이름 검색"
                                 variant="outlined"
                                 name="patient_name"
                                 onChange={handleChange}
@@ -123,8 +175,39 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                                 size='small'
                                 style={{ width: "130px", height: "10px" }}
                                 autoComplete="off"
+                                onKeyUp={handleDropDownKey}
                             />
+                            {autoCompleteList.length > 0 && (
+                                <Table style={{ width: "150px", height: "10px" }}>
+                                    <TableBody>
+                                        {autoCompleteList.map((patient) => (
+                                            <TableRow
+                                                key={patient.patient_id}
+                                                hover
+                                                onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
 
+                                            >
+                                                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
+                                                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
+                                                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            )
+                            }
+                            {
+                                patient_name.length > 1 && autoCompleteList.length === 0 && (
+                                    //handleAlet()
+                                    <Table style={{ width: "150px", height: "10px" }}>
+                                        <TableBody>
+                                            <TableCell colSpan={3} align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
+                                                입력하신 환자는 <br />존재하지 않습니다.
+                                            </TableCell>
+                                        </TableBody>
+                                    </Table>
+                                )
+                            }
 
 
                             <TextField id="outlined-basic" label="주민등록번호" variant="outlined" name="front_registration_number" onChange={handleChange} value={patientData.front_registration_number || ''} size='small' />-
@@ -189,12 +272,10 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                                 inputProps={{ readOnly: true }}
                             />
                             <Button variant="contained" onClick={handleComplete}>주소 검색</Button>
-                            {popup &&
-                                <Dialog aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description">
-                                    <PopupPostCode company={selectedAddress} setcompany={setSelectedAddress} onClose={closePostCode}></PopupPostCode>
-                                </Dialog>
-                            }
+                            {/* {popup && <PopupPostCode company={selectedAddress} setcompany={setSelectedAddress} onClose={closePostCode}></PopupPostCode>} */}
+                            <Dialog open={open} onClose={closePostCode}>
+                                <PopupPostCode company={selectedAddress} setcompany={setSelectedAddress} onClose={closePostCode}></PopupPostCode>
+                            </Dialog>
                             <TextField id="outlined-basic"
                                 label="주소"
                                 name="address"
