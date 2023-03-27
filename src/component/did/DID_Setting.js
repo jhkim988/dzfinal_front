@@ -107,15 +107,15 @@ const DID_Setting = () => {
           }}
         >
           {/* <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead> */}
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead> */}
           <TableBody>
             <TableRow>
               <TableCell align="left">DID 타입</TableCell>
