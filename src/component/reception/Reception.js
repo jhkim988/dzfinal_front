@@ -8,6 +8,7 @@ import ReceptionForm from './ReceptionForm';
 import Receipt from '../receipt/Receipt';
 import WaitingQueue from '../waiting/WaitingQueue';
 import ReceptionList from './ReceptionList';
+import WaitingQueueLayout from './../waiting/WaitingQueueLayout';
 
 const Reception = () => {
   const [patient_id, setPatient_id] = useState(null);
@@ -45,7 +46,7 @@ const Reception = () => {
     <>
       <Grid container spacing={2}>
         <Grid item xs={2}>
-          <WaitingQueue sx={{ width: 260 }} />
+          <WaitingQueueLayout sx={{ width: 260 }} />
         </Grid>
         <Grid item xs={7}>
           <AutoCompleteForm setPatientData={setPatientData} setReceptionData={setReceptionData} />
