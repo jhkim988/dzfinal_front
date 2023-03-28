@@ -1,4 +1,8 @@
-import { Button, Checkbox, createTheme, Dialog, FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider } from '@mui/material';
+import {
+    Button, Checkbox, createTheme, Dialog,
+    FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider,
+    Table, TableBody, TableCell, TableHead, TableRow, Grid
+} from '@mui/material';
 import { Box } from '@mui/system';
 import SearchIcon from "@material-ui/icons/Search";
 import { InputAdornment } from "@material-ui/core";
@@ -7,6 +11,10 @@ import axios from 'axios';
 import PopupDom from './PopupDom';
 import PopupPostCode from './PopupPostCode';
 import zIndex from '@mui/material/styles/zIndex';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const Patient_API_BASE_URL = "/api/patient";
 const gender = [
@@ -22,9 +30,9 @@ const gender = [
 
 const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionData, selectedAddress, setSelectedAddress }) => {
     const [isChecked, setIsChecked] = useState(false);
-    const [popup, setPopup] = useState(false);
-
-
+    const [open, setOpen] = React.useState(false);
+    const [patient_name, setPatient_name] = useState('');
+    const [autoCompleteList, setAutoCompleteList] = useState([]);
 
     const resetHandler = (event) => {
         setPatientData({
@@ -56,7 +64,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
             ...isChecked,
             [name]: value
         }));
-
+        setPatient_name(event.target.value);
     };
 
     const handleSubmit = (event) => {
@@ -79,13 +87,57 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
 
     };
 
+    const handleAlet = () => {
+        alert("해당 환자 이름이 존재하지 않습니다. 초진 환자 입니다. ");
+    }
+
+    //환자이름검색
+    const handleDropDownKey = (event) => {
+        event.preventDefault();
+        if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter") {
+            if (patient_name.length > 1) {
+                axios.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
+                    .then((response) => {
+                        setAutoCompleteList(response.data);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else {
+                setAutoCompleteList([]);
+            }
+
+        }
+    }
+    const removeAutoCompleteList = () => {
+        setPatient_name('');
+        setAutoCompleteList([]);
+    }
+
+    const selectedSearchPatient = (patient_id) => {
+        alert(patient_id);
+        // setPatient_name({
+        //     patient_name: patient_name
+        // });
+        axios.get(Patient_API_BASE_URL + `/${patient_id}`)
+            .then((response) => {
+                console.log("자동완성 환자정보:", response.data);
+                setPatientData(prev => ({ ...response.data }));
+                setReceptionData(prev => ({ ...response.data }));
+                //removeAutoCompleteList();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+    }
 
     //우편번호 검색
     const handleComplete = (data) => {
-        setPopup(!popup);
+        setOpen(true);
     }
     const closePostCode = () => {
-        setPopup(false);
+        setOpen(false);
     }
     const handleInput = (e) => {
         setSelectedAddress({
@@ -94,28 +146,34 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
         })
     }
 
+    const tableStyle = {
+        position: "fixed",
+        zIndex: "9999",
+        background: "white",
+        width: "150px", height: "auto"
+    }
     return (
-        <div>
+        <>
             <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
-                <h5>환자 등록/수정</h5>
+                <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>환자 등록/수정</h5>
             </div>
-            <Paper sx={{ marginBottom: 5, marginTop: 2 }} elevation={2} style={{ width: "450px", height: "280px" }}>
-                <div>
-                    <form onSubmit={handleSubmit}>
-
+            <Paper sx={{ marginTop: 2, height: 140 }} elevation={2}>
+                <form onSubmit={handleSubmit}>
+                    <div>
                         <Box component="form"
                             sx={{
                                 '& > :not(style)': { m: 0.5, width: 100 },
+                                '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                             }}
                             noValidate
                             autoComplete="off"
-
-
                         >
 
-
                             <TextField id="outlined-basic"
-                                label="환자이름"
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
+                                label="환자이름 검색"
                                 variant="outlined"
                                 name="patient_name"
                                 onChange={handleChange}
@@ -123,22 +181,85 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                                 size='small'
                                 style={{ width: "130px", height: "10px" }}
                                 autoComplete="off"
+                                onKeyUp={handleDropDownKey}
                             />
+                            {
+                                autoCompleteList.length > 0 && (
+                                    <div style={tableStyle}>
+                                        <Table >
+                                            <TableBody>
+                                                {autoCompleteList.map((patient) => (
+                                                    <TableRow
+                                                        key={patient.patient_id}
+                                                        hover
+                                                        onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
+
+                                                    >
+                                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
+                                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
+                                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                                <Button variant="contained" onClick={() => { removeAutoCompleteList(); }}>닫기</Button>
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                )
+                            }
+                            {
+
+                                patient_name.length > 1 && autoCompleteList.length === 0 && (
+                                    //handleAlet()
+                                    <div style={tableStyle}>
+                                        < Table style={{ width: "150px", height: "10px" }}>
+                                            <TableBody>
+                                                <TableCell colSpan={3} align="center"
+                                                    style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}
+                                                >
+                                                    입력하신 환자는 <br />존재하지 않습니다.
+                                                </TableCell>
+                                                <TableRow>
+                                                    <Button variant="contained" onClick={() => { removeAutoCompleteList(); }}>닫기</Button>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                )
+                            }
 
 
-
-                            <TextField id="outlined-basic" label="주민등록번호" variant="outlined" name="front_registration_number" onChange={handleChange} value={patientData.front_registration_number || ''} size='small' />-
+                            <TextField id="outlined-basic"
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
+                                label="주민등록번호"
+                                variant="outlined"
+                                name="front_registration_number"
+                                onChange={handleChange}
+                                value={patientData.front_registration_number || ''}
+                                size='small' />-
                             {/* 주민번호 뒷자리 숨김처리  */}
-                            <TextField id="outlined-basic" label="뒷자리" onChange={handleChange} name="back_registration_number" value={patientData.back_registration_number || ''} variant="outlined" size='small' />
+                            <TextField id="outlined-basic"
+                                onChange={handleChange}
+                                name="back_registration_number"
+                                value={patientData.back_registration_number || ''}
+                                variant="outlined"
+                                size='small' />
                             <TextField
                                 id="outlined-select-currency"
                                 select
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
                                 label="성별"
                                 size='small'
                                 name="gender"
                                 onChange={handleChange}
                                 value={patientData.gender || ''}
                                 style={{ width: "70px", height: "10px" }}
+                                sx={{
+                                    '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
+                                }}
                             >
                                 {gender.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
@@ -150,13 +271,23 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                         <Box component="form"
                             sx={{
                                 '& > :not(style)': { m: 0.5, width: 80 },
+                                '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                             }}
                             noValidate
                             autoComplete="off"
                         >
-                            <TextField id="outlined-basic" label="연락처1" name="phone_number1" onChange={handleChange} value={patientData.phone_number1 || ''} variant="outlined" size='small' />-
-                            <TextField id="outlined-basic" label="연락처2" name="phone_number2" onChange={handleChange} value={patientData.phone_number2 || ''} variant="outlined" size='small' />-
-                            <TextField id="outlined-basic" label="연락처3" name="phone_number3" onChange={handleChange} value={patientData.phone_number3 || ''} variant="outlined" size='small' />
+                            <TextField id="outlined-basic"
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
+                                label="연락처"
+                                name="phone_number1"
+                                onChange={handleChange}
+                                value={patientData.phone_number1 || ''}
+                                variant="outlined"
+                                size='small' />-
+                            <TextField id="outlined-basic" name="phone_number2" onChange={handleChange} value={patientData.phone_number2 || ''} variant="outlined" size='small' />-
+                            <TextField id="outlined-basic" name="phone_number3" onChange={handleChange} value={patientData.phone_number3 || ''} variant="outlined" size='small' />
 
                             <FormControlLabel
                                 control={<Checkbox
@@ -174,28 +305,30 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                         </Box>
                         <Box component="form"
                             sx={{
-                                '& > :not(style)': { m: 0.5, width: 100 },
+                                '& > :not(style)': { m: 0.5, width: 70 },
+                                '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                             }}
                             noValidate
                             autoComplete="off"
                         >
+                            <Box style={{ float: "left" }}>
+                                <TextField id="outlined-basic"
+                                    InputLabelProps={{
+                                        shrink: "true"
+                                    }}
+                                    label="우편번호"
+                                    name="zip_code"
+                                    onChange={handleInput}
+                                    value={patientData.zip_code || '' || selectedAddress.zip_code}
+                                    variant="outlined"
+                                    size='small'
+                                    inputProps={{ readOnly: true }}
+                                />
+                            </Box>
                             <TextField id="outlined-basic"
-                                label="우편번호"
-                                name="zip_code"
-                                onChange={handleInput}
-                                value={patientData.zip_code || '' || selectedAddress.zip_code}
-                                variant="outlined"
-                                size='small'
-                                inputProps={{ readOnly: true }}
-                            />
-                            <Button variant="contained" onClick={handleComplete}>주소 검색</Button>
-                            {popup &&
-                                <Dialog aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description">
-                                    <PopupPostCode company={selectedAddress} setcompany={setSelectedAddress} onClose={closePostCode}></PopupPostCode>
-                                </Dialog>
-                            }
-                            <TextField id="outlined-basic"
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
                                 label="주소"
                                 name="address"
                                 value={patientData.address || '' || selectedAddress.address}
@@ -203,31 +336,44 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                                 onChange={handleInput}
                                 variant="outlined"
                                 size='small'
-                                style={{ width: 440, height: "10px" }} />
+                                style={{ width: 285, height: "10px" }} />
 
+                            <Box style={{ float: "right" }}>
+                                <Button variant="contained" onClick={handleComplete} style={{ width: "50px", height: "20px" }}>검색</Button>
+                            </Box>
+                            <Dialog open={open} onClose={closePostCode}>
+                                <PopupPostCode company={selectedAddress} setcompany={setSelectedAddress} onClose={closePostCode}></PopupPostCode>
+                            </Dialog>
                         </Box>
                         <Box
                             component="form"
                             sx={{
-                                '& > :not(style)': {
-                                    marginTop: 3, width: 100, marginLeft: 0.5
-                                },
+                                '& > :not(style)': { m: 0.5 },
+                                '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                             }}
                             noValidate
                             autoComplete="off"
                         >
-                            <TextField id="outlined-basic" label="상세주소" name="detail_address" onChange={handleChange} value={patientData.detail_address || ''} variant="outlined" size='small' margin='dense'
-                                style={{ width: 440 }}
-                            />
+                            <Box style={{ float: "left" }}>
+                                <TextField id="outlined-basic" label="상세주소" name="detail_address" onChange={handleChange} value={patientData.detail_address || ''} variant="outlined" size='small'
+                                    style={{ width: 310, float: "left" }}
+                                    InputLabelProps={{
+                                        shrink: "true"
+                                    }}
+                                />
+
+                                <Box style={{ float: "right" }}>
+                                    <Button type="submit" variant="contained" style={{ width: "30px", height: "20px" }}>등록</Button>
+                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "20px" }}>취소</Button>
+                                </Box>
+                            </Box>
                         </Box>
-                        <Button type="submit" variant="contained">등록</Button>
-                        <Button type="reset" variant="contained" color="error" onClick={resetHandler}>취소</Button>
-                    </form>
-                </div>
+
+
+                    </div >
+                </form>
             </Paper>
-
-
-        </div >
+        </>
     );
 };
 

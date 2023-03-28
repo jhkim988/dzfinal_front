@@ -29,44 +29,30 @@ const PopupPostCode = (props) => {
         })
     }
 
-    // const postCodeStyle = {
-    //     // display: "block",
-    //     // position: "absolute",
-    //     // top: "10%",
-    //     // width: "600px",
-    //     // height: "600px",
-    //     // padding: "7px",
-    // };
-
-
+    const postCodeStyle = {
+        width: '500px',
+        height: '500px'
+    };
 
     return (
         <div>
-            <DaumPostcode className="postModel" onComplete={handlePostCode} autoClose />
-            <button type='button' onClick={() => { props.onClose() }} className='postCode_btn'>닫기</button>
+            <DaumPostcode className="postModel" style={postCodeStyle} onComplete={handlePostCode} autoClose />
+            {/* <button type='button' onClick={() => { props.onClose() }} className='postCode_btn'>닫기</button> */}
         </div>
     )
 }
 
 // const postModel = styled.div`
-// background : white;
-//     position : fixed;
-//     left:0;
-//     top:3;
-//     height:600px;
-//     width:600px;
+//     position: fixed;
+//     background: white;
+//     width: 50%;
+//     height: auto;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     padding: 20px;
+
 // `
-const postModel = styled.div`
-    position: fixed;
-    background: white;
-    width: 50%;
-    height: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-   
-`
 
 export default PopupPostCode;
 
