@@ -146,6 +146,12 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
         })
     }
 
+    const tableStyle = {
+        position: "fixed",
+        zIndex: "9999",
+        background: "white",
+        width: "150px", height: "auto"
+    }
     return (
         <div>
             <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
@@ -178,34 +184,45 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                                 onKeyUp={handleDropDownKey}
                             />
                             {autoCompleteList.length > 0 && (
-                                <Table style={{ width: "150px", height: "10px" }}>
-                                    <TableBody>
-                                        {autoCompleteList.map((patient) => (
-                                            <TableRow
-                                                key={patient.patient_id}
-                                                hover
-                                                onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
+                                <div style={tableStyle}>
+                                    <Table >
+                                        <TableBody>
+                                            {autoCompleteList.map((patient) => (
+                                                <TableRow
+                                                    key={patient.patient_id}
+                                                    hover
+                                                    onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
 
-                                            >
-                                                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
-                                                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
-                                                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                                >
+                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
+                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
+                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                            <Button variant="contained" onClick={() => { removeAutoCompleteList(); }}>닫기</Button>
+                                        </TableBody>
+                                    </Table>
+                                </div>
                             )
                             }
                             {
+
                                 patient_name.length > 1 && autoCompleteList.length === 0 && (
                                     //handleAlet()
-                                    <Table style={{ width: "150px", height: "10px" }}>
-                                        <TableBody>
-                                            <TableCell colSpan={3} align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
-                                                입력하신 환자는 <br />존재하지 않습니다.
-                                            </TableCell>
-                                        </TableBody>
-                                    </Table>
+                                    <div style={tableStyle}>
+                                        < Table style={{ width: "150px", height: "10px" }}>
+                                            <TableBody>
+                                                <TableCell colSpan={3} align="center"
+                                                    style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}
+                                                >
+                                                    입력하신 환자는 <br />존재하지 않습니다.
+                                                </TableCell>
+                                                <TableRow>
+                                                    <Button variant="contained" onClick={() => { removeAutoCompleteList(); }}>닫기</Button>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
+                                    </div>
                                 )
                             }
 
@@ -304,8 +321,8 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                         <Button type="submit" variant="contained">등록</Button>
                         <Button type="reset" variant="contained" color="error" onClick={resetHandler}>취소</Button>
                     </form>
-                </div>
-            </Paper>
+                </div >
+            </Paper >
 
 
         </div >
