@@ -12,7 +12,6 @@ const Management = () => {
     axios
       .get("/api/admin/employee")
       .then((response) => {
-        console.log(response.data);
         setEmployees(response.data);
       })
       .catch((error) => {
@@ -40,11 +39,14 @@ const Management = () => {
           </Box>
         </Box>
         <Grid container spacing={2} sx={{ marginTop: 3 }}>
-          {employees.map((employee) =>
-            employee.employee_name !== "관리자" ? (
-              <EmployeeCard key={employee.employ_id} employee={employee} />
-            ) : null
-          )}
+          {employees.map((employee) => (
+            <EmployeeCard
+              key={employee.employ_id}
+              employee={employee}
+              setEmployees={setEmployees}
+              employees={employees}
+            />
+          ))}
         </Grid>
       </Grid>
       <Grid item xs></Grid>

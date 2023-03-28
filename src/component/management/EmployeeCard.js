@@ -1,8 +1,27 @@
 import { Box, Button, Card, CardMedia, Grid, Paper } from "@mui/material";
+import axios from "axios";
 import React from "react";
 
 export default function EmployeeCard(props) {
-  const { employee } = props;
+  const { employee, setEmployees, employees } = props;
+
+  const onDelete = () => {
+    if (window.confirm("삭제 하시겠습니까?")) {
+      axios
+        .delete("/api/admin/employee", {
+          params: { employ_id: employee.employ_id },
+        })
+        .then((response) => {
+          const newEmployees = employees.filter(
+            (e) => e.employ_id !== employee.employ_id
+          );
+          setEmployees(newEmployees);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
   return (
     <Grid item xs={6}>
@@ -29,7 +48,7 @@ export default function EmployeeCard(props) {
                 <Button variant="contained" sx={{ marginRight: 2 }}>
                   수정
                 </Button>
-                <Button variant="contained" color="error">
+                <Button variant="contained" color="error" onClick={onDelete}>
                   삭제
                 </Button>
               </Box>
