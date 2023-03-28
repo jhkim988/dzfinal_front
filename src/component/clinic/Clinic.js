@@ -183,7 +183,7 @@ const Clinic = ({
           <>
             <Stack spacing={2} direction="row">
               <Button variant="contained" onClick={onClick}>
-                {mode === 1 ? "등록" : "수정"}
+                {mode !== 2 ? "등록" : "수정"}
               </Button>
               <Button variant="outlined" onClick={onCancel}>
                 취소
