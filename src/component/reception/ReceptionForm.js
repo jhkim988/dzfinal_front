@@ -1,4 +1,4 @@
-import { Button, Checkbox, createTheme, FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider } from '@mui/material';
+import { Button, Checkbox, createTheme, FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import SearchIcon from "@material-ui/icons/Search";
 import { InputAdornment } from "@material-ui/core";
@@ -114,13 +114,13 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
     }
 
     return (
-        <div>
+        <Grid sx={{ marginLeft: 2 }}>
 
             <div style={{ width: "300px", height: "10px", marginBottom: "10px", marginTop: "10px" }}>
                 <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>접수 등록/수정 [환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]</h5>
             </div>
 
-            <Paper sx={{ marginBottom: 1 }} elevation={2} style={{ width: "450px", height: "100px" }}>
+            <Paper sx={{ marginBottom: 1 }} elevation={2} style={{ height: "100px" }}>
                 <div>
                     {receptionData != null && patient_id == null && (
                         <form onSubmit={receptDataHandleSubmit}>
@@ -381,7 +381,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                 </div>
             </Paper>
 
-        </div >
+        </Grid >
     );
 };
 

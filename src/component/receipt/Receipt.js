@@ -42,18 +42,18 @@ function Receipt() {
 
 
   return (
-    <div style={{width: "1350px", height:"480px"}}>
-       <div style={{ width: "950px", padding: 2, height: "400px", float: "left"}}>
+    <div style={{height:"480px"}}>
+       {/* <div style={{ width: "950px", padding: 2, height: "400px", float: "left"}}>
          <Paper elevation={3} style={{padding: "20px"}}>
              <ReceiptList user={user}/>
          </Paper>
-       </div> 
+       </div>  */}
       {/* <div style={{width: "395px", height: "400px", float: "left"}}>
         <Paper elevation={3} style={{padding: "20px"}}>
             <ReceiptList user={user}/>
         </Paper>
       </div> */}
-      <div style={{width: "395px", height: "400px", float: "right"}}>
+      <div style={{height: "400px"}}>
         <Paper elevation={3} style={{padding: "20px"}}>
           {/* <h2>수납하기</h2> */}
             {/* 접수정보 */}
