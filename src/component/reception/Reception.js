@@ -46,7 +46,7 @@ const Reception = () => {
     <>
       <Grid container spacing={2}>
         <Grid item xs={2}>
-          <WaitingQueueLayout sx={{ width: 260 }} />
+          <WaitingQueueLayout sx={{ width: 260 }} initPanel="3" nextState="수납중"/>
         </Grid>
         <Grid item xs={7}>
           <AutoCompleteForm setPatientData={setPatientData} setReceptionData={setReceptionData} />
