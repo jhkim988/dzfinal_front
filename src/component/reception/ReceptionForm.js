@@ -116,12 +116,11 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
     return (
         <div>
 
-            <div style={{ width: "300px", height: "10px", marginBottom: "10px" }}>
+            <div style={{ width: "300px", height: "10px", marginBottom: "10px", marginTop: "10px" }}>
                 <h5>접수 등록/수정 [환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]</h5>
-
             </div>
 
-            <Paper sx={{ marginBottom: 1 }} elevation={2} style={{ width: "450px", height: "200px" }}>
+            <Paper sx={{ marginBottom: 1 }} elevation={2} style={{ width: "450px", height: "150px" }}>
                 <div>
                     {receptionData != null && patient_id == null && (
                         <form onSubmit={receptDataHandleSubmit}>
@@ -132,21 +131,35 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                 noValidate
                                 autoComplete="off"
                             >
-                                <input name="patient_id" value={receptionData.patient_id || ''} variant="outlined" size='small' type="text" readOnly={true} />
+
+                                {/* <input name="patient_id" value={receptionData.patient_id || ''} variant="outlined" size='small' type="text" readOnly={true} /> */}
+                                <TextField id="outlined-basic" label="환자번호" name="patient_id" value={receptionData.patient_id || ''} variant="outlined" size='small' readOnly={true} />
                                 <TextField id="outlined-basic" label="키" name="height" onChange={handleChange} value={receptionData.height || ''} variant="outlined" size='small' />
                                 <TextField id="outlined-basic" label="체중" name="weight" onChange={handleChange} value={receptionData.weight || ''} variant="outlined" size='small' />
                                 <TextField id="outlined-basic" label="BMI" name="bmi" onChange={handleChange} value={receptionData.bmi || ''} variant="outlined" size='small' />
-                                <TextField id="outlined-basic" label="최고" name="systolic" onChange={handleChange} value={receptionData.systolic || ''} variant="outlined" size='small' />
-                                <TextField id="outlined-basic" label="최저" name="diastolic" onChange={handleChange} value={receptionData.diastolic || ''} variant="outlined" size='small' />
-                                <TextField id="outlined-basic" label="혈당" name="blood_sugar" onChange={handleChange} value={receptionData.blood_sugar || ''} variant="outlined" size='small' />
+                                <TextField id="outlined-basic" label="최고혈압" name="systolic" onChange={handleChange} value={receptionData.systolic || ''} variant="outlined" size='small' />
+                                <TextField id="outlined-basic" label="최저혈압" name="diastolic" onChange={handleChange} value={receptionData.diastolic || ''} variant="outlined" size='small' />
+
                             </Box>
-                            <Box component="form"
+                            {/* <Box component="form"
                                 sx={{
-                                    '& > :not(style)': { m: 1, width: 60 },
+                                    '& > :not(style)': { m: 0.5, width: 100 },
                                 }}
                                 noValidate
                                 autoComplete="off"
                             >
+                                <TextField id="outlined-basic" label="최고혈압" name="systolic" onChange={handleChange} value={receptionData.systolic || ''} variant="outlined" size='small' />
+                                <TextField id="outlined-basic" label="최저혈압" name="diastolic" onChange={handleChange} value={receptionData.diastolic || ''} variant="outlined" size='small' />
+                                <TextField id="outlined-basic" label="혈당" name="blood_sugar" onChange={handleChange} value={receptionData.blood_sugar || ''} variant="outlined" size='small' />
+                            </Box> */}
+                            <Box component="form"
+                                sx={{
+                                    '& > :not(style)': { m: 0.5, width: 60 },
+                                }}
+                                noValidate
+                                autoComplete="off"
+                            >
+                                <TextField id="outlined-basic" label="혈당" name="blood_sugar" onChange={handleChange} value={receptionData.blood_sugar || ''} variant="outlined" size='small' />
                                 <TextField
                                     id="outlined-select-currency"
                                     select
@@ -169,7 +182,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     label="내원사유"
                                     multiline
                                     rows={1}
-                                    style={{ width: 300 }}
+                                    style={{ width: 250 }}
                                     size='small'
                                     name="treatment_reason"
                                     onChange={handleChange}
@@ -190,21 +203,32 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                 autoComplete="off"
                             >
 
-                                <input name="patient_id" value={patient_id || ''} variant="outlined" size='small' type="text" readOnly={true} />
+                                {/* <input name="patient_id" value={patient_id || ''} variant="outlined" size='small' type="text" readOnly={true} /> */}
+                                <TextField id="outlined-basic" label="환자번호" name="patient_id" value={receptionData.patient_id || ''} variant="outlined" size='small' readOnly={true} />
                                 <TextField id="outlined-basic" label="키" name="height" onChange={handleChange} value={receptionData.height || ''} variant="outlined" size='small' />
                                 <TextField id="outlined-basic" label="체중" name="weight" onChange={handleChange} value={receptionData.weight || ''} variant="outlined" size='small' />
                                 <TextField id="outlined-basic" label="BMI" name="bmi" onChange={handleChange} value={receptionData.bmi || ''} variant="outlined" size='small' />
-                                <TextField id="outlined-basic" label="최고" name="systolic" onChange={handleChange} value={receptionData.systolic || ''} variant="outlined" size='small' />
-                                <TextField id="outlined-basic" label="최저" name="diastolic" onChange={handleChange} value={receptionData.diastolic || ''} variant="outlined" size='small' />
-                                <TextField id="outlined-basic" label="혈당" name="blood_sugar" onChange={handleChange} value={receptionData.blood_sugar || ''} variant="outlined" size='small' />
+                                <TextField id="outlined-basic" label="최고혈압" name="systolic" onChange={handleChange} value={receptionData.systolic || ''} variant="outlined" size='small' />
+                                <TextField id="outlined-basic" label="최저혈압" name="diastolic" onChange={handleChange} value={receptionData.diastolic || ''} variant="outlined" size='small' />
+
                             </Box>
                             <Box component="form"
                                 sx={{
-                                    '& > :not(style)': { m: 1, width: 60 },
+                                    '& > :not(style)': { m: 0.5, width: 100 },
                                 }}
                                 noValidate
                                 autoComplete="off"
                             >
+
+                            </Box>
+                            <Box component="form"
+                                sx={{
+                                    '& > :not(style)': { m: 0.5, width: 60 },
+                                }}
+                                noValidate
+                                autoComplete="off"
+                            >
+                                <TextField id="outlined-basic" label="혈당" name="blood_sugar" onChange={handleChange} value={receptionData.blood_sugar || ''} variant="outlined" size='small' />
                                 <TextField
                                     id="outlined-select-currency"
                                     select
@@ -227,7 +251,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     label="내원사유"
                                     multiline
                                     rows={1}
-                                    style={{ width: 300 }}
+                                    style={{ width: 250 }}
                                     size='small'
                                     name="treatment_reason"
                                     onChange={handleChange}
