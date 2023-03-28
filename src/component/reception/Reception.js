@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import AutoCompleteForm from './AutoCompleteForm';
@@ -41,16 +41,14 @@ const Reception = () => {
 
     return (
         <>
-            <div style={{ width: "900px", height: "620px" }}>
-                {/* <AutoCompleteForm setPatientData={setPatientData} setReceptionData={setReceptionData} /> */}
 
-                {/* <Test /> */}
-
-                <Paper>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Grid container spacing={2}>
+                <Paper sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Grid item xs={6} style={{ paddingTop: 0 }}>
                         <DailyReservationList setSelectedReservationDetails={setSelectedReservationDetails} setPatientData={setPatientData} setReceptionData={setReceptionData} />
-                        <Box sx={{ width: 475, padding: 2 }}>
-
+                    </Grid>
+                    <Grid item xs={6} style={{ paddingTop: 0 }}>
+                        <Box>
                             <PatientForm setPatient_id={setPatient_id}
                                 setReceptionData={setReceptionData}
                                 selectedReservationDetails={selectedReservationDetails}
@@ -58,6 +56,8 @@ const Reception = () => {
                                 setPatientData={setPatientData}
                                 selectedAddress={selectedAddress}
                                 setSelectedAddress={setSelectedAddress}
+
+
                             />
                             <ReceptionForm patient_id={patient_id}
                                 receptionData={receptionData}
@@ -67,12 +67,11 @@ const Reception = () => {
                                 setSelectedAddress={setSelectedAddress}
                             />
                         </Box>
-                    </Box>
-                    {/* <ChatList style={{ width: "300px", height: "510px", border: 1 }} />
-                <ChatRoom /> */}
+                    </Grid>
                 </Paper>
                 {/* <ReceptionList /> */}
-            </div>
+            </Grid>
+
         </>
 
     );
