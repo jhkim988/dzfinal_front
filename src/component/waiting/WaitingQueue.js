@@ -28,11 +28,11 @@ const WaitingQueue = ({ initPanel, data, selected, onRowClick }) => {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            {tabInfo.map(el => <Tab sx={{ minWidth: 65 }} value={el.value} label={el.label} />)}
+            {tabInfo.map((el, idx) => <Tab key={`Tab${idx}`}sx={{ minWidth: 65 }} value={el.value} label={el.label} />)}
           </TabList>
         </Box>
         {
-          tabInfo.map(el => <TabPanel sx={{ minWidth: 260, padding: 0 }} value={el.value}>
+          tabInfo.map((el, idx) => <TabPanel key={`TabPanel${idx}`}sx={{ minWidth: 260, padding: 0 }} value={el.value}>
             <WaitingTabPanel data={data.filter(d => el.filter(d))} selected={selected} onRowClick={onRowClick}/>
           </TabPanel>)
         }

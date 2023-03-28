@@ -24,7 +24,7 @@ const WaitingTabPanel = ({ data, selected, onRowClick }) => {
           {
           data.map(el =>
             <TableRow
-              id={`waitingQueue#${el.reception_id}`}
+              key={`waitingQueue#${el.reception_id}`}
               data-reception_id={el.reception_id}
               onClick={onRowClick}
               sx={{ backgroundColor: selected === `${el.reception_id}` ? 'rgba(33, 150, 243, 0.1)' : undefined }}
@@ -45,7 +45,7 @@ const WaitingTabPanel = ({ data, selected, onRowClick }) => {
           )
         }
         {
-          dummyData.map((el, idx) => <TableRow id={`waitingQueueDummy#${idx}`}>
+          dummyData.map((el, idx) => <TableRow key={`waitingQueueDummy#${idx}`}>
             <TableCell>-</TableCell>
             <TableCell>-</TableCell>
             <TableCell>-</TableCell>
