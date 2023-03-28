@@ -153,12 +153,11 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
         width: "150px", height: "auto"
     }
     return (
-        <Grid >
-
+        <>
             <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
                 <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>환자 등록/수정</h5>
             </div>
-            <Paper sx={{ marginTop: 2, width: 450, height: 140 }} elevation={2}>
+            <Paper sx={{ marginTop: 2, height: 140 }} elevation={2}>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <Box component="form"
@@ -374,7 +373,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                     </div >
                 </form>
             </Paper>
-        </Grid >
+        </>
     );
 };
 

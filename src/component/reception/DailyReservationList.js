@@ -51,8 +51,8 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
     }
 
     return (
-        <Grid container spacing={2} >
-            <Paper sx={{ marginTop: 2, marginLeft: 1 }}>
+        <Grid container spacing={2} sx={{ height: '100%' }}>
+            <Paper sx={{ marginTop: 2, marginLeft: 2 }}>
                 <Grid item xs={6} style={{ paddingTop: 0 }}>
                     <h5 style={{ marginLeft: "15px", marginTop: "5px", marginBottom: "5px" }}>당일 예약 현황</h5>
                 </Grid>
