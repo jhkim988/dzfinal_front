@@ -2,8 +2,6 @@ import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import AutoCompleteForm from './AutoCompleteForm';
-import ChatList from './ChatList';
-import ChatRoom from './ChatRoom';
 import DailyReservationList from './DailyReservationList';
 import PatientForm from './PatientForm';
 import ReceptionForm from './ReceptionForm';
