@@ -1,7 +1,7 @@
 import {
     Button, Checkbox, createTheme, Dialog,
     FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider,
-    Table, TableBody, TableCell, TableHead, TableRow
+    Table, TableBody, TableCell, TableHead, TableRow, Grid
 } from '@mui/material';
 import { Box } from '@mui/system';
 import SearchIcon from "@material-ui/icons/Search";
@@ -153,26 +153,27 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
         width: "150px", height: "auto"
     }
     return (
-        <div>
-            <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
-                <h5>환자 등록/수정</h5>
-            </div>
-            <Paper sx={{ marginBottom: 5, marginTop: 2 }} elevation={2} style={{ width: "450px", height: "280px" }}>
-                <div>
-                    <form onSubmit={handleSubmit}>
+        <Grid >
 
+            <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
+                <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>환자 등록/수정</h5>
+            </div>
+            <Paper sx={{ marginTop: 2, width: 450, height: 140 }} elevation={2}>
+                <form onSubmit={handleSubmit}>
+                    <div>
                         <Box component="form"
                             sx={{
                                 '& > :not(style)': { m: 0.5, width: 100 },
+                                '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                             }}
                             noValidate
                             autoComplete="off"
-
-
                         >
 
-
                             <TextField id="outlined-basic"
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
                                 label="환자이름 검색"
                                 variant="outlined"
                                 name="patient_name"
@@ -183,27 +184,28 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                                 autoComplete="off"
                                 onKeyUp={handleDropDownKey}
                             />
-                            {autoCompleteList.length > 0 && (
-                                <div style={tableStyle}>
-                                    <Table >
-                                        <TableBody>
-                                            {autoCompleteList.map((patient) => (
-                                                <TableRow
-                                                    key={patient.patient_id}
-                                                    hover
-                                                    onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
+                            {
+                                autoCompleteList.length > 0 && (
+                                    <div style={tableStyle}>
+                                        <Table >
+                                            <TableBody>
+                                                {autoCompleteList.map((patient) => (
+                                                    <TableRow
+                                                        key={patient.patient_id}
+                                                        hover
+                                                        onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
 
-                                                >
-                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
-                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
-                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                            <Button variant="contained" onClick={() => { removeAutoCompleteList(); }}>닫기</Button>
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                            )
+                                                    >
+                                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
+                                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
+                                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                                <Button variant="contained" onClick={() => { removeAutoCompleteList(); }}>닫기</Button>
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                )
                             }
                             {
 
@@ -227,18 +229,38 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                             }
 
 
-                            <TextField id="outlined-basic" label="주민등록번호" variant="outlined" name="front_registration_number" onChange={handleChange} value={patientData.front_registration_number || ''} size='small' />-
+                            <TextField id="outlined-basic"
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
+                                label="주민등록번호"
+                                variant="outlined"
+                                name="front_registration_number"
+                                onChange={handleChange}
+                                value={patientData.front_registration_number || ''}
+                                size='small' />-
                             {/* 주민번호 뒷자리 숨김처리  */}
-                            <TextField id="outlined-basic" label="뒷자리" onChange={handleChange} name="back_registration_number" value={patientData.back_registration_number || ''} variant="outlined" size='small' />
+                            <TextField id="outlined-basic"
+                                onChange={handleChange}
+                                name="back_registration_number"
+                                value={patientData.back_registration_number || ''}
+                                variant="outlined"
+                                size='small' />
                             <TextField
                                 id="outlined-select-currency"
                                 select
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
                                 label="성별"
                                 size='small'
                                 name="gender"
                                 onChange={handleChange}
                                 value={patientData.gender || ''}
                                 style={{ width: "70px", height: "10px" }}
+                                sx={{
+                                    '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
+                                }}
                             >
                                 {gender.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
@@ -250,13 +272,23 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                         <Box component="form"
                             sx={{
                                 '& > :not(style)': { m: 0.5, width: 80 },
+                                '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                             }}
                             noValidate
                             autoComplete="off"
                         >
-                            <TextField id="outlined-basic" label="연락처1" name="phone_number1" onChange={handleChange} value={patientData.phone_number1 || ''} variant="outlined" size='small' />-
-                            <TextField id="outlined-basic" label="연락처2" name="phone_number2" onChange={handleChange} value={patientData.phone_number2 || ''} variant="outlined" size='small' />-
-                            <TextField id="outlined-basic" label="연락처3" name="phone_number3" onChange={handleChange} value={patientData.phone_number3 || ''} variant="outlined" size='small' />
+                            <TextField id="outlined-basic"
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
+                                label="연락처"
+                                name="phone_number1"
+                                onChange={handleChange}
+                                value={patientData.phone_number1 || ''}
+                                variant="outlined"
+                                size='small' />-
+                            <TextField id="outlined-basic" name="phone_number2" onChange={handleChange} value={patientData.phone_number2 || ''} variant="outlined" size='small' />-
+                            <TextField id="outlined-basic" name="phone_number3" onChange={handleChange} value={patientData.phone_number3 || ''} variant="outlined" size='small' />
 
                             <FormControlLabel
                                 control={<Checkbox
@@ -274,26 +306,30 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                         </Box>
                         <Box component="form"
                             sx={{
-                                '& > :not(style)': { m: 0.5, width: 100 },
+                                '& > :not(style)': { m: 0.5, width: 70 },
+                                '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                             }}
                             noValidate
                             autoComplete="off"
                         >
+                            <Box style={{ float: "left" }}>
+                                <TextField id="outlined-basic"
+                                    InputLabelProps={{
+                                        shrink: "true"
+                                    }}
+                                    label="우편번호"
+                                    name="zip_code"
+                                    onChange={handleInput}
+                                    value={patientData.zip_code || '' || selectedAddress.zip_code}
+                                    variant="outlined"
+                                    size='small'
+                                    inputProps={{ readOnly: true }}
+                                />
+                            </Box>
                             <TextField id="outlined-basic"
-                                label="우편번호"
-                                name="zip_code"
-                                onChange={handleInput}
-                                value={patientData.zip_code || '' || selectedAddress.zip_code}
-                                variant="outlined"
-                                size='small'
-                                inputProps={{ readOnly: true }}
-                            />
-                            <Button variant="contained" onClick={handleComplete}>주소 검색</Button>
-                            {/* {popup && <PopupPostCode company={selectedAddress} setcompany={setSelectedAddress} onClose={closePostCode}></PopupPostCode>} */}
-                            <Dialog open={open} onClose={closePostCode}>
-                                <PopupPostCode company={selectedAddress} setcompany={setSelectedAddress} onClose={closePostCode}></PopupPostCode>
-                            </Dialog>
-                            <TextField id="outlined-basic"
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
                                 label="주소"
                                 name="address"
                                 value={patientData.address || '' || selectedAddress.address}
@@ -301,31 +337,44 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                                 onChange={handleInput}
                                 variant="outlined"
                                 size='small'
-                                style={{ width: 440, height: "10px" }} />
+                                style={{ width: 285, height: "10px" }} />
 
+                            <Box style={{ float: "right" }}>
+                                <Button variant="contained" onClick={handleComplete} style={{ width: "50px", height: "20px" }}>검색</Button>
+                            </Box>
+                            <Dialog open={open} onClose={closePostCode}>
+                                <PopupPostCode company={selectedAddress} setcompany={setSelectedAddress} onClose={closePostCode}></PopupPostCode>
+                            </Dialog>
                         </Box>
                         <Box
                             component="form"
                             sx={{
-                                '& > :not(style)': {
-                                    marginTop: 3, width: 100, marginLeft: 0.5
-                                },
+                                '& > :not(style)': { m: 0.5 },
+                                '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                             }}
                             noValidate
                             autoComplete="off"
                         >
-                            <TextField id="outlined-basic" label="상세주소" name="detail_address" onChange={handleChange} value={patientData.detail_address || ''} variant="outlined" size='small' margin='dense'
-                                style={{ width: 440 }}
-                            />
+                            <Box style={{ float: "left" }}>
+                                <TextField id="outlined-basic" label="상세주소" name="detail_address" onChange={handleChange} value={patientData.detail_address || ''} variant="outlined" size='small'
+                                    style={{ width: 310, float: "left" }}
+                                    InputLabelProps={{
+                                        shrink: "true"
+                                    }}
+                                />
+
+                                <Box style={{ float: "right" }}>
+                                    <Button type="submit" variant="contained" style={{ width: "30px", height: "20px" }}>등록</Button>
+                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "20px" }}>취소</Button>
+                                </Box>
+                            </Box>
                         </Box>
-                        <Button type="submit" variant="contained">등록</Button>
-                        <Button type="reset" variant="contained" color="error" onClick={resetHandler}>취소</Button>
-                    </form>
-                </div >
-            </Paper >
 
 
-        </div >
+                    </div >
+                </form>
+            </Paper>
+        </Grid >
     );
 };
 
