@@ -70,6 +70,8 @@ const ReceptionList = ({user}) => {
   };
 
   return (
+  <>
+    <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>수납내역목록</h5>
     <Paper sx={{ height: "45vh" }}>
       <Box sx={{ display: "flex" }}>
         <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -88,7 +90,11 @@ const ReceptionList = ({user}) => {
             startText="기간 시작"
             endText="기간 끝"
             renderInput={(startProps, endProps) => (
-              <Box sx={{ display: "flex", alignItems: "center"}}>
+              <Box sx={{ display: "flex", 
+                         alignItems: "center",
+                        '& > :not(style)': { m: 0.5, width: 100 },
+                        '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" },
+                          }}>
                 <TextField {...startProps} variant="outlined" sx={{ height: "20px" }} />
                 <Box sx={{ mx: 1 }}>~</Box>
                 <TextField {...endProps} variant="outlined" size="small" />
@@ -151,7 +157,7 @@ const ReceptionList = ({user}) => {
         </Stack>
     </Box>
     </Paper>
-    
+  </>
   );
 };
 
