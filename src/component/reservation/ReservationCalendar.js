@@ -27,7 +27,8 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { compareDate } from "./utils/dateUtils";
 import { doctorData } from "./Reservation";
 
-const cellHeight = 70
+const cellHeight = 70;
+const height = `12vh`
 
 const appointmentBackground = {
   1: "#F29D94",
@@ -39,11 +40,11 @@ const StyledMonthViewTimeTableCell = styled(MonthView.TimeTableCell)(
     [`&.prevDays`]: {
       backgroundColor: "#E8E8E8",
       opacity: 0.5,
-      height: 110,
+      height,
     },
     [`&.nextDays`]: {
       backgroundColor: "white",
-      height: 110,
+      height,
     },
     [`&.day${0}`]: {
       color: "red",
