@@ -44,7 +44,9 @@ const Reception = () => {
 
     return (
         <>
-
+          <>
+            <Receipt />
+          </>
             <Grid container spacing={2}>
                 <Paper sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Grid item xs={6} style={{ paddingTop: 0 }}>
