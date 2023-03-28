@@ -6,38 +6,41 @@ import DailyReservationList from './DailyReservationList';
 import PatientForm from './PatientForm';
 import ReceptionForm from './ReceptionForm';
 import Receipt from '../receipt/Receipt';
+import WaitingQueue from '../waiting/WaitingQueue';
+import ReceptionList from './ReceptionList';
+import WaitingQueueLayout from './../waiting/WaitingQueueLayout';
 
 const Reception = () => {
-    const [patient_id, setPatient_id] = useState(null);
-    const [selectedReservationDetails, setSelectedReservationDetails] = useState({});
-    const [selectedAddress, setSelectedAddress] = useState({
-        zip_code: '',
-        address: ''
-    });
-    const [patientData, setPatientData] = useState({
-        patient_name: '',
-        front_registration_number: '',
-        back_registration_number: '',
-        gender: '',
-        phone_number1: '',
-        phone_number2: '',
-        phone_number3: '',
-        insurance: '',
-        zip_code: '',
-        address: '',
-        detail_address: '',
-        insurance: 'true'
-    });
-    const [receptionData, setReceptionData] = useState({
-        doctor: '',
-        treatment_reason: '',
-        systolic: '',
-        diastolic: '',
-        blood_sugar: '',
-        height: '',
-        weight: '',
-        bmi: ''
-    });
+  const [patient_id, setPatient_id] = useState(null);
+  const [selectedReservationDetails, setSelectedReservationDetails] = useState({});
+  const [selectedAddress, setSelectedAddress] = useState({
+    zip_code: '',
+    address: ''
+  });
+  const [patientData, setPatientData] = useState({
+    patient_name: '',
+    front_registration_number: '',
+    back_registration_number: '',
+    gender: '',
+    phone_number1: '',
+    phone_number2: '',
+    phone_number3: '',
+    insurance: '',
+    zip_code: '',
+    address: '',
+    detail_address: '',
+    insurance: 'true'
+  });
+  const [receptionData, setReceptionData] = useState({
+    doctor: '',
+    treatment_reason: '',
+    systolic: '',
+    diastolic: '',
+    blood_sugar: '',
+    height: '',
+    weight: '',
+    bmi: ''
+  });
 
     return (
         <>
@@ -74,7 +77,7 @@ const Reception = () => {
 
         </>
 
-    );
+  );
 };
 
 export default Reception;

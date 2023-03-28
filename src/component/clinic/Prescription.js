@@ -17,8 +17,10 @@ import { red } from "@mui/material/colors";
 
 const Prescription = ({
   handlePrescriptionAdd,
-  prescription,
   handlePrescriptionRemove,
+  prescription,
+  medicalInfo,
+  mode,
 }) => {
   const [drug_code, setDrug_code] = useState("");
   const [drug_name, setDrug_name] = useState("");
@@ -59,20 +61,6 @@ const Prescription = ({
     setDrug_code("");
     setDrug_name("");
   }
-
-  // const handleAdd = (drug) => {
-  //   if (drugTaking.some((item) => item.drug_id === drug.drug_id)) {
-  //     // 이미 추가된 질병일 경우
-  //     alert("이미 추가된 약품입니다.");
-  //   } else {
-  //     setDrugTaking((prev) => [...prev, drug]);
-  //   }
-  // };
-
-  // function handleRemove(drug_id) {
-  //   const newDrugTaking = drugTaking.filter((drug) => drug.drug_id !== drug_id);
-  //   setDrugTaking(newDrugTaking);
-  // }
 
   const handleKeyDown = (e) => {
     const scrollRef = searchListRef.current;
@@ -199,20 +187,22 @@ const Prescription = ({
         <Box sx={{ minHeight: "220px", overflowY: "auto" }}>
           <Table>
             <TableBody>
-              {prescription.map((drug) => (
-                <TableRow key={drug.drug_id}>
-                  <TableCell align="center">{drug.drug_code}</TableCell>
-                  <TableCell align="center">{drug.drug_name}</TableCell>
-                  <TableCell align="center">
-                    <RemoveCircleOutlineIcon
-                      sx={{ color: red[500] }}
-                      onClick={() => {
-                        handlePrescriptionRemove(drug.drug_id);
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {(mode >= 1 ? medicalInfo.prescription : prescription || []).map(
+                (drug) => (
+                  <TableRow key={drug.drug_id}>
+                    <TableCell align="center">{drug.drug_code}</TableCell>
+                    <TableCell align="center">{drug.drug_name}</TableCell>
+                    <TableCell align="center">
+                      <RemoveCircleOutlineIcon
+                        sx={{ color: red[500] }}
+                        onClick={() => {
+                          handlePrescriptionRemove(drug.drug_id);
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
         </Box>

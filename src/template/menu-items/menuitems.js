@@ -1,7 +1,7 @@
-import { IconCalendarTime, IconDeviceDesktop, IconClipboardList } from '@tabler/icons';
+import { IconCalendarTime, IconDeviceDesktop, IconClipboardList, IconSettings } from '@tabler/icons';
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
-const icons = { IconCalendarTime, IconDeviceDesktop, IconClipboardList };
+const icons = { IconCalendarTime, IconDeviceDesktop, IconClipboardList, IconSettings };
 
 const menuItems = {
     id: 'menuitems',
@@ -28,6 +28,14 @@ const menuItems = {
             type: 'item',
             url: '/clinic',
             icon: icons.IconClipboardList,
+            breadcrumbs: false
+        },
+        {
+            id: 'did_setting',
+            title: 'DID 설정',
+            type: 'item',
+            url: '/did_setting',
+            icon: icons.IconSettings,
             breadcrumbs: false
         }
     ]
