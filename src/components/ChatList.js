@@ -30,7 +30,7 @@ const ChatList = () => {
     return (
         <div>
             {/* 로그인 시 자기자신 제외한 채팅방목록 조회 */}
-            <Paper sx={{ marginBottom: 5, marginTop: 2 }} elevation={2} style={{ width: "300px", height: "600px" }}>
+            <Paper sx={{ marginBottom: 5 }} elevation={2} style={{ width: "300px", height: "550px" }}>
                 <Box>
                     <AppBar position="static" style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
                         <Toolbar style={{ width: 300, height: 60, alignItems: 'right' }}>
