@@ -1,10 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Grid } from "@mui/material";
 import mqtt from "mqtt";
 import axios from "axios";
 import CallButtonSet from './CallButtonSet';
 import WaitingQueue from './WaitingQueue';
 
+// const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
+const mqttURL = `mqtt://localhost:8083/mqtt`;
 const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 
 const mqttOptions = {
@@ -18,7 +20,7 @@ const mqttOptions = {
 
 const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   const [data, setData] = useState([]);
-  const [client, setClient] = useState(mqtt.connect(`mqtt://192.168.0.132:8083/mqtt`, mqttOptions));
+  const client = useMemo(() => mqtt.connect(mqttURL, mqttOptions), []);
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
