@@ -6,7 +6,7 @@ import ReceiptDetails from './ReceiptDetails';
 import Reservation from './Reservation';
 import Paper from '@mui/material/Paper';
 import { useState, useEffect } from 'react';
-import ReceptionList from './ReceptionList';
+import ReceiptList from './ReceiptList';
 
 
 function Receipt() {
@@ -49,6 +49,11 @@ function Receipt() {
       //   </Paper>
       // </div> */}
       // <div style={{width: "395px", height: "400px", float: "right"}}>
+        <Paper elevation={3} style={{padding: "20px"}}>
+            <ReceiptList user={user}/>
+        </Paper>
+      </div>
+      <div style={{width: "395px", height: "400px", float: "right"}}>
         <Paper elevation={3} style={{padding: "20px"}}>
           {/* <h2>수납하기</h2> */}
             {/* 접수정보 */}
