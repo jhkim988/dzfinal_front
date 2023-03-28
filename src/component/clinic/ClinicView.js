@@ -9,6 +9,7 @@ import Queue from "./Queue";
 import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
+import WaitingQueueLayout from './../waiting/WaitingQueueLayout';
 
 const ClinicView = () => {
   const [reception, setReception] = useState(1);
@@ -48,9 +49,7 @@ const ClinicView = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={2} style={{ height: "90vh" }}>
-        <Paper sx={{ height: "90vh" }}>
-          <Queue />
-        </Paper>
+        <WaitingQueueLayout initPanel="2" nextState="진료중" clickRowCallback={(reception_id) => {}}/>
       </Grid>
       <Grid item xs={10} style={{ height: "100vh" }}>
         <Grid container spacing={2}>

@@ -15,7 +15,7 @@ const mqttOptions = {
   password: "emqx_test",
 };
 
-const WaitingQueueLayout = ({ initPanel, nextState, loadReceptionInfo }) => {
+const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   const [data, setData] = useState([]);
   const [client, setClient] = useState(mqtt.connect(`ws://192.168.0.132:8083/mqtt`, mqttOptions));
   const [selected, setSelected] = useState(null);
@@ -61,7 +61,7 @@ const WaitingQueueLayout = ({ initPanel, nextState, loadReceptionInfo }) => {
 
   const onRowClick = e => {
     setSelected(e.currentTarget.dataset.reception_id);
-    loadReceptionInfo && loadReceptionInfo(e.currentTarget.dataset.reception_id);
+    clickRowCallback && clickRowCallback(e.currentTarget.dataset.reception_id);
   }
   // init data load
   useEffect(() => {
