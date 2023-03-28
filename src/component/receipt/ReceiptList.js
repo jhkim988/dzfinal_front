@@ -19,7 +19,7 @@ import { Stack } from "@mui/system";
 
 
 
-const ReceptionList = ({user}) => {
+const ReceiptList = ({user}) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
   const [searchText, setSearchText] = useState("");
@@ -161,4 +161,4 @@ const ReceptionList = ({user}) => {
   );
 };
 
-export default ReceptionList;
+export default ReceiptList;
