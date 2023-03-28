@@ -25,7 +25,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import koLocale from "dayjs/locale/ko";
 
-const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
+const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordInquiry }) => {
   const [type, setType] = useState("");
   const handleChange = (e) => {
     setType(e.target.value);
@@ -64,31 +64,9 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
     setKeyword(e.target.value);
   };
 
+
   const onSearchList = () => {
-    if (!type) return alert("분류를 정해주세요");
-    console.log(formattedDates.start + "/" + formattedDates.end);
-    axios
-      .post(
-        "/api/clinic/mri/search",
-        {
-          type: type,
-          start: formattedDates?.start || "",
-          end: formattedDates?.end || "",
-          keyword: keyword,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        setMri(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    clickMedicalRecordInquiry(type, formattedDates, keyword);
   };
 
   return (

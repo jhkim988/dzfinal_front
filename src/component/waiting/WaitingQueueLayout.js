@@ -9,24 +9,30 @@ const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 
 
 const mqttOptions = {
   clean: true,
-  connectTimeout: 4000,
+  connectTimeout: 30*1000,
   clientId: `emqx_test${genRanHex(6)}`,
   username: `emqx_test${genRanHex(6)}`,
   password: "emqx_test",
 };
 
+
 const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   const [data, setData] = useState([]);
-  const [client, setClient] = useState(mqtt.connect(`ws://192.168.0.132:8083/mqtt`, mqttOptions));
+  const [client, setClient] = useState(mqtt.connect(`mqtt://192.168.0.132:8083/mqtt`, mqttOptions));
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    client.subscribe("waiting", { qos: 1 });
+    client.on("connect", () => {
+      client.subscribe("waiting", { qos: 1 });
+    });
+
     client.on("message", (topic, payload, packet) => {
       payload = JSON.parse(payload);
+      console.log("message", payload);
+
       if (topic === "waiting") {
         if (payload.method === "ADD") {
-          setData([...data, payload.data]);
+        setData([...data, payload.data]);
         } else if (payload.method === "PUT") {
           setData(prev => {
             const ret = [...prev]
@@ -42,11 +48,9 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
     });
 
     return () => {
-      client.unsubscribe("waiting");
       client.end();
-      console.log("connection end")
     }
-  }, [client]);
+  }, []);
 
   // mqtt call Patient
   const callPatient = useCallback((reception_id) => {
@@ -61,7 +65,7 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
 
   const onRowClick = e => {
     setSelected(e.currentTarget.dataset.reception_id);
-    clickRowCallback && clickRowCallback(e.currentTarget.dataset.reception_id);
+    clickRowCallback && clickRowCallback(data.filter(el => `${el.reception_id}` === e.currentTarget.dataset.reception_id)[0]);
   }
   // init data load
   useEffect(() => {
