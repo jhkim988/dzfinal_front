@@ -86,6 +86,9 @@ const DidSetting = () => {
           setSelectedValue(null);
           setFile(null);
         }
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 

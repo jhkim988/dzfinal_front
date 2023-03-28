@@ -5,7 +5,6 @@ import {
   Grid,
   InputLabel,
   MenuItem,
-  Paper,
   Select,
   Table,
   TableBody,
@@ -14,16 +13,17 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import axios from "axios";
+import dayjs from "dayjs";
 import React from "react";
 import { useState } from "react";
+import "dayjs/locale/ko";
+
+dayjs.locale("ko");
 
 const Register = () => {
-  const [role, setRole] = useState("");
-
-  const handleChange = (e) => {
-    setRole(e.target.value);
-  };
-
   const [file, setFile] = useState(null);
 
   const handleBoxClick = () => {
@@ -32,6 +32,64 @@ const Register = () => {
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
+  };
+
+  const [employee, setEmployee] = useState({
+    user_id: "",
+    employee_email: "",
+    employee_name: "",
+    role: "",
+    birth: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEmployee((prevEmployee) => ({
+      ...prevEmployee,
+      [name]: value,
+    }));
+  };
+
+  const handleBirthdayChange = (value) => {
+    const formattedValue = dayjs(value).format("YYYY-MM-DD");
+
+    setEmployee((prevEmployee) => ({
+      ...prevEmployee,
+      birth: formattedValue,
+    }));
+  };
+
+  const registerClick = () => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const info = new Blob([JSON.stringify(employee)], {
+      type: "application/json",
+    });
+
+    formData.append("employee", info);
+
+    axios
+      .post("/api/admin/employee", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        if (response.data === true) {
+          alert("등록 완료");
+          setEmployee({
+            user_id: "",
+            employee_email: "",
+            employee_name: "",
+            role: "",
+            birth: "",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -88,6 +146,8 @@ const Register = () => {
                     <TextField
                       label="아이디"
                       variant="outlined"
+                      name="user_id"
+                      onChange={handleInputChange}
                       sx={{ width: "100%" }}
                     />
                   </TableCell>
@@ -97,6 +157,8 @@ const Register = () => {
                     <TextField
                       label="이메일"
                       variant="outlined"
+                      name="employee_email"
+                      onChange={handleInputChange}
                       sx={{ width: "100%" }}
                     />
                   </TableCell>
@@ -106,6 +168,8 @@ const Register = () => {
                     <TextField
                       label="이름"
                       variant="outlined"
+                      name="employee_name"
+                      onChange={handleInputChange}
                       sx={{ width: "100%" }}
                     />
                   </TableCell>
@@ -114,21 +178,29 @@ const Register = () => {
                   <TableCell>
                     <FormControl fullWidth>
                       <InputLabel>직책</InputLabel>
-                      <Select value={role} label="role" onChange={handleChange}>
+                      <Select
+                        value={employee.role}
+                        label="role"
+                        inputProps={{ name: "role" }}
+                        onChange={handleInputChange}
+                      >
                         <MenuItem value={"doctor"}>의사</MenuItem>
-                        <MenuItem value={"nurse"}>간호사</MenuItem>
-                        <MenuItem value={"assistant"}>조무사</MenuItem>
+                        <MenuItem value={"rn"}>간호사</MenuItem>
+                        <MenuItem value={"klpn"}>조무사</MenuItem>
                       </Select>
                     </FormControl>
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>
-                    <TextField
-                      label="생년월일"
-                      variant="outlined"
-                      sx={{ width: "100%" }}
-                    />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="생년월일"
+                        format="YYYY-MM-DD"
+                        sx={{ width: "100%" }}
+                        onChange={(value) => handleBirthdayChange(value)}
+                      />
+                    </LocalizationProvider>
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -140,7 +212,9 @@ const Register = () => {
                 marginTop: 2,
               }}
             >
-              <Button variant="contained">등록</Button>
+              <Button variant="contained" onClick={registerClick}>
+                등록
+              </Button>
               <Button variant="contained" color="error">
                 취소
               </Button>
