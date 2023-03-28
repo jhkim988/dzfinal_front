@@ -41,36 +41,38 @@ const Reception = () => {
 
     return (
         <>
-            <Receipt />
-        <div style={{ width: "950px", height: "400px" }}>
-            <AutoCompleteForm setPatientData={setPatientData} setReceptionData={setReceptionData} />
-            {/* <Test /> */}
+            <div style={{ width: "900px", height: "620px" }}>
+                {/* <AutoCompleteForm setPatientData={setPatientData} setReceptionData={setReceptionData} /> */}
 
-            <Paper>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <DailyReservationList setSelectedReservationDetails={setSelectedReservationDetails} setPatientData={setPatientData} setReceptionData={setReceptionData} />
-                    <Box sx={{ width: 475, padding: 2 }}>
-                        
-                        <PatientForm setPatient_id={setPatient_id}
-                            setReceptionData={setReceptionData}
-                            selectedReservationDetails={selectedReservationDetails}
-                            patientData={patientData}
-                            setPatientData={setPatientData}
-                            selectedAddress={selectedAddress}
-                            setSelectedAddress={setSelectedAddress}
-                        />
-                        <ReceptionForm patient_id={patient_id}
-                            receptionData={receptionData}
-                            setReceptionData={setReceptionData}
-                            patientData={patientData}
-                            setPatientData={setPatientData}
-                            setSelectedAddress={setSelectedAddress}
-                        />
+                {/* <Test /> */}
+
+                <Paper>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <DailyReservationList setSelectedReservationDetails={setSelectedReservationDetails} setPatientData={setPatientData} setReceptionData={setReceptionData} />
+                        <Box sx={{ width: 475, padding: 2 }}>
+
+                            <PatientForm setPatient_id={setPatient_id}
+                                setReceptionData={setReceptionData}
+                                selectedReservationDetails={selectedReservationDetails}
+                                patientData={patientData}
+                                setPatientData={setPatientData}
+                                selectedAddress={selectedAddress}
+                                setSelectedAddress={setSelectedAddress}
+                            />
+                            <ReceptionForm patient_id={patient_id}
+                                receptionData={receptionData}
+                                setReceptionData={setReceptionData}
+                                patientData={patientData}
+                                setPatientData={setPatientData}
+                                setSelectedAddress={setSelectedAddress}
+                            />
+                        </Box>
                     </Box>
-                </Box>
-            </Paper>
-            {/* <ReceptionList /> */}
-        </div>
+                    {/* <ChatList style={{ width: "300px", height: "510px", border: 1 }} />
+                <ChatRoom /> */}
+                </Paper>
+                {/* <ReceptionList /> */}
+            </div>
         </>
 
     );
