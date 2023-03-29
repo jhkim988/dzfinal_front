@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import {
   Button,
   Paper,
@@ -27,6 +27,8 @@ const ReservationForm = ({
   requestSuccessCallback,
 }) => {
   const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const anchorRef = useRef(null);
   const [reservationFormData, setReservationFormData] = useState({
     patient_id: 0,
     patient_name: '',
@@ -40,7 +42,6 @@ const ReservationForm = ({
     doctor: 0,
     treatment_reason: '',
   });
-  
   const formOnChange = useCallback((e) => {
     setReservationFormData((prev) => ({
       ...prev,
@@ -50,7 +51,7 @@ const ReservationForm = ({
 
   const postReservation = useCallback((e) => {
     axios.post("/api/reservation", reservationFormData, {
-      headers: { 'Content-Type': 'application/json;charset=utf-8'}
+      headers: { 'Content-Type': 'application/json;charset=utf-8' }
     }).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
@@ -86,7 +87,7 @@ const ReservationForm = ({
       });
     } else if (reservationFormModal.mode === "PUT") {
       axios.get(`/api/reservation/${reservationFormModal.reservation_id}`)
-        .then(({data}) => {
+        .then(({ data }) => {
           const data_date = new Date(data.wish_date);
           const wish_date = offsetDate(data_date);
           setReservationFormData({
@@ -103,14 +104,20 @@ const ReservationForm = ({
             doctor: data.doctor,
             treatment_reason: data.treatment_reason,
           });
-      });
+        });
     }
-  }, [reservationFormModal.modalState, pickDate, pickTime])
+  }, [reservationFormModal.modalState, pickDate, pickTime]);
+
+  useEffect(() => {
+
+  }, [reservationFormModal]);
+
   return (
     <>
       <Modal
         open={reservationFormModal.modalState}
         onClose={() => {
+          setDateTimePickerModal(false);
           setReservationFormModal({
             ...reservationFormModal,
             modalState: false,
@@ -123,12 +130,14 @@ const ReservationForm = ({
         <Paper
           sx={{
             padding: "20px",
-            width: 400,
+            width: 450,
+            height: 645,
             left: "50%",
             top: "50%",
             position: "absolute",
             transform: "translate(-50%, -50%)",
           }}
+          ref={anchorRef}
         >
           <Grid container>
             <Grid item xs={12} style={style}>
@@ -220,21 +229,24 @@ const ReservationForm = ({
                 </Select>
               </FormControl>
             </Grid>
-
+            <Grid item xs={6} />
             <Grid item xs={6} style={style}>
               <FormControl>
                 <InputLabel id="date-time">예약날짜/시간</InputLabel>
                 <Input
                   readOnly
-                  onClick={() =>
-                    setDateTimePickerModal(true)
+                  onClick={(e) => {
+                    console.log("click", anchorRef.current, dateTimePickerModal);
+                    setAnchorEl(anchorRef.current);
+                    setDateTimePickerModal(prev => !prev);
+                  }
                   }
                   value={reservationFormData.wish_date && reservationFormData.wish_time ? reservationFormData.date_time : ''}
                   name="date-time"
                   onChange={formOnChange}
                   endAdornment={<InputAdornment position="end">
-                  <CalendarMonthIcon/>
-                </InputAdornment>}
+                    <CalendarMonthIcon />
+                  </InputAdornment>}
                 >
                 </Input>
 
@@ -247,7 +259,7 @@ const ReservationForm = ({
                   placeholder="예약메모"
                   minRows={5}
                   multiline
-                  style={{ width: 360 }}
+                  style={{ width: 410 }}
                   name="treatment_reason"
                   onChange={formOnChange}
                   value={reservationFormData.treatment_reason}
@@ -266,6 +278,7 @@ const ReservationForm = ({
             <Grid item xs={2} style={style}>
               <Button
                 onClick={(e) => {
+                  setDateTimePickerModal(false);
                   setReservationFormModal({
                     ...reservationFormModal,
                     modalState: false,
@@ -285,6 +298,7 @@ const ReservationForm = ({
         setReservationFormData={setReservationFormData}
         pickDate={pickDate}
         pickTime={pickTime}
+        anchorEl={anchorEl}
       />
     </>
   );
