@@ -19,7 +19,7 @@ import { compareDate, offsetDate } from './utils/dateUtils';
 import ReservationForm from './ReservationForm';
 import { doctorData, resources } from "./Reservation";
 
-const cellHeight = 25;
+const cellHeight = 2.7;
 
 const appointmentBackground = {
   '1': "#F29D94",
@@ -164,7 +164,7 @@ const ReservationDay = ({
               isShaded={compareDate(props.startDate, new Date()) <= 0}
               data-datetime={props.startDate}
               data-doctor={props.groupingInfo[0].id}
-              style={{ height: cellHeight }}
+              style={{ height: `${cellHeight}vh` }}
               onClick={clickEmptyCell}
             />
           )}
@@ -174,11 +174,11 @@ const ReservationDay = ({
           timeScaleLabelComponent={styled((props) => {
             if (!props.time)
               return (
-                <DayView.TimeScaleLabel {...props} style={{ height: cellHeight/2 }} />
+                <DayView.TimeScaleLabel {...props} style={{ height: `${cellHeight/2}vh` }} />
               );
             else
               return (
-                <DayView.TimeScaleLabel {...props} style={{ height: cellHeight }} />
+                <DayView.TimeScaleLabel {...props} style={{ height: `${cellHeight}vh` }} />
               );
           })({
             '&.Label-label': {
@@ -186,7 +186,7 @@ const ReservationDay = ({
             }
           })}
           timeScaleTickCellComponent={() => (
-            <DayView.TimeScaleTickCell style={{ height: cellHeight }} />
+            <DayView.TimeScaleTickCell style={{ height: `${cellHeight}vh` }} />
           )}
         />
         <Appointments appointmentComponent={Appointment} />
