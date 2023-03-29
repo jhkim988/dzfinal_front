@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from "axios";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Select, Box, FormControl, Button, Checkbox, FormControlLabel, FormGroup, Pagination, InputLabel, makeStyles, MenuItem, Paper, TextareaAutosize, TextField } from '@mui/material';
 import {
     Table,
@@ -19,38 +19,20 @@ import { Stack } from "@mui/system";
 
 
 
-const ReceiptList = ({user}) => {
+const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
   const [searchText, setSearchText] = useState("");
   const [searchRange, setSearchRange] = useState([null, null]);
 
   useEffect(() => {
-    getReceiptList();
-  }, []);
+    console.log(patient_name);
+    receptionRecordSearch({ type: "patient_name", searchText: patient_name }, setReceiptList);
+  }, [patient_name]);
 
-  const getReceiptList = () => {
-     console.log(searchRange[0]?.format("YYYY-MM-DD"));
-     console.log(searchRange[1]?.format("YYYY-MM-DD"));
-
-    axios
-      .post("/api/receipt/getReceiptList", {
-        type,
-        searchText,
-        start_date: searchRange[0]?.format("YYYY-MM-DD"),
-        end_date: searchRange[1]?.format("YYYY-MM-DD"),
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((response) => {
-        setReceiptList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  const getReceiptList = useCallback(() => {
+    receptionRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText}, setReceiptList);
+  }, [searchRange, type, searchText, setReceiptList, receptionRecordSearch]);
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
@@ -66,7 +48,6 @@ const ReceiptList = ({user}) => {
 
   const handleSearch = () => {
     getReceiptList();
-    // console.log("보낸데이터"+getReceiptList);
   };
 
   return (

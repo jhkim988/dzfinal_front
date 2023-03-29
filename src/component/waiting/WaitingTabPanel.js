@@ -2,7 +2,7 @@ import { Paper, TableContainer, Table, TableHead, TableRow, TableBody, TableCell
 
 const WaitingTabPanel = ({ data, selected, onRowClick }) => {
 
-  const dummyData = new Array(Math.max(18 - data.length, 0)).fill({});
+  const dummyData = new Array(Math.max(19 - data.length, 0)).fill({});
 
   return (
     <Paper>

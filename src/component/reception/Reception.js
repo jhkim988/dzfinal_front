@@ -1,6 +1,7 @@
 import { Grid, Paper } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
+import axios from "axios";
 import AutoCompleteForm from "./AutoCompleteForm";
 import DailyReservationList from "./DailyReservationList";
 import PatientForm from "./PatientForm";
@@ -45,6 +46,32 @@ const Reception = () => {
     bmi: "",
   });
 
+  const [reception_id, setReception_id] = useState(0);
+  const [patient_name, setPatient_name] = useState("");
+  // searchRange[];
+
+  const receptionRecordSearch = ({ start, end, type, searchText }, callback) => {
+    console.log(start?.format("YYYY-MM-DD"));
+    console.log(end?.format("YYYY-MM-DD"));
+
+   axios
+     .post("/api/receipt/getReceiptList", {
+       type,
+       searchText,
+       start_date: start?.format("YYYY-MM-DD"),
+       end_date: end?.format("YYYY-MM-DD"),
+     }, {
+       headers: {
+         'Content-Type': 'application/json'
+       }
+     })
+     .then((response) => {
+      callback(response.data);
+     })
+     .catch((error) => {
+       console.log(error);
+     });
+ };
   return (
     <>
       <Grid container spacing={2}>
@@ -52,14 +79,18 @@ const Reception = () => {
           <WaitingQueueLayout
             initPanel="3"
             nextState="수납완료"
-            clickRowCallback={() => { }}
+            clickRowCallback={({ reception_id, patient_id, patient_name }) => {
+              setPatient_id(patient_id);
+              setPatient_name(patient_name);
+              setReception_id(reception_id);
+            }}
           />
         </Grid>
 
         <Grid item xs={7}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              {/* <ReceiptList /> */}
+              <ReceiptList receptionRecordSearch={receptionRecordSearch} patient_name={patient_name}/>
             </Grid>
             <Grid item xs={12}>
               <Paper sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -101,7 +132,7 @@ const Reception = () => {
         </Grid>
 
         <Grid item xs={3}>
-          <Receipt />
+          <Receipt reception_id={reception_id}/>
         </Grid>
       </Grid>
 

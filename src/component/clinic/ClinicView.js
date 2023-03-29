@@ -11,7 +11,7 @@ import DiseaseModel from "./model/DiseaseModel";
 import WaitingQueueLayout from './../waiting/WaitingQueueLayout';
 
 const ClinicView = () => {
-  const [reception, setReception] = useState(1);
+  const [reception, setReception] = useState();
   const [patient, setPatient] = useState({});
   const [underlying, onInsert, onDelete, onAppend, onReset] = DiseaseModel();
   const [drug_taking, setDrug_taking] = useState([]);
@@ -22,10 +22,12 @@ const ClinicView = () => {
   const [prescription, setPrescription] = useState([]);
   
   useEffect(() => {
+    reception &&
     axios
-      .get(`/api/clinic/1`)
+      .get(`/api/clinic/${reception}`)
       .then((response) => {
         setPatient(response.data);
+        onReset();
         onAppend(response.data.underlyingList);
         setDrug_taking(response.data.drug_takingList);
       })
@@ -35,8 +37,9 @@ const ClinicView = () => {
   }, [reception]);
 
   useEffect(() => {
+    patient?.patient_id &&
     axios
-      .get(`/api/clinic/mri/${1}`)
+      .get(`/api/clinic/mri/${patient.patient_id}`)
       .then((response) => {
         setMri(response.data);
       })
@@ -45,7 +48,7 @@ const ClinicView = () => {
       });
   }, []);
 
-  const clickMedicalRecordInquiry = useCallback((type, formattedDates, keyword) => {
+  const searchMedicalRecordInquiry = useCallback((type, formattedDates, keyword) => {
     if (!type) return alert("분류를 정해주세요");
     console.log(formattedDates.start + "/" + formattedDates.end);
     axios
@@ -72,13 +75,12 @@ const ClinicView = () => {
       });
   }, []);
 
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={2} style={{ height: "90vh" }}>
-        <WaitingQueueLayout initPanel="2" nextState="진료중" clickRowCallback={({ reception_id, patient_name}) => {
+        <WaitingQueueLayout initPanel="2" nextState="진료중" clickRowCallback={({ reception_id, patient_name }) => {
           setReception(reception_id);
-          clickMedicalRecordInquiry("patient_name", {}, patient_name);
+          searchMedicalRecordInquiry("patient_name", { start: "2000-01-01", end: "2100-12-31" }, patient_name);
         }}/>
       </Grid>
       <Grid item xs={10} style={{ height: "100vh" }}>
@@ -88,7 +90,7 @@ const ClinicView = () => {
               mri={mri}
               setMri={setMri}
               setMedicalInfo={setMedicalInfo}
-              clickMedicalRecordInquiry={clickMedicalRecordInquiry}
+              searchMedicalRecordInquiry={searchMedicalRecordInquiry}
             />
           </Grid>
           <Grid item xs={5.9} style={{ height: "50vh" }}>

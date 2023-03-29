@@ -25,7 +25,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import koLocale from "dayjs/locale/ko";
 
-const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordInquiry }) => {
+const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, searchMedicalRecordInquiry }) => {
   const [type, setType] = useState("");
   const handleChange = (e) => {
     setType(e.target.value);
@@ -64,34 +64,6 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordI
     setKeyword(e.target.value);
   };
 
-
-  const onSearchList = () => {
-    if (!type) return alert("분류를 정해주세요");
-
-    axios
-      .post(
-        "/api/clinic/mri/search",
-        {
-          type: type,
-          start: formattedDates?.start || "",
-          end: formattedDates?.end || "",
-          keyword: keyword,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        setMri(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   return (
     <Paper sx={{ height: "45vh" }} elevation={3}>
       <Box>진료기록조회</Box>
@@ -121,7 +93,7 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordI
         <Button
           variant="contained"
           sx={{ height: "40px", alignSelf: "center" }}
-          onClick={onSearchList}
+          onClick={() => searchMedicalRecordInquiry({ type, ...formattedDates, keyword })}
         >
           검색
         </Button>
