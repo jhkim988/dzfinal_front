@@ -87,34 +87,24 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
 
     };
 
-    const handleAlet = () => {
-        alert("해당 환자 이름이 존재하지 않습니다. 초진 환자 입니다. ");
-    }
-
     //환자이름검색
     const handleDropDownKey = (event) => {
         event.preventDefault();
         if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter") {
             if (patient_name.length > 1) {
-                axios.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
+                axios.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
                     .then((response) => {
                         setAutoCompleteList(response.data);
                     })
                     .catch((error) => {
                         console.error(error);
                     });
-
             } else {
                 setAutoCompleteList([]);
             }
 
         }
     }
-
     const removeAutoCompleteList = () => {
         setPatient_name('');
         setAutoCompleteList([]);
@@ -159,14 +149,13 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
         width: "150px", height: "auto"
     }
     return (
-        <Grid >
-
+        <>
             <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
                 <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>환자 등록/수정</h5>
             </div>
-            <Paper sx={{ marginTop: 2, width: 450, height: 160 }} elevation={2}>
-                <div>
-                    <form onSubmit={handleSubmit}>
+            <Paper sx={{ marginTop: 2, height: 140 }} elevation={2}>
+                <form onSubmit={handleSubmit}>
+                    <div>
                         <Box component="form"
                             sx={{
                                 '& > :not(style)': { m: 0.5, width: 100 },
@@ -207,7 +196,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                                                         <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
                                                     </TableRow>
                                                 ))}
-                                                <Button variant="contained" onClick={() => { removeAutoCompleteList(); }} style={{ width: "30px", height: "20px" }}>닫기</Button>
+                                                <Button variant="contained" onClick={() => { removeAutoCompleteList(); }}>닫기</Button>
                                             </TableBody>
                                         </Table>
                                     </div>
@@ -357,17 +346,15 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                             sx={{
                                 '& > :not(style)': { m: 0.5 },
                                 '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
+
                             }}
                             noValidate
                             autoComplete="off"
                         >
-                            <TextField id="outlined-basic" label="상세주소"
-                                name="detail_address"
-                                onChange={handleChange}
-                                value={patientData.detail_address || ''}
-                                variant="outlined"
-                                size='small'
-                                style={{ width: 440 }}
+                            <TextField id="outlined-basic" label="상세주소" name="detail_address" onChange={handleChange} value={patientData.detail_address || ''} variant="outlined" size='small'
+                                style={{
+                                    width: 270
+                                }}
                                 InputLabelProps={{
                                     shrink: "true"
                                 }}
@@ -377,10 +364,11 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                             <Button type="submit" variant="contained" style={{ width: "30px", height: "20px" }}>등록</Button>
                             <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "20px" }}>취소</Button>
                         </Box>
-                    </form>
-                </div >
+
+                    </div >
+                </form>
             </Paper>
-        </Grid >
+        </>
     );
 };
 
