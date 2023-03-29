@@ -87,10 +87,6 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
 
     };
 
-    const handleAlet = () => {
-        alert("해당 환자 이름이 존재하지 않습니다. 초진 환자 입니다. ");
-    }
-
     //환자이름검색
     const handleDropDownKey = (event) => {
         event.preventDefault();
@@ -350,25 +346,24 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                             sx={{
                                 '& > :not(style)': { m: 0.5 },
                                 '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
+
                             }}
                             noValidate
                             autoComplete="off"
                         >
-                            <Box style={{ float: "left" }}>
-                                <TextField id="outlined-basic" label="상세주소" name="detail_address" onChange={handleChange} value={patientData.detail_address || ''} variant="outlined" size='small'
-                                    style={{ width: 310, float: "left" }}
-                                    InputLabelProps={{
-                                        shrink: "true"
-                                    }}
-                                />
-
-                                <Box style={{ float: "right" }}>
-                                    <Button type="submit" variant="contained" style={{ width: "30px", height: "20px" }}>등록</Button>
-                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "20px" }}>취소</Button>
-                                </Box>
-                            </Box>
+                            <TextField id="outlined-basic" label="상세주소" name="detail_address" onChange={handleChange} value={patientData.detail_address || ''} variant="outlined" size='small'
+                                style={{
+                                    width: 270
+                                }}
+                                InputLabelProps={{
+                                    shrink: "true"
+                                }}
+                            />
                         </Box>
-
+                        <Box style={{ float: "right" }}>
+                            <Button type="submit" variant="contained" style={{ width: "30px", height: "20px" }}>등록</Button>
+                            <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "20px" }}>취소</Button>
+                        </Box>
 
                     </div >
                 </form>

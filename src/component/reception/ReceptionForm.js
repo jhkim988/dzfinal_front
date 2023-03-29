@@ -233,7 +233,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     name="doctor"
                                     onChange={handleChange}
                                     value={receptionData.doctor || ''}
-                                    style={{ width: "100px", height: "10px" }}
+                                    style={{ width: "90px", height: "10px" }}
                                     sx={{
                                         '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                                     }}
@@ -252,7 +252,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                         shrink: "true"
                                     }}
                                     rows={1}
-                                    style={{ width: 250 }}
+                                    style={{ width: 280 }}
                                     size='small'
                                     name="treatment_reason"
                                     onChange={handleChange}
@@ -346,7 +346,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     name="doctor"
                                     onChange={handleChange}
                                     value={receptionData.doctor || ''}
-                                    style={{ width: "100px", height: "10px" }}
+                                    style={{ width: "90px", height: "10px" }}
                                     sx={{
                                         '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                                     }}
@@ -364,7 +364,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     }}
                                     multiline
                                     rows={1}
-                                    style={{ width: 250 }}
+                                    style={{ width: 280 }}
                                     size='small'
                                     name="treatment_reason"
                                     onChange={handleChange}
