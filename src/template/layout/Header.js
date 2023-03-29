@@ -5,7 +5,7 @@ import { Avatar, Box, Button, ButtonBase, Dialog, TextField } from "@mui/materia
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
-import ChatList from "../../components/ChatList";
+import ChatList from "../../component/chat/ChatList";
 
 
 const Header = ({ handleLeftDrawerToggle }) => {
