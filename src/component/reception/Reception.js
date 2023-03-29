@@ -59,7 +59,7 @@ const Reception = () => {
         <Grid item xs={7}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <ReceiptList />
+              {/* <ReceiptList /> */}
             </Grid>
             <Grid item xs={12}>
               <Paper sx={{ display: "flex", justifyContent: "space-between" }}>
