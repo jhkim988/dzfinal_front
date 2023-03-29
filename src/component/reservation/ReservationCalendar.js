@@ -288,7 +288,7 @@ const DoctorFilterSelector = ({
   );
 };
 
-const DoctorFilterListItem = ({
+export const DoctorFilterListItem = ({
   doctor,
   selectDoctor,
   onCheckListItemClick,

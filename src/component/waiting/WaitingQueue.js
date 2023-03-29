@@ -11,7 +11,7 @@ const tabInfo = [
   { label: "완료", value: "4", filter: (data) => data.state === "수납완료" },
 ];
 
-const WaitingQueue = ({ initPanel, data, selected, onRowClick }) => {
+const WaitingQueue = ({ initPanel, data, selected, onRowClick, autoCall, doctorFilter }) => {
   const [value, setValue] = useState(initPanel);
 
   const handleChange = (event, newValue) => {
@@ -26,14 +26,17 @@ const WaitingQueue = ({ initPanel, data, selected, onRowClick }) => {
             variant="fullWidth"
             sx={{ minWidth: 260 }}
             onChange={handleChange}
-            aria-label="basic tabs example"
           >
             {tabInfo.map((el, idx) => <Tab key={`Tab${idx}`}sx={{ minWidth: 65 }} value={el.value} label={el.label} />)}
           </TabList>
         </Box>
         {
-          tabInfo.map((el, idx) => <TabPanel key={`TabPanel${idx}`}sx={{ minWidth: 260, padding: 0 }} value={el.value}>
-            <WaitingTabPanel data={data.filter(d => el.filter(d))} selected={selected} onRowClick={onRowClick}/>
+          tabInfo.map((el, idx) => <TabPanel
+              key={`TabPanel${idx}`}
+              sx={{ minWidth: 260, padding: 0 }}
+              value={el.value}
+            >
+            <WaitingTabPanel data={data.filter(d => el.filter(d) && doctorFilter[d.doctor_id])} selected={selected} onRowClick={onRowClick}/>
           </TabPanel>)
         }
       </TabContext>
