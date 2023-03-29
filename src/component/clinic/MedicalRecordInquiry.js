@@ -25,7 +25,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import koLocale from "dayjs/locale/ko";
 
-const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
+const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordInquiry }) => {
   const [type, setType] = useState("");
   const handleChange = (e) => {
     setType(e.target.value);
@@ -63,6 +63,7 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
   const handleInputChange = (e) => {
     setKeyword(e.target.value);
   };
+
 
   const onSearchList = () => {
     if (!type) return alert("분류를 정해주세요");

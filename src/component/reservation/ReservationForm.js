@@ -23,19 +23,16 @@ const ReservationForm = ({
   reservationFormModal,
   setReservationFormModal,
   pickDate,
-  setPickDate,
   pickTime,
-  setPickTime,
-  loadCalendar,
-  loadDayAppointments,
+  requestSuccessCallback,
 }) => {
   const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
   const [reservationFormData, setReservationFormData] = useState({
     patient_id: 0,
     patient_name: '',
-    phone1: '',
-    phone2: '',
-    phone3: '',
+    phone_number1: '',
+    phone_number2: '',
+    phone_number3: '',
     date_time: '',
     wish_date: '',
     wish_time: '',
@@ -57,30 +54,29 @@ const ReservationForm = ({
     }).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
-        loadCalendar();
-        loadDayAppointments(reservationFormData.wish_date);
+        requestSuccessCallback(reservationFormData, res.data);
       }
     });
   }, [reservationFormData]);
+
   const putReservation = useCallback((e) => {
     axios.put("/api/reservation", reservationFormData).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
-        loadCalendar();
-        loadDayAppointments(reservationFormData.wish_date);  
+        requestSuccessCallback(reservationFormData, res.data);
       }
     });
   }, [reservationFormData]);
 
   useEffect(() => {
     if (reservationFormModal.mode === "POST") {
-      const date = pickDate.toISOString().slice(0, 10);
+      const date = pickDate ? pickDate.toISOString().slice(0, 10) : null;
       setReservationFormData({
         patient_id: 0,
         patient_name: '',
-        phone1: '',
-        phone2: '',
-        phone3: '',
+        phone_number1: '',
+        phone_number2: '',
+        phone_number3: '',
         date_time: `${date} ${pickTime}`,
         wish_date: date,
         wish_time: pickTime,
@@ -88,7 +84,6 @@ const ReservationForm = ({
         treatment_reason: '',
         doctor: reservationFormModal.doctor,
       });
-  
     } else if (reservationFormModal.mode === "PUT") {
       axios.get(`/api/reservation/${reservationFormModal.reservation_id}`)
         .then(({data}) => {
@@ -98,9 +93,9 @@ const ReservationForm = ({
             reservation_id: data.reservation_id,
             patient_id: data.patient_id,
             patient_name: data.patient_name,
-            phone1: data.phone1,
-            phone2: data.phone2,
-            phone3: data.phone3,
+            phone_number1: data.phone_number1,
+            phone_number2: data.phone_number2,
+            phone_number3: data.phone_number3,
             date_time: `${wish_date} ${data.wish_time}`,
             wish_date: wish_date,
             wish_time: data.wish_time,
@@ -110,7 +105,7 @@ const ReservationForm = ({
           });
       });
     }
-  }, [reservationFormModal.modalState])
+  }, [reservationFormModal.modalState, pickDate, pickTime])
   return (
     <>
       <Modal
@@ -154,10 +149,10 @@ const ReservationForm = ({
                   <FormControl>
                     <InputLabel id="phone-label1">연락처</InputLabel>
                     <Input
-                      id="phone1"
-                      name="phone1"
+                      id="phone_number1"
+                      name="phone_number1"
                       onChange={formOnChange}
-                      value={reservationFormData.phone1}
+                      value={reservationFormData.phone_number1}
                     />
                   </FormControl>
                 </Grid>
@@ -167,10 +162,10 @@ const ReservationForm = ({
                 <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
                   <FormControl>
                     <Input
-                      id="phone2"
-                      name="phone2"
+                      id="phone_number2"
+                      name="phone_number2"
                       onChange={formOnChange}
-                      value={reservationFormData.phone2}
+                      value={reservationFormData.phone_number2}
                     />
                   </FormControl>
                 </Grid>
@@ -180,10 +175,10 @@ const ReservationForm = ({
                 <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
                   <FormControl>
                     <Input
-                      id="phone3"
-                      name="phone3"
+                      id="phone_number3"
+                      name="phone_number3"
                       onChange={formOnChange}
-                      value={reservationFormData.phone3}
+                      value={reservationFormData.phone_number3}
                     />
                   </FormControl>
                 </Grid>
@@ -234,7 +229,7 @@ const ReservationForm = ({
                   onClick={() =>
                     setDateTimePickerModal(true)
                   }
-                  value={reservationFormData.date_time}
+                  value={reservationFormData.wish_date && reservationFormData.wish_time ? reservationFormData.date_time : ''}
                   name="date-time"
                   onChange={formOnChange}
                   endAdornment={<InputAdornment position="end">
@@ -284,14 +279,12 @@ const ReservationForm = ({
         </Paper>
       </Modal>
       <ReservationDateTimePickerModal
-        setDateTimePickerModal={setDateTimePickerModal}
         dateTimePickerModal={dateTimePickerModal}
+        setDateTimePickerModal={setDateTimePickerModal}
         reservationFormData={reservationFormData}
         setReservationFormData={setReservationFormData}
         pickDate={pickDate}
-        setPickDate={setPickDate}
         pickTime={pickTime}
-        setPickTime={setPickTime}
       />
     </>
   );

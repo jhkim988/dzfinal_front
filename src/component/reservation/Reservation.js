@@ -19,7 +19,7 @@ const ReservationLayout = () => {
   const [calendarAppointments, setCalendarAppointments] = useState([]);
   return (
     <>
-      <Grid container spacing={2} sx={{ maxHeight: 700 }}>
+      <Grid container spacing={2}>
         <Grid item xs={8}>
           <ReservationCalendar
             viewDate={viewDate}
@@ -28,7 +28,7 @@ const ReservationLayout = () => {
             setViewCalendar={setViewCalendar}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <ReservationDay
             viewDate={viewDate}
             daySchedule={daySchedule}

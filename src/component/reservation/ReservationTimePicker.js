@@ -3,9 +3,11 @@ import { Grid } from "@mui/material";
 import { Button, Paper } from "@mui/material";
 import axios from "axios";
 import { offsetDate } from "./utils/dateUtils";
+
 const compare = (t1, t2) => {
   return t1.getTime() - t2.getTime();
 };
+
 const getTimeArr = (start, end, intervalMinutes) => {
   const initTime = new Date(`2023-03-16 ${start}`);
   const endTime = new Date(`2023-03-16 ${end}`);
@@ -31,25 +33,27 @@ const getTimeArr = (start, end, intervalMinutes) => {
 };
 
 const ReservationTimePicker = ({
-  reservationFormData,
   setReservationFormData,
-  pickDate,
+  viewPickerDate,
   doctor,
+  pickTime,
 }) => {
   const timeArr = getTimeArr("09:00:00", "18:00:00", 20);
   const [impossible, setImpossible] = useState(new Set(timeArr));
+  const [selectPickTime, setSelectPickTime] = useState(pickTime);
+
   useEffect(() => {
-    axios
+    viewPickerDate && axios
       .get(`/api/reservation/impossible/time`, {
         params: {
           doctor,
-          date: offsetDate(pickDate),
+          date: offsetDate(viewPickerDate),
         },
       })
       .then(({ data }) => {
         setImpossible(new Set(data));
       });
-  }, [pickDate]);
+  }, [viewPickerDate]);
 
   return (
     <Paper style={{ width: 320, padding: 10, margin: "auto" }}>
@@ -58,7 +62,7 @@ const ReservationTimePicker = ({
           <Grid item xs={3} key={`${timeStr}#reservationTime`}>
             <Button
               variant={
-                reservationFormData.wish_time === timeStr
+                selectPickTime === timeStr
                   ? "contained"
                   : "outlined"
               }
@@ -67,11 +71,12 @@ const ReservationTimePicker = ({
               key={`reservationTimeSelect#${timeStr}`}
               value={timeStr}
               onClick={(e) => {
-                setReservationFormData({
-                  ...reservationFormData,
-                  date_time: `${reservationFormData.wish_date} ${e.currentTarget.value}`,
+                setSelectPickTime(e.currentTarget.value)
+                setReservationFormData((prev) => ({
+                  ...prev,
+                  date_time: `${prev.wish_date} ${e.currentTarget.value}`,
                   wish_time: e.currentTarget.value,
-                });
+                }));
               }}
             >
               {timeStr}
