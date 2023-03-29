@@ -67,7 +67,7 @@ const ReservationTimePicker = ({
                   : "outlined"
               }
               disabled={impossible.has(timeStr)}
-              style={{ width: 80, margin: "3px" }}
+              style={{ width: 60, height: 30, margin: "3px" }}
               key={`reservationTimeSelect#${timeStr}`}
               value={timeStr}
               onClick={(e) => {

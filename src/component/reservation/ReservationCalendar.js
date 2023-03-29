@@ -55,7 +55,7 @@ const StyledMonthViewTimeTableCell = styled(MonthView.TimeTableCell)(
   })
 );
 
-const Appointment = ({ children, style, ...restProps }) => (
+const Appointment = ({ children, style, setViewDate, ...restProps }) => (
   <Appointments.Appointment
     {...restProps}
     style={{
@@ -66,6 +66,9 @@ const Appointment = ({ children, style, ...restProps }) => (
       borderRadius: "8px",
       // height: 42.5,
       height: '90%'
+    }}
+    onClick={() => {
+      setViewDate(restProps.data.startDate);
     }}
   >
   <div>{restProps.data.title}</div>
@@ -175,7 +178,7 @@ const ReservationCalendar = ({
             );
           })}
         />
-        <Appointments appointmentComponent={Appointment} />
+        <Appointments appointmentComponent={(props) => <Appointment {...props} setViewDate={setViewDate}/>}/>
       </Scheduler>
     </Paper>
   );
