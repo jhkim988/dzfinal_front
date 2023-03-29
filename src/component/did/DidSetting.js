@@ -19,7 +19,7 @@ import axios from "axios";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import DID_MessageModel from "./model/DID_MessageModel";
 
-const DID_Setting = () => {
+const DidSetting = () => {
   const [messages, onInsert, onToggle, onUpdate, onAppend] = DID_MessageModel();
   const inputEl = useRef(null);
   const [value, setValue] = useState("");
@@ -86,6 +86,9 @@ const DID_Setting = () => {
           setSelectedValue(null);
           setFile(null);
         }
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -252,4 +255,4 @@ const DID_Setting = () => {
   );
 };
 
-export default DID_Setting;
+export default DidSetting;
