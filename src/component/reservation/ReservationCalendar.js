@@ -68,7 +68,6 @@ const Appointment = ({ children, style, setViewDate, ...restProps }) => (
       height: '90%'
     }}
     onClick={() => {
-      console.log(restProps.data);
       setViewDate(restProps.data.startDate);
     }}
   >
