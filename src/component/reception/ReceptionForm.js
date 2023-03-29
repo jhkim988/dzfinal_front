@@ -120,7 +120,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                 <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>접수 등록/수정 [환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]</h5>
             </div>
 
-            <Paper sx={{ marginBottom: 1 }} elevation={2} style={{ height: "100px" }}>
+            <Paper sx={{ marginBottom: 1 }} elevation={1} style={{ height: "100px" }}>
                 <div>
                     {receptionData != null && patient_id == null && (
                         <form onSubmit={receptDataHandleSubmit}>
@@ -252,7 +252,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                         shrink: "true"
                                     }}
                                     rows={1}
-                                    style={{ width: 280 }}
+                                    style={{ width: 300 }}
                                     size='small'
                                     name="treatment_reason"
                                     onChange={handleChange}
@@ -364,7 +364,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     }}
                                     multiline
                                     rows={1}
-                                    style={{ width: 280 }}
+                                    style={{ width: 300 }}
                                     size='small'
                                     name="treatment_reason"
                                     onChange={handleChange}
