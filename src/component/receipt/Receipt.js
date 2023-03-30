@@ -9,9 +9,11 @@ import { useState, useEffect } from 'react';
 import ReceiptList from './ReceiptList';
 
 
-function Receipt({ receiptData }) {
+function Receipt({ receiptData, selectedInformation }) {
+
   const [user, setUser] = useState({
     reception_id: 0,
+    patient_name: "",
     insurance: 0,
     treatment: 0,
     doctor: 0,
@@ -28,6 +30,7 @@ function Receipt({ receiptData }) {
     setUser(prev => {
       const ret = ({
         reception_id: receiptData.reception.reception_id,
+        patient_name: receiptData.patient.patient_name,
         insurance: receiptData.patient.insuarance,
         treatment: receiptData.clinic.treatment,
         doctor: receiptData.reception.doctor,

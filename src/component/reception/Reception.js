@@ -80,6 +80,10 @@ const Reception = () => {
         console.log(error);
       });
   };
+
+  const [selectedInformation, setSelectedInformation] = useState({});
+
+
   return (
     <>
       <Grid container spacing={2}>
@@ -105,6 +109,7 @@ const Reception = () => {
               <Paper elevation={3}>
                 <ReceiptList
                   receptionRecordSearch={receptionRecordSearch}
+                  setSelectedInformation={setSelectedInformation}
                   patient_id={patient_id}
                 />
               </Paper>
@@ -114,11 +119,9 @@ const Reception = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={5}>
                     <DailyReservationList
-                      setSelectedReservationDetails={
-                        setSelectedReservationDetails
-                      }
                       setPatientData={setPatientData}
                       setReceptionData={setReceptionData}
+                      setSelectedReservationDetails={setSelectedReservationDetails}
                     />
                   </Grid>
                   <Grid item xs={7}>
@@ -153,7 +156,10 @@ const Reception = () => {
         </Grid>
 
         <Grid item xs={2.5}>
-          <Receipt receiptData={receiptData} />
+          <Receipt 
+            receiptData={receiptData} 
+            selectedInformation={selectedInformation}
+          />
         </Grid>
       </Grid>
     </>
