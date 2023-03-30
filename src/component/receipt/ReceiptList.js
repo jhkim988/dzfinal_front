@@ -1,7 +1,6 @@
 import * as React from 'react';
-import axios from "axios";
 import { useState, useEffect, useCallback } from 'react';
-import { Select, Box, FormControl, Button, Checkbox, FormControlLabel, FormGroup, Pagination, InputLabel, makeStyles, MenuItem, Paper, TextareaAutosize, TextField } from '@mui/material';
+import { Select, Box, FormControl, Button, Pagination, InputLabel, MenuItem, Paper, TextField } from '@mui/material';
 import {
     Table,
     TableBody,
@@ -10,19 +9,27 @@ import {
     TableHead,
     TableRow
 } from "@material-ui/core";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import { padding, Stack } from "@mui/system";
+import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
-
-
-
 
 const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
+
+  // 검색어
+  const [searchText, setSearchText] = useState("");
+  const handleSearchTextChange = (event) => {
+    setSearchText(event.target.value);
+  };
+
+  // 기간 설정
+  const [searchRange, setSearchRange] = useState([null, null]);
+  const handleSearchRangeChange = (newValue) => {
+    setSearchRange(newValue);
+  };
 
   useEffect(() => {
     console.log(patient_name);
@@ -37,22 +44,9 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
     setType(event.target.value);
   };
 
-  // 검색어
-  const [searchText, setSearchText] = useState("");
-  const handleSearchTextChange = (event) => {
-    setSearchText(event.target.value);
-  };
-
-  // 기간 설정
-  const [searchRange, setSearchRange] = useState([null, null]);
-  const handleSearchRangeChange = (newValue) => {
-    setSearchRange(newValue);
-  };
-
   const handleSearch = () => {
-    getReceiptList(); }
-
-    
+    getReceiptList();
+  }
   // 데이터피커 가운데 글자 사라지게 하기
   useEffect(() => {
     handleToggle(false);
