@@ -56,12 +56,12 @@ const Reception = () => {
           />
         </Grid>
 
-        <Grid item xs={7}>
+        <Grid item xs={7.5}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <ReceiptList />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} >
               <Paper sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Grid item xs={6}>
                   <DailyReservationList
@@ -102,7 +102,7 @@ const Reception = () => {
           </Grid>
         </Grid>
 
-        <Grid item xs={3}>
+        <Grid item xs={2.5}>
           <Receipt />
         </Grid>
       </Grid>
