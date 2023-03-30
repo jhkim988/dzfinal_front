@@ -116,6 +116,10 @@ const Reception = () => {
   });
 
 
+
+  const [selectedInformation, setSelectedInformation] = useState({});
+
+
   return (
     <>
       <Grid container spacing={2}>
@@ -143,6 +147,7 @@ const Reception = () => {
                 <ReceiptList
                   clickRowCallback={clickRowCallback}
                   receiptRecordSearch={receiptRecordSearch}
+                  setSelectedInformation={setSelectedInformation}
                   patient_id={patient_id}
                   // setSelectedOneReceipt={setSelectedOneReceipt}
                 />
@@ -192,7 +197,7 @@ const Reception = () => {
         <Grid item xs={2.5}>
           <Receipt 
             receiptData={receiptData} 
-            // selectedOneReceipt={selectedOneReceipt}
+            selectedInformation={selectedInformation}
           />
         </Grid>
       </Grid>
