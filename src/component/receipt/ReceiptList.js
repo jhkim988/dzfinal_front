@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { Select, Box, FormControl, Button, Pagination, InputLabel, MenuItem, Paper, TextField } from '@mui/material';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
 } from "@material-ui/core";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
@@ -37,7 +37,7 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
   }, [patient_name]);
 
   const getReceiptList = useCallback(() => {
-    receptionRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText}, setReceiptList);
+    receptionRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText }, setReceiptList);
   }, [searchRange, type, searchText, setReceiptList, receptionRecordSearch]);
 
   const handleTypeChange = (event) => {
@@ -80,18 +80,26 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
     }
   };
 
+  useEffect(() => {
+    handleToggle(false);
+  }, []);
+
+  useEffect(() => {
+    handleToggle(true);
+  }, [searchRange]);
+
   return (
-  <>
-    <Paper sx={{ height: "38vh" }}>
-      <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>수납내역목록</h5>
+    <>
+      <Paper sx={{ height: "38vh" }}>
+        <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>수납내역목록</h5>
         <Box sx={{ display: "flex" }}>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel>분류</InputLabel>
-            <Select 
-              value={type} 
+            <Select
+              value={type}
               onChange={handleTypeChange}
               size="medium"
-              >
+            >
               <MenuItem value={"patient_name"}>환자이름</MenuItem>
               <MenuItem value={"reception_id"}>접수번호</MenuItem>
             </Select>
@@ -106,9 +114,10 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
               format="YYYY-MM-DD"
               // onToggle={handleToggle}
               renderInput={(startProps, endProps) => (
-                <Box sx={{ display: "flex", 
-                           alignItems: "center",
-                        }}>
+                <Box sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}>
                   <TextField {...startProps} variant="outlined" sx={{ height: "20px" }} />
                   <Box sx={{ mx: 1 }}>~</Box>
                   <TextField {...endProps} variant="outlined" size="small" />
@@ -116,13 +125,13 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
               )}
             />
           </LocalizationProvider>
-          <TextField 
-            label="검색어" 
-            size="medium" 
+          <TextField
+            label="검색어"
+            size="medium"
             sx={{ alignSelf: "center" }}
             value={searchText}
             onChange={handleSearchTextChange}
-            />
+          />
           <Button
             variant="contained"
             sx={{ height: "40px", alignSelf: "center" }}
@@ -147,7 +156,7 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {receiptList.length === 0 ? 
+              {receiptList.length === 0 ?
                 Array.from(Array(5)).map((_, idx) => (
                   <TableRow key={idx}>
                     <TableCell align="right">&nbsp;</TableCell>
@@ -159,11 +168,11 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
                     <TableCell align="right">&nbsp;</TableCell>
                     <TableCell align="right">&nbsp;</TableCell>
                   </TableRow>
-                )) 
-                : 
+                ))
+                :
                 receiptList.map((receipt, idx) => (
                   <TableRow key={idx}>
-                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
                       {receipt.doctor === 1 ? "김을지" : "이더존"}
                     </TableCell>
                     <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{`${receipt.patient_name}(${receipt.phone_number3})`}</TableCell>
@@ -182,7 +191,7 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
             </TableBody>
           </Table>
         </TableContainer>
-              {/* {[...Array(Math.max(5, receiptList.length))].map((_, index) => {
+        {/* {[...Array(Math.max(5, receiptList.length))].map((_, index) => {
                 if (index < receiptList.length) {
                   const list = receiptList[index];
                   return (
@@ -209,16 +218,16 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
                   );
                 }
               })} */}
-            {/* </TableBody>
+        {/* </TableBody>
           </Table>
         </TableContainer> */}
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Stack spacing={2} style={{bottom: '0'}}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Stack spacing={2} style={{ bottom: '0' }}>
             <Pagination count={5} />
           </Stack>
-      </Box>
-    </Paper>
-  </>
+        </Box>
+      </Paper>
+    </>
   );
 };
 

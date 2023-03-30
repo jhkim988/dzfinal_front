@@ -45,10 +45,12 @@ const Reception = () => {
     weight: "",
     bmi: "",
   });
-
-  const [reception_id, setReception_id] = useState(0);
-  const [patient_name, setPatient_name] = useState("");
-  // searchRange[];
+  const [receiptData, setReceiptData] = useState({
+    reception: {},
+    patient: {},
+    clinic: {},
+    receipt: {},
+  });
 
   const receptionRecordSearch = (
     { start, end, type, searchText },
@@ -56,7 +58,6 @@ const Reception = () => {
   ) => {
     console.log(start?.format("YYYY-MM-DD"));
     console.log(end?.format("YYYY-MM-DD"));
-
     axios
       .post(
         "/api/receipt/getReceiptList",
@@ -86,10 +87,14 @@ const Reception = () => {
           <WaitingQueueLayout
             initPanel="3"
             nextState="수납완료"
-            clickRowCallback={({ reception_id, patient_id, patient_name }) => {
+            clickRowCallback={({ reception_id, patient_id }) => {
               setPatient_id(patient_id);
-              setPatient_name(patient_name);
-              setReception_id(reception_id);
+              axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+                setPatientData(data.patient)
+                setReceptionData(data.reception);
+                setReceiptData(data);
+                console.log(data);
+              });
             }}
           />
         </Grid>
@@ -99,44 +104,46 @@ const Reception = () => {
             <Grid item xs={12}>
               <Paper elevation={3}>
                 <ReceiptList
-                receptionRecordSearch={receptionRecordSearch}
-                patient_name={patient_name}
-              />
+                  receptionRecordSearch={receptionRecordSearch}
+                  patient_id={patient_id}
+                />
               </Paper>
             </Grid>
             <Grid item xs={12} >
               <Paper elevation={3} sx={{ height: "42vh", display: "flex", justifyContent: "space-between" }}>
-                <Grid item xs={6}>
-                  <DailyReservationList
-                    setSelectedReservationDetails={
-                      setSelectedReservationDetails
-                    }
-                    setPatientData={setPatientData}
-                    setReceptionData={setReceptionData}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <PatientForm
-                        setPatient_id={setPatient_id}
-                        setReceptionData={setReceptionData}
-                        selectedReservationDetails={selectedReservationDetails}
-                        patientData={patientData}
-                        setPatientData={setPatientData}
-                        selectedAddress={selectedAddress}
-                        setSelectedAddress={setSelectedAddress}
-                      />
-                    </Grid>
-                    <Grid xs={12}>
-                      <ReceptionForm
-                        patient_id={patient_id}
-                        receptionData={receptionData}
-                        setReceptionData={setReceptionData}
-                        patientData={patientData}
-                        setPatientData={setPatientData}
-                        setSelectedAddress={setSelectedAddress}
-                      />
+                <Grid container spacing={2}>
+                  <Grid item xs={5}>
+                    <DailyReservationList
+                      setSelectedReservationDetails={
+                        setSelectedReservationDetails
+                      }
+                      setPatientData={setPatientData}
+                      setReceptionData={setReceptionData}
+                    />
+                  </Grid>
+                  <Grid item xs={7}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <PatientForm
+                          setPatient_id={setPatient_id}
+                          setReceptionData={setReceptionData}
+                          selectedReservationDetails={selectedReservationDetails}
+                          patientData={patientData}
+                          setPatientData={setPatientData}
+                          selectedAddress={selectedAddress}
+                          setSelectedAddress={setSelectedAddress}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <ReceptionForm
+                          patient_id={patient_id}
+                          receptionData={receptionData}
+                          setReceptionData={setReceptionData}
+                          patientData={patientData}
+                          setPatientData={setPatientData}
+                          setSelectedAddress={setSelectedAddress}
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -146,7 +153,7 @@ const Reception = () => {
         </Grid>
 
         <Grid item xs={2.5}>
-            <Receipt reception_id={reception_id} />
+          <Receipt receiptData={receiptData} />
         </Grid>
       </Grid>
     </>
