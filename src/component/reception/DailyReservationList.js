@@ -51,13 +51,13 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
     }
 
     return (
-        <Grid container spacing={2} sx={{ height: '41vh', width: "100%" }}>
-            <Paper sx={{ marginTop: 2, marginLeft: 2 }}>
+        <Grid container spacing={2} sx={{ height: '41vh' }} >
+            <Paper sx={{ width: "100%", marginTop: 2, marginLeft: 2 }}>
                 <Grid item xs={6} style={{ paddingTop: 0 }}>
                     <h5 style={{ marginLeft: "15px", marginTop: "5px", marginBottom: "5px" }}>당일 예약 현황</h5>
                 </Grid>
-                <Grid item xs={6} style={{ paddingTop: 0 }}>
-                    <TableContainer component={Paper} style={{ width: 475, padding: 2 }}>
+                <Grid item xs={12} style={{ width: "100%", paddingTop: 0 }}>
+                    <TableContainer style={{ padding: 2 }}>
                         <Table aria-label="simple table" size='small'>
                             <TableHead>
                                 <TableRow>
@@ -95,7 +95,7 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
                     </TableContainer>
                 </Grid>
             </Paper>
-        </Grid>
+        </Grid >
     );
 };
 
