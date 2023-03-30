@@ -63,7 +63,7 @@ const Reception = () => {
                 <ReceiptList />
               </Paper>
             </Grid>
-            {/* <Grid item xs={12} >
+            <Grid item xs={12} >
               <Paper elevation={3} sx={{ height: "42vh", display: "flex", justifyContent: "space-between" }}>
                 <Grid item xs={6}>
                   <DailyReservationList
@@ -100,7 +100,7 @@ const Reception = () => {
                   </Grid>
                 </Grid>
               </Paper>
-            </Grid> */}
+            </Grid>
           </Grid>
         </Grid>
 

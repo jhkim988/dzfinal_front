@@ -175,22 +175,37 @@ const ReceiptList = ({user}) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              { 
-              receiptList.map((receipt, idx) => (
-                <TableRow key={idx}>
-                      <TableCell align="right">
-                        {receipt.doctor === 1 ? "김을지" : "이더존"}
-                      </TableCell>
-                      <TableCell align="right">{`${receipt.patient_name}(${receipt.phone_number3})`}</TableCell>
-                      <TableCell align="right">{receipt.front_registration_number}</TableCell>
-                      <TableCell align="right">{receipt.disease_name}</TableCell>
-                      <TableCell align="right">{receipt.drug_name}</TableCell>
-                      <TableCell align="right">{receipt.total_amount}</TableCell>
-                      <TableCell align="center">{receipt.mode}</TableCell>
-                      <TableCell align="right">{receipt.created_at}</TableCell>
-                    </TableRow>
-              ))}
-            
+              {receiptList.length === 0 ? 
+                Array.from(Array(5)).map((_, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="center">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                  </TableRow>
+                )) 
+                : 
+                receiptList.map((receipt, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell align="right">
+                      {receipt.doctor === 1 ? "김을지" : "이더존"}
+                    </TableCell>
+                    <TableCell align="right">{`${receipt.patient_name}(${receipt.phone_number3})`}</TableCell>
+                    <TableCell align="right">{receipt.front_registration_number}</TableCell>
+                    <TableCell align="right">{receipt.disease_name}</TableCell>
+                    <TableCell align="right">{receipt.drug_name}</TableCell>
+                    <TableCell align="right">{receipt.total_amount}</TableCell>
+                    <TableCell align="center">{receipt.mode}</TableCell>
+                    <TableCell align="right">{receipt.created_at}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
               {/* {[...Array(Math.max(5, receiptList.length))].map((_, index) => {
                 if (index < receiptList.length) {
                   const list = receiptList[index];
@@ -218,12 +233,12 @@ const ReceiptList = ({user}) => {
                   );
                 }
               })} */}
-            </TableBody>
+            {/* </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer> */}
       <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Stack spacing={2} style={{bottom: '0'}}>
-            <Pagination count={10} />
+            <Pagination count={5} />
           </Stack>
       </Box>
     </Paper>
