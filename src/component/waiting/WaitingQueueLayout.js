@@ -5,8 +5,8 @@ import axios from "axios";
 import CallButtonSet from "./CallButtonSet";
 import WaitingQueue from "./WaitingQueue";
 
-// const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
-const mqttURL = `mqtt://localhost:8083/mqtt`;
+const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
+// const mqttURL = `mqtt://localhost:8083/mqtt`;
 const genRanHex = (size) =>
   [...Array(size)]
     .map(() => Math.floor(Math.random() * 16).toString(16))
@@ -119,7 +119,7 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   }, [data, selected]);
 
   return (
-    <Paper>
+    <Paper elevation={2} sx={{ height: "82vh"}}>
       <Grid container>
         <Grid item xs={12}>
           <CallButtonSet
