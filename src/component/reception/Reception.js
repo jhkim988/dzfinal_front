@@ -45,10 +45,12 @@ const Reception = () => {
     weight: "",
     bmi: "",
   });
-
-  const [reception_id, setReception_id] = useState(0);
-  const [patient_name, setPatient_name] = useState("");
-  // searchRange[];
+  const [receiptData, setReceiptData] = useState({
+    reception: {},
+    patient: {},
+    clinic: {},
+    receipt: {},
+  });
 
   const receptionRecordSearch = (
     { start, end, type, searchText },
@@ -56,7 +58,6 @@ const Reception = () => {
   ) => {
     console.log(start?.format("YYYY-MM-DD"));
     console.log(end?.format("YYYY-MM-DD"));
-
     axios
       .post(
         "/api/receipt/getReceiptList",
@@ -86,10 +87,14 @@ const Reception = () => {
           <WaitingQueueLayout
             initPanel="3"
             nextState="수납완료"
-            clickRowCallback={({ reception_id, patient_id, patient_name }) => {
+            clickRowCallback={({ reception_id, patient_id }) => {
               setPatient_id(patient_id);
-              setPatient_name(patient_name);
-              setReception_id(reception_id);
+              axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+                setPatientData(data.patient)
+                setReceptionData(data.reception);
+                setReceiptData(data);
+                console.log(data);
+              });
             }}
           />
         </Grid>
@@ -99,7 +104,7 @@ const Reception = () => {
             <Grid item xs={12}>
               <ReceiptList elevation={3}
                 receptionRecordSearch={receptionRecordSearch}
-                patient_name={patient_name}
+                patient_id={patient_id}
               />
             </Grid>
             <Grid item xs={12} >
@@ -144,7 +149,7 @@ const Reception = () => {
         </Grid>
 
         <Grid item xs={2.5}>
-            <Receipt reception_id={reception_id} />
+            <Receipt receiptData={receiptData}/>
         </Grid>
       </Grid>
     </>
