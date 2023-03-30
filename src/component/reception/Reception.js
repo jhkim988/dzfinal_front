@@ -59,10 +59,12 @@ const Reception = () => {
         <Grid item xs={7.5}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <ReceiptList />
+              <Paper elevation={3}>
+                <ReceiptList />
+              </Paper>
             </Grid>
-            <Grid item xs={12} >
-              <Paper sx={{ height: "42vh", display: "flex", justifyContent: "space-between" }}>
+            {/* <Grid item xs={12} >
+              <Paper elevation={3} sx={{ height: "42vh", display: "flex", justifyContent: "space-between" }}>
                 <Grid item xs={6}>
                   <DailyReservationList
                     setSelectedReservationDetails={
@@ -98,7 +100,7 @@ const Reception = () => {
                   </Grid>
                 </Grid>
               </Paper>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
 

@@ -21,55 +21,93 @@ import koLocale from "dayjs/locale/ko";
 
 
 const ReceiptList = ({user}) => {
+  
   const [receiptList, setReceiptList] = useState([]);
-  const [type, setType] = useState("");
-  const [searchText, setSearchText] = useState("");
-  const [searchRange, setSearchRange] = useState([null, null]);
-
-  useEffect(() => {
-    getReceiptList();
-  }, []);
+  // useEffect(() => {
+  // }, []);
 
   const getReceiptList = () => {
-     console.log(searchRange[0]?.format("YYYY-MM-DD"));
-     console.log(searchRange[1]?.format("YYYY-MM-DD"));
+   axios
+     .post("/api/receipt/getReceiptList", {
+       type,
+       searchText,
+       start_date: searchRange[0]?.format("YYYY-MM-DD"),
+       end_date: searchRange[1]?.format("YYYY-MM-DD"),
+     }, {
+       headers: {
+         'Content-Type': 'application/json'
+       }
+     })
+     .then((response) => {
+      console.log("0000000", response.data.length);
+      setReceiptList([...response.data]);
+       console.log("111111111", receiptList);
+       console.log("222222222", response.data);
+     })
+     .catch((error) => {
+       console.log(error);
+     });
+ };
 
-    axios
-      .post("/api/receipt/getReceiptList", {
-        type,
-        searchText,
-        start_date: searchRange[0]?.format("YYYY-MM-DD"),
-        end_date: searchRange[1]?.format("YYYY-MM-DD"),
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((response) => {
-        setReceiptList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+ const handleSearch = () => {
+  getReceiptList();
+  // console.log("보낸데이터"+getReceiptList);
+};
 
+  // 분류 고르기
+  const [type, setType] = useState("");
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
 
+  // 검색어
+  const [searchText, setSearchText] = useState("");
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
   };
 
+  // 기간 설정
+  const [searchRange, setSearchRange] = useState([null, null]);
   const handleSearchRangeChange = (newValue) => {
     setSearchRange(newValue);
   };
 
-  const handleSearch = () => {
-    getReceiptList();
-    // console.log("보낸데이터"+getReceiptList);
+ 
+
+  // 데이터피커 가운데 글자 사라지게 하기
+  useEffect(() => {
+    handleToggle(false);
+  }, []);
+
+  useEffect(() => {
+    handleToggle(true);
+  }, [searchRange]);
+
+  const handleToggle = (isOpen) => {
+    if (isOpen) {
+      const intervalId = setInterval(() => {
+        const dateRangePickerRoot = document.querySelector(
+          ".css-e47596-MuiDateRangeCalendar-root"
+        );
+        if (dateRangePickerRoot) {
+          const firstDiv =
+            dateRangePickerRoot.querySelector("div:first-of-type");
+          firstDiv.style.opacity = 0;
+          clearInterval(intervalId);
+        }
+      }, 100);
+    } else {
+      const dateRangePickerRoot = document.querySelector(
+        ".css-e47596-MuiDateRangeCalendar-root"
+      );
+      if (dateRangePickerRoot) {
+        const firstDiv = dateRangePickerRoot.querySelector("div:first-of-type");
+        firstDiv.style.opacity = 1;
+      }
+    }
   };
 
+  console.log("7777777777777", receiptList);
   return (
   <>
     <Paper sx={{ height: "38vh" }}>
@@ -94,6 +132,7 @@ const ReceiptList = ({user}) => {
               onChange={handleSearchRangeChange}
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
+              onToggle={handleToggle}
               renderInput={(startProps, endProps) => (
                 <Box sx={{ display: "flex", 
                            alignItems: "center",
@@ -121,7 +160,7 @@ const ReceiptList = ({user}) => {
           </Button>
         </Box>
 
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} style={{ padding: 2 }}>
           <Table sx={{ maxWidth: 100 }} size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
@@ -136,7 +175,23 @@ const ReceiptList = ({user}) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {[...Array(Math.max(5, receiptList.length))].map((_, index) => {
+              { 
+              receiptList.map((receipt, idx) => (
+                <TableRow key={idx}>
+                      <TableCell align="right">
+                        {receipt.doctor === 1 ? "김을지" : "이더존"}
+                      </TableCell>
+                      <TableCell align="right">{`${receipt.patient_name}(${receipt.phone_number3})`}</TableCell>
+                      <TableCell align="right">{receipt.front_registration_number}</TableCell>
+                      <TableCell align="right">{receipt.disease_name}</TableCell>
+                      <TableCell align="right">{receipt.drug_name}</TableCell>
+                      <TableCell align="right">{receipt.total_amount}</TableCell>
+                      <TableCell align="center">{receipt.mode}</TableCell>
+                      <TableCell align="right">{receipt.created_at}</TableCell>
+                    </TableRow>
+              ))}
+            
+              {/* {[...Array(Math.max(5, receiptList.length))].map((_, index) => {
                 if (index < receiptList.length) {
                   const list = receiptList[index];
                   return (
@@ -162,7 +217,7 @@ const ReceiptList = ({user}) => {
                     </TableRow>
                   );
                 }
-              })}
+              })} */}
             </TableBody>
           </Table>
         </TableContainer>
