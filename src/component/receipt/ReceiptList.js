@@ -104,7 +104,7 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
               onChange={handleSearchRangeChange}
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
-              onToggle={handleToggle}
+              // onToggle={handleToggle}
               renderInput={(startProps, endProps) => (
                 <Box sx={{ display: "flex", 
                            alignItems: "center",

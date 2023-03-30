@@ -10,7 +10,7 @@ import Receipt from "../receipt/Receipt";
 import WaitingQueue from "../waiting/WaitingQueue";
 import ReceptionList from "./ReceptionList";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
-import ReceiptList from "./../receipt/ReceiptList";
+import ReceiptList from "../receipt/ReceiptList";
 
 const Reception = () => {
   const [patient_id, setPatient_id] = useState(null);
@@ -97,10 +97,12 @@ const Reception = () => {
         <Grid item xs={7.5}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <ReceiptList elevation={3}
+              <Paper elevation={3}>
+                <ReceiptList
                 receptionRecordSearch={receptionRecordSearch}
                 patient_name={patient_name}
               />
+              </Paper>
             </Grid>
             <Grid item xs={12} >
               <Paper elevation={3} sx={{ height: "42vh", display: "flex", justifyContent: "space-between" }}>
