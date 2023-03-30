@@ -39,21 +39,56 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
     setType(event.target.value);
   };
 
+  // 검색어
+  const [searchText, setSearchText] = useState("");
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
   };
 
+  // 기간 설정
+  const [searchRange, setSearchRange] = useState([null, null]);
   const handleSearchRangeChange = (newValue) => {
     setSearchRange(newValue);
   };
 
   const handleSearch = () => {
     getReceiptList();
+  // 데이터피커 가운데 글자 사라지게 하기
+  useEffect(() => {
+    handleToggle(false);
+  }, []);
+
+  useEffect(() => {
+    handleToggle(true);
+  }, [searchRange]);
+
+  const handleToggle = (isOpen) => {
+    if (isOpen) {
+      const intervalId = setInterval(() => {
+        const dateRangePickerRoot = document.querySelector(
+          ".css-e47596-MuiDateRangeCalendar-root"
+        );
+        if (dateRangePickerRoot) {
+          const firstDiv =
+            dateRangePickerRoot.querySelector("div:first-of-type");
+          firstDiv.style.opacity = 0;
+          clearInterval(intervalId);
+        }
+      }, 100);
+    } else {
+      const dateRangePickerRoot = document.querySelector(
+        ".css-e47596-MuiDateRangeCalendar-root"
+      );
+      if (dateRangePickerRoot) {
+        const firstDiv = dateRangePickerRoot.querySelector("div:first-of-type");
+        firstDiv.style.opacity = 1;
+      }
+    }
   };
 
   return (
   <>
-    <Paper sx={{ height: "40vh" }}>
+    <Paper sx={{ height: "38vh" }}>
       <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>수납내역목록</h5>
         <Box sx={{ display: "flex" }}>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -75,6 +110,7 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
               onChange={handleSearchRangeChange}
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
+              onToggle={handleToggle}
               renderInput={(startProps, endProps) => (
                 <Box sx={{ display: "flex", 
                            alignItems: "center",
@@ -102,22 +138,53 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
           </Button>
         </Box>
 
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} style={{ padding: 2 }}>
           <Table sx={{ maxWidth: 100 }} size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
-                <TableCell align="center" style={{ paddingTop: 4 }}>의사</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>환자이름</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>주민등록번호</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>질병명</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>처방명</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>수납액</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>결제</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>수납일</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>의사</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>환자이름</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>주민등록번호</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>질병명</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>처방명</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>수납액</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>결제</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>수납일</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {[...Array(Math.max(5, receiptList.length))].map((_, index) => {
+              {receiptList.length === 0 ? 
+                Array.from(Array(5)).map((_, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
+                  </TableRow>
+                )) 
+                : 
+                receiptList.map((receipt, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>
+                      {receipt.doctor === 1 ? "김을지" : "이더존"}
+                    </TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{`${receipt.patient_name}(${receipt.phone_number3})`}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.front_registration_number}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.disease_name}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.drug_name}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.total_amount}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.mode}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.created_at}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+              {/* {[...Array(Math.max(5, receiptList.length))].map((_, index) => {
                 if (index < receiptList.length) {
                   const list = receiptList[index];
                   return (
@@ -143,13 +210,13 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
                     </TableRow>
                   );
                 }
-              })}
-            </TableBody>
+              })} */}
+            {/* </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer> */}
       <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Stack spacing={2} style={{bottom: '0'}}>
-            <Pagination count={10} />
+            <Pagination count={5} />
           </Stack>
       </Box>
     </Paper>

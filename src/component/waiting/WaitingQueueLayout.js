@@ -119,7 +119,7 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   }, [data, selected]);
 
   return (
-    <Paper elevation={2} sx={{ height: "82vh" }}>
+    <Paper elevation={2} sx={{ height: "82vh"}}>
       <Grid container>
         <Grid item xs={12}>
           <CallButtonSet
