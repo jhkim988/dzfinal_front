@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -8,12 +8,14 @@ import {
   Pagination,
   Paper,
   Select,
+  styled,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -25,7 +27,21 @@ import axios from "axios";
 import dayjs from "dayjs";
 import koLocale from "dayjs/locale/ko";
 
-const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordInquiry }) => {
+const MedicalRecordInquiry = ({
+  mri,
+  setMri,
+  setMedicalInfo,
+  clickMedicalRecordInquiry,
+}) => {
+  const dateRangePickerRoot = document.querySelector(
+    ".css-e47596-MuiDateRangeCalendar-root"
+  );
+
+  if (dateRangePickerRoot) {
+    const firstDiv = dateRangePickerRoot.querySelector("div:first-of-type");
+    firstDiv.style.opacity = 0;
+  }
+
   const [type, setType] = useState("");
   const handleChange = (e) => {
     setType(e.target.value);
@@ -64,7 +80,6 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordI
     setKeyword(e.target.value);
   };
 
-
   const onSearchList = () => {
     if (!type) return alert("분류를 정해주세요");
 
@@ -92,13 +107,35 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordI
       });
   };
 
+  const handleDateRangePickerClick = () => {
+    const dateRangePickerRoot = document.querySelector(
+      ".css-e47596-MuiDateRangeCalendar-root"
+    );
+    if (dateRangePickerRoot) {
+      const firstDiv = dateRangePickerRoot.querySelector("div:first-of-type");
+      firstDiv.style.opacity = 0;
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const dateRangePickerRoot = document.querySelector(
+      ".css-e47596-MuiDateRangeCalendar-root"
+    );
+    if (dateRangePickerRoot) {
+      const firstDiv = dateRangePickerRoot.querySelector("div:first-of-type");
+      firstDiv.style.opacity = 0;
+    }
+  });
+
   return (
     <Paper sx={{ height: "45vh" }} elevation={3}>
-      <Box>진료기록조회</Box>
+      <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
+        진료기록조회
+      </Typography>
       <Box sx={{ display: "flex" }}>
         <FormControl sx={{ m: 1, minWidth: 120 }}>
           <InputLabel>분류</InputLabel>
-          <Select value={type} onChange={handleChange}>
+          <Select label="분류" value={type} onChange={handleChange}>
             <MenuItem value={"patient_name"}>환자이름</MenuItem>
             <MenuItem value={"reception_id"}>접수번호</MenuItem>
           </Select>
@@ -110,6 +147,8 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordI
               format="YYYY-MM-DD"
               value={[dayjs(selectedDates.start), dayjs(selectedDates.end)]}
               onChange={handleDateChange}
+              onOpen={handleDateChange}
+              open={handleDateRangePickerClick}
             />
           </DemoContainer>
         </LocalizationProvider>
@@ -127,6 +166,9 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo, clickMedicalRecordI
         </Button>
       </Box>
       <Box>
+        <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
+          조회기록
+        </Typography>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>

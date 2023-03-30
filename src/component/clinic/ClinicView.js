@@ -8,7 +8,7 @@ import Patient from "./Patient";
 import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
-import WaitingQueueLayout from './../waiting/WaitingQueueLayout';
+import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 
 const ClinicView = () => {
   const [reception, setReception] = useState(1);
@@ -20,7 +20,7 @@ const ClinicView = () => {
   const [mode, setMode] = useState(0);
   const [diagnosis, setDiagnosis] = useState([]);
   const [prescription, setPrescription] = useState([]);
-  
+
   useEffect(() => {
     axios
       .get(`/api/clinic/1`)
@@ -45,41 +45,47 @@ const ClinicView = () => {
       });
   }, []);
 
-  const clickMedicalRecordInquiry = useCallback((type, formattedDates, keyword) => {
-    if (!type) return alert("분류를 정해주세요");
-    console.log(formattedDates.start + "/" + formattedDates.end);
-    axios
-      .post(
-        "/api/clinic/mri/search",
-        {
-          type: type,
-          start: formattedDates?.start || "",
-          end: formattedDates?.end || "",
-          keyword: keyword,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+  const clickMedicalRecordInquiry = useCallback(
+    (type, formattedDates, keyword) => {
+      if (!type) return alert("분류를 정해주세요");
+      console.log(formattedDates.start + "/" + formattedDates.end);
+      axios
+        .post(
+          "/api/clinic/mri/search",
+          {
+            type: type,
+            start: formattedDates?.start || "",
+            end: formattedDates?.end || "",
+            keyword: keyword,
           },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        setMri(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setMri(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    []
+  );
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={2} style={{ height: "90vh" }}>
-        <WaitingQueueLayout initPanel="2" nextState="진료중" clickRowCallback={({ reception_id, patient_name}) => {
-          setReception(reception_id);
-          clickMedicalRecordInquiry("patient_name", {}, patient_name);
-        }}/>
+        <WaitingQueueLayout
+          initPanel="2"
+          nextState="진료중"
+          clickRowCallback={({ reception_id, patient_name }) => {
+            setReception(reception_id);
+            clickMedicalRecordInquiry("patient_name", {}, patient_name);
+          }}
+        />
       </Grid>
       <Grid item xs={10} style={{ height: "100vh" }}>
         <Grid container spacing={2}>
