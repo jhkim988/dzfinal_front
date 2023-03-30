@@ -50,28 +50,35 @@ const Reception = () => {
   const [patient_name, setPatient_name] = useState("");
   // searchRange[];
 
-  const receptionRecordSearch = ({ start, end, type, searchText }, callback) => {
+  const receptionRecordSearch = (
+    { start, end, type, searchText },
+    callback
+  ) => {
     console.log(start?.format("YYYY-MM-DD"));
     console.log(end?.format("YYYY-MM-DD"));
 
-   axios
-     .post("/api/receipt/getReceiptList", {
-       type,
-       searchText,
-       start_date: start?.format("YYYY-MM-DD"),
-       end_date: end?.format("YYYY-MM-DD"),
-     }, {
-       headers: {
-         'Content-Type': 'application/json'
-       }
-     })
-     .then((response) => {
-      callback(response.data);
-     })
-     .catch((error) => {
-       console.log(error);
-     });
- };
+    axios
+      .post(
+        "/api/receipt/getReceiptList",
+        {
+          type,
+          searchText,
+          start_date: start?.format("YYYY-MM-DD"),
+          end_date: end?.format("YYYY-MM-DD"),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        callback(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <>
       <Grid container spacing={2}>
@@ -87,10 +94,13 @@ const Reception = () => {
           />
         </Grid>
 
-        <Grid item xs={7}>
+        <Grid item xs={7.5}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <ReceiptList receptionRecordSearch={receptionRecordSearch} patient_name={patient_name}/>
+              <ReceiptList
+                receptionRecordSearch={receptionRecordSearch}
+                patient_name={patient_name}
+              />
             </Grid>
             <Grid item xs={12}>
               <Paper sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -106,25 +116,25 @@ const Reception = () => {
                 <Grid item xs={6}>
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
-                    <PatientForm
-                      setPatient_id={setPatient_id}
-                      setReceptionData={setReceptionData}
-                      selectedReservationDetails={selectedReservationDetails}
-                      patientData={patientData}
-                      setPatientData={setPatientData}
-                      selectedAddress={selectedAddress}
-                      setSelectedAddress={setSelectedAddress}
-                    />
+                      <PatientForm
+                        setPatient_id={setPatient_id}
+                        setReceptionData={setReceptionData}
+                        selectedReservationDetails={selectedReservationDetails}
+                        patientData={patientData}
+                        setPatientData={setPatientData}
+                        selectedAddress={selectedAddress}
+                        setSelectedAddress={setSelectedAddress}
+                      />
                     </Grid>
                     <Grid xs={12}>
-                    <ReceptionForm
-                      patient_id={patient_id}
-                      receptionData={receptionData}
-                      setReceptionData={setReceptionData}
-                      patientData={patientData}
-                      setPatientData={setPatientData}
-                      setSelectedAddress={setSelectedAddress}
-                    />
+                      <ReceptionForm
+                        patient_id={patient_id}
+                        receptionData={receptionData}
+                        setReceptionData={setReceptionData}
+                        patientData={patientData}
+                        setPatientData={setPatientData}
+                        setSelectedAddress={setSelectedAddress}
+                      />
                     </Grid>
                   </Grid>
                 </Grid>
@@ -133,44 +143,10 @@ const Reception = () => {
           </Grid>
         </Grid>
 
-        <Grid item xs={3}>
-          <Receipt reception_id={reception_id}/>
+        <Grid item xs={2.5}>
+            <Receipt reception_id={reception_id} />
         </Grid>
       </Grid>
-
-      {/* <Grid container spacing={2}>
-        <Paper sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Grid item xs={6} style={{ paddingTop: 0 }}>
-            <DailyReservationList
-              setSelectedReservationDetails={setSelectedReservationDetails}
-              setPatientData={setPatientData}
-              setReceptionData={setReceptionData}
-            />
-          </Grid>
-          <Grid item xs={6} style={{ paddingTop: 0 }}>
-            <Box>
-              <PatientForm
-                setPatient_id={setPatient_id}
-                setReceptionData={setReceptionData}
-                selectedReservationDetails={selectedReservationDetails}
-                patientData={patientData}
-                setPatientData={setPatientData}
-                selectedAddress={selectedAddress}
-                setSelectedAddress={setSelectedAddress}
-              />
-              <ReceptionForm
-                patient_id={patient_id}
-                receptionData={receptionData}
-                setReceptionData={setReceptionData}
-                patientData={patientData}
-                setPatientData={setPatientData}
-                setSelectedAddress={setSelectedAddress}
-              />
-            </Box>
-          </Grid>
-        </Paper>
-        {/* <ReceptionList /> */}
-      {/* </Grid> */}
     </>
   );
 };
