@@ -23,8 +23,6 @@ import koLocale from "dayjs/locale/ko";
 const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
-  const [searchText, setSearchText] = useState("");
-  const [searchRange, setSearchRange] = useState([null, null]);
 
   useEffect(() => {
     console.log(patient_name);
@@ -52,7 +50,9 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
   };
 
   const handleSearch = () => {
-    getReceiptList();
+    getReceiptList(); }
+
+    
   // 데이터피커 가운데 글자 사라지게 하기
   useEffect(() => {
     handleToggle(false);
@@ -110,7 +110,7 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
               onChange={handleSearchRangeChange}
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
-              onToggle={handleToggle}
+              // onToggle={handleToggle}
               renderInput={(startProps, endProps) => (
                 <Box sx={{ display: "flex", 
                            alignItems: "center",
