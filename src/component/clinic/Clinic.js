@@ -6,6 +6,7 @@ import {
   Grid,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
@@ -13,14 +14,7 @@ import { useState } from "react";
 import Diagnosis from "./Diagnosis";
 import Prescription from "./Prescription";
 
-const Clinic = ({
-  setPatient,
-  setReception,
-  onReset,
-  reception,
-  mode,
-  medicalInfo,
-}) => {
+const Clinic = ({ reception, mode, medicalInfo }) => {
   const [doctor, setDoctor] = useState(0);
   const [symptom, setSymptom] = useState("");
   const [treatment, setTreatment] = useState(false);
@@ -29,8 +23,6 @@ const Clinic = ({
   const [prescription, setPrescription] = useState([]);
 
   const handleDiagnosisAdd = (disease) => {
-    console.log(disease);
-
     if (diagnosis.some((item) => item.disease_id === disease.disease_id)) {
       alert("이미 추가된 질병입니다.");
     } else {
@@ -126,8 +118,11 @@ const Clinic = ({
 
   return (
     <>
+      <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
+        진료
+      </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={6} style={{ paddingTop: 0 }}>
+        <Grid item xs={6}>
           <Diagnosis
             handleDiagnosisAdd={handleDiagnosisAdd}
             diagnosis={diagnosis}
@@ -136,7 +131,7 @@ const Clinic = ({
             mode={mode}
           />
         </Grid>
-        <Grid item xs={6} style={{ paddingTop: 0 }}>
+        <Grid item xs={6}>
           <Prescription
             handlePrescriptionAdd={handlePrescriptionAdd}
             prescription={prescription}
@@ -147,17 +142,23 @@ const Clinic = ({
         </Grid>
       </Grid>
       <form onSubmit={handleSymptomSubmit}>
-        <>
-          증상
+        <Box sx={{ margin: 1 }}>
           <TextField
             sx={{ width: "100%" }}
+            label="증상"
             multiline
-            rows={4}
+            rows={2}
             value={mode >= 1 ? symptom || medicalInfo.symptom : symptom}
             onChange={handleSymptomChange}
           />
-        </>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: 1,
+          }}
+        >
           <Box>
             <FormControlLabel
               control={

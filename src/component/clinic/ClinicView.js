@@ -1,14 +1,14 @@
 import { Grid, Paper } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import DrugTaking from "./Drug_Taking";
 import MedicalInfo from "./MedicalInfo";
 import MedicalRecordInquiry from "./MedicalRecordInquiry";
 import Patient from "./Patient";
-import Queue from "./Queue";
 import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
+import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 
 const ClinicView = () => {
   const [reception, setReception] = useState(1);
@@ -38,6 +38,7 @@ const ClinicView = () => {
     axios
       .get(`/api/clinic/mri/${1}`)
       .then((response) => {
+        console.log(response.data);
         setMri(response.data);
       })
       .catch((error) => {
@@ -45,26 +46,78 @@ const ClinicView = () => {
       });
   }, []);
 
+  const clickMedicalRecordInquiry = useCallback(
+    (type, formattedDates, keyword) => {
+      if (!type) return alert("분류를 정해주세요");
+      console.log(formattedDates.start + "/" + formattedDates.end);
+      axios
+        .post(
+          "/api/clinic/mri/search",
+          {
+            type: type,
+            start: formattedDates?.start || "",
+            end: formattedDates?.end || "",
+            keyword: keyword,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setMri(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    []
+  );
+
   return (
     <Grid container spacing={2}>
-      <Grid item xs={2} style={{ height: "90vh" }}>
-        <Paper sx={{ height: "90vh" }}>
-          <Queue />
-        </Paper>
+      <Grid item xs={2}>
+        <WaitingQueueLayout
+          initPanel="2"
+          nextState="진료중"
+          clickRowCallback={({ reception_id, patient_name }) => {
+            setReception(reception_id);
+            clickMedicalRecordInquiry("patient_name", {}, patient_name);
+          }}
+        />
       </Grid>
-      <Grid item xs={10} style={{ height: "100vh" }}>
+      <Grid item xs={5}>
         <Grid container spacing={2}>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <MedicalRecordInquiry
-              mri={mri}
-              setMri={setMri}
-              setMedicalInfo={setMedicalInfo}
-            />
+          <Grid item xs={12}>
+            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
+              <MedicalRecordInquiry
+                mri={mri}
+                setMri={setMri}
+                setMedicalInfo={setMedicalInfo}
+                clickMedicalRecordInquiry={clickMedicalRecordInquiry}
+              />
+            </Paper>
           </Grid>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <Paper sx={{ height: "45vh" }} elevation={3}>
+          <Grid item xs={12}>
+            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
+              <MedicalInfo
+                medicalInfo={medicalInfo}
+                setMode={setMode}
+                setDiagnosis={setDiagnosis}
+                setPrescription={setPrescription}
+              />
+            </Paper>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={5}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
               <Patient reception={reception} patient={patient} />
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ marginTop: 1 }}>
                 <Grid item xs={6}>
                   <Underlying props={underlying} onInsert={onInsert} />
                 </Grid>
@@ -74,18 +127,8 @@ const ClinicView = () => {
               </Grid>
             </Paper>
           </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <MedicalInfo
-              medicalInfo={medicalInfo}
-              setMode={setMode}
-              setDiagnosis={setDiagnosis}
-              setPrescription={setPrescription}
-            />
-          </Grid>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <Paper elevation={3} sx={{ height: "50vh" }}>
+          <Grid item xs={12}>
+            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
               <Clinic
                 setPatient={setPatient}
                 setReception={setReception}

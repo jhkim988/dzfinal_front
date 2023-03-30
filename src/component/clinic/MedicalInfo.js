@@ -3,12 +3,14 @@ import {
   Box,
   Button,
   Grid,
+  InputAdornment,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 
 const MedicalInfo = ({
@@ -17,35 +19,6 @@ const MedicalInfo = ({
   setDiagnosis,
   setPrescription,
 }) => {
-  function createData(name, unit) {
-    return { name, unit };
-  }
-
-  const rows = [
-    createData(
-      "진료날짜",
-      medicalInfo.created_at ? medicalInfo.created_at : ""
-    ),
-    createData(
-      "담당의",
-      medicalInfo.employee_name ? medicalInfo.employee_name : ""
-    ),
-    createData(
-      "혈압",
-      medicalInfo.diastolic && medicalInfo.systolic
-        ? `${medicalInfo.diastolic}/${medicalInfo.systolic}`
-        : ""
-    ),
-    createData("혈당", medicalInfo.blood_sugar ? medicalInfo.blood_sugar : ""),
-    createData("키", medicalInfo.height ? medicalInfo.height + "cm" : ""),
-    createData("체중", medicalInfo.weight ? medicalInfo.weight + "kg" : ""),
-    createData("BMI", medicalInfo.bmi ? medicalInfo.bmi : ""),
-    createData(
-      "내원사유",
-      medicalInfo.treatment_reason ? medicalInfo.treatment_reason : ""
-    ),
-  ];
-
   const onCopy = () => {
     setMode(1);
     setDiagnosis(medicalInfo.diagnosis);
@@ -61,90 +34,187 @@ const MedicalInfo = ({
   return (
     <Paper>
       <Grid container>
-        <Grid item xs={12}>
-          <Box>내원기록 상세보기</Box>
-        </Grid>
-        <Grid item xs={12} sx={{ display: "flex", justifyContent: "end" }}>
-          <Button
-            variant="contained"
-            color="success"
-            sx={{ marginRight: 2 }}
-            onClick={onCopy}
-          >
-            복사
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ marginRight: 2 }}
-            onClick={onUpdate}
-          >
-            수정
-          </Button>
-        </Grid>
-        <Grid item xs={6}>
-          <Table size="small" aria-label="a dense table">
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.name}>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    sx={{ padding: "6px 6px", borderBottom: "0px" }}
-                  >
-                    {row.name}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      borderBottom: "0px",
-                    }}
-                  >
-                    <TextField
-                      variant="outlined"
-                      size="small"
-                      value={row.unit}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Grid>
-        <Grid item xs={6}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <Box>
-            <Box sx={{ margin: 1, height: "33%" }}>
-              진단
-              <Box
-                sx={{
-                  border: 1,
-                  borderRadius: 1,
-                  height: "100px",
-                  display: "inline-block",
-                }}
-              >
-                {medicalInfo.diagnosis &&
-                  medicalInfo.diagnosis.length > 0 &&
-                  medicalInfo.diagnosis.map((item, index) => (
-                    <div key={index}>{item.disease_name}</div>
-                  ))}
-              </Box>
+            <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
+              내원기록 상세보기
+            </Typography>
+          </Box>
+          <Box sx={{ marginTop: 1 }}>
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              sx={{ marginRight: 2 }}
+              onClick={onCopy}
+            >
+              복사
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ marginRight: 2 }}
+              onClick={onUpdate}
+            >
+              수정
+            </Button>
+          </Box>
+        </Grid>
+        <Grid item xs={12} sx={{ marginTop: 2 }}>
+          <Box sx={{ display: "flex" }}>
+            <TextField
+              disabled
+              size="small"
+              value={medicalInfo.created_at || ""}
+              label="진료날짜"
+              sx={{ marginLeft: 1, marginRight: 1 }}
+            />
+            <TextField
+              disabled
+              size="small"
+              value={medicalInfo.employee_name || ""}
+              label="담당의"
+              sx={{ marginLeft: 1, marginRight: 1 }}
+            />
+            <TextField
+              disabled
+              size="small"
+              value={medicalInfo.patient_name || ""}
+              label="환자이름"
+              sx={{ marginLeft: 1, marginRight: 1 }}
+            />
+            <TextField
+              disabled
+              size="small"
+              value={medicalInfo.front_registration_number || ""}
+              label="앞자리"
+              sx={{ marginLeft: 1, marginRight: 1 }}
+            />
+          </Box>
+          <Box sx={{ display: "flex", marginTop: 1 }}>
+            <TextField
+              disabled
+              size="small"
+              value={medicalInfo.height || ""}
+              label="키"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">cm</InputAdornment>
+                ),
+              }}
+              sx={{ marginLeft: 1, marginRight: 1 }}
+            />
+            <TextField
+              disabled
+              size="small"
+              value={medicalInfo.weight || ""}
+              label="체중"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">kg</InputAdornment>
+                ),
+              }}
+              sx={{ marginLeft: 1, marginRight: 1 }}
+            />
+            <TextField
+              disabled
+              size="small"
+              value={medicalInfo.bmi || ""}
+              label="BMI"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">kg/㎡</InputAdornment>
+                ),
+              }}
+              sx={{ marginLeft: 1, marginRight: 1, width: "260px" }}
+            />
+            <TextField
+              disabled
+              size="small"
+              value={
+                medicalInfo.diastolic && medicalInfo.systolic
+                  ? `${medicalInfo.diastolic}/${medicalInfo.systolic}`
+                  : ""
+              }
+              label="혈압"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">mmHg</InputAdornment>
+                ),
+              }}
+              sx={{ marginLeft: 1, marginRight: 1, width: "300px" }}
+            />
+            <TextField
+              disabled
+              size="small"
+              value={medicalInfo.blood_sugar || ""}
+              label="혈당"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">mg/dL</InputAdornment>
+                ),
+              }}
+              sx={{ marginLeft: 1, marginRight: 1 }}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <Box sx={{ margin: 1 }}>
+            진단
+            <Box
+              sx={{
+                border: "1px solid gray",
+                borderRadius: 1,
+                height: "130px",
+                overflowY: "auto",
+              }}
+            >
+              {medicalInfo.diagnosis &&
+                medicalInfo.diagnosis.length > 0 &&
+                medicalInfo.diagnosis.map((item, index) => (
+                  <div key={index}>{item.disease_name}</div>
+                ))}
             </Box>
-            <Box sx={{ margin: 1, height: "33%" }}>
-              처방
-              <Box sx={{ border: 1, borderRadius: 1, height: "100px" }}>
-                {medicalInfo.prescription &&
-                  medicalInfo.prescription.length > 0 &&
-                  medicalInfo.prescription.map((item, index) => (
-                    <div key={index}>{item.drug_name}</div>
-                  ))}
-              </Box>
+          </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <Box sx={{ margin: 1 }}>
+            처방
+            <Box
+              sx={{
+                border: "1px solid gray",
+                borderRadius: 1,
+                height: "130px",
+                overflowY: "auto",
+              }}
+            >
+              {medicalInfo.prescription &&
+                medicalInfo.prescription.length > 0 &&
+                medicalInfo.prescription.map((item, index) => (
+                  <div key={index}>{item.drug_name}</div>
+                ))}
             </Box>
-            <Box sx={{ margin: 1, height: "33%" }}>
-              증상
-              <Box sx={{ border: 1, borderRadius: 1, height: "100px" }}>
-                {medicalInfo.symptom}
-              </Box>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Box sx={{ margin: 1, height: "100%" }}>
+            증상
+            <Box
+              sx={{
+                border: "1px solid gray",
+                borderRadius: 1,
+                height: "50px",
+                overflowY: "auto",
+              }}
+            >
+              {medicalInfo.symptom}
             </Box>
           </Box>
         </Grid>

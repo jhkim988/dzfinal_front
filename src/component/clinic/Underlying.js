@@ -6,6 +6,7 @@ import {
   TableCell,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
@@ -54,7 +55,6 @@ const Underlying = ({ props, onInsert }) => {
 
   const handleAdd = (disease) => {
     if (underlying.some((item) => item.disease_id === disease.disease_id)) {
-      // 이미 추가된 질병일 경우
       alert("이미 추가된 질병입니다.");
     } else {
       axios
@@ -90,16 +90,40 @@ const Underlying = ({ props, onInsert }) => {
   }
 
   const handleKeyDown = (e) => {
+    const scrollRef = searchListRef.current;
+
     if (e.key === "ArrowDown") {
       setSelectedIndex((prevIndex) =>
         prevIndex < searchList.length - 1 ? prevIndex + 1 : prevIndex
       );
+      const selectedRow = scrollRef.querySelector(
+        `tr:nth-of-type(${selectedIndex + 3})`
+      );
+      if (selectedRow) {
+        selectedRow.scrollIntoView({
+          block: "nearest",
+          inline: "nearest",
+          behavior: "smooth",
+        });
+      }
     } else if (e.key === "ArrowUp") {
       setSelectedIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : prevIndex
       );
+      const selectedRow = scrollRef.querySelector(
+        `tr:nth-of-type(${selectedIndex - 1})`
+      );
+      if (selectedRow) {
+        selectedRow.scrollIntoView({
+          block: "nearest",
+          inline: "nearest",
+          behavior: "smooth",
+        });
+      }
     } else if (e.key === "Enter") {
       handleAdd(searchList[selectedIndex]);
+      setSelectedIndex(-1);
+      scrollRef.scrollTop = 0;
       hideSearchList();
       resetInputValue();
     }
@@ -123,9 +147,11 @@ const Underlying = ({ props, onInsert }) => {
   }, [searchList]);
 
   return (
-    <Box>
-      <Box>기저질환</Box>
-      <Box>
+    <Box sx={{ marginLeft: 1 }}>
+      <Typography variant="subtitle2" sx={{ marginLeft: 1 }}>
+        기저질환
+      </Typography>
+      <Box sx={{ marginTop: 1 }}>
         <Box sx={{ display: "flex" }}>
           <TextField
             size="small"
@@ -153,13 +179,15 @@ const Underlying = ({ props, onInsert }) => {
         <Box
           ref={searchListRef}
           sx={{
-            width: 340,
+            width: 324,
             position: "absolute",
             backgroundColor: "white",
             zIndex: 10,
             border: "1px solid black",
             borderRadius: 5,
             display: searchList.length === 0 ? "none" : "block",
+            height: "30vh",
+            overflowY: "auto",
           }}
         >
           <Table>
@@ -189,8 +217,20 @@ const Underlying = ({ props, onInsert }) => {
           </Table>
         </Box>
       </Box>
-      <Box sx={{ maxHeight: "250px", overflowY: "auto" }}>
-        <Table>
+      <Box
+        sx={{
+          marginTop: 1,
+          height: "170px",
+          overflowY: "auto",
+          border: "1px solid lightgray",
+          borderRadius: 2,
+        }}
+      >
+        <Table
+          sx={{
+            "& td": { padding: 1 },
+          }}
+        >
           <TableBody>
             {underlying.map((disease) => (
               <TableRow key={disease.disease_id}>

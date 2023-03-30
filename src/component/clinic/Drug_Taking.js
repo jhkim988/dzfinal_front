@@ -6,6 +6,7 @@ import {
   TableCell,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
@@ -16,20 +17,17 @@ const DrugTaking = ({ props }) => {
   const [drug_code, setDrug_code] = useState("");
   const [drug_name, setDrug_name] = useState("");
   const [searchList, setSearchList] = useState([]);
-  const [searchText, setSearchText] = useState("");
   const searchListRef = useRef();
   const [drugTaking, setDrugTaking] = useState(props);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
-      setSearchText(e.target.value);
-
       if (e.target.value.length >= 2) {
         axios
           .get(
             `/api/clinic/drug/${e.target.name}/${encodeURIComponent(
-              searchText
+              e.target.value
             )}`
           )
           .then((response) => {
@@ -56,7 +54,6 @@ const DrugTaking = ({ props }) => {
 
   const handleAdd = (drug) => {
     if (drugTaking.some((item) => item.drug_id === drug.drug_id)) {
-      // 이미 추가된 질병일 경우
       alert("이미 추가된 약품입니다.");
     } else {
       axios
@@ -78,7 +75,7 @@ const DrugTaking = ({ props }) => {
         params: {
           patient_id: 1,
           drug_id: drug_id,
-        }
+        },
       })
       .then((response) => {})
       .catch((error) => {
@@ -90,16 +87,40 @@ const DrugTaking = ({ props }) => {
   }
 
   const handleKeyDown = (e) => {
+    const scrollRef = searchListRef.current;
+
     if (e.key === "ArrowDown") {
       setSelectedIndex((prevIndex) =>
         prevIndex < searchList.length - 1 ? prevIndex + 1 : prevIndex
       );
+      const selectedRow = scrollRef.querySelector(
+        `tr:nth-of-type(${selectedIndex + 3})`
+      );
+      if (selectedRow) {
+        selectedRow.scrollIntoView({
+          block: "nearest",
+          inline: "nearest",
+          behavior: "smooth",
+        });
+      }
     } else if (e.key === "ArrowUp") {
       setSelectedIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : prevIndex
       );
+      const selectedRow = scrollRef.querySelector(
+        `tr:nth-of-type(${selectedIndex - 1})`
+      );
+      if (selectedRow) {
+        selectedRow.scrollIntoView({
+          block: "nearest",
+          inline: "nearest",
+          behavior: "smooth",
+        });
+      }
     } else if (e.key === "Enter") {
       handleAdd(searchList[selectedIndex]);
+      setSelectedIndex(-1);
+      scrollRef.scrollTop = 0;
       hideSearchList();
       resetInputValue();
     }
@@ -123,9 +144,11 @@ const DrugTaking = ({ props }) => {
   }, [searchList]);
 
   return (
-    <Box>
-      <Box>복용중인 약</Box>
-      <Box>
+    <Box sx={{ marginRight: 1 }}>
+      <Typography variant="subtitle2" sx={{ marginLeft: 1 }}>
+        복용중인 약
+      </Typography>
+      <Box sx={{ marginTop: 1 }}>
         <Box sx={{ display: "flex" }}>
           <TextField
             size="small"
@@ -153,13 +176,15 @@ const DrugTaking = ({ props }) => {
         <Box
           ref={searchListRef}
           sx={{
-            width: 340,
+            width: 324,
             position: "absolute",
             backgroundColor: "white",
             zIndex: 10,
             border: "1px solid black",
             borderRadius: 5,
             display: searchList.length === 0 ? "none" : "block",
+            height: "30vh",
+            overflowY: "auto",
           }}
         >
           <Table>
@@ -189,7 +214,15 @@ const DrugTaking = ({ props }) => {
           </Table>
         </Box>
       </Box>
-      <Box sx={{ maxHeight: "250px", overflowY: "auto" }}>
+      <Box
+        sx={{
+          marginTop: 1,
+          height: "170px",
+          overflowY: "auto",
+          border: "1px solid lightgray",
+          borderRadius: 2,
+        }}
+      >
         <Table>
           <TableBody>
             {drugTaking.map((drug) => (

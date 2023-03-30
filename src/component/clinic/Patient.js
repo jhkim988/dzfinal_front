@@ -1,76 +1,103 @@
 import React from "react";
-import { Box, TextField } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 const Patient = (props) => {
   const { reception, patient } = props;
 
   return (
     <Box>
-      <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-        접수번호
+      <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
+        접수정보
+      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", m: 1 }}>
         <TextField
           disabled
           size="small"
-          value={reception}
-          sx={{ width: 100 }}
+          value={reception || ""}
+          label="접수번호"
+          sx={{ marginLeft: 1, marginRight: 1 }}
         />
-        환자이름
         <TextField
           disabled
           size="small"
-          value={patient.patient_name}
-          sx={{ width: 120 }}
+          value={patient.patient_name || ""}
+          label="환자이름"
+          sx={{ marginLeft: 1, marginRight: 1 }}
         />
-        주민등록번호
         <TextField
           disabled
           size="small"
-          value={patient.front_registration_number}
-          sx={{ width: 100 }}
+          value={patient.front_registration_number || ""}
+          label="앞자리"
+          sx={{ marginLeft: 1, marginRight: 1 }}
         />
         -
         <TextField
           disabled
           size="small"
-          value={patient.back_registration_number}
-          sx={{ width: 100 }}
+          value={patient.back_registration_number || ""}
+          label="뒷자리"
+          sx={{ marginLeft: 1, marginRight: 1 }}
         />
       </Box>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        키
+      <Box sx={{ display: "flex", alignItems: "center", m: 1 }}>
         <TextField
           disabled
           size="small"
-          value={patient.height}
-          sx={{ width: 100 }}
+          value={patient.height || ""}
+          label="키"
+          InputProps={{
+            endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+          }}
+          sx={{ marginLeft: 1, marginRight: 1 }}
         />
-        체중
         <TextField
           disabled
           size="small"
-          value={patient.weight}
-          sx={{ width: 100 }}
+          value={patient.weight || ""}
+          label="체중"
+          InputProps={{
+            endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+          }}
+          sx={{ marginLeft: 1, marginRight: 1 }}
         />
-        BMI
         <TextField
           disabled
           size="small"
-          value={patient.bmi}
-          sx={{ width: 100 }}
+          value={patient.bmi || ""}
+          label="BMI"
+          InputProps={{
+            endAdornment: <InputAdornment position="end">kg/㎡</InputAdornment>,
+          }}
+          sx={{ marginLeft: 1, marginRight: 1, width: "260px" }}
         />
-        혈압
         <TextField
           disabled
           size="small"
           value={`${patient.diastolic}/${patient.systolic}`}
-          sx={{ width: 100 }}
+          label="혈압"
+          InputProps={{
+            endAdornment: <InputAdornment position="end">mmHg</InputAdornment>,
+          }}
+          sx={{ marginLeft: 1, marginRight: 1, width: "300px" }}
         />
-        혈당
         <TextField
           disabled
           size="small"
-          value={patient.blood_sugar}
-          sx={{ width: 100 }}
+          value={patient.blood_sugar || ""}
+          label="혈당"
+          InputProps={{
+            endAdornment: <InputAdornment position="end">mg/dL</InputAdornment>,
+          }}
+          sx={{ marginLeft: 1, marginRight: 1 }}
         />
       </Box>
     </Box>
