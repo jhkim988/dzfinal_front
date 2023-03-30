@@ -14,7 +14,7 @@ import { useState } from "react";
 import Diagnosis from "./Diagnosis";
 import Prescription from "./Prescription";
 
-const Clinic = ({ reception, mode, medicalInfo }) => {
+const Clinic = ({ reception, mode, medicalInfo, setMedicalInfo }) => {
   const [doctor, setDoctor] = useState(0);
   const [symptom, setSymptom] = useState("");
   const [treatment, setTreatment] = useState(false);
@@ -164,7 +164,16 @@ const Clinic = ({ reception, mode, medicalInfo }) => {
               control={
                 <Checkbox
                   checked={mode >= 1 ? medicalInfo.treatment : treatment}
-                  onChange={(e) => setTreatment(e.target.checked)}
+                  onChange={(e) => {
+                    if (mode >= 1) {
+                      setMedicalInfo({
+                        ...medicalInfo,
+                        treatment: e.target.checked,
+                      });
+                    } else {
+                      setTreatment(e.target.checked);
+                    }
+                  }}
                 />
               }
               label="처치"
@@ -175,7 +184,16 @@ const Clinic = ({ reception, mode, medicalInfo }) => {
                   checked={
                     mode >= 1 ? medicalInfo.clinic_request : clinic_request
                   }
-                  onChange={(e) => setClinic_request(e.target.checked)}
+                  onChange={(e) => {
+                    if (mode >= 1) {
+                      setMedicalInfo({
+                        ...medicalInfo,
+                        clinic_request: e.target.checked,
+                      });
+                    } else {
+                      setClinic_request(e.target.checked);
+                    }
+                  }}
                 />
               }
               label="진료의뢰서"

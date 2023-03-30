@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Box,
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, InputAdornment, TextField, Typography } from "@mui/material";
 
 const Patient = (props) => {
   const { reception, patient } = props;
@@ -35,6 +27,13 @@ const Patient = (props) => {
         <TextField
           disabled
           size="small"
+          value={patient.treatment_reason || ""}
+          label="내원사유"
+          sx={{ marginLeft: 1, marginRight: 1, width: "100%" }}
+        />
+        {/* <TextField
+          disabled
+          size="small"
           value={patient.front_registration_number || ""}
           label="앞자리"
           sx={{ marginLeft: 1, marginRight: 1 }}
@@ -46,7 +45,7 @@ const Patient = (props) => {
           value={patient.back_registration_number || ""}
           label="뒷자리"
           sx={{ marginLeft: 1, marginRight: 1 }}
-        />
+        /> */}
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", m: 1 }}>
         <TextField

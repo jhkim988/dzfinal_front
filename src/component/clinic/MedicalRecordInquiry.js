@@ -25,13 +25,15 @@ import axios from "axios";
 import dayjs from "dayjs";
 import koLocale from "dayjs/locale/ko";
 
-const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
+const MedicalRecordInquiry = ({ mri, setMri, setMode, setMedicalInfo }) => {
   const [type, setType] = useState("");
   const handleChange = (e) => {
     setType(e.target.value);
   };
 
   const onClick = (reception_id) => {
+    setMode(0);
+
     axios
       .get(`/api/clinic/medicalinfo/${reception_id}`)
       .then((response) => {
@@ -66,7 +68,9 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
 
   const onSearchList = () => {
     if (!type) return alert("분류를 정해주세요");
+
     console.log(formattedDates.start + "/" + formattedDates.end);
+
     axios
       .post(
         "/api/clinic/mri/search",
@@ -99,8 +103,9 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
   }, [selectedDates]);
 
   const handleToggle = (isOpen) => {
+    let intervalId = null;
     if (isOpen) {
-      const intervalId = setInterval(() => {
+      intervalId = setInterval(() => {
         const dateRangePickerRoot = document.querySelector(
           ".css-e47596-MuiDateRangeCalendar-root"
         );
@@ -112,6 +117,7 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
         }
       }, 100);
     } else {
+      clearInterval(intervalId);
       const dateRangePickerRoot = document.querySelector(
         ".css-e47596-MuiDateRangeCalendar-root"
       );
@@ -143,12 +149,7 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
               format="YYYY-MM-DD"
               value={[dayjs(selectedDates.start), dayjs(selectedDates.end)]}
               onToggle={handleToggle}
-              onChange={(value, states) => {
-                setSelectedDates({
-                  start: value.start.format("YYYY-MM-DD"),
-                  end: value.end.format("YYYY-MM-DD"),
-                });
-              }}
+              onChange={handleDateChange}
             />
           </DemoContainer>
         </LocalizationProvider>
@@ -190,7 +191,13 @@ const MedicalRecordInquiry = ({ mri, setMri, setMedicalInfo }) => {
               {mri.map((row) => (
                 <TableRow
                   key={row.reception_id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  hover
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "#90caf9 !important",
+                    },
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}
                   onClick={() => onClick(row.reception_id)}
                 >
                   <TableCell scope="row" align="center">

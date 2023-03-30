@@ -38,7 +38,6 @@ const ClinicView = () => {
     axios
       .get(`/api/clinic/mri/${1}`)
       .then((response) => {
-        console.log(response.data);
         setMri(response.data);
       })
       .catch((error) => {
@@ -95,6 +94,7 @@ const ClinicView = () => {
               <MedicalRecordInquiry
                 mri={mri}
                 setMri={setMri}
+                setMode={setMode}
                 setMedicalInfo={setMedicalInfo}
                 clickMedicalRecordInquiry={clickMedicalRecordInquiry}
               />
@@ -138,6 +138,7 @@ const ClinicView = () => {
                 medicalInfo={medicalInfo}
                 diagnosis={diagnosis}
                 prescription={prescription}
+                setMedicalInfo={setMedicalInfo}
               />
             </Paper>
           </Grid>
