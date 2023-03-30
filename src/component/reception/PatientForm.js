@@ -156,12 +156,13 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
                             <Autocomplete
-                                disablePortal
+                                freeSolo
                                 id="combo-box-demo"
                                 options={autoCompleteList}
                                 onChange={handleChange}
                                 name="patient_name"
                                 value={patientData.patient_name || ''}
+                                onKeyUp={handleDropDownKey}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
