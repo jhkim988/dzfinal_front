@@ -23,9 +23,6 @@ import koLocale from "dayjs/locale/ko";
 const ReceiptList = ({user}) => {
   
   const [receiptList, setReceiptList] = useState([]);
-  // useEffect(() => {
-  // }, []);
-
   const getReceiptList = () => {
    axios
      .post("/api/receipt/getReceiptList", {
@@ -39,10 +36,7 @@ const ReceiptList = ({user}) => {
        }
      })
      .then((response) => {
-      console.log("0000000", response.data.length);
       setReceiptList([...response.data]);
-       console.log("111111111", receiptList);
-       console.log("222222222", response.data);
      })
      .catch((error) => {
        console.log(error);
@@ -51,7 +45,6 @@ const ReceiptList = ({user}) => {
 
  const handleSearch = () => {
   getReceiptList();
-  // console.log("보낸데이터"+getReceiptList);
 };
 
   // 분류 고르기
@@ -71,8 +64,6 @@ const ReceiptList = ({user}) => {
   const handleSearchRangeChange = (newValue) => {
     setSearchRange(newValue);
   };
-
- 
 
   // 데이터피커 가운데 글자 사라지게 하기
   useEffect(() => {
@@ -107,7 +98,6 @@ const ReceiptList = ({user}) => {
     }
   };
 
-  console.log("7777777777777", receiptList);
   return (
   <>
     <Paper sx={{ height: "38vh" }}>
@@ -164,14 +154,14 @@ const ReceiptList = ({user}) => {
           <Table sx={{ maxWidth: 100 }} size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
-                <TableCell align="center" style={{ paddingTop: 4 }}>의사</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>환자이름</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>주민등록번호</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>질병명</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>처방명</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>수납액</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>결제</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4 }}>수납일</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>의사</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>환자이름</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>주민등록번호</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>질병명</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>처방명</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>수납액</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>결제</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>수납일</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -184,23 +174,23 @@ const ReceiptList = ({user}) => {
                     <TableCell align="right">&nbsp;</TableCell>
                     <TableCell align="right">&nbsp;</TableCell>
                     <TableCell align="right">&nbsp;</TableCell>
-                    <TableCell align="center">&nbsp;</TableCell>
+                    <TableCell align="right">&nbsp;</TableCell>
                     <TableCell align="right">&nbsp;</TableCell>
                   </TableRow>
                 )) 
                 : 
                 receiptList.map((receipt, idx) => (
                   <TableRow key={idx}>
-                    <TableCell align="right">
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>
                       {receipt.doctor === 1 ? "김을지" : "이더존"}
                     </TableCell>
-                    <TableCell align="right">{`${receipt.patient_name}(${receipt.phone_number3})`}</TableCell>
-                    <TableCell align="right">{receipt.front_registration_number}</TableCell>
-                    <TableCell align="right">{receipt.disease_name}</TableCell>
-                    <TableCell align="right">{receipt.drug_name}</TableCell>
-                    <TableCell align="right">{receipt.total_amount}</TableCell>
-                    <TableCell align="center">{receipt.mode}</TableCell>
-                    <TableCell align="right">{receipt.created_at}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{`${receipt.patient_name}(${receipt.phone_number3})`}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.front_registration_number}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.disease_name}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.drug_name}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.total_amount}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.mode}</TableCell>
+                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>{receipt.created_at}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>
