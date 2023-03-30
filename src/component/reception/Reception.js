@@ -62,7 +62,7 @@ const Reception = () => {
               <ReceiptList />
             </Grid>
             <Grid item xs={12} >
-              <Paper sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Paper sx={{ height: "42vh", display: "flex", justifyContent: "space-between" }}>
                 <Grid item xs={6}>
                   <DailyReservationList
                     setSelectedReservationDetails={

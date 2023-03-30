@@ -72,7 +72,7 @@ const ReceiptList = ({user}) => {
 
   return (
   <>
-    <Paper sx={{ height: "40vh" }}>
+    <Paper sx={{ height: "38vh" }}>
       <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>수납내역목록</h5>
         <Box sx={{ display: "flex" }}>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
