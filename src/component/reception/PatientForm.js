@@ -160,6 +160,8 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                                 id="combo-box-demo"
                                 options={autoCompleteList}
                                 onChange={handleChange}
+                                name="patient_name"
+                                value={patientData.patient_name || ''}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}

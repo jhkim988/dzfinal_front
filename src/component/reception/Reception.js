@@ -111,37 +111,39 @@ const Reception = () => {
             </Grid>
             <Grid item xs={12} >
               <Paper elevation={3} sx={{ height: "42vh", display: "flex", justifyContent: "space-between" }}>
-                <Grid item xs={5}>
-                  <DailyReservationList
-                    setSelectedReservationDetails={
-                      setSelectedReservationDetails
-                    }
-                    setPatientData={setPatientData}
-                    setReceptionData={setReceptionData}
-                  />
-                </Grid>
-                <Grid item xs={7}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <PatientForm
-                        setPatient_id={setPatient_id}
-                        setReceptionData={setReceptionData}
-                        selectedReservationDetails={selectedReservationDetails}
-                        patientData={patientData}
-                        setPatientData={setPatientData}
-                        selectedAddress={selectedAddress}
-                        setSelectedAddress={setSelectedAddress}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <ReceptionForm
-                        patient_id={patient_id}
-                        receptionData={receptionData}
-                        setReceptionData={setReceptionData}
-                        patientData={patientData}
-                        setPatientData={setPatientData}
-                        setSelectedAddress={setSelectedAddress}
-                      />
+                <Grid container spacing={2}>
+                  <Grid item xs={5}>
+                    <DailyReservationList
+                      setSelectedReservationDetails={
+                        setSelectedReservationDetails
+                      }
+                      setPatientData={setPatientData}
+                      setReceptionData={setReceptionData}
+                    />
+                  </Grid>
+                  <Grid item xs={7}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <PatientForm
+                          setPatient_id={setPatient_id}
+                          setReceptionData={setReceptionData}
+                          selectedReservationDetails={selectedReservationDetails}
+                          patientData={patientData}
+                          setPatientData={setPatientData}
+                          selectedAddress={selectedAddress}
+                          setSelectedAddress={setSelectedAddress}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <ReceptionForm
+                          patient_id={patient_id}
+                          receptionData={receptionData}
+                          setReceptionData={setReceptionData}
+                          patientData={patientData}
+                          setPatientData={setPatientData}
+                          setSelectedAddress={setSelectedAddress}
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
