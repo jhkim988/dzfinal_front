@@ -1,10 +1,8 @@
 import { Paper, TableContainer, Table, TableHead, TableRow, TableBody, TableCell } from "@mui/material";
 
-const rowHeight = 3.7;
-
 const WaitingTabPanel = ({ data, selected, onRowClick }) => {
 
-  const dummyData = new Array(Math.max(19 - data.length, 0)).fill({});
+  const dummyData = new Array(Math.max(17 - data.length, 0)).fill({});
 
   return (
     <Paper>
@@ -29,7 +27,7 @@ const WaitingTabPanel = ({ data, selected, onRowClick }) => {
               key={`waitingQueue#${el.reception_id}`}
               data-reception_id={el.reception_id}
               onClick={onRowClick}
-              sx={{ backgroundColor: selected === `${el.reception_id}` ? 'rgba(33, 150, 243, 0.1)' : undefined, height: `${rowHeight}vh` }}
+              sx={{ backgroundColor: selected === `${el.reception_id}` ? 'rgba(33, 150, 243, 0.1)' : undefined }}
             >
                 <TableCell>
                   {el.patient_name}
@@ -47,11 +45,11 @@ const WaitingTabPanel = ({ data, selected, onRowClick }) => {
           )
         }
         {
-          dummyData.map((el, idx) => <TableRow key={`waitingQueueDummy#${idx}`} sx={{ height: `${rowHeight}vh` }}>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
+          dummyData.map((el, idx) => <TableRow key={`waitingQueueDummy#${idx}`}>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell>&nbsp;</TableCell>
           </TableRow>)
         }
           </TableBody>
