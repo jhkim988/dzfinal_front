@@ -399,7 +399,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                             name="treatment_reason"
                             onChange={handleChange}
                             value={receptionData.treatment_reason || ''}
-                            sx={{ width: "100%", padding: "0.3em" }}
+                            sx={{ width: "100%", ".css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall": { padding: "0.5em" } }}
                         />
                     </Grid>
                     <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
