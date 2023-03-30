@@ -75,8 +75,8 @@ function Receipt({ receiptData }) {
 
 
   return (
-    <div style={{height:"480px"}}>
-       {/* <div style={{ width: "950px", padding: 2, height: "400px", float: "left"}}>
+    <div style={{ height: "480px" }}>
+      {/* <div style={{ width: "950px", padding: 2, height: "400px", float: "left"}}>
          <Paper elevation={3} style={{padding: "20px"}}>
              <ReceiptList user={user}/>
          </Paper>

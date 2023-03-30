@@ -7,7 +7,7 @@ import Treatment from './modal/Treatment';
 import ClinicRequest from './modal/ClinicRequest';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import {InputLabel, MenuItem, FormControl, Select, Input} from '@mui/material';
+import { InputLabel, MenuItem, FormControl, Select, Input } from '@mui/material';
 
 
 
@@ -35,7 +35,7 @@ export default function BasicSelect({user}) {
       const response = await axios.post('/api/receipt/insertReceipt', {
         reception_id: user.reception_id,
         ratio: InsuranceRatio,
-        total_amount: (ClinicPrice+TreatmentPrice)*InsuranceRatio,
+        total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
         card_name: '-',
         card_number: '-',
         mode: '현금',
@@ -53,7 +53,7 @@ export default function BasicSelect({user}) {
       console.log(error);
     }
   };
-  
+
   // select 값 받아오기
   const [card_name, setCard_name] = React.useState('');
   const handleChange = (event) => {
@@ -89,7 +89,7 @@ export default function BasicSelect({user}) {
     });
 
     const handleCardNumberChange = (e) => {
-      const {name, value} = e.target;
+      const { name, value } = e.target;
       setCard_number((prevState) => ({
         ...prevState,
         [name]: value,
@@ -97,8 +97,8 @@ export default function BasicSelect({user}) {
     };
 
     const formatCardNumber = (card) => {
-      const {card_number1, card_number2, card_number3, card_number4} = card;
-      return `${card_number1}-${card_number2}-${card_number3}-${card_number4}`;    
+      const { card_number1, card_number2, card_number3, card_number4 } = card;
+      return `${card_number1}-${card_number2}-${card_number3}-${card_number4}`;
     };
 
     const handleCardNumberSubmit = (e) => {
@@ -110,7 +110,7 @@ export default function BasicSelect({user}) {
 
   // 카드번호 가리기
   const [hidePassword, setHidePassword] = useState(true);
-  const toggleHidePassword =()=>{
+  const toggleHidePassword = () => {
     setHidePassword(!hidePassword);
   }
 
@@ -122,7 +122,7 @@ export default function BasicSelect({user}) {
         const response = await axios.post('/api/receipt/insertReceipt', {
           reception_id: user.reception_id,
           ratio: InsuranceRatio,
-          total_amount: (ClinicPrice+TreatmentPrice)*InsuranceRatio,
+          total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
           card_name: card_name,
           card_number: card_number,
           mode: '카드',
@@ -140,23 +140,23 @@ export default function BasicSelect({user}) {
       }
     }
   };
-  
+
   const style = {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: 800,
-      height: 800,
-      bgcolor: 'background.paper',
-      border: '2px solid #000',
-      boxShadow: 24,
-      overflow: "scroll",
-      p: 4,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    height: 800,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    overflow: "scroll",
+    p: 4,
   };
   const [treatmentModalOpen, setTreatmentModalOpen] = React.useState(false);
   const [clinicRequestModalOpen, setClinicRequestModalOpen] = React.useState(false);
-  
+
   // 처방전 모달
   const handleTreatmentModalOpen = () => {
     setTreatmentModalOpen(true);
@@ -191,17 +191,29 @@ export default function BasicSelect({user}) {
                 fontSize: '12px',
               }}
           variant="contained"
+          onClick={handleCardPayment} > 카드결제 </Button>
+        <Button
+          sx={{ fontSize: '12px', }}
+          variant="contained"
+          onClick={handleCashPayment} > 현금결제 </Button>
+
+        <Button
+          sx={{
+            backgroundColor: 'green',
+            fontSize: '12px',
+          }}
+          variant="contained"
           href="#contained-buttons"
-          disabled={ user.treatment !== 0 && !isReceipt }
+          disabled={user.treatment !== 0 && !isReceipt}
           onClick={handleTreatmentModalOpen}
         >
           처방전
         </Button>
-        <Modal open={treatmentModalOpen} 
-               onClose={handleTreatmentModalClose}
-               >
+        <Modal open={treatmentModalOpen}
+          onClose={handleTreatmentModalClose}
+        >
           <Box sx={style}>
-            <Treatment user={user}/>
+            <Treatment user={user} />
             <Button onClick={handleTreatmentModalClose}> 확인 </Button>
           </Box>
         </Modal>
@@ -212,20 +224,20 @@ export default function BasicSelect({user}) {
               }}
           variant="contained"
           href="#contained-buttons"
-          disabled={ user.clinic_request !== 0 && !isReceipt }
+          disabled={user.clinic_request !== 0 && !isReceipt}
           onClick={handleClinicRequestModalOpen}
         >
           진료의뢰서
         </Button>
-        <Modal open={clinicRequestModalOpen} 
-               onClose={handleClinicRequestModalClose}
-               >
+        <Modal open={clinicRequestModalOpen}
+          onClose={handleClinicRequestModalClose}
+        >
           <Box sx={style}>
             <ClinicRequest user={user} />
             <Button onClick={handleClinicRequestModalClose}> 확인 </Button>
           </Box>
         </Modal>
-        </Stack>
+      </Stack>
 
       <br/>
       <br/>
@@ -325,8 +337,7 @@ export default function BasicSelect({user}) {
             
           </div>
         </div>
-       
-{/*      {showCardForm && <CardPaymentForm user={user}/>} */}
+           {/* {showCardForm && <CardPaymentForm user={user}/>} */}
     </>
   );
 };
