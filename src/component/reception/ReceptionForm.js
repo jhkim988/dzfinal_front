@@ -120,7 +120,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                 <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>접수 등록/수정 [환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]</h5>
             </div>
 
-            <Paper sx={{ marginBottom: 1 }} elevation={2} style={{ height: "100px" }}>
+            <Paper sx={{ marginBottom: 1 }} elevation={1} style={{ height: "100px" }}>
                 <div>
                     {receptionData != null && patient_id == null && (
                         <form onSubmit={receptDataHandleSubmit}>
@@ -233,7 +233,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     name="doctor"
                                     onChange={handleChange}
                                     value={receptionData.doctor || ''}
-                                    style={{ width: "100px", height: "10px" }}
+                                    style={{ width: "90px", height: "10px" }}
                                     sx={{
                                         '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                                     }}
@@ -252,7 +252,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                         shrink: "true"
                                     }}
                                     rows={1}
-                                    style={{ width: 250 }}
+                                    style={{ width: 300 }}
                                     size='small'
                                     name="treatment_reason"
                                     onChange={handleChange}
@@ -346,7 +346,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     name="doctor"
                                     onChange={handleChange}
                                     value={receptionData.doctor || ''}
-                                    style={{ width: "100px", height: "10px" }}
+                                    style={{ width: "90px", height: "10px" }}
                                     sx={{
                                         '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "3px", paddingLeft: "10px" }
                                     }}
@@ -364,7 +364,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     }}
                                     multiline
                                     rows={1}
-                                    style={{ width: 250 }}
+                                    style={{ width: 300 }}
                                     size='small'
                                     name="treatment_reason"
                                     onChange={handleChange}

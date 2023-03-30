@@ -53,6 +53,7 @@ const ReservationDatePicker = ({
     >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar
+          sx={{ width: 320, height: 320 }}
           onMonthChange={onMonthChange}
           slots={{
             day: ServerDay

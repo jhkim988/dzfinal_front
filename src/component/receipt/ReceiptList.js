@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from "axios";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Select, Box, FormControl, Button, Checkbox, FormControlLabel, FormGroup, Pagination, InputLabel, makeStyles, MenuItem, Paper, TextareaAutosize, TextField } from '@mui/material';
 import {
     Table,
@@ -20,35 +20,21 @@ import koLocale from "dayjs/locale/ko";
 
 
 
-const ReceiptList = ({user}) => {
-  
+const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
   const [receiptList, setReceiptList] = useState([]);
-  const getReceiptList = () => {
-   axios
-     .post("/api/receipt/getReceiptList", {
-       type,
-       searchText,
-       start_date: searchRange[0]?.format("YYYY-MM-DD"),
-       end_date: searchRange[1]?.format("YYYY-MM-DD"),
-     }, {
-       headers: {
-         'Content-Type': 'application/json'
-       }
-     })
-     .then((response) => {
-      setReceiptList([...response.data]);
-     })
-     .catch((error) => {
-       console.log(error);
-     });
- };
-
- const handleSearch = () => {
-  getReceiptList();
-};
-
-  // 분류 고르기
   const [type, setType] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [searchRange, setSearchRange] = useState([null, null]);
+
+  useEffect(() => {
+    console.log(patient_name);
+    receptionRecordSearch({ type: "patient_name", searchText: patient_name }, setReceiptList);
+  }, [patient_name]);
+
+  const getReceiptList = useCallback(() => {
+    receptionRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText}, setReceiptList);
+  }, [searchRange, type, searchText, setReceiptList, receptionRecordSearch]);
+
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
@@ -65,6 +51,8 @@ const ReceiptList = ({user}) => {
     setSearchRange(newValue);
   };
 
+  const handleSearch = () => {
+    getReceiptList();
   // 데이터피커 가운데 글자 사라지게 하기
   useEffect(() => {
     handleToggle(false);

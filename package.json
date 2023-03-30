@@ -2,10 +2,10 @@
   "name": "dz-project",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8090",
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@date-io/date-fns": "1.x",
-    "@date-io/dayjs": "1.x",
+    "@date-io/dayjs": "1.x.x",
     "@date-io/luxon": "1.x",
     "@date-io/moment": "1.x",
     "@devexpress/dx-react-core": "^4.0.3",

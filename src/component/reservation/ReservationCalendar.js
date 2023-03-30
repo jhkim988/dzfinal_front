@@ -27,7 +27,8 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { compareDate } from "./utils/dateUtils";
 import { doctorData } from "./Reservation";
 
-const cellHeight = 70
+const cellHeight = 70;
+const height = `12vh`
 
 const appointmentBackground = {
   1: "#F29D94",
@@ -39,11 +40,11 @@ const StyledMonthViewTimeTableCell = styled(MonthView.TimeTableCell)(
     [`&.prevDays`]: {
       backgroundColor: "#E8E8E8",
       opacity: 0.5,
-      height: 110,
+      height,
     },
     [`&.nextDays`]: {
       backgroundColor: "white",
-      height: 110,
+      height,
     },
     [`&.day${0}`]: {
       color: "red",
@@ -54,7 +55,7 @@ const StyledMonthViewTimeTableCell = styled(MonthView.TimeTableCell)(
   })
 );
 
-const Appointment = ({ children, style, ...restProps }) => (
+const Appointment = ({ children, style, setViewDate, ...restProps }) => (
   <Appointments.Appointment
     {...restProps}
     style={{
@@ -65,6 +66,9 @@ const Appointment = ({ children, style, ...restProps }) => (
       borderRadius: "8px",
       // height: 42.5,
       height: '90%'
+    }}
+    onClick={() => {
+      setViewDate(restProps.data.startDate);
     }}
   >
   <div>{restProps.data.title}</div>
@@ -174,7 +178,7 @@ const ReservationCalendar = ({
             );
           })}
         />
-        <Appointments appointmentComponent={Appointment} />
+        <Appointments appointmentComponent={(props) => <Appointment {...props} setViewDate={setViewDate}/>}/>
       </Scheduler>
     </Paper>
   );
@@ -287,7 +291,7 @@ const DoctorFilterSelector = ({
   );
 };
 
-const DoctorFilterListItem = ({
+export const DoctorFilterListItem = ({
   doctor,
   selectDoctor,
   onCheckListItemClick,

@@ -9,8 +9,20 @@ import { useState, useEffect } from 'react';
 import ReceiptList from './ReceiptList';
 
 
-function Receipt() {
-  const [user, setUser] = useState({});
+function Receipt({ reception_id }) {
+  const [user, setUser] = useState({
+    reception_id: 0,
+    insurance: 0,
+    treatment: 0,
+    doctor: 0,
+    gender: 0,
+    front_registration_number: "",
+    back_registration_number: "",
+    address: "",
+    detail_address: "",
+    clinic_request: 0,
+    has_prescription: 0,
+  });
 
   let insurance = '';         // 보험여부
   let InsuranceRatio = 0;    // 보험할인율
@@ -32,11 +44,11 @@ function Receipt() {
   }
 
   useEffect(() => {
-    axios.get('/api/receipt/selectReceiptDetail')
+    axios.get(`/api/receipt/selectReceiptDetail?reception_id=${reception_id}`)
       .then(response => {
         setUser({ ...response.data, InsuranceRatio, TreatmentPrice, ClinicPrice, insurance });
       });
-  }, []);
+  }, [reception_id]);
 
   
 
