@@ -50,7 +50,7 @@ function Receipt({ reception_id }) {
       });
   }, [reception_id]);
 
-
+  
 
 
   return (
@@ -66,10 +66,12 @@ function Receipt({ reception_id }) {
         </Paper>
       </div> */}
       <div style={{height: "400px"}}>
-        <Paper elevation={3} style={{padding: "20px"}}>
+        <Paper elevation={3} style={{padding: "5px", height: "82vh"}}>
           {/* <h2>수납하기</h2> */}
+            <br/>
             {/* 접수정보 */}
             <ReceptionInformation user={user}/>
+            <br/>
             {/* 다음진료예약 */}
             <Reservation />
             {/* 결제내역정보 */}
@@ -80,7 +82,7 @@ function Receipt({ reception_id }) {
 
         </Paper>
      </div>
-     </div>
+    </div>
   );
 }
 
