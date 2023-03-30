@@ -9,7 +9,8 @@ import { useState, useEffect } from 'react';
 import ReceiptList from './ReceiptList';
 
 
-function Receipt({ receiptData }) {
+function Receipt({ receiptData, selectedInformation }) {
+
   const [user, setUser] = useState({
     reception_id: 0,
     patient_name: "",
