@@ -11,8 +11,8 @@ import { InputLabel, MenuItem, FormControl, Select, Input } from '@mui/material'
 
 
 
-export default function BasicSelect({user}) {
-  const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
+export default function BasicSelect({ user }) {
+  const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance } = user;
   const [showCardForm, setShowCardForm] = useState(false); // 카드 결제 폼을 보여줄지 여부를 저장할 상태 값을 추가합니다.
   const [isCashPayment, setIsCashPayment] = useState(false); // 현금결제 상태 값을 추가합니다.
   const [isCardPayment, setIsCardPayment] = useState(false);
@@ -177,13 +177,15 @@ export default function BasicSelect({user}) {
   return (
     <>
       <Stack direction="row" spacing={1}>
-        <Button 
-          sx={{ fontSize: '12px', }}
-          variant="contained" 
+        <Button
+          sx={{
+            fontSize: '12px',
+          }}
+          variant="contained"
           onClick={handleCardPayment} > 카드결제 </Button>
-        <Button 
+        <Button
           sx={{ fontSize: '12px', }}
-          variant="contained" 
+          variant="contained"
           onClick={handleCashPayment} > 현금결제 </Button>
 
         <Button
@@ -208,9 +210,10 @@ export default function BasicSelect({user}) {
         </Modal>
 
         <Button
-          sx={{backgroundColor: 'green',
-               fontSize: '12px',
-              }}
+          sx={{
+            backgroundColor: 'green',
+            fontSize: '12px',
+          }}
           variant="contained"
           href="#contained-buttons"
           disabled={user.clinic_request !== 0 && !isReceipt}
@@ -228,105 +231,105 @@ export default function BasicSelect({user}) {
         </Modal>
       </Stack>
 
-      <br/>
-      <br/>
+      <br />
+      <br />
 
 
-      <div style={{ height: 180}}>
-          카드사
-          <br/>
+      <div style={{ height: 180 }}>
+        카드사
+        <br />
+        <Box
+          disabled>
+          <Box sx={{ height: 50, maxWidth: 150 }}>
+            <FormControl fullWidth>
+              <InputLabel id="cardName-label">카드사</InputLabel>
+              <Select
+                labelId="cardName-label"
+                id="card_name"
+                value={card_name}
+                label="카드사"
+                size='small'
+                margin='dense'
+                onChange={handleChange}
+                disabled={!showCardForm}
+              >
+                <MenuItem value={'현대카드'}>현대카드</MenuItem>
+                <MenuItem value={'삼성카드'}>삼성카드</MenuItem>
+                <MenuItem value={'신한카드'}>신한카드</MenuItem>
+                <MenuItem value={'국민카드'}>국민카드</MenuItem>
+                <MenuItem value={'농협카드'}>농협카드</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          카드번호
           <Box
-            disabled>
-            <Box sx={{ height: 50, maxWidth: 150 }}>
-              <FormControl fullWidth>
-                <InputLabel id="cardName-label">카드사</InputLabel>
-                <Select
-                  labelId="cardName-label"
-                  id="card_name"
-                  value={card_name}
-                  label="카드사"
-                  size='small'
-                  margin='dense'
-                  onChange={handleChange}
-                  disabled={!showCardForm}
-                >
-                  <MenuItem value={'현대카드'}>현대카드</MenuItem>
-                  <MenuItem value={'삼성카드'}>삼성카드</MenuItem>
-                  <MenuItem value={'신한카드'}>신한카드</MenuItem>
-                  <MenuItem value={'국민카드'}>국민카드</MenuItem>
-                  <MenuItem value={'농협카드'}>농협카드</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            카드번호
-            <Box
-              component="form"
-              sx={{
-                '& > :not(style)': { m: 0.5, width:70},
-              }}
-              noValidate
-              autoComplete="off"
-            
-            >
-              <Input onChange={handleCardNumber} 
-                     disabled={!showCardForm}
-                     type="number" 
-                     id="card_number1" 
-                     name="card_number1" 
-                     max={4} 
-                     placeholder="카드번호1" 
-                     inputProps={ariaLabel} 
-                     />
-              <Input onChange={handleCardNumber} 
-                     disabled={!showCardForm}
-                     type={hidePassword ? "password":"text"} 
-                     id="card_number2" 
-                     name="card_number2" 
-                     placeholder="카드번호2" 
-                     inputProps={ariaLabel} />
-              <Input onChange={handleCardNumber} 
-                     disabled={!showCardForm}
-                     type={hidePassword ? "password":"text"} 
-                     id="card_number3" 
-                     name="card_number3" 
-                     placeholder="카드번호3" 
-                     inputProps={ariaLabel} />
-              <Input onChange={handleCardNumber} 
-                     disabled={!showCardForm}
-                     type="number" 
-                     id="card_number4" 
-                     name="card_number4" 
-                     placeholder="카드번호4" 
-                     inputProps={ariaLabel} />
-            </Box>
-            <br/>
-            <Stack spacing={2} direction="row">
-              <Button 
-                disabled={!showCardForm}
-                variant="contained" 
-                onClick={handleReceiptInsert}>확인</Button>
-              <Button
-                disabled={!showCardForm}
-                type="reset"
-                variant="outlined"
-                onClick={() => {
+            component="form"
+            sx={{
+              '& > :not(style)': { m: 0.5, width: 70 },
+            }}
+            noValidate
+            autoComplete="off"
+
+          >
+            <Input onChange={handleCardNumber}
+              disabled={!showCardForm}
+              type="number"
+              id="card_number1"
+              name="card_number1"
+              max={4}
+              placeholder="카드번호1"
+              inputProps={ariaLabel}
+            />
+            <Input onChange={handleCardNumber}
+              disabled={!showCardForm}
+              type={hidePassword ? "password" : "text"}
+              id="card_number2"
+              name="card_number2"
+              placeholder="카드번호2"
+              inputProps={ariaLabel} />
+            <Input onChange={handleCardNumber}
+              disabled={!showCardForm}
+              type={hidePassword ? "password" : "text"}
+              id="card_number3"
+              name="card_number3"
+              placeholder="카드번호3"
+              inputProps={ariaLabel} />
+            <Input onChange={handleCardNumber}
+              disabled={!showCardForm}
+              type="number"
+              id="card_number4"
+              name="card_number4"
+              placeholder="카드번호4"
+              inputProps={ariaLabel} />
+          </Box>
+          <br />
+          <Stack spacing={2} direction="row">
+            <Button
+              disabled={!showCardForm}
+              variant="contained"
+              onClick={handleReceiptInsert}>확인</Button>
+            <Button
+              disabled={!showCardForm}
+              type="reset"
+              variant="outlined"
+              onClick={() => {
                 setCard_name('');
                 setCard_number('');
                 setCard_number('');
                 setCard_number('');
                 setCard_number('');
-                }}>
+              }}>
 
-                취소
-                </Button>
-            </Stack>
-            </Box>
-    
-          <div>
-            
-          </div>
+              취소
+            </Button>
+          </Stack>
+        </Box>
+
+        <div>
+
         </div>
-           {/* {showCardForm && <CardPaymentForm user={user}/>} */}
+      </div>
+      {/* {showCardForm && <CardPaymentForm user={user}/>} */}
     </>
   );
 };
