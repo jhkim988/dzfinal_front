@@ -97,7 +97,7 @@ const Reception = () => {
         <Grid item xs={7.5}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Paper elevation={3}>
+              <ReceiptList elevation={3}
                 receptionRecordSearch={receptionRecordSearch}
                 patient_name={patient_name}
               />
