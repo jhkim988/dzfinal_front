@@ -5,10 +5,6 @@ import {
   Grid,
   InputAdornment,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,17 +14,23 @@ const MedicalInfo = ({
   setMode,
   setDiagnosis,
   setPrescription,
+  setTreatment,
+  setClinic_request
 }) => {
   const onCopy = () => {
     setMode(1);
     setDiagnosis(medicalInfo.diagnosis);
     setPrescription(medicalInfo.prescription);
+    setTreatment(medicalInfo.treatment);
+    setClinic_request(medicalInfo.clinic_request);
   };
 
   const onUpdate = () => {
     setMode(2);
     setDiagnosis(medicalInfo.diagnosis);
     setPrescription(medicalInfo.prescription);
+    setTreatment(medicalInfo.treatment);
+    setClinic_request(medicalInfo.clinic_request);
   };
 
   return (

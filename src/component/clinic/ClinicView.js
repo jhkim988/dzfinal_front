@@ -8,7 +8,7 @@ import Patient from "./Patient";
 import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
-import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
+// import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 
 const ClinicView = () => {
   const [reception, setReception] = useState(1);
@@ -20,6 +20,8 @@ const ClinicView = () => {
   const [mode, setMode] = useState(0);
   const [diagnosis, setDiagnosis] = useState([]);
   const [prescription, setPrescription] = useState([]);
+  const [treatment, setTreatment] = useState(false);
+  const [clinic_request, setClinic_request] = useState(false);
 
   useEffect(() => {
     axios
@@ -78,14 +80,14 @@ const ClinicView = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={2}>
-        <WaitingQueueLayout
+        {/* <WaitingQueueLayout
           initPanel="2"
           nextState="진료중"
           clickRowCallback={({ reception_id, patient_name }) => {
             setReception(reception_id);
             clickMedicalRecordInquiry("patient_name", {}, patient_name);
           }}
-        />
+        /> */}
       </Grid>
       <Grid item xs={5}>
         <Grid container spacing={2}>
@@ -107,6 +109,8 @@ const ClinicView = () => {
                 setMode={setMode}
                 setDiagnosis={setDiagnosis}
                 setPrescription={setPrescription}
+                setTreatment={setTreatment}
+                setClinic_request={setClinic_request}
               />
             </Paper>
           </Grid>
@@ -139,6 +143,10 @@ const ClinicView = () => {
                 diagnosis={diagnosis}
                 prescription={prescription}
                 setMedicalInfo={setMedicalInfo}
+                treatment={treatment}
+                setTreatment={setTreatment}
+                clinic_request={clinic_request}
+                setClinic_request={setClinic_request}
               />
             </Paper>
           </Grid>

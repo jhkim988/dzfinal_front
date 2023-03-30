@@ -33,6 +33,7 @@ const MedicalRecordInquiry = ({ mri, setMri, setMode, setMedicalInfo }) => {
 
   const onClick = (reception_id) => {
     setMode(0);
+    setMedicalInfo({});
 
     axios
       .get(`/api/clinic/medicalinfo/${reception_id}`)
