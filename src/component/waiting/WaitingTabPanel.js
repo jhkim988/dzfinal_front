@@ -2,7 +2,7 @@ import { Paper, TableContainer, Table, TableHead, TableRow, TableBody, TableCell
 
 const WaitingTabPanel = ({ data, selected, onRowClick }) => {
 
-  const dummyData = new Array(Math.max(18 - data.length, 0)).fill({});
+  const dummyData = new Array(Math.max(17 - data.length, 0)).fill({});
 
   return (
     <Paper>
@@ -46,10 +46,10 @@ const WaitingTabPanel = ({ data, selected, onRowClick }) => {
         }
         {
           dummyData.map((el, idx) => <TableRow key={`waitingQueueDummy#${idx}`}>
-            <TableCell>-</TableCell>
-            <TableCell>-</TableCell>
-            <TableCell>-</TableCell>
-            <TableCell>-</TableCell>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell>&nbsp;</TableCell>
           </TableRow>)
         }
           </TableBody>

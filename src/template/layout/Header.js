@@ -5,6 +5,7 @@ import { Avatar, Box, Button, ButtonBase, Dialog, TextField } from "@mui/materia
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
+import ChatList from "../../component/chat/ChatList";
 
 
 const Header = ({ handleLeftDrawerToggle }) => {
@@ -79,10 +80,10 @@ const Header = ({ handleLeftDrawerToggle }) => {
         <Button variant="contained" onClick={openModal}>
           채팅
         </Button>
-        {/* <Dialog open={open} onClose={closeModal}>
+        <Dialog open={open} onClose={closeModal}>
           <ChatList onRequestClose={closeModal}>
           </ChatList>
-        </Dialog> */}
+        </Dialog>
         {/* {<ChatList isOpen={modalIsOpen} onRequestClose={closeModal}>
           <button onClick={closeModal}>Close Modal</button>
         </ChatList>} */}
