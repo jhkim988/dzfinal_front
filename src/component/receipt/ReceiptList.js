@@ -19,7 +19,7 @@ import axios from 'axios';
 
 
 
-const ReceiptList = ({ patient_name, receptionRecordSearch, setSelectedInformation }) => {
+const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
 
@@ -37,12 +37,12 @@ const ReceiptList = ({ patient_name, receptionRecordSearch, setSelectedInformati
 
   useEffect(() => {
     console.log(patient_name);
-    receptionRecordSearch({ type: "patient_name", searchText: patient_name }, setReceiptList);
+    receiptRecordSearch({ type: "patient_name", searchText: patient_name }, setReceiptList);
   }, [patient_name]);
 
   const getReceiptList = useCallback(() => {
-    receptionRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText }, setReceiptList);
-  }, [searchRange, type, searchText, setReceiptList, receptionRecordSearch]);
+    receiptRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText }, setReceiptList);
+  }, [searchRange, type, searchText, setReceiptList, receiptRecordSearch]);
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
@@ -96,11 +96,13 @@ const ReceiptList = ({ patient_name, receptionRecordSearch, setSelectedInformati
 
 
 
-  const handleSelectedInformation = (receipt_id, reception_id, patient_name, patient_id) => {
-    axios.get(`/api/receipt/selectReceiptDetail?reception_id=${reception_id}`)
+  // 수납내역목록에서 데이터 선택하면 데이터가 
+  const handleSelectedReceipt = (receipt_id, reception_id) => {
+    axios.get(`/api/receipt/selectedOneReceipt?reception_id=${reception_id}`)
          .then((response) => {
           console.log("선택한 데이터 정보: ", response.data);
-          setSelectedInformation(response.data);
+          clickRowCallback(response.data);
+        //  handleSelectedInformation(response.data);
          })
          .catch((error) => {
           console.error(error);
@@ -165,7 +167,7 @@ const ReceiptList = ({ patient_name, receptionRecordSearch, setSelectedInformati
             <TableHead>
               <TableRow>
                 <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>의사</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>환자이름</TableCell>
+                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>환자이름(생년월일)</TableCell>
                 <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>주민등록번호</TableCell>
                 <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>질병명</TableCell>
                 <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>처방명</TableCell>
@@ -178,14 +180,20 @@ const ReceiptList = ({ patient_name, receptionRecordSearch, setSelectedInformati
               {[...Array(Math.max(5, receiptList.length))].map((_, idx) => {
                 if (idx < receiptList.length) {
                   return (
-                    <TableRow key={idx} hover={true} onClick={() => handleSelectedInformation(idx.receipt_id, idx.reception_id, idx.patient_id)}>
+                    <TableRow key={idx} 
+                              hover={true} 
+                              onClick={() => handleSelectedReceipt(receiptList[idx].receipt_id, receiptList[idx].reception_id)}>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
                         {receiptList[idx].doctor === 1 ? "김을지" : "이더존"}
                       </TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{`${receiptList[idx].patient_name}(${receiptList[idx].phone_number3})`}</TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].front_registration_number}</TableCell>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].disease_name}</TableCell>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].drug_name}</TableCell>
+                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>
+                      { receiptList[idx].receipt_count > 1 ? `${receiptList[idx].disease_name} 외 ${receiptList[idx].receipt_count - 1} 건` : `${receiptList[idx].disease_name}` }
+                      </TableCell>
+                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>
+                      { receiptList[idx].receipt_count > 1 ? `${receiptList[idx].drug_name} 외 ${receiptList[idx].receipt_count - 1} 건` : `${receiptList[idx].drug_name}` }
+                      </TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].total_amount}</TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].mode}</TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].created_at}</TableCell>
@@ -209,36 +217,6 @@ const ReceiptList = ({ patient_name, receptionRecordSearch, setSelectedInformati
             </TableBody>
           </Table>
         </TableContainer>
-        {/* {[...Array(Math.max(5, receiptList.length))].map((_, index) => {
-                if (index < receiptList.length) {
-                  const list = receiptList[index];
-                  return (
-                    <TableRow key={list.receipt_id}>
-                      <TableCell align="right">
-                        {list.doctor === 1 ? "김을지" : "이더존"}
-                      </TableCell>
-                      <TableCell align="right">{`${list.patient_name}(${list.phone_number3})`}</TableCell>
-                      <TableCell align="right">{list.front_registration_number}</TableCell>
-                      <TableCell align="right">{list.disease_name}</TableCell>
-                      <TableCell align="right">{list.drug_name}</TableCell>
-                      <TableCell align="right">{list.total_amount}</TableCell>
-                      <TableCell align="center">{list.mode}</TableCell>
-                      <TableCell align="right">{list.created_at}</TableCell>
-                    </TableRow>
-                  );
-                } else {
-                  return (
-                    <TableRow key={index}>
-                      <TableCell align="center" colSpan={8}>
-                      &nbsp;
-                      </TableCell>
-                    </TableRow>
-                  );
-                }
-              })} */}
-        {/* </TableBody>
-          </Table>
-        </TableContainer> */}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Stack spacing={2} style={{ bottom: '0' }}>
             <Pagination count={5} />
