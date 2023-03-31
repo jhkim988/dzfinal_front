@@ -1,46 +1,61 @@
 import React, { useCallback } from "react";
-import { Modal, Button } from "@mui/material";
+import { Modal, Button, Popper, Paper } from "@mui/material";
 import ReservationDatePicker from "./ReservationDatePicker";
-import ReservationTimePicker from "./ReservationTimePicker";
 
 const ReservationDateTimePickerModal = ({
-  setDateTimePickerModal,
   dateTimePickerModal,
+  setDateTimePickerModal,
   reservationFormData,
   setReservationFormData,
   pickDate,
-  setPickDate,
+  pickTime,
+  anchorEl
 }) => {
   const selectEvent = useCallback(() => {
     const date_time = `${reservationFormData.wish_date} ${reservationFormData.wish_time}`;
     reservationFormData.wish_date && reservationFormData.wish_time
-    ? setReservationFormData({ ...reservationFormData, date_time })
-    : setReservationFormData({ ...reservationFormData, date_time: ''});
+      ? setReservationFormData({ ...reservationFormData, date_time })
+      : setReservationFormData({ ...reservationFormData, date_time: '' });
     setDateTimePickerModal(false);
   }, [setReservationFormData, setDateTimePickerModal, reservationFormData]);
+  console.log("dateTimePickerModal: ", dateTimePickerModal);
   return (
-    <Modal open={dateTimePickerModal} onClose={() => setDateTimePickerModal(false)}>
-      <>
-        <ReservationDatePicker
-          pickDate={pickDate}
-          setPickDate={setPickDate}
-          doctor={reservationFormData.doctor}
-        />
-        <ReservationTimePicker
-          reservationFormData={reservationFormData}
-          setReservationFormData={setReservationFormData}
-          pickDate={pickDate}
-          doctor={reservationFormData.doctor}
-        />
-        <Button
-          style={{ display: "block", margin: "20px auto", width: "320px" }}
-          variant="contained"
-          onClick={selectEvent}
-        >
-          선택
-        </Button>
-      </>
-    </Modal>
+    <>
+      <Popper open={dateTimePickerModal} onClose={() => setDateTimePickerModal(false)} placement="right-end" anchorEl={anchorEl} sx={{ zIndex: 2000 }}>
+        <Paper sx={{ marginLeft: 2}}>
+          <ReservationDatePicker
+            pickDate={pickDate}
+            pickTime={pickTime}
+            setReservationFormData={setReservationFormData}
+            doctor={reservationFormData.doctor}
+          />
+          <Button
+            style={{ display: "block", width: "100%" }}
+            variant="contained"
+            onClick={selectEvent}
+          >
+            선택
+          </Button>
+        </Paper>
+      </Popper>
+    </>
+    // <Modal open={dateTimePickerModal} onClose={() => setDateTimePickerModal(false)}>
+    //   <>
+    //     <ReservationDatePicker
+    //       pickDate={pickDate}
+    //       pickTime={pickTime}
+    //       setReservationFormData={setReservationFormData}
+    //       doctor={reservationFormData.doctor}
+    //     />
+    //     <Button
+    //       style={{ display: "block", margin: "20px auto", width: "320px" }}
+    //       variant="contained"
+    //       onClick={selectEvent}
+    //     >
+    //       선택
+    //     </Button>
+    //   </>
+    // </Modal>
   );
 };
 

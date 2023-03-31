@@ -8,10 +8,10 @@ import Patient from "./Patient";
 import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
-// import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
+import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 
 const ClinicView = () => {
-  const [reception, setReception] = useState(57);
+  const [reception, setReception] = useState();
   const [patient, setPatient] = useState({});
   const [underlying, onInsert, onDelete, onAppend, onReset] = DiseaseModel();
   const [drug_taking, setDrug_taking] = useState([]);
@@ -25,29 +25,32 @@ const ClinicView = () => {
   const [pagination, setPagination] = useState({});
 
   useEffect(() => {
-    axios
-      .get(`/api/clinic/${reception}`)
-      .then((response) => {
-        setPatient(response.data);
-        onAppend(response.data.underlyingList);
-        setDrug_taking(response.data.drug_takingList);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    reception &&
+      axios
+        .get(`/api/clinic/${reception}`)
+        .then((response) => {
+          setPatient(response.data);
+          onReset();
+          onAppend(response.data.underlyingList);
+          setDrug_taking(response.data.drug_takingList);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }, [reception]);
 
   useEffect(() => {
-    axios
-      .get(`/api/clinic/mri/${1}/${1}`)
-      .then((response) => {
-        setMri(response.data.mri);
-        setPagination(response.data.pagination);
-        console.log(response.data.pagination);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    patient?.patient_id &&
+      axios
+        .get(`/api/clinic/mri/${patient.patient_id}`)
+        .then((response) => {
+          setMri(response.data.mri);
+          setPagination(response.data.pagination);
+          console.log(response.data.pagination);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }, []);
 
   const clickMedicalRecordInquiry = useCallback(
@@ -82,15 +85,19 @@ const ClinicView = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={2}>
-        {/* <WaitingQueueLayout
+      <Grid item xs={2} style={{ height: "90vh" }}>
+        <WaitingQueueLayout
           initPanel="2"
           nextState="진료중"
           clickRowCallback={({ reception_id, patient_name }) => {
             setReception(reception_id);
-            clickMedicalRecordInquiry("patient_name", {}, patient_name);
+            clickMedicalRecordInquiry(
+              "patient_name",
+              { start: "2000-01-01", end: "2100-12-31" },
+              patient_name
+            );
           }}
-        /> */}
+        />
       </Grid>
       <Grid item xs={5}>
         <Grid container spacing={2}>

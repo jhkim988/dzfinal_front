@@ -1,29 +1,31 @@
 import { lazy } from "react";
 
-// project imports
 import MainLayout from "../layout/MainLayout";
 import Loadable from "../ui-component/Loadable";
 
+const ClinicView = Loadable(
+  lazy(() => import("../../component/clinic/ClinicView"))
+);
+const Reservation = Loadable(
+  lazy(() => import("../../component/reservation/Reservation"))
+);
+const Reception = Loadable(
+  lazy(() => import("../../component/reception/Reception"))
+);
+const DidSetting = Loadable(
+  lazy(() => import("../../component/did/DidSetting"))
+);
 
-// dashboard routing
-const ClinicView = Loadable(lazy(() => import("../../component/clinic/ClinicView")));
-const Reservation = Loadable(lazy(() => import("../../component/reservation/Reservation")))
-const Reception = Loadable(lazy(() => import('../../component/reception/Reception')));
+const Management = Loadable(
+  lazy(() => import("../../component/management/Management"))
+);
 
-// utilities routing
-// const UtilsTypography = Loadable(lazy(() => import('../views/utilities/Typography')));
-// const UtilsColor = Loadable(lazy(() => import('../views/utilities/Color')));
-// const UtilsShadow = Loadable(lazy(() => import('../views/utilities/Shadow')));
-// const UtilsMaterialIcons = Loadable(lazy(() => import('../views/utilities/MaterialIcons')));
-// const UtilsTablerIcons = Loadable(lazy(() => import('../views/utilities/TablerIcons')));
-
-// // sample page routing
-// const SamplePage = Loadable(lazy(() => import('../views/sample-page')));
-
-// ==============================|| MAIN ROUTING ||============================== //
+const Register = Loadable(
+  lazy(() => import("../../component/management/Register"))
+);
 
 const MainRoutes = {
-  path: '/',
+  path: "/",
   element: <MainLayout />,
   children: [
     {
@@ -32,12 +34,25 @@ const MainRoutes = {
     },
     {
       path: "reservation",
-      element: <Reservation />
-    }, {
+      element: <Reservation />,
+    },
+    {
       path: "reception",
       element: <Reception />,
-    }
-  ]
+    },
+    {
+      path: "did_setting",
+      element: <DidSetting />,
+    },
+    {
+      path: "management",
+      element: <Management />,
+    },
+    {
+      path: "register",
+      element: <Register />,
+    },
+  ],
 };
 
 export default MainRoutes;
