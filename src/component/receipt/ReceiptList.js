@@ -15,7 +15,7 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
 
-const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
+const ReceiptList = ({ patient_id, receptionRecordSearch }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
 
@@ -32,9 +32,8 @@ const ReceiptList = ({ patient_name, receptionRecordSearch }) => {
   };
 
   useEffect(() => {
-    console.log(patient_name);
-    receptionRecordSearch({ type: "patient_name", searchText: patient_name }, setReceiptList);
-  }, [patient_name]);
+    receptionRecordSearch({ type: "patient_id", searchText: patient_id }, setReceiptList);
+  }, [patient_id]);
 
   const getReceiptList = useCallback(() => {
     receptionRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText }, setReceiptList);

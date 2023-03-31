@@ -75,6 +75,7 @@ const Reception = () => {
       )
       .then((response) => {
         callback(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -86,7 +87,7 @@ const Reception = () => {
         <Grid item xs={2}>
           <WaitingQueueLayout
             initPanel="3"
-            nextState="수납완료"
+            nextState="수납중"
             clickRowCallback={({ reception_id, patient_id }) => {
               setPatient_id(patient_id);
               axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {

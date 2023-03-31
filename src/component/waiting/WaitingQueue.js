@@ -11,7 +11,7 @@ const tabInfo = [
   { label: "완료", value: "4", filter: (data) => data.state === "수납완료" },
 ];
 
-const WaitingQueue = ({ initPanel, data, selected, onRowClick, autoCall, doctorFilter }) => {
+const WaitingQueue = ({ initPanel, data, selected, onRowClick, doctorFilter }) => {
   const [value, setValue] = useState(initPanel);
 
   const handleChange = (event, newValue) => {
@@ -36,7 +36,11 @@ const WaitingQueue = ({ initPanel, data, selected, onRowClick, autoCall, doctorF
               sx={{ minWidth: 260, padding: 0 }}
               value={el.value}
             >
-            <WaitingTabPanel data={data.filter(d => el.filter(d) && doctorFilter[d.doctor_id])} selected={selected} onRowClick={onRowClick}/>
+            <WaitingTabPanel
+              data={data.filter(d => el.filter(d) && doctorFilter[d.doctor_id])}
+              selected={selected}
+              onRowClick={onRowClick}
+            />
           </TabPanel>)
         }
       </TabContext>

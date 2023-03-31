@@ -22,7 +22,7 @@ const WaitingTabPanel = ({ data, selected, onRowClick }) => {
           </TableHead>
           <TableBody>
           {
-          data.map(el =>
+          data.map((el, idx) =>
             <TableRow
               key={`waitingQueue#${el.reception_id}`}
               data-reception_id={el.reception_id}

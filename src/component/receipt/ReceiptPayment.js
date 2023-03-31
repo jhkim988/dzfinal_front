@@ -185,17 +185,6 @@ export default function BasicSelect({user}) {
           sx={{ fontSize: '12px', }}
           variant="contained" 
           onClick={handleCashPayment} > 현금결제 </Button>
-      
-        <Button
-          sx={{ backgroundColor: 'green',
-                fontSize: '12px',
-              }}
-          variant="contained"
-          onClick={handleCardPayment} > 카드결제 </Button>
-        <Button
-          sx={{ fontSize: '12px', }}
-          variant="contained"
-          onClick={handleCashPayment} > 현금결제 </Button>
 
         <Button
           sx={{
