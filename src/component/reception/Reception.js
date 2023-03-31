@@ -45,6 +45,8 @@ const Reception = () => {
     weight: "",
     bmi: "",
   });
+
+  // (Receipt)수납
   const [receiptData, setReceiptData] = useState({
     reception: {},
     patient: {},
@@ -52,7 +54,22 @@ const Reception = () => {
     receipt: {},
   });
 
-  const receptionRecordSearch = (
+  const clickRowCallback = async({ reception_id, patient_id }) => {
+    setPatient_id(patient_id);
+    try {
+      axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+        setPatientData(data.patient)
+        setReceptionData(data.reception);
+        setReceiptData(data);
+        console.log(data);
+      });
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  // 수납내역목록 검색
+  const receiptRecordSearch = (
     { start, end, type, searchText },
     callback
   ) => {
@@ -82,8 +99,37 @@ const Reception = () => {
       });
   };
 
-  const [selectedInformation, setSelectedInformation] = useState({});
+  const [selectedOneReceipt, setSelectedOneReceipt] = useState({
+    receipt_id: 0,      // 데이터 선택 후 수정을 하기 위해 추가
+    reception_id: 0,
+    patient_name: "",
+    insurance: 0,
+    treatment: 0,
+    doctor: 0,
+    gender: 0,
+    front_registration_number: "",
+    back_registration_number: "",
+    address: "",
+    detail_address: "",
+    clinic_request: 0,
+    has_prescription: 0,
+  });
 
+
+  // const [patientData, setPatientData] = useState({
+  //   patient_name: "",
+  //   front_registration_number: "",
+  //   back_registration_number: "",
+  //   gender: "",
+  //   phone_number1: "",
+  //   phone_number2: "",
+  //   phone_number3: "",
+  //   insurance: "",
+  //   zip_code: "",
+  //   address: "",
+  //   detail_address: "",
+  //   insurance: "true",
+  // });
 
   return (
     <>
@@ -91,16 +137,17 @@ const Reception = () => {
         <Grid item xs={2}>
           <WaitingQueueLayout
             initPanel="3"
-            nextState="수납중"
-            clickRowCallback={({ reception_id, patient_id }) => {
-              setPatient_id(patient_id);
-              axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
-                setPatientData(data.patient)
-                setReceptionData(data.reception);
-                setReceiptData(data);
-                console.log(data);
-              });
-            }}
+            nextState="수납완료"
+            clickRowCallback={clickRowCallback}
+            // clickRowCallback={({ reception_id, patient_id }) => {
+            //   setPatient_id(patient_id);
+            //   axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+            //     setPatientData(data.patient)
+            //     setReceptionData(data.reception);
+            //     setReceiptData(data);
+            //     console.log(data);
+            //   });
+            // }}
           />
         </Grid>
 
@@ -109,9 +156,10 @@ const Reception = () => {
             <Grid item xs={12}>
               <Paper elevation={3}>
                 <ReceiptList
-                  receptionRecordSearch={receptionRecordSearch}
-                  setSelectedInformation={setSelectedInformation}
+                  clickRowCallback={clickRowCallback}
+                  receiptRecordSearch={receiptRecordSearch}
                   patient_id={patient_id}
+                  // setSelectedOneReceipt={setSelectedOneReceipt}
                 />
               </Paper>
             </Grid>
@@ -159,7 +207,7 @@ const Reception = () => {
         <Grid item xs={2.5}>
           <Receipt 
             receiptData={receiptData} 
-            selectedInformation={selectedInformation}
+            // selectedOneReceipt={selectedOneReceipt}
           />
         </Grid>
       </Grid>
