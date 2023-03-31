@@ -13,7 +13,7 @@ import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOu
 import { red } from "@mui/material/colors";
 import axios from "axios";
 
-const DrugTaking = ({ props }) => {
+const DrugTaking = ({ props, patient }) => {
   const [drug_code, setDrug_code] = useState("");
   const [drug_name, setDrug_name] = useState("");
   const [searchList, setSearchList] = useState([]);
@@ -32,7 +32,6 @@ const DrugTaking = ({ props }) => {
           )
           .then((response) => {
             setSearchList(response.data);
-            console.log(response.data);
           })
           .catch((error) => {
             console.log(error);
@@ -58,7 +57,7 @@ const DrugTaking = ({ props }) => {
     } else {
       axios
         .post("/api/clinic/drug", {
-          patient_id: 1,
+          patient_id: 83,
           drug_id: drug.drug_id,
         })
         .then((response) => {})
@@ -73,7 +72,7 @@ const DrugTaking = ({ props }) => {
     axios
       .delete("/api/clinic/drug", {
         params: {
-          patient_id: 1,
+          patient_id: patient.patient_id,
           drug_id: drug_id,
         },
       })

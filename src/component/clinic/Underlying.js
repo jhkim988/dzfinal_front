@@ -13,7 +13,7 @@ import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOu
 import { red } from "@mui/material/colors";
 import axios from "axios";
 
-const Underlying = ({ props, onInsert }) => {
+const Underlying = ({ props, onInsert, patient }) => {
   const [disease_code, setDisease_code] = useState("");
   const [disease_name, setDisease_name] = useState("");
   const [searchList, setSearchList] = useState([]);
@@ -24,7 +24,6 @@ const Underlying = ({ props, onInsert }) => {
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
       if (e.target.value.length >= 2) {
-        console.log(e.target.name + e.target.value);
         axios
           .get(
             `/api/clinic/disease/${e.target.name}/${encodeURIComponent(
@@ -32,7 +31,6 @@ const Underlying = ({ props, onInsert }) => {
             )}`
           )
           .then((response) => {
-            console.log(response.data);
             setSearchList(response.data);
           })
           .catch((error) => {
@@ -59,7 +57,7 @@ const Underlying = ({ props, onInsert }) => {
     } else {
       axios
         .post("/api/clinic/disease", {
-          patient_id: 1,
+          patient_id: 83,
           disease_id: disease.disease_id,
         })
         .then((response) => {})
@@ -74,7 +72,7 @@ const Underlying = ({ props, onInsert }) => {
     axios
       .delete("/api/clinic/disease", {
         params: {
-          patient_id: 1,
+          patient_id: patient.patient_id,
           disease_id: disease_id,
         },
       })

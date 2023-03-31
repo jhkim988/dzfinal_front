@@ -9,13 +9,23 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Diagnosis from "./Diagnosis";
 import Prescription from "./Prescription";
 
-const Clinic = ({ reception, mode, medicalInfo, setMedicalInfo, treatment, clinic_request, setTreatment, setClinic_request }) => {
-  const [doctor, setDoctor] = useState(0);
+const Clinic = ({
+  reception,
+  mode,
+  setMode,
+  medicalInfo,
+  setMedicalInfo,
+  treatment,
+  clinic_request,
+  setTreatment,
+  setClinic_request,
+}) => {
+  const [doctor, setDoctor] = useState(1);
   const [symptom, setSymptom] = useState("");
   const [diagnosis, setDiagnosis] = useState([]);
   const [prescription, setPrescription] = useState([]);
@@ -61,7 +71,30 @@ const Clinic = ({ reception, mode, medicalInfo, setMedicalInfo, treatment, clini
   const onClick = () => {
     setDoctor(1);
 
-    if (mode === 1) {
+    if (mode === 0) {
+      const diseaseIds = diagnosis.map((disease) => disease.disease_id);
+      const drugIds = prescription.map((drug) => drug.drug_id);
+
+      axios
+        .post("/api/clinic/clinic", {
+          reception_id: reception,
+          symptom: symptom,
+          treatment: treatment,
+          clinic_request: clinic_request,
+          creator: doctor,
+          disease_ids: diseaseIds,
+          drug_ids: drugIds,
+        })
+        .then((response) => {})
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (mode === 1) {
+      setDoctor(1);
+      setSymptom(medicalInfo.symptom);
+      setDiagnosis(medicalInfo.diagnosis);
+      setClinic_request(medicalInfo.clinic_request);
+
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
 
@@ -80,6 +113,8 @@ const Clinic = ({ reception, mode, medicalInfo, setMedicalInfo, treatment, clini
           console.log(error);
         });
     } else if (mode === 2) {
+      setDoctor(1);
+      setSymptom(medicalInfo.symptom);
       setDiagnosis(medicalInfo.diagnosis);
       setPrescription(medicalInfo.prescription);
 
@@ -102,6 +137,7 @@ const Clinic = ({ reception, mode, medicalInfo, setMedicalInfo, treatment, clini
         });
     }
 
+    setMode(0);
     setSymptom("");
     setTreatment(false);
     setClinic_request(false);
@@ -110,7 +146,14 @@ const Clinic = ({ reception, mode, medicalInfo, setMedicalInfo, treatment, clini
     setMedicalInfo({});
   };
 
-  const onCancel = () => {};
+  const onCancel = () => {
+    setMode(0);
+    setSymptom("");
+    setTreatment(false);
+    setClinic_request(false);
+    setDiagnosis([]);
+    setPrescription([]);
+  };
 
   return (
     <>
@@ -156,38 +199,45 @@ const Clinic = ({ reception, mode, medicalInfo, setMedicalInfo, treatment, clini
           }}
         >
           <Box>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={mode >= 1 ? medicalInfo.treatment : treatment}
-                onChange={(e) => {
-                  if (mode >= 1) {
-                    setMedicalInfo({ ...medicalInfo, treatment: e.target.checked });
-                  } else {
-                    setTreatment(e.target.checked);
-                  }
-                }}
-              />
-            }
-            label="처치"
-          />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={mode >= 1 ? medicalInfo.treatment : treatment}
+                  onChange={(e) => {
+                    if (mode >= 1) {
+                      setMedicalInfo({
+                        ...medicalInfo,
+                        treatment: e.target.checked,
+                      });
+                    } else {
+                      setTreatment(e.target.checked);
+                    }
+                  }}
+                />
+              }
+              label="처치"
+            />
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={mode >= 1 ? medicalInfo.clinic_request : clinic_request}
-                onChange={(e) => {
-                  if (mode >= 1) {
-                    setMedicalInfo({ ...medicalInfo, clinic_request: e.target.checked });
-                  } else {
-                    setClinic_request(false);
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={
+                    mode >= 1 ? medicalInfo.clinic_request : clinic_request
                   }
-                }}
-              />
-            }
-            label="진료의뢰서"
-          />
-
+                  onChange={(e) => {
+                    if (mode >= 1) {
+                      setMedicalInfo({
+                        ...medicalInfo,
+                        clinic_request: e.target.checked,
+                      });
+                    } else {
+                      setClinic_request(e.target.checked);
+                    }
+                  }}
+                />
+              }
+              label="진료의뢰서"
+            />
           </Box>
           <>
             <Stack spacing={2} direction="row">

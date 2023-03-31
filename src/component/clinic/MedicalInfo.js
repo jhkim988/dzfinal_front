@@ -11,11 +11,12 @@ import {
 
 const MedicalInfo = ({
   medicalInfo,
+  mode,
   setMode,
   setDiagnosis,
   setPrescription,
   setTreatment,
-  setClinic_request
+  setClinic_request,
 }) => {
   const onCopy = () => {
     setMode(1);
@@ -23,6 +24,9 @@ const MedicalInfo = ({
     setPrescription(medicalInfo.prescription);
     setTreatment(medicalInfo.treatment);
     setClinic_request(medicalInfo.clinic_request);
+    console.log(
+      `mode : ${mode} / treatment : ${medicalInfo.treatment} / clinic_request : ${medicalInfo.clinic_request}`
+    );
   };
 
   const onUpdate = () => {
@@ -31,6 +35,9 @@ const MedicalInfo = ({
     setPrescription(medicalInfo.prescription);
     setTreatment(medicalInfo.treatment);
     setClinic_request(medicalInfo.clinic_request);
+    console.log(
+      `mode : ${mode} / treatment : ${medicalInfo.treatment} / clinic_request : ${medicalInfo.clinic_request}`
+    );
   };
 
   return (

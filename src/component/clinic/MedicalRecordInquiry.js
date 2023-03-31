@@ -4,8 +4,8 @@ import {
   Button,
   FormControl,
   InputLabel,
+  Link,
   MenuItem,
-  Pagination,
   Select,
   Table,
   TableBody,
@@ -25,7 +25,14 @@ import axios from "axios";
 import dayjs from "dayjs";
 import koLocale from "dayjs/locale/ko";
 
-const MedicalRecordInquiry = ({ mri, setMri, setMode, setMedicalInfo }) => {
+const MedicalRecordInquiry = ({
+  mri,
+  setMri,
+  setMode,
+  setMedicalInfo,
+  pagination,
+  setPagination,
+}) => {
   const [type, setType] = useState("");
   const handleChange = (e) => {
     setType(e.target.value);
@@ -129,6 +136,18 @@ const MedicalRecordInquiry = ({ mri, setMri, setMode, setMedicalInfo }) => {
     }
   };
 
+  const handlePageClick = (pageNumber) => {
+    axios
+      .get(`/api/clinic/mri/${1}/${pageNumber}`)
+      .then((response) => {
+        setMri(response.data.mri);
+        setPagination(response.data.pagination);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
@@ -170,7 +189,7 @@ const MedicalRecordInquiry = ({ mri, setMri, setMode, setMedicalInfo }) => {
         </Box>
       </Box>
       <Box sx={{ m: 1, marginTop: 2 }}>
-        <TableContainer>
+        <TableContainer sx={{ height: "242px" }}>
           <Table
             sx={{
               minWidth: 650,
@@ -237,9 +256,27 @@ const MedicalRecordInquiry = ({ mri, setMri, setMode, setMedicalInfo }) => {
         </TableContainer>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Stack spacing={2}>
-          <Pagination count={10} />
-        </Stack>
+        {pagination.prev && (
+          <Button onClick={() => handlePageClick(pagination.startPage - 1)}>
+            {"<"}
+          </Button>
+        )}{" "}
+        {Array.from(Array(pagination.endPage), (e, i) => {
+          return (
+            <Button
+              sx={{ padding: 0 }}
+              key={pagination.currentPage === i + 1 ? "active" : i}
+              onClick={() => handlePageClick(i + 1)}
+            >
+              {i + 1}
+            </Button>
+          );
+        })}
+        {pagination.next && (
+          <Button onClick={() => handlePageClick(pagination.endPage + 1)}>
+            {">"}
+          </Button>
+        )}
       </Box>
     </>
   );

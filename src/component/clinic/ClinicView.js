@@ -11,7 +11,7 @@ import DiseaseModel from "./model/DiseaseModel";
 // import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 
 const ClinicView = () => {
-  const [reception, setReception] = useState(1);
+  const [reception, setReception] = useState(57);
   const [patient, setPatient] = useState({});
   const [underlying, onInsert, onDelete, onAppend, onReset] = DiseaseModel();
   const [drug_taking, setDrug_taking] = useState([]);
@@ -22,10 +22,11 @@ const ClinicView = () => {
   const [prescription, setPrescription] = useState([]);
   const [treatment, setTreatment] = useState(false);
   const [clinic_request, setClinic_request] = useState(false);
+  const [pagination, setPagination] = useState({});
 
   useEffect(() => {
     axios
-      .get(`/api/clinic/1`)
+      .get(`/api/clinic/${reception}`)
       .then((response) => {
         setPatient(response.data);
         onAppend(response.data.underlyingList);
@@ -38,9 +39,11 @@ const ClinicView = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/clinic/mri/${1}`)
+      .get(`/api/clinic/mri/${1}/${1}`)
       .then((response) => {
-        setMri(response.data);
+        setMri(response.data.mri);
+        setPagination(response.data.pagination);
+        console.log(response.data.pagination);
       })
       .catch((error) => {
         console.log(error);
@@ -99,6 +102,8 @@ const ClinicView = () => {
                 setMode={setMode}
                 setMedicalInfo={setMedicalInfo}
                 clickMedicalRecordInquiry={clickMedicalRecordInquiry}
+                pagination={pagination}
+                setPagination={setPagination}
               />
             </Paper>
           </Grid>
@@ -106,6 +111,7 @@ const ClinicView = () => {
             <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
               <MedicalInfo
                 medicalInfo={medicalInfo}
+                mode={mode}
                 setMode={setMode}
                 setDiagnosis={setDiagnosis}
                 setPrescription={setPrescription}
@@ -123,10 +129,14 @@ const ClinicView = () => {
               <Patient reception={reception} patient={patient} />
               <Grid container spacing={2} sx={{ marginTop: 1 }}>
                 <Grid item xs={6}>
-                  <Underlying props={underlying} onInsert={onInsert} />
+                  <Underlying
+                    props={underlying}
+                    onInsert={onInsert}
+                    patient={patient}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  <DrugTaking props={drug_taking} />
+                  <DrugTaking props={drug_taking} patient={patient} />
                 </Grid>
               </Grid>
             </Paper>
@@ -139,6 +149,7 @@ const ClinicView = () => {
                 reception={reception}
                 onReset={onReset}
                 mode={mode}
+                setMode={setMode}
                 medicalInfo={medicalInfo}
                 diagnosis={diagnosis}
                 prescription={prescription}
