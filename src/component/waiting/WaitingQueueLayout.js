@@ -136,7 +136,7 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
             setDoctorFilter={setDoctorFilter}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ height: "70vh" }}>
           <WaitingQueue
             data={data}
             selected={selected}
