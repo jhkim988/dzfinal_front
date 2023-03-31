@@ -12,6 +12,7 @@ import ReceiptList from './ReceiptList';
 function Receipt({ receiptData }) {
   const [user, setUser] = useState({
     reception_id: 0,
+    patient_name: "",
     insurance: 0,
     treatment: 0,
     doctor: 0,
@@ -28,16 +29,17 @@ function Receipt({ receiptData }) {
     setUser(prev => {
       const ret = ({
         reception_id: receiptData.reception.reception_id,
+        patient_name: receiptData.patient.patient_name,
         insurance: receiptData.patient.insuarance,
-        treatment: receiptData.clinic.treatment,
+        treatment: receiptData.clinic?.treatment,
         doctor: receiptData.reception.doctor,
         gender: receiptData.patient.gender,
         front_registration_number: receiptData.patient.front_registration_number,
         back_registration_number: receiptData.patient.back_registration_number,
         address: receiptData.patient.address,
         detail_address: receiptData.patient.detail_address,
-        clinic_request: receiptData.clinic.clinic_request,
-        has_prescription: receiptData.clinic.has_prescription,
+        clinic_request: receiptData.clinic?.clinic_request,
+        has_prescription: receiptData.clinic?.has_prescription,
       });
 
       let insurance = '';         // 보험여부
@@ -53,7 +55,7 @@ function Receipt({ receiptData }) {
       let ClinicPrice = 5000;     // 기본진료비
     
       let TreatmentPrice = 0;     // 처치비
-      if(Boolean(receiptData.clinic.treatment)) {
+      if(Boolean(receiptData.clinic?.treatment)) {
         TreatmentPrice = 10000;
       } else {
         TreatmentPrice = 0;
