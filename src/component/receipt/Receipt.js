@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { Stack, Button } from "@mui/system";
 
 
-function Receipt({ receiptData, selectedInformation }) {
+function Receipt({ receiptData }) {
 
   const [user, setUser] = useState({
     receipt_id: 0,      // 데이터 선택 후 수정을 하기 위해 추가
