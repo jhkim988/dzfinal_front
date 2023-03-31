@@ -9,6 +9,7 @@ import {
     TableRow
 } from "@material-ui/core";
 import axios from 'axios';
+import { Box } from '@mui/system';
 
 const Reservation_API_BASE_URL = "/api/reservation";
 
@@ -57,9 +58,9 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
                     <h5 style={{ marginLeft: "15px", marginTop: "5px", marginBottom: "5px" }}>당일 예약 현황</h5>
                 </Grid>
                 <Grid item xs={12} style={{ width: "100%", paddingTop: 0 }}>
-                    <TableContainer style={{ padding: 2 }}>
+                    <TableContainer style={{ padding: 2, maxHeight: '38vh' }}>
                         <Table aria-label="simple table" size='small'>
-                            <TableHead>
+                            <TableHead style={{ position: 'sticky', top: 0, background: "white" }}>
                                 <TableRow>
                                     {/* <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>no</TableCell> */}
                                     <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>이름</TableCell>
@@ -74,7 +75,8 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
                                     <TableCell colSpan={6} align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>금일 예약환자가 존재하지 않습니다.</TableCell>
                                 </TableBody>
                             )}
-                            <TableBody>
+                            {/* <Box ></Box> */}
+                            <TableBody style={{ overflowY: 'scroll' }}>
                                 {reservation.map((list) => (
                                     <TableRow key={list.reservation_id}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
