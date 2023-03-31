@@ -22,7 +22,17 @@ const ClinicView = () => {
   const [prescription, setPrescription] = useState([]);
   const [treatment, setTreatment] = useState(false);
   const [clinic_request, setClinic_request] = useState(false);
-  const [pagination, setPagination] = useState({});
+  // const [pagination, setPagination] = useState({});
+  const [searchMode, setSearchMode] = useState(1);
+  const [pagination, setPagination] = useState({
+    startPage: 1,
+    endPage: 1,
+    currentPage: 1,
+    amount: 10,
+    total: 0,
+    prev: false,
+    next: false,
+  });
 
   useEffect(() => {
     reception &&
@@ -55,6 +65,8 @@ const ClinicView = () => {
 
   const clickMedicalRecordInquiry = useCallback(
     (type, formattedDates, keyword) => {
+      setSearchMode(1);
+
       if (!type) return alert("분류를 정해주세요");
       console.log(formattedDates.start + "/" + formattedDates.end);
       axios
@@ -111,6 +123,8 @@ const ClinicView = () => {
                 clickMedicalRecordInquiry={clickMedicalRecordInquiry}
                 pagination={pagination}
                 setPagination={setPagination}
+                searchMode={searchMode}
+                setSearchMode={setSearchMode}
               />
             </Paper>
           </Grid>

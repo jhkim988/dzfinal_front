@@ -4,8 +4,8 @@ import {
   Button,
   FormControl,
   InputLabel,
-  Link,
   MenuItem,
+  Pagination,
   Select,
   Table,
   TableBody,
@@ -32,6 +32,8 @@ const MedicalRecordInquiry = ({
   setMedicalInfo,
   pagination,
   setPagination,
+  searchMode,
+  setSearchMode,
 }) => {
   const [type, setType] = useState("");
   const handleChange = (e) => {
@@ -74,11 +76,11 @@ const MedicalRecordInquiry = ({
     setKeyword(e.target.value);
   };
 
-  const onSearchList = () => {
+  const onSearchList = (currentPage) => {
     if (!type) return alert("분류를 정해주세요");
-
+    setSearchMode(2);
     console.log(formattedDates.start + "/" + formattedDates.end);
-
+    console.log(currentPage);
     axios
       .post(
         "/api/clinic/mri/search",
@@ -87,6 +89,7 @@ const MedicalRecordInquiry = ({
           start: formattedDates?.start || "",
           end: formattedDates?.end || "",
           keyword: keyword,
+          currentPage: currentPage,
         },
         {
           headers: {
@@ -95,7 +98,8 @@ const MedicalRecordInquiry = ({
         }
       )
       .then((response) => {
-        setMri(response.data);
+        setMri(response.data.mri);
+        setPagination(response.data.pagination);
       })
       .catch((error) => {
         console.log(error);
@@ -182,7 +186,7 @@ const MedicalRecordInquiry = ({
           <Button
             variant="contained"
             sx={{ height: "40px", alignSelf: "center" }}
-            onClick={onSearchList}
+            onClick={() => onSearchList(1)}
           >
             검색
           </Button>
@@ -256,27 +260,49 @@ const MedicalRecordInquiry = ({
         </TableContainer>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        {pagination.prev && (
+        <Stack spacing={2}>
+          {searchMode === 1 ? (
+            <Pagination
+              count={Math.ceil(pagination.total / 10)}
+              size="small"
+              onChange={(e, page) => {
+                handlePageClick(page);
+              }}
+            />
+          ) : (
+            <Pagination
+              count={Math.ceil(pagination.total / 10)}
+              size="small"
+              onChange={(e, page) => {
+                onSearchList(page);
+              }}
+            />
+          )}
+        </Stack>
+        {/* {pagination.prev && (
           <Button onClick={() => handlePageClick(pagination.startPage - 1)}>
             {"<"}
           </Button>
         )}{" "}
-        {Array.from(Array(pagination.endPage), (e, i) => {
-          return (
-            <Button
-              sx={{ padding: 0 }}
-              key={pagination.currentPage === i + 1 ? "active" : i}
-              onClick={() => handlePageClick(i + 1)}
-            >
-              {i + 1}
-            </Button>
-          );
-        })}
+        {Array.from(
+          Array(pagination.endPage - pagination.startPage + 1),
+          (e, i) => {
+            return (
+              <Button
+                sx={{ padding: 0 }}
+                key={pagination.startPage + i}
+                onClick={() => handlePageClick(pagination.startPage + i)}
+              >
+                {pagination.startPage + i}
+              </Button>
+            );
+          }
+        )}
         {pagination.next && (
           <Button onClick={() => handlePageClick(pagination.endPage + 1)}>
             {">"}
           </Button>
-        )}
+        )} */}
       </Box>
     </>
   );
