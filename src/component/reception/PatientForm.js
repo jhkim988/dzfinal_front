@@ -154,86 +154,51 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
     }
     return (
         <>
-            <Paper sx={{ height: "24vh" }} elevation={1}>
-                <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
-                    <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>환자 등록/수정</h5>
-                </div>
-                <div style={{ marginTop: "1em", marginLeft: "1em" }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={4}>
-                            <Autocomplete
-                                freeSolo
-                                id="combo-box-demo"
-                                options={autoCompleteList}
-                                onChange={handleChange}
-                                name="patient_name"
-                                value={patientData.patient_name || ''}
-                                onKeyUp={handleDropDownKey}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="환자이름 검색"
-                                        InputLabelProps={{
-                                            shrink: true
-                                        }}
-                                        sx={{
-                                            width: "100%",
-                                            '& > :not(style)': { m: 0.5 },
-                                            '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
-                                        }}
-                                        name="patient_name"
-                                        value={patientData.patient_name || ''}
-                                        size="small"
-                                        style={{ height: "10px" }}
-                                    />
-                                )}
-                                renderOption={autoCompleteList.map((patient) => (
-                                    <TableRow
-                                        key={patient.patient_id}
-                                        hover
-                                        onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
-
-                                    >
-                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
-                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
-                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
-                                    </TableRow>
-                                ))}
-                            />
-                            {/* <TextField
-                                id="outlined-basic"
-                                InputLabelProps={{
-                                    shrink: "true"
-                                }}
-                                sx={{
-                                    width: "100%",
-                                    '& > :not(style)': { m: 0.5 },
-                                    '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
-                                }}
-                                label="환자이름 검색"
-                                variant="outlined"
-                                name="patient_name"
-                                onChange={handleChange}
-                                value={patientData.patient_name || ''}
-                                size='small'
-                                style={{ height: "10px" }}
-                                autoComplete="off"
-                                onKeyUp={handleDropDownKey}
-                            /> */}
-                            {/* {autoCompleteList.length > 0 && (
-                                <div style={tableStyle}>
-                                    <Table style={{ width: "200px", height: "10px" }}>
-                                        <TableBody>
-                                            {autoCompleteList.map((patient) => (
-                                                <TableRow
-                                                    key={patient.patient_id}
-                                                    hover
-                                                    onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
-
-                                                >
-                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
-                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
-                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
+            {patientData.patient_id != null && patientData.patient_id == 0 && (
+                <Paper sx={{ height: "24vh" }} elevation={1}>
+                    <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
+                        <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>환자 등록/수정</h5>
+                    </div>
+                    <div style={{ marginTop: "1em", marginLeft: "1em" }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={4}>
+                                <TextField
+                                    id="outlined-basic"
+                                    InputLabelProps={{
+                                        shrink: "true"
+                                    }}
+                                    sx={{
+                                        width: "100%",
+                                        '& > :not(style)': { m: 0.5 },
+                                        '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" },
+                                        '.css-1rufdh7-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "6px 6px", paddingLeft: "10px" }
+                                    }}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end" style={{ height: 5 }}>
+                                                {/* <ArrowDropDownSharpIcon style={{ fontSize: "large" }} /> */}
+                                                <ArrowDropDownSharpIcon />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    style={{ height: "10px" }}
+                                    label="환자이름 검색"
+                                    variant="outlined"
+                                    name="patient_name"
+                                    onChange={handleChange}
+                                    value={patientData.patient_name || ''}
+                                    size='small'
+                                    autoComplete="off"
+                                    onKeyUp={handleDropDownKey}
+                                />
+                                {autoCompleteList.length > 0 && (
+                                    <div style={tableStyle}>
+                                        <Table style={{ width: "250px", height: "10px", border: "1px solid lightgray" }} aria-label="simple table" size='small'>
+                                            <TableHead style={{ position: 'sticky', top: 0, background: "white" }}>
+                                                <TableRow>
+                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>환자이름</TableCell>
+                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>생년월일</TableCell>
+                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>연락처</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
