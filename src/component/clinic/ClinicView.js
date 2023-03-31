@@ -8,7 +8,7 @@ import Patient from "./Patient";
 import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
-import WaitingQueueLayout from './../waiting/WaitingQueueLayout';
+import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 
 const ClinicView = () => {
   const [reception, setReception] = useState();
@@ -20,113 +20,151 @@ const ClinicView = () => {
   const [mode, setMode] = useState(0);
   const [diagnosis, setDiagnosis] = useState([]);
   const [prescription, setPrescription] = useState([]);
-  
+  const [treatment, setTreatment] = useState(false);
+  const [clinic_request, setClinic_request] = useState(false);
+  const [pagination, setPagination] = useState({});
+
   useEffect(() => {
     reception &&
-    axios
-      .get(`/api/clinic/${reception}`)
-      .then((response) => {
-        setPatient(response.data);
-        onReset();
-        onAppend(response.data.underlyingList);
-        setDrug_taking(response.data.drug_takingList);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      axios
+        .get(`/api/clinic/${reception}`)
+        .then((response) => {
+          setPatient(response.data);
+          onReset();
+          onAppend(response.data.underlyingList);
+          setDrug_taking(response.data.drug_takingList);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }, [reception]);
 
   useEffect(() => {
     patient?.patient_id &&
-    axios
-      .get(`/api/clinic/mri/${patient.patient_id}`)
-      .then((response) => {
-        setMri(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      axios
+        .get(`/api/clinic/mri/${patient.patient_id}`)
+        .then((response) => {
+          setMri(response.data.mri);
+          setPagination(response.data.pagination);
+          console.log(response.data.pagination);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }, []);
 
-  const searchMedicalRecordInquiry = useCallback((type, formattedDates, keyword) => {
-    if (!type) return alert("분류를 정해주세요");
-    console.log(formattedDates.start + "/" + formattedDates.end);
-    axios
-      .post(
-        "/api/clinic/mri/search",
-        {
-          type: type,
-          start: formattedDates?.start || "",
-          end: formattedDates?.end || "",
-          keyword: keyword,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+  const clickMedicalRecordInquiry = useCallback(
+    (type, formattedDates, keyword) => {
+      if (!type) return alert("분류를 정해주세요");
+      console.log(formattedDates.start + "/" + formattedDates.end);
+      axios
+        .post(
+          "/api/clinic/mri/search",
+          {
+            type: type,
+            start: formattedDates?.start || "",
+            end: formattedDates?.end || "",
+            keyword: keyword,
           },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        setMri(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setMri(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    []
+  );
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={2} style={{ height: "90vh" }}>
-        <WaitingQueueLayout initPanel="2" nextState="진료중" clickRowCallback={({ reception_id, patient_name }) => {
-          setReception(reception_id);
-          searchMedicalRecordInquiry("patient_name", { start: "2000-01-01", end: "2100-12-31" }, patient_name);
-        }}/>
+        <WaitingQueueLayout
+          initPanel="2"
+          nextState="진료중"
+          clickRowCallback={({ reception_id, patient_name }) => {
+            setReception(reception_id);
+            clickMedicalRecordInquiry(
+              "patient_name",
+              { start: "2000-01-01", end: "2100-12-31" },
+              patient_name
+            );
+          }}
+        />
       </Grid>
-      <Grid item xs={10} style={{ height: "100vh" }}>
+      <Grid item xs={5}>
         <Grid container spacing={2}>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <MedicalRecordInquiry
-              mri={mri}
-              setMri={setMri}
-              setMedicalInfo={setMedicalInfo}
-              searchMedicalRecordInquiry={searchMedicalRecordInquiry}
-            />
+          <Grid item xs={12}>
+            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
+              <MedicalRecordInquiry
+                mri={mri}
+                setMri={setMri}
+                setMode={setMode}
+                setMedicalInfo={setMedicalInfo}
+                clickMedicalRecordInquiry={clickMedicalRecordInquiry}
+                pagination={pagination}
+                setPagination={setPagination}
+              />
+            </Paper>
           </Grid>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <Paper sx={{ height: "45vh" }} elevation={3}>
+          <Grid item xs={12}>
+            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
+              <MedicalInfo
+                medicalInfo={medicalInfo}
+                mode={mode}
+                setMode={setMode}
+                setDiagnosis={setDiagnosis}
+                setPrescription={setPrescription}
+                setTreatment={setTreatment}
+                setClinic_request={setClinic_request}
+              />
+            </Paper>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={5}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
               <Patient reception={reception} patient={patient} />
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ marginTop: 1 }}>
                 <Grid item xs={6}>
-                  <Underlying props={underlying} onInsert={onInsert} />
+                  <Underlying
+                    props={underlying}
+                    onInsert={onInsert}
+                    patient={patient}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  <DrugTaking props={drug_taking} />
+                  <DrugTaking props={drug_taking} patient={patient} />
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <MedicalInfo
-              medicalInfo={medicalInfo}
-              setMode={setMode}
-              setDiagnosis={setDiagnosis}
-              setPrescription={setPrescription}
-            />
-          </Grid>
-          <Grid item xs={5.9} style={{ height: "50vh" }}>
-            <Paper elevation={3} sx={{ height: "50vh" }}>
+          <Grid item xs={12}>
+            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
               <Clinic
                 setPatient={setPatient}
                 setReception={setReception}
                 reception={reception}
                 onReset={onReset}
                 mode={mode}
+                setMode={setMode}
                 medicalInfo={medicalInfo}
                 diagnosis={diagnosis}
                 prescription={prescription}
+                setMedicalInfo={setMedicalInfo}
+                treatment={treatment}
+                setTreatment={setTreatment}
+                clinic_request={clinic_request}
+                setClinic_request={setClinic_request}
               />
             </Paper>
           </Grid>

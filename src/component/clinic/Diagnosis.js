@@ -6,6 +6,7 @@ import {
   TableCell,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
@@ -111,8 +112,10 @@ const Diagnosis = ({
 
   return (
     <Box>
-      <Box>진단</Box>
-      <Box>
+      <Typography variant="subtitle1" sx={{ marginLeft: 2 }}>
+        진단
+      </Typography>
+      <Box sx={{ marginLeft: 1 }}>
         <Box sx={{ display: "flex" }}>
           <TextField
             size="small"
@@ -178,7 +181,15 @@ const Diagnosis = ({
             </TableBody>
           </Table>
         </Box>
-        <Box sx={{ minHeight: "220px", overflowY: "auto" }}>
+        <Box
+          sx={{
+            marginTop: 1,
+            height: "160px",
+            overflowY: "auto",
+            border: "1px solid lightgray",
+            borderRadius: 2,
+          }}
+        >
           <Table>
             <TableBody>
               {(mode >= 1 ? medicalInfo.diagnosis : diagnosis || []).map(
