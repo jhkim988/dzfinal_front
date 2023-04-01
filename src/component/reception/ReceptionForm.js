@@ -114,6 +114,15 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
 
     }
 
+    const updateReceptionInfo = () => {
+        if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 접수 정보를 수정하시겠습니까?")) {
+
+        } else {
+            alert("취소되었습니다.");
+            resetHandler();
+        }
+    }
+
     return (
         <Paper elevation={1} sx={{ padding: 2, height: "15.3vh" }}>
             {receptionData != null && patient_id == null && (
@@ -256,7 +265,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                             </Grid>
                             <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
                                 <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                                    <Button type="submit" onClick={receptDataHandleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>등록</Button>
+                                    {receptionData.reception_id != null && (
+                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px" }}>수정</Button>
+                                    )}
+                                    {receptionData.reception_id == null && (
+                                        <Button type="submit" onClick={receptDataHandleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>접수</Button>
+                                    )}
                                     <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px" }}>취소</Button>
                                 </Box>
                             </Grid>
@@ -406,7 +420,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                             </Grid>
                             <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
                                 <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                                    <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>접수</Button>
+                                    {receptionData.reception_id != null && (
+                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px" }}>수정</Button>
+                                    )}
+                                    {receptionData.reception_id == null && (
+                                        <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>접수</Button>
+                                    )}
                                     <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px" }}>취소</Button>
                                 </Box>
                             </Grid>
