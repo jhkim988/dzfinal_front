@@ -20,9 +20,9 @@ const ClinicView = () => {
   const [mode, setMode] = useState(0);
   const [diagnosis, setDiagnosis] = useState([]);
   const [prescription, setPrescription] = useState([]);
+  const [symptom, setSymptom] = useState("");
   const [treatment, setTreatment] = useState(false);
   const [clinic_request, setClinic_request] = useState(false);
-  // const [pagination, setPagination] = useState({});
   const [searchMode, setSearchMode] = useState(1);
   const [pagination, setPagination] = useState({
     startPage: 1,
@@ -52,41 +52,27 @@ const ClinicView = () => {
   useEffect(() => {
     patient?.patient_id &&
       axios
-        .get(`/api/clinic/mri/${patient.patient_id}`)
+        .get(`/api/clinic/mri/${patient.patient_id}/${pagination.currentPage}`)
         .then((response) => {
           setMri(response.data.mri);
           setPagination(response.data.pagination);
-          console.log(response.data.pagination);
         })
         .catch((error) => {
           console.log(error);
         });
-  }, []);
+  }, [patient.patient_id]);
 
   const clickMedicalRecordInquiry = useCallback(
-    (type, formattedDates, keyword) => {
+    (type, formattedDates, keyword, patient_id) => {
       setSearchMode(1);
 
       if (!type) return alert("분류를 정해주세요");
-      console.log(formattedDates.start + "/" + formattedDates.end);
       axios
-        .post(
-          "/api/clinic/mri/search",
-          {
-            type: type,
-            start: formattedDates?.start || "",
-            end: formattedDates?.end || "",
-            keyword: keyword,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
+        .get(`/api/clinic/mri/${patient_id}/${pagination.currentPage}`)
         .then((response) => {
-          console.log(response.data);
           setMri(response.data);
+          setPagination(response.data.pagination);
+          // setPatient((prev) => ({ ...prev, patient_id }));
         })
         .catch((error) => {
           console.log(error);
@@ -101,12 +87,15 @@ const ClinicView = () => {
         <WaitingQueueLayout
           initPanel="2"
           nextState="진료중"
-          clickRowCallback={({ reception_id, patient_name }) => {
+          clickRowCallback={({ reception_id, patient_name, patient_id }) => {
             setReception(reception_id);
+            console.log(`patient_id ${patient_id}`);
+            // setPatient((prev) => ({ ...prev, patient_id }));
             clickMedicalRecordInquiry(
               "patient_name",
               { start: "2000-01-01", end: "2100-12-31" },
-              patient_name
+              patient_name,
+              patient_id
             );
           }}
         />
@@ -136,6 +125,7 @@ const ClinicView = () => {
                 setMode={setMode}
                 setDiagnosis={setDiagnosis}
                 setPrescription={setPrescription}
+                setSymptom={setSymptom}
                 setTreatment={setTreatment}
                 setClinic_request={setClinic_request}
               />
@@ -150,11 +140,7 @@ const ClinicView = () => {
               <Patient reception={reception} patient={patient} />
               <Grid container spacing={2} sx={{ marginTop: 1 }}>
                 <Grid item xs={6}>
-                  <Underlying
-                    props={underlying}
-                    onInsert={onInsert}
-                    patient={patient}
-                  />
+                  <Underlying props={underlying} patient={patient} />
                 </Grid>
                 <Grid item xs={6}>
                   <DrugTaking props={drug_taking} patient={patient} />
@@ -174,6 +160,10 @@ const ClinicView = () => {
                 medicalInfo={medicalInfo}
                 diagnosis={diagnosis}
                 prescription={prescription}
+                setDiagnosis={setDiagnosis}
+                setPrescription={setPrescription}
+                symptom={symptom}
+                setSymptom={setSymptom}
                 setMedicalInfo={setMedicalInfo}
                 treatment={treatment}
                 setTreatment={setTreatment}
