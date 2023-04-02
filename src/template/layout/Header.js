@@ -44,7 +44,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
           component="span"
           sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
         >
-          <Box>DREAM_EULJI</Box>
+          <LogoSection/>
         </Box>
       </Box>
 
