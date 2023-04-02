@@ -20,16 +20,17 @@ const Clinic = ({
   setMode,
   medicalInfo,
   setMedicalInfo,
+  diagnosis,
+  setDiagnosis,
+  prescription,
+  setPrescription,
+  symptom,
+  setSymptom,
   treatment,
   clinic_request,
   setTreatment,
   setClinic_request,
 }) => {
-  const [doctor, setDoctor] = useState(1);
-  const [symptom, setSymptom] = useState("");
-  const [diagnosis, setDiagnosis] = useState([]);
-  const [prescription, setPrescription] = useState([]);
-
   const handleDiagnosisAdd = (disease) => {
     if (diagnosis.some((item) => item.disease_id === disease.disease_id)) {
       alert("이미 추가된 질병입니다.");
@@ -64,13 +65,15 @@ const Clinic = ({
     setSymptom(e.target.value);
   };
 
-  const handleSymptomSubmit = (e) => {
-    e.preventDefault();
+  const handleTreatmentChange = (event) => {
+    setTreatment(event.target.checked);
+  };
+
+  const handleClinicRequestChange = (event) => {
+    setClinic_request(event.target.checked);
   };
 
   const onClick = () => {
-    setDoctor(1);
-
     if (mode === 0) {
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
@@ -81,7 +84,7 @@ const Clinic = ({
           symptom: symptom,
           treatment: treatment,
           clinic_request: clinic_request,
-          creator: doctor,
+          creator: 1,
           disease_ids: diseaseIds,
           drug_ids: drugIds,
         })
@@ -90,7 +93,6 @@ const Clinic = ({
           console.log(error);
         });
     } else if (mode === 1) {
-      setDoctor(1);
       setSymptom(medicalInfo.symptom);
       setDiagnosis(medicalInfo.diagnosis);
       setClinic_request(medicalInfo.clinic_request);
@@ -104,7 +106,7 @@ const Clinic = ({
           symptom: symptom,
           treatment: treatment,
           clinic_request: clinic_request,
-          creator: doctor,
+          creator: 1,
           disease_ids: diseaseIds,
           drug_ids: drugIds,
         })
@@ -113,7 +115,6 @@ const Clinic = ({
           console.log(error);
         });
     } else if (mode === 2) {
-      setDoctor(1);
       setSymptom(medicalInfo.symptom);
       setDiagnosis(medicalInfo.diagnosis);
       setPrescription(medicalInfo.prescription);
@@ -127,7 +128,7 @@ const Clinic = ({
           symptom: symptom,
           treatment: treatment,
           clinic_request: clinic_request,
-          updator: doctor,
+          updator: 1,
           disease_ids: diseaseIds,
           drug_ids: drugIds,
         })
@@ -180,7 +181,6 @@ const Clinic = ({
           />
         </Grid>
       </Grid>
-      <form onSubmit={handleSymptomSubmit}>
         <Box sx={{ margin: 1 }}>
           <TextField
             sx={{ width: "100%" }}
@@ -202,18 +202,10 @@ const Clinic = ({
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={mode >= 1 ? medicalInfo.treatment : treatment}
-                  onChange={(e) => {
-                    if (mode >= 1) {
-                      setMedicalInfo({
-                        ...medicalInfo,
-                        treatment: e.target.checked,
-                      });
-                    } else {
-                      setTreatment(e.target.checked);
-                    }
-                  }}
-                />
+            checked={treatment}
+            onChange={handleTreatmentChange}
+            name="treatment"
+          />
               }
               label="처치"
             />
@@ -221,20 +213,10 @@ const Clinic = ({
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={
-                    mode >= 1 ? medicalInfo.clinic_request : clinic_request
-                  }
-                  onChange={(e) => {
-                    if (mode >= 1) {
-                      setMedicalInfo({
-                        ...medicalInfo,
-                        clinic_request: e.target.checked,
-                      });
-                    } else {
-                      setClinic_request(e.target.checked);
-                    }
-                  }}
-                />
+            checked={clinic_request}
+            onChange={handleClinicRequestChange}
+            name="clinic_request"
+          />
               }
               label="진료의뢰서"
             />
@@ -250,7 +232,6 @@ const Clinic = ({
             </Stack>
           </>
         </Box>
-      </form>
     </>
   );
 };

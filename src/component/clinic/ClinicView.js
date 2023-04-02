@@ -20,9 +20,9 @@ const ClinicView = () => {
   const [mode, setMode] = useState(0);
   const [diagnosis, setDiagnosis] = useState([]);
   const [prescription, setPrescription] = useState([]);
+  const [symptom, setSymptom] = useState("");
   const [treatment, setTreatment] = useState(false);
   const [clinic_request, setClinic_request] = useState(false);
-  // const [pagination, setPagination] = useState({});
   const [searchMode, setSearchMode] = useState(1);
   const [pagination, setPagination] = useState({
     startPage: 1,
@@ -36,7 +36,7 @@ const ClinicView = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/clinic/${reception}`)
+      .get(`/api/clinic/receptioninfo/${reception}`)
       .then((response) => {
         setPatient(response.data);
         onAppend(response.data.underlyingList);
@@ -49,11 +49,10 @@ const ClinicView = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/clinic/mri/${1}/${1}`)
+      .get(`/api/clinic/mri/${83}/${1}`)
       .then((response) => {
         setMri(response.data.mri);
         setPagination(response.data.pagination);
-        console.log(response.data.pagination);
       })
       .catch((error) => {
         console.log(error);
@@ -129,6 +128,7 @@ const ClinicView = () => {
                 setMode={setMode}
                 setDiagnosis={setDiagnosis}
                 setPrescription={setPrescription}
+                setSymptom={setSymptom}
                 setTreatment={setTreatment}
                 setClinic_request={setClinic_request}
               />
@@ -167,6 +167,10 @@ const ClinicView = () => {
                 medicalInfo={medicalInfo}
                 diagnosis={diagnosis}
                 prescription={prescription}
+                setDiagnosis={setDiagnosis}
+                setPrescription={setPrescription}
+                symptom={symptom}
+                setSymptom={setSymptom}
                 setMedicalInfo={setMedicalInfo}
                 treatment={treatment}
                 setTreatment={setTreatment}

@@ -198,7 +198,7 @@ const Prescription = ({
         >
           <Table>
             <TableBody>
-              {(mode >= 1 ? medicalInfo.prescription : prescription || []).map(
+              {prescription.map(
                 (drug) => (
                   <TableRow key={drug.drug_id}>
                     <TableCell align="center">{drug.drug_code}</TableCell>
