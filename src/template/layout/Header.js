@@ -2,9 +2,10 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import { Avatar, Box, ButtonBase, TextField } from "@mui/material";
-import PersonPinIcon from '@mui/icons-material/PersonPin';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
+import LogoSection from "./LogoSection";
+import Logo from "../ui-component/Logo";
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
@@ -31,7 +32,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
           component="span"
           sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
         >
-          <Box>DREAM_EULJI</Box>
+          <LogoSection/>
         </Box>
       </Box>
 
