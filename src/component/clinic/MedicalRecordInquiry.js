@@ -79,8 +79,7 @@ const MedicalRecordInquiry = ({
   const onSearchList = (currentPage) => {
     if (!type) return alert("분류를 정해주세요");
     setSearchMode(2);
-    console.log(formattedDates.start + "/" + formattedDates.end);
-    console.log(currentPage);
+
     axios
       .post(
         "/api/clinic/mri/search",
@@ -212,49 +211,51 @@ const MedicalRecordInquiry = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {mri.map((row) => (
-                <TableRow
-                  key={row.reception_id}
-                  hover
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: "#90caf9 !important",
-                    },
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                  onClick={() => onClick(row.reception_id)}
-                >
-                  <TableCell scope="row" align="center">
-                    {row.patient_name}
-                  </TableCell>
-                  <TableCell align="center">{row.employee_name}</TableCell>
-                  <TableCell align="center">
-                    {row.diagnosisList.length > 0 &&
-                      `[${
-                        row.diagnosisList[0].disease_code
-                      }]${row.diagnosisList[0].disease_name.substring(
-                        0,
-                        5
-                      )}...`}
-                    {row.diagnosisList.length > 1 &&
-                      ` 외${row.diagnosisList.length - 1}`}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.prescriptionList.length > 0 &&
-                      `[${
-                        row.prescriptionList[0].drug_code
-                      }]${row.prescriptionList[0].drug_name.substring(
-                        0,
-                        5
-                      )}...`}
-                    {row.prescriptionList.length > 1 &&
-                      ` 외${row.prescriptionList.length - 1}`}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.created_at.substring(0, 10)}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {mri &&
+                mri.length > 0 &&
+                mri.map((row) => (
+                  <TableRow
+                    key={row.reception_id}
+                    hover
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#90caf9 !important",
+                      },
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}
+                    onClick={() => onClick(row.reception_id)}
+                  >
+                    <TableCell scope="row" align="center">
+                      {row.patient_name}
+                    </TableCell>
+                    <TableCell align="center">{row.employee_name}</TableCell>
+                    <TableCell align="center">
+                      {row.diagnosisList.length > 0 &&
+                        `[${
+                          row.diagnosisList[0].disease_code
+                        }]${row.diagnosisList[0].disease_name.substring(
+                          0,
+                          5
+                        )}...`}
+                      {row.diagnosisList.length > 1 &&
+                        ` 외${row.diagnosisList.length - 1}`}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.prescriptionList.length > 0 &&
+                        `[${
+                          row.prescriptionList[0].drug_code
+                        }]${row.prescriptionList[0].drug_name.substring(
+                          0,
+                          5
+                        )}...`}
+                      {row.prescriptionList.length > 1 &&
+                        ` 외${row.prescriptionList.length - 1}`}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.created_at.substring(0, 10)}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

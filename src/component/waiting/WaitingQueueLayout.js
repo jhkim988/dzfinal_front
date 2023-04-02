@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { Grid, Paper } from "@mui/material";
 import mqtt from "mqtt";
 import axios from "axios";
@@ -22,8 +28,8 @@ const mqttOptions = {
 
 // TODO: doctor_id 적용
 const autoCallInfo = {
-  "2": (d) => d.state === "진료대기",
-  "3": (d) => d.state === "수납대기",
+  2: (d) => d.state === "진료대기",
+  3: (d) => d.state === "수납대기",
 };
 
 const doctor_id = 1;
@@ -33,14 +39,14 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
   const autoCall = useRef(false);
-  const setAutoCall = (flag) => autoCall.current = flag;
+  const setAutoCall = (flag) => (autoCall.current = flag);
   const [doctorFilter, setDoctorFilter] = useState({
     1: true,
     2: true,
   });
 
   const autoCallNext = useRef();
-  const setAutoCallNext = (next) => autoCallNext.current = next;
+  const setAutoCallNext = (next) => (autoCallNext.current = next);
   useEffect(() => {
     setAutoCallNext(data.find(autoCallInfo[initPanel]));
   }, [data]);
@@ -49,13 +55,13 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   const callPatient = (reception_id) => {
     console.log("callPatient", reception_id);
     client.current.publish(
-        "waiting",
-        JSON.stringify({
-          method: "PUT",
-          data: { reception_id, state: nextState },
-        }),
-        { qos: 1 }
-      );
+      "waiting",
+      JSON.stringify({
+        method: "PUT",
+        data: { reception_id, state: nextState },
+      }),
+      { qos: 1 }
+    );
   };
 
   const mqttEventListener = useCallback((topic, payload, packet) => {
@@ -74,7 +80,10 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
           return [...ret];
         });
         if (!autoCall.current) return;
-        if ((initPanel === "2" && payload.data.state === "수납대기") || (initPanel === "3" && payload.data.state === "수납완료")) {
+        if (
+          (initPanel === "2" && payload.data.state === "수납대기") ||
+          (initPanel === "3" && payload.data.state === "수납완료")
+        ) {
           const next = autoCallNext.current;
           setSelected(`${next.reception_id}`);
           clickRowCallback && clickRowCallback(next);
@@ -99,6 +108,11 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
 
   const onRowClick = (e) => {
     setSelected(e.currentTarget.dataset.reception_id);
+    console.log(
+      data.filter(
+        (el) => `${el.reception_id}` === e.currentTarget.dataset.reception_id
+      )[0]
+    );
     clickRowCallback &&
       clickRowCallback(
         data.filter(

@@ -192,7 +192,7 @@ const Diagnosis = ({
         >
           <Table>
             <TableBody>
-              {(mode >= 1 ? medicalInfo.diagnosis : diagnosis || []).map(
+              {diagnosis.map(
                 (disease) => (
                   <TableRow key={disease.disease_id}>
                     <TableCell align="center">{disease.disease_code}</TableCell>
