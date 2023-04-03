@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Autocomplete, TextField, Typography } from "@mui/material";
 import axios from "axios";
 
-const PatientAutoComplete = ({ setPatientData }) => {
+const PatientAutoComplete = ({ setPatientData, patientData }) => {
   const [text, setText] = useState("");
   const [comboBoxData, setComboBoxData] = useState([]);
 
@@ -13,7 +13,7 @@ const PatientAutoComplete = ({ setPatientData }) => {
     axios
       .get(`/api/patient/list`, { params: { patient_name: searchText } })
       .then(({ data }) => {
-        const formattedData = data.map((el) => ({...el, label: el.patient_name, value: el.patient_id}));
+        const formattedData = data.map((el) => ({ ...el, label: el.patient_name, value: el.patient_id }));
         console.log(formattedData);
         setComboBoxData(formattedData);
       });
@@ -39,12 +39,18 @@ const PatientAutoComplete = ({ setPatientData }) => {
           padding: "0",
         }
       }}
+      freeSolo
+      value={patientData.patient_name}
       onChange={onSelect}
       disablePortal
       options={comboBoxData}
       renderOption={(props, option) => <Typography {...props}>{option.patient_name} {option.front_registration_number} {option.phone_number3}</Typography>}
       renderInput={(params) => (
-        <TextField {...params} value={text} onChange={onChange} />
+        <TextField {...params} value={text} label="환자이름 검색"
+          InputLabelProps={{
+            shrink: "true"
+          }}
+          onChange={onChange} onBlur={e => { setPatientData(prev => ({ ...prev, patient_name: e.target.value })) }} />
       )}
     />
   );

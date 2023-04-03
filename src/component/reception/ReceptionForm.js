@@ -116,7 +116,16 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
 
     const updateReceptionInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 접수 정보를 수정하시겠습니까?")) {
-
+            axios.post(Reception_API_BASE_URL + "/update", receptionData)
+                .then((response) => {
+                    alert("접수 수정 성공");
+                    setPatientData(prev => ({ ...response.data }));
+                    resetHandler();
+                })
+                .catch((error) => {
+                    alert("접수 수정 실패, 확인바람 ");
+                    console.error(error);
+                });
         } else {
             alert("취소되었습니다.");
             resetHandler();
