@@ -24,6 +24,10 @@ const Register = Loadable(
   lazy(() => import("../../component/management/Register"))
 );
 
+const DID = Loadable(
+  lazy(() => import("../../component/did/DID"))
+)
+
 const MainRoutes = {
   path: "/",
   element: <MainLayout />,
@@ -39,6 +43,10 @@ const MainRoutes = {
     {
       path: "reception",
       element: <Reception />,
+    },    
+    {
+      path: "view",
+      element: <DID />,
     },
     {
       path: "did_setting",

@@ -20,6 +20,7 @@ export default function BasicSelect({ user }) {
   const [showCardForm, setShowCardForm] = useState(false); // 카드 결제 폼을 보여줄지 여부를 저장할 상태 값을 추가합니다.
   const [isCashPayment, setIsCashPayment] = useState(false); // 현금결제 상태 값을 추가합니다.
   const [isCardPayment, setIsCardPayment] = useState(false);
+  const [modifyReceipt, setModifyReceipt] = useState(false);
 
 
   
@@ -262,7 +263,7 @@ export default function BasicSelect({ user }) {
               <Select
                 labelId="cardName-label"
                 id="card_name"
-                value={card_name}
+                value={user.card_name}
                 label="카드사"
                 size="small"
                 margin="dense"
@@ -326,7 +327,7 @@ export default function BasicSelect({ user }) {
             />
           </Box>
           <br />
-          <Stack spacing={2} direction="row">
+          <Stack spacing={2} direction="row" sx={{display: 'flex'}}>
             <Button
               disabled={!showCardForm}
               variant="contained"
@@ -347,6 +348,14 @@ export default function BasicSelect({ user }) {
               }}
             >
               취소
+            </Button>
+            <Button
+              sx={{ backgroundColor: "green", fontSize: "12px", marginLeft: "auto" }}
+              variant="contained"
+              disabled={user.receipt_id < 0}
+              // disabled={!showCardForm}
+            >
+              수정
             </Button>
           </Stack>
         </Box>
