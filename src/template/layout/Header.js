@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
-import { Avatar, Box, Button, ButtonBase, Dialog, TextField } from "@mui/material";
-import PersonPinIcon from '@mui/icons-material/PersonPin';
+import { Avatar, Badge, Box, Button, ButtonBase, Dialog, TextField } from "@mui/material";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
 import ChatList from "../../component/chat/ChatList";
