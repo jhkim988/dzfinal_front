@@ -57,7 +57,7 @@ const Underlying = ({ props, onInsert, patient }) => {
     } else {
       axios
         .post("/api/clinic/disease", {
-          patient_id: 83,
+          patient_id: patient.patient_id,
           disease_id: disease.disease_id,
         })
         .then((response) => {})
@@ -69,6 +69,7 @@ const Underlying = ({ props, onInsert, patient }) => {
   };
 
   function handleRemove(disease_id) {
+    console.log(patient.patient_id);
     axios
       .delete("/api/clinic/disease", {
         params: {

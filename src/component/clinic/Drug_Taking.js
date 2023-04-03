@@ -57,7 +57,7 @@ const DrugTaking = ({ props, patient }) => {
     } else {
       axios
         .post("/api/clinic/drug", {
-          patient_id: 83,
+          patient_id: patient.patient_id,
           drug_id: drug.drug_id,
         })
         .then((response) => {})
