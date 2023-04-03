@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
-import { Avatar, Box, Button, ButtonBase, Dialog, TextField } from "@mui/material";
-import PersonPinIcon from '@mui/icons-material/PersonPin';
+import { Avatar, Badge, Box, Button, ButtonBase, Dialog, TextField } from "@mui/material";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
 import ChatList from "../../component/chat/ChatList";
+import MailIcon from '@mui/icons-material/Mail';
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
@@ -75,10 +75,11 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
-      <Box>
-        <Button variant="contained" onClick={openModal}>
-          채팅
-        </Button>
+
+      <Box style={{ marginRight: "10px" }}>
+        <Badge badgeContent={4} color="primary">
+          <MailIcon color="action" onClick={openModal} />
+        </Badge>
         <Dialog open={open} onClose={closeModal}>
           <ChatList onRequestClose={closeModal}>
           </ChatList>

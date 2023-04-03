@@ -27,13 +27,17 @@ const ChatList = () => {
             });
     }, []);
 
+    const openChatRoom = () => {
+        alert("채팅방");
+    }
+
     return (
         <div>
             {/* 로그인 시 자기자신 제외한 채팅방목록 조회 */}
-            <Paper sx={{ marginBottom: 5 }} elevation={2} style={{ width: "300px", height: "550px" }}>
+            <Paper sx={{ marginBottom: 5 }} elevation={2} style={{ width: "400px", height: "550px" }}>
                 <Box>
                     <AppBar position="static" style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-                        <Toolbar style={{ width: 300, height: 60, alignItems: 'right' }}>
+                        <Toolbar style={{ width: 400, height: 60, alignItems: 'right' }}>
                             {/* <AccountCircleRoundedIcon style={{ height: 50 }}></AccountCircleRoundedIcon>
                             <TextField id="outlined-basic"
                                 abel="프로필"
@@ -47,8 +51,8 @@ const ChatList = () => {
                     <h3>채팅목록</h3>
                     {
                         chatList.map((list) => (
-                            <List sx={{ width: '100%', maxWidth: 300, bgcolor: 'background.paper' }}>
-                                <ListItem alignItems="flex-start" key={list.chatroom_id}>
+                            <List sx={{ width: '100%', maxWidth: 400, bgcolor: 'background.paper' }}>
+                                <ListItem alignItems="flex-start" key={list.chatroom_id} onClick={openChatRoom}>
                                     <ListItemButton style={{ padding: 2 }}>
                                         <ListItemAvatar>
                                             <Avatar
