@@ -4,6 +4,7 @@ import {
   IconClipboardList,
   IconSettings,
   IconUsers,
+  IconDeviceTv,
 } from "@tabler/icons";
 
 const icons = {
@@ -12,6 +13,7 @@ const icons = {
   IconClipboardList,
   IconSettings,
   IconUsers,
+  IconDeviceTv,
 };
 
 const menuItems = {
@@ -40,6 +42,14 @@ const menuItems = {
       type: "item",
       url: "/clinic",
       icon: icons.IconClipboardList,
+      breadcrumbs: false,
+    },
+    {
+      id: "did",
+      title: "DID",
+      type: "item",
+      url: "/view",
+      icon: icons.IconDeviceTv,
       breadcrumbs: false,
     },
     {
