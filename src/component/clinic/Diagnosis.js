@@ -24,7 +24,7 @@ const Diagnosis = ({
   const [disease_name, setDisease_name] = useState("");
   const [searchList, setSearchList] = useState([]);
   const searchListRef = useRef();
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
@@ -89,6 +89,7 @@ const Diagnosis = ({
         });
       }
     } else if (e.key === "Enter") {
+      console.log(selectedIndex);
       handleDiagnosisAdd(searchList[selectedIndex]);
       setSelectedIndex(-1);
       scrollRef.scrollTop = 0;
@@ -126,6 +127,7 @@ const Diagnosis = ({
             autoComplete="off"
             onChange={(e) => setDisease_code(e.target.value)}
             onKeyUp={handleKeyUp}
+            onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
           />
           <TextField
@@ -137,6 +139,7 @@ const Diagnosis = ({
             autoComplete="off"
             onChange={(e) => setDisease_name(e.target.value)}
             onKeyUp={handleKeyUp}
+            onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
           />
         </Box>
@@ -192,8 +195,8 @@ const Diagnosis = ({
         >
           <Table>
             <TableBody>
-              {diagnosis.map(
-                (disease) => (
+              {diagnosis &&
+                diagnosis.map((disease) => (
                   <TableRow key={disease.disease_id}>
                     <TableCell align="center">{disease.disease_code}</TableCell>
                     <TableCell align="center">{disease.disease_name}</TableCell>
@@ -206,8 +209,7 @@ const Diagnosis = ({
                       />
                     </TableCell>
                   </TableRow>
-                )
-              )}
+                ))}
             </TableBody>
           </Table>
         </Box>

@@ -20,21 +20,24 @@ const MedicalInfo = ({
   setClinic_request,
 }) => {
   const copyMedicalInfo = () => {
+    if (!medicalInfo) {
+      return;
+    }
     setDiagnosis(medicalInfo.diagnosis);
     setPrescription(medicalInfo.prescription);
     setSymptom(medicalInfo.symptom);
     setTreatment(medicalInfo.treatment);
     setClinic_request(medicalInfo.clinic_request);
-  }
+  };
 
   const onCopy = () => {
-    setMode(1);
     copyMedicalInfo();
+    setMode(1);
   };
 
   const onUpdate = () => {
-    setMode(2);
     copyMedicalInfo();
+    setMode(2);
   };
 
   return (
