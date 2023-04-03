@@ -89,8 +89,6 @@ const ClinicView = () => {
           nextState="진료중"
           clickRowCallback={({ reception_id, patient_name, patient_id }) => {
             setReception(reception_id);
-            console.log(`patient_id ${patient_id}`);
-            // setPatient((prev) => ({ ...prev, patient_id }));
             clickMedicalRecordInquiry(
               "patient_name",
               { start: "2000-01-01", end: "2100-12-31" },
