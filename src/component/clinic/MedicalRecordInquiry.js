@@ -22,13 +22,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import axios from "axios";
-import dayjs from "dayjs";
 import koLocale from "dayjs/locale/ko";
 
 const MedicalRecordInquiry = ({
   mri,
   setMri,
-  setMode,
   setMedicalInfo,
   pagination,
   setPagination,
@@ -41,7 +39,6 @@ const MedicalRecordInquiry = ({
   };
 
   const onClick = (reception_id) => {
-    setMode(0);
     setMedicalInfo({});
 
     axios
@@ -54,21 +51,18 @@ const MedicalRecordInquiry = ({
       });
   };
 
-  const [selectedDates, setSelectedDates] = useState({
-    start: dayjs(),
-    end: dayjs(),
-  });
+  const [selectedDates, setSelectedDates] = useState({});
 
   const handleDateChange = (dates) => {
     setSelectedDates({
-      start: dates[0],
-      end: dates[1],
+      start: dates[0]?.format("YYYY-MM-DD"),
+      end: dates[1]?.format("YYYY-MM-DD"),
     });
   };
 
   const formattedDates = {
-    start: selectedDates.start.format("YYYY-MM-DD"),
-    end: selectedDates.end.format("YYYY-MM-DD"),
+    start: selectedDates.start,
+    end: selectedDates.end,
   };
 
   const [keyword, setKeyword] = useState("");
@@ -106,12 +100,8 @@ const MedicalRecordInquiry = ({
   };
 
   useEffect(() => {
-    handleToggle(false);
-  }, []);
-
-  useEffect(() => {
     handleToggle(true);
-  }, [selectedDates]);
+  }, []);
 
   const handleToggle = (isOpen) => {
     let intervalId = null;
@@ -124,18 +114,8 @@ const MedicalRecordInquiry = ({
           const firstDiv =
             dateRangePickerRoot.querySelector("div:first-of-type");
           firstDiv.style.opacity = 0;
-          clearInterval(intervalId);
         }
       }, 100);
-    } else {
-      clearInterval(intervalId);
-      const dateRangePickerRoot = document.querySelector(
-        ".css-e47596-MuiDateRangeCalendar-root"
-      );
-      if (dateRangePickerRoot) {
-        const firstDiv = dateRangePickerRoot.querySelector("div:first-of-type");
-        firstDiv.style.opacity = 1;
-      }
     }
   };
 
@@ -170,8 +150,6 @@ const MedicalRecordInquiry = ({
             <DateRangePicker
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
-              value={[dayjs(selectedDates.start), dayjs(selectedDates.end)]}
-              onToggle={handleToggle}
               onChange={handleDateChange}
             />
           </DemoContainer>
@@ -280,30 +258,6 @@ const MedicalRecordInquiry = ({
             />
           )}
         </Stack>
-        {/* {pagination.prev && (
-          <Button onClick={() => handlePageClick(pagination.startPage - 1)}>
-            {"<"}
-          </Button>
-        )}{" "}
-        {Array.from(
-          Array(pagination.endPage - pagination.startPage + 1),
-          (e, i) => {
-            return (
-              <Button
-                sx={{ padding: 0 }}
-                key={pagination.startPage + i}
-                onClick={() => handlePageClick(pagination.startPage + i)}
-              >
-                {pagination.startPage + i}
-              </Button>
-            );
-          }
-        )}
-        {pagination.next && (
-          <Button onClick={() => handlePageClick(pagination.endPage + 1)}>
-            {">"}
-          </Button>
-        )} */}
       </Box>
     </>
   );
