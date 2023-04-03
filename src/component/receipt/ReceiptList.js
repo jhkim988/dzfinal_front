@@ -15,6 +15,7 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
 import axios from 'axios';
+import useEnhancedEffect from '@mui/material/utils/useEnhancedEffect';
 
 
 
@@ -111,8 +112,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
   }, [page]);
 
 
-
-  // 수납내역목록에서 데이터 선택하면 데이터가 
+  // 수납내역목록에서 데이터 선택하면 데이터가져오기
   const handleSelectedReceipt = (receipt_id, reception_id) => {
     axios.get(`/api/receipt/selectedOneReceipt?reception_id=${reception_id}`)
          .then((response) => {
@@ -124,6 +124,25 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
           console.error(error);
          })
   }
+
+  // 페이징처리
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  }
+
+  useEffect(() => {
+    axios.get(`/api/receipt/getReceiptList?page=${page}`)
+    .then(response => {
+      setReceiptList(response.data.content);
+      setTotalPages(response.data.totalPages);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }, [page]);
 
   return (
     <>
@@ -205,10 +224,10 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{`${receiptList[idx].patient_name}(${receiptList[idx].phone_number3})`}</TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].front_registration_number}</TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>
-                      { receiptList[idx].receipt_count > 1 ? `${receiptList[idx].disease_name} 외 ${receiptList[idx].receipt_count - 1} 건` : `${receiptList[idx].disease_name}` }
+                      { receiptList[idx].disease_count > 1 ? `${receiptList[idx].disease_name} 외 ${receiptList[idx].disease_count - 1} 건` : `${receiptList[idx].disease_name}` }
                       </TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight:2 }}>
-                      { receiptList[idx].receipt_count > 1 ? `${receiptList[idx].drug_name} 외 ${receiptList[idx].receipt_count - 1} 건` : `${receiptList[idx].drug_name}` }
+                      { receiptList[idx].prescription_count > 1 ? `${receiptList[idx].drug_name} 외 ${receiptList[idx].prescription_count - 1} 건` : `${receiptList[idx].drug_name}` }
                       </TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].total_amount}</TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].mode}</TableCell>
