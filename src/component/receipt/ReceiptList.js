@@ -78,28 +78,6 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
   
 
 
-
-  // 수납내역목록에서 데이터 선택하면 데이터가져오기
-  const handleSelectedReceipt = (receipt_id, reception_id) => {
-    axios.get(`/api/receipt/selectedOneReceipt?reception_id=${reception_id}`)
-         .then((response) => {
-          console.log("선택한 데이터 정보: ", response.data);
-          clickRowCallback(response.data);
-        //  handleSelectedInformation(response.data);
-         })
-         .catch((error) => {
-          console.error(error);
-         })
-  }
-
-  // 페이징처리
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  }
-
   useEffect(() => {
     axios.get(`/api/receipt/getReceiptList?page=${page}`)
     .then(response => {
@@ -109,7 +87,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
     .catch(error => {
       console.log(error);
     });
-  }, [page]);
+  }, []);
 
 
   // 수납내역목록에서 데이터 선택하면 데이터가져오기
