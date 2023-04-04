@@ -2,7 +2,7 @@ import { Box, Grid, OutlinedInput, Paper, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import React from "react";
 
-const DidView = () => {
+const DidView = ({data}) => {
   function MyFormHelperText() {
     // const { focused } = useFormControl() || {};
     // const helperText = React.useMemo(() => {
@@ -38,7 +38,8 @@ const DidView = () => {
                 >
                 <Box sx={{ flexGrow: 1 }}>
                     <Typography variant="h2">
-                    진료실 1 / 담당의사: 김더존
+                    진료실 1 / 담당의사: 김더존<br/>
+                    data: {data.reception_id}
                     </Typography>
 
                     <Box component="form" noValidate autoComplete="off">
