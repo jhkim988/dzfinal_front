@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const AxiosClient = axios.create({
+const axiosClient = axios.create({
   baseURL: "",
   headers: {
     "Content-Type": "application/json;charset=UTF-8",
@@ -8,7 +8,7 @@ const AxiosClient = axios.create({
   },
 });
 
-AxiosClient.interceptors.request.use((request) => {
+axiosClient.interceptors.request.use((request) => {
   const tokenPayload = JSON.parse(
     atob(localStorage.getItem("token").split(".")[1])
   );
@@ -34,4 +34,4 @@ AxiosClient.interceptors.request.use((request) => {
   }
   return request;
 });
-export default AxiosClient;
+export default axiosClient;

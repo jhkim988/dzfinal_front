@@ -2,7 +2,6 @@ import { Button, MenuItem, Paper,  TextField, Grid, Hidden } from '@mui/material
 import { Box } from '@mui/system';
 import React from 'react';
 import axiosClient from './../login/AxiosClient';
-
 const doctors = [
     {
         value: '1',
@@ -110,7 +109,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
 
     const updateReceptionInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 접수 정보를 수정하시겠습니까?")) {
-            axios.post(Reception_API_BASE_URL + "/update", receptionData)
+            axiosClient.post(Reception_API_BASE_URL + "/update", receptionData)
                 .then((response) => {
                     alert("접수 수정 성공");
                     setPatientData(prev => ({ ...response.data }));

@@ -3,7 +3,7 @@ import { Grid, Paper } from "@material-ui/core";
 import { TextField, Button, Stack } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import AxiosClient from './AxiosClient';
+import axiosClient from './AxiosClient';
 
 const LoginImage = () => {
   return (
@@ -48,7 +48,7 @@ const LoginForm = () => {
         const { user_name, authorities } = JSON.parse(atob(data.access_token.split(".")[1]));
         localStorage.setItem("user_id", user_name);
         localStorage.setItem("authorities", authorities);
-        AxiosClient.defaults.headers["Authorization"] = `Bearer ${data.access_token}`;
+        axiosClient.defaults.headers["Authorization"] = `Bearer ${data.access_token}`;
         getLoginUserInfo();
         movePageWithAuthority(authorities);
       });
@@ -56,7 +56,7 @@ const LoginForm = () => {
 
   const getLoginUserInfo = () => {
     const user_id = localStorage.getItem("user_id");
-    AxiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
+    axiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
       localStorage.setItem("userInfo", data);
     });
   };

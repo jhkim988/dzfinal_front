@@ -95,7 +95,7 @@ export default function DID_MessageModel() {
   };
 
   const onDelete = (id) => {
-    axios
+    axiosClient
       .delete("/api/did/did_subtitle", { params: { id: id } })
       .then((response) => {
         dispatch({ type: DID_Message_ACTION.DELETE, id });

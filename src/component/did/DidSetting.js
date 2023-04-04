@@ -19,9 +19,10 @@ import { tableCellClasses } from "@mui/material/TableCell";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import DID_MessageModel from "./model/DID_MessageModel";
 import axiosClient from './../login/AxiosClient';
+import RemoveCircleOutlineIcon  from '@mui/icons-material/RemoveCircleOutline';
 
 const DidSetting = () => {
-  const [messages, onInsert, onToggle, onUpdate, onAppend] = DID_MessageModel();
+  const [messages, onInsert, onToggle, onUpdate, onAppend, onDelete] = DID_MessageModel();
   const inputEl = useRef(null);
   const [value, setValue] = useState("");
   const [selectedValue, setSelectedValue] = useState("");

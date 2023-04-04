@@ -53,7 +53,7 @@ const Reception = () => {
   const clickRowCallback = async({ reception_id, patient_id }) => {
     setPatient_id(patient_id);
     try {
-      axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+      axiosClient.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
         setPatientData(data.patient)
         setReceptionData(data.reception);
         setReceiptData(data);
