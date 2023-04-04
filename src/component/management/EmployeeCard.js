@@ -1,10 +1,10 @@
 import { Box, Button, Card, CardMedia, Grid, Paper } from "@mui/material";
-import React from "react";
-import { axiosClient } from "../login/AxiosClient";
+import React, { useContext } from "react";
+import AxiosClientContext from "../login/AxiosClient";
 
 export default function EmployeeCard(props) {
   const { employee, setEmployees, employees } = props;
-
+  const { axiosClient } = useContext(AxiosClientContext);
   const onDelete = () => {
     if (window.confirm("삭제 하시겠습니까?")) {
       axiosClient

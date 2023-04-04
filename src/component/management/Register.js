@@ -18,14 +18,15 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import "dayjs/locale/ko";
-import { axiosClient } from "../login/AxiosClient";
+import AxiosClientContext from './../login/AxiosClient';
 
 dayjs.locale("ko");
 
 const Register = () => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
 

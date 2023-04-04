@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Grid, Paper } from "@material-ui/core";
 import { TextField, Button, Stack } from "@mui/material";
 import axios from "axios";
-import { axiosClient } from './AxiosClient';
 import { useNavigate } from 'react-router-dom';
+import AxiosClientContext from './AxiosClient';
 
 const LoginImage = () => {
   return (
@@ -16,14 +16,8 @@ const LoginImage = () => {
   );
 };
 
-const getLoginUserInfo = () => {
-  const user_id = localStorage.getItem("user_id");
-  axiosClient.get(`/emplyee/${user_id}`).then(({ data }) => {
-    console.log(data);
-  });
-};
-
 const LoginForm = () => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const [loginForm, setLoginForm] = useState({
     username: "",
     password: "",
@@ -51,15 +45,43 @@ const LoginForm = () => {
         headers,
       })
       .then(({ data }) => {
+        console.log(data);
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("refresh_token", data.refresh_token);
         console.log(atob(data.access_token.split(".")[1]));
         const { user_name, authorities } = JSON.parse(atob(data.access_token.split(".")[1]));
         localStorage.setItem("user_id", user_name);
         localStorage.setItem("authorities", authorities);
-        // getLoginUserInfo(user_name);
+        getLoginUserInfo(user_name);
       });
   };
+
+  const getLoginUserInfo = () => {
+    const user_id = localStorage.getItem("user_id");
+    axiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
+      console.log(data);
+    });
+  };
+
+  const navi = useNavigate();
+  const movePageWithAuthority = (authority) => {
+    if (authority.includes("ADMIN")) {
+      navi("/management");
+    } else if (authority.includes("DOCTOR")) {
+      navi("/clinic");
+    } else if (authority.includes("KLPN") || authority.includes("ROLE_RN")) {
+      navi("/reception");
+    }
+  }
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      getLoginUserInfo();
+      const authority = localStorage.getItem("authorities");
+      console.log(token, authority);
+      movePageWithAuthority(authority);
+    }
+  }, []);
 
   return (
     <Paper
@@ -114,24 +136,6 @@ const LoginForm = () => {
 };
 
 const Login = () => {
-  const navi = useNavigate();
-  const movePageWithAuthority = (authority) => {
-    if (authority.includes("ADMIN")) {
-      navi("/management");
-    } else if (authority.includes("DOCTOR")) {
-      navi("/clinic");
-    } else if (authority.includes("KLPN") || authority.includes("ROLE_RN")) {
-      navi("/reception");
-    }
-  }
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const authority = localStorage.getItem("authorities");
-      console.log(token, authority);
-      movePageWithAuthority(authority);
-    }
-  }, []);
   return (
     <Grid container>
       <Grid item xs={9}>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef, useContext } from "react";
 import {
   Button,
   Paper,
@@ -13,9 +13,9 @@ import {
   InputAdornment,
 } from "@mui/material";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { axiosClient } from "../login/AxiosClient";
 import { offsetDate } from "./utils/dateUtils";
 import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
+import AxiosClientContext from './../login/AxiosClient';
 
 
 const style = { margin: "20px 0px" };
@@ -27,6 +27,7 @@ const ReservationForm = ({
   pickTime,
   requestSuccessCallback,
 }) => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const anchorRef = useRef(null);

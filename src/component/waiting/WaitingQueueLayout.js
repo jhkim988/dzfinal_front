@@ -4,12 +4,13 @@ import React, {
   useCallback,
   useMemo,
   useRef,
+  useContext,
 } from "react";
 import { Grid, Paper } from "@mui/material";
 import mqtt from "mqtt";
 import CallButtonSet from "./CallButtonSet";
 import WaitingQueue from "./WaitingQueue";
-import { axiosClient } from "../login/AxiosClient";
+import AxiosClientContext from './../login/AxiosClient';
 const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
 // const mqttURL = `mqtt://localhost:8083/mqtt`;
 const genRanHex = (size) =>
@@ -34,6 +35,7 @@ const autoCallInfo = {
 const doctor_id = 1;
 
 const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
+  const {axiosClient} = useContext(AxiosClientContext)
   const client = useRef();
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);

@@ -1,5 +1,5 @@
 import React from "react";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useContext } from "react";
 import { Paper } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import {
@@ -14,10 +14,10 @@ import {
   ViewState,
   IntegratedGrouping,
 } from "@devexpress/dx-react-scheduler";
-import { axiosClient } from "../login/AxiosClient";
 import { compareDate, offsetDate } from './utils/dateUtils';
 import ReservationForm from './ReservationForm';
 import { doctorData, resources } from "./Reservation";
+import AxiosClientContext from './../login/AxiosClient';
 
 
 const cellHeight = 2.7;
@@ -32,6 +32,7 @@ const ReservationDay = ({
   setCalendarAppointments,
   setDaySchedule,
 }) => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const [reservationFormModal, setReservationFormModal] = useState({
     modalState: false,
     mode: 'POST', // POST or PUT

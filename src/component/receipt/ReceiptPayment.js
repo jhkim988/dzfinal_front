@@ -7,7 +7,7 @@ import ClinicRequest from './modal/ClinicRequest';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { InputLabel, MenuItem, FormControl, Select, Input } from '@mui/material';
-import { axiosClient } from '../login/AxiosClient';
+import axiosClient from './../login/AxiosClient';
 
 export default function BasicSelect({user}) {
   const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
@@ -15,9 +15,6 @@ export default function BasicSelect({user}) {
   const [isCashPayment, setIsCashPayment] = useState(false); // 현금결제 상태 값을 추가합니다.
   const [isCardPayment, setIsCardPayment] = useState(false);
   const [modifyReceipt, setModifyReceipt] = useState(false);
-
-
-  
 
   const handleCardPayment = () => {
     setIsCashPayment(false); // 카드결제 버튼을 클릭하면 현금결제 상태 값을 false로 변경합니다.
@@ -46,7 +43,7 @@ export default function BasicSelect({user}) {
         headers: {
           'Content-Type': 'application/json'
         }
-      );
+    });
       alert("현금결제가 완료되었습니다.");
       console.log("Payment successful", response.data);
       setIsCardPayment(true);
@@ -135,7 +132,7 @@ export default function BasicSelect({user}) {
           headers: {
             'Content-Type': 'application/json'
           }
-        );
+      });
         alert("카드결제가 완료되었습니다.");
         console.log("Payment successful", response.data);
         setIsReceipt(true);

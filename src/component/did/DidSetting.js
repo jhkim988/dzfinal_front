@@ -16,13 +16,13 @@ import {
 } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { tableCellClasses } from "@mui/material/TableCell";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useContext } from "react";
 import DID_MessageModel from "./model/DID_MessageModel";
-import { axiosClient } from "../login/AxiosClient";
+import AxiosClientContext from './../login/AxiosClient';
 
 const DidSetting = () => {
-  const [messages, onInsert, onToggle, onUpdate, onDelete, onAppend] =
-    DID_MessageModel();
+  const { axiosClient } = useContext(AxiosClientContext);
+  const [messages, onInsert, onToggle, onUpdate, onAppend] = DID_MessageModel();
   const inputEl = useRef(null);
   const [value, setValue] = useState("");
   const [selectedValue, setSelectedValue] = useState("");

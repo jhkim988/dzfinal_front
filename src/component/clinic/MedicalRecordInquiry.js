@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Box,
   Button,
@@ -22,7 +22,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
-import { axiosClient } from "../login/AxiosClient";
+import AxiosClientContext from "../login/AxiosClient";
 
 const MedicalRecordInquiry = ({
   mri,
@@ -34,6 +34,7 @@ const MedicalRecordInquiry = ({
   searchMode,
   setSearchMode,
 }) => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const [type, setType] = useState("");
   const handleChange = (e) => {
     setType(e.target.value);

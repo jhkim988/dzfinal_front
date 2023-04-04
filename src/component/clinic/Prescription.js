@@ -8,13 +8,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useRef } from "react";
+import { useEffect, useContext, useState, useRef } from "react";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
-import { axiosClient } from "../login/AxiosClient";
+import AxiosClientContext from './../login/AxiosClient';
 
 const Prescription = ({
   handlePrescriptionAdd,
@@ -23,6 +21,7 @@ const Prescription = ({
   medicalInfo,
   mode,
 }) => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const [drug_code, setDrug_code] = useState("");
   const [drug_name, setDrug_name] = useState("");
   const [searchList, setSearchList] = useState([]);

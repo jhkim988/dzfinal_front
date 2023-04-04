@@ -1,13 +1,13 @@
 import {
-    Button, Checkbox, createTheme, Dialog,
-    FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider,
-    Table, TableBody, TableCell, TableHead, TableRow, Grid, Autocomplete
+    Button, Checkbox, Dialog,
+    FormControlLabel, MenuItem, Paper, TextField,
+    TableCell, TableRow, Grid, Autocomplete
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PopupPostCode from './PopupPostCode';
-import { axiosClient } from '../login/AxiosClient';
-
+import axiosClient from './../login/AxiosClient';
+import PatientAutoComplete from './PatientAutoComplete';
 
 const Patient_API_BASE_URL = "/api/patient";
 
@@ -115,7 +115,7 @@ const PatientForm = ({
     };
     const updatePatientInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 환자 정보를 수정하시겠습니까?")) {
-            axios.post(Patient_API_BASE_URL + "/update", patientData)
+            axiosClient.post(Patient_API_BASE_URL + "/update", patientData)
                 .then((response) => {
                     alert("환자 수정 성공");
                     setPatientData(prev => ({ ...response.data }));
@@ -170,7 +170,6 @@ const PatientForm = ({
     }
     return (
         <>
-
             <Paper sx={{ height: "24vh" }} elevation={1}>
                 <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
                     <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>환자 등록/수정</h5>
@@ -384,5 +383,6 @@ const PatientForm = ({
         </>
     );
 };
+}
 
 export default PatientForm;
