@@ -6,11 +6,13 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
 import ChatList from "../../component/chat/ChatList";
 import MailIcon from '@mui/icons-material/Mail';
+import { useRef } from 'react';
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
   const [toggleIcon, setToggleIcon] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const client = useRef();
 
   const openModal = () => {
     setOpen(true);

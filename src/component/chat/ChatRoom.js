@@ -1,55 +1,96 @@
-import { AppBar, BottomNavigation, BottomNavigationAction, Box, Button, IconButton, Paper, TextareaAutosize, TextField, Toolbar } from '@mui/material';
+import {
+    AppBar, BottomNavigation, BottomNavigationAction,
+    Box, Button, Grid, IconButton, Paper, TextField, Toolbar
+} from '@mui/material';
 import React from 'react';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArchiveIcon from '@mui/icons-material/Archive';
-const ChatRoom = () => {
+import ChatList from './ChatList';
+import { useState } from 'react';
+import { useRef } from 'react';
+import mqtt from 'mqtt';
+import { useEffect } from 'react';
+
+const employee_id = 1;
+const employee_id2 = 2;
+
+const ChatRoom = (selectedChatRoom) => {
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState([]);
+    const client = useRef(null);
+
+    const connectToMqttBroker = () => {
+        const mqttBroker = 'mqtt://localhost:8083/mqtt';
+        const mqttClient = mqtt.connect(mqttBroker);
+
+        mqttClient.on('message', (topic, payload) => {
+            setMessages([...messages, payload.toString()]);
+        });
+
+        client.current = mqttClient;
+    }
+    const sendMessage = () => {
+        alert("메세지");
+        console.log(message);
+        client.current.publish(`chat/${employee_id}`, JSON.stringify(message));
+        setMessages((prevMessages) => [...prevMessages, message]);
+    }
+
+    useEffect(() => {
+        connectToMqttBroker();
+
+        return () => {
+            client.current.end();
+        }
+    }, [])
+
+
+    const showChatList = () => {
+        return <ChatList />;
+    };
+
     return (
         <div>
-            <Paper sx={{ marginBottom: 5, marginTop: 2 }} elevation={2} style={{ width: "300px", height: "450px" }}>
-                <Box>
-                    <div>
-                        <AppBar position="static" style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-                            <Toolbar style={{ width: 300, height: 60 }}>
-                                <Button color="inherit">목록 보기</Button>
-                            </Toolbar>
-                        </AppBar>
-                    </div>
-                    <h4 style={{ textAlign: 'center' }}>()님과 채팅 중 입니다.</h4>
-
-                    {/* <BottomNavigation
-                        //showLabels
-                        //value={value}
-                        // onChange={(event, newValue) => {
-                        //     setValue(newValue);
-                        // }}
-                        sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}
-                        style={{ width: "300px", height: "40" }}
-                    >
-                        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-                        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-                        <BottomNavigationAction label="Archive" icon={<ArchiveIcon />} />
-                    </BottomNavigation> */}
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        {/* <TextField id="outlined-basic" variant="outlined" size='small' style={{ marginTop: "290px", width: "230px" }} /> */}
-                        <TextField
-                            multiline
-                            rows={1}
-                            defaultValue="내용을 입력해주세요."
-                            style={{ marginTop: "280px", width: "230px" }}
-                        />
-                        {/* <TextareaAutosize
-                            maxRows={4}//teatArea 스크롤
-                            aria-label="minimum height"
-                            minRows={10}
-                            placeholder="내용을 입력하세요"
-                            style={{ marginTop: "290px", width: "230px" }}
-                        /> */}
-                        <Button variant="contained" style={{ marginTop: "290px" }}>전송</Button>
+            <Grid container spacing={1}>
+                {/* <Paper sx={{ marginBottom: 5, marginTop: 2 }} elevation={2} style={{ width: "400px", height: "550px" }}> */}
+                <Grid item xs={12}>
+                    <AppBar position="static" style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
+                        <Toolbar style={{ height: 60 }}>
+                            <div>
+                                <Button color="inherit" onClick={showChatList}>목록 보기</Button>
+                            </div>
+                        </Toolbar>
+                    </AppBar>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box>
+                        <h4 style={{ textAlign: 'center' }}>()님과 채팅 중 입니다.</h4>
                     </Box>
-
-                </Box>
-            </Paper>
+                    <ul>
+                        {messages && messages.map((message, index) => (<li key={index}>{message}</li>))}
+                    </ul>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={10}>
+                                <TextField
+                                    multiline
+                                    rows={1}
+                                    placeholder="내용을 입력해주세요."
+                                    style={{ marginTop: "400px", width: "100%" }}
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Button variant="contained"
+                                    onClick={sendMessage}
+                                    style={{ marginTop: "400px", width: "100%" }}>전송</Button>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Grid>
+                {/* </Paper> */}
+            </Grid>
         </div>
     );
 };
