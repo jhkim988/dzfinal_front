@@ -65,6 +65,7 @@ const ClinicView = () => {
   const clickMedicalRecordInquiry = useCallback(
     (type, formattedDates, keyword, patient_id) => {
       setSearchMode(1);
+      setMedicalInfo({});
 
       if (!type) return alert("분류를 정해주세요");
       axios
@@ -72,7 +73,6 @@ const ClinicView = () => {
         .then((response) => {
           setMri(response.data);
           setPagination(response.data.pagination);
-          // setPatient((prev) => ({ ...prev, patient_id }));
         })
         .catch((error) => {
           console.log(error);
@@ -89,8 +89,6 @@ const ClinicView = () => {
           nextState="진료중"
           clickRowCallback={({ reception_id, patient_name, patient_id }) => {
             setReception(reception_id);
-            console.log(`patient_id ${patient_id}`);
-            // setPatient((prev) => ({ ...prev, patient_id }));
             clickMedicalRecordInquiry(
               "patient_name",
               { start: "2000-01-01", end: "2100-12-31" },
@@ -107,7 +105,6 @@ const ClinicView = () => {
               <MedicalRecordInquiry
                 mri={mri}
                 setMri={setMri}
-                setMode={setMode}
                 setMedicalInfo={setMedicalInfo}
                 clickMedicalRecordInquiry={clickMedicalRecordInquiry}
                 pagination={pagination}

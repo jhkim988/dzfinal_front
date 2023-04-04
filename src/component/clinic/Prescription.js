@@ -28,7 +28,7 @@ const Prescription = ({
   const [searchList, setSearchList] = useState([]);
   const [searchText, setSearchText] = useState("");
   const searchListRef = useRef();
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
@@ -132,6 +132,7 @@ const Prescription = ({
             autoComplete="off"
             onChange={(e) => setDrug_code(e.target.value)}
             onKeyUp={handleKeyUp}
+            onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
           />
           <TextField
@@ -143,6 +144,7 @@ const Prescription = ({
             autoComplete="off"
             onChange={(e) => setDrug_name(e.target.value)}
             onKeyUp={handleKeyUp}
+            onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
           />
         </Box>
@@ -198,8 +200,8 @@ const Prescription = ({
         >
           <Table>
             <TableBody>
-              {prescription.map(
-                (drug) => (
+              {prescription &&
+                prescription.map((drug) => (
                   <TableRow key={drug.drug_id}>
                     <TableCell align="center">{drug.drug_code}</TableCell>
                     <TableCell align="center">{drug.drug_name}</TableCell>
@@ -212,8 +214,7 @@ const Prescription = ({
                       />
                     </TableCell>
                   </TableRow>
-                )
-              )}
+                ))}
             </TableBody>
           </Table>
         </Box>

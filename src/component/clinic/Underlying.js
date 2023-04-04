@@ -19,7 +19,7 @@ const Underlying = ({ props, onInsert, patient }) => {
   const [searchList, setSearchList] = useState([]);
   const searchListRef = useRef();
   const [underlying, setUnderlying] = useState(props);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
@@ -161,6 +161,7 @@ const Underlying = ({ props, onInsert, patient }) => {
             autoComplete="off"
             onChange={(e) => setDisease_code(e.target.value)}
             onKeyUp={handleKeyUp}
+            onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
           />
           <TextField
@@ -172,6 +173,7 @@ const Underlying = ({ props, onInsert, patient }) => {
             autoComplete="off"
             onChange={(e) => setDisease_name(e.target.value)}
             onKeyUp={handleKeyUp}
+            onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
           />
         </Box>
