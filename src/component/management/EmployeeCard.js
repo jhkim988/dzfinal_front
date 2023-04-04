@@ -1,13 +1,13 @@
 import { Box, Button, Card, CardMedia, Grid, Paper } from "@mui/material";
-import axios from "axios";
 import React from "react";
+import { axiosClient } from "../login/AxiosClient";
 
 export default function EmployeeCard(props) {
   const { employee, setEmployees, employees } = props;
 
   const onDelete = () => {
     if (window.confirm("삭제 하시겠습니까?")) {
-      axios
+      axiosClient
         .delete("/api/admin/employee", {
           params: { employ_id: employee.employ_id },
         })

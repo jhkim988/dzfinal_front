@@ -15,9 +15,9 @@ import {
   TextField,
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
-import axios from "axios";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import DID_MessageModel from "./model/DID_MessageModel";
+import { axiosClient } from "../login/AxiosClient";
 
 const DidSetting = () => {
   const [messages, onInsert, onToggle, onUpdate, onAppend] = DID_MessageModel();
@@ -30,7 +30,7 @@ const DidSetting = () => {
   };
 
   useEffect(() => {
-    axios
+    axiosClient
       .get("/api/did/did_subtitle")
       .then((response) => {
         const existingData = messages.find(
@@ -74,7 +74,7 @@ const DidSetting = () => {
     formData.append("file", file);
     formData.append("type", selectedValue);
 
-    axios
+    axiosClient
       .post("/api/did/did_setting", formData, {
         headers: {
           "content-type": "multipart/form-data",

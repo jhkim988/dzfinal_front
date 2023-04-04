@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import ReactToPrint from "react-to-print";
-import axios from "axios";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Treatment from './modal/Treatment';
@@ -8,8 +7,7 @@ import ClinicRequest from './modal/ClinicRequest';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { InputLabel, MenuItem, FormControl, Select, Input } from '@mui/material';
-
-
+import { axiosClient } from '../login/AxiosClient';
 
 export default function BasicSelect({user}) {
   const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
@@ -32,7 +30,7 @@ export default function BasicSelect({user}) {
   // 현금결제
   const handleCashPayment = async () => {
     try {
-      const response = await axios.post('/api/receipt/insertReceipt', {
+      const response = await axiosClient.post('/api/receipt/insertReceipt', {
         reception_id: user.reception_id,
         ratio: InsuranceRatio,
         total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
@@ -119,7 +117,7 @@ export default function BasicSelect({user}) {
   const handleReceiptInsert = async () => {
     if (card_name && card_number) {
       try {
-        const response = await axios.post('/api/receipt/insertReceipt', {
+        const response = await axiosClient.post('/api/receipt/insertReceipt', {
           reception_id: user.reception_id,
           ratio: InsuranceRatio,
           total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,

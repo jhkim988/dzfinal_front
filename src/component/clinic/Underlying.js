@@ -11,7 +11,7 @@ import {
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
-import axios from "axios";
+import { axiosClient } from "../login/AxiosClient";
 
 const Underlying = ({ props, onInsert, patient }) => {
   const [disease_code, setDisease_code] = useState("");
@@ -24,7 +24,7 @@ const Underlying = ({ props, onInsert, patient }) => {
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
       if (e.target.value.length >= 2) {
-        axios
+        axiosClient
           .get(
             `/api/clinic/disease/${e.target.name}/${encodeURIComponent(
               e.target.value
@@ -55,7 +55,7 @@ const Underlying = ({ props, onInsert, patient }) => {
     if (underlying.some((item) => item.disease_id === disease.disease_id)) {
       alert("이미 추가된 질병입니다.");
     } else {
-      axios
+      axiosClient
         .post("/api/clinic/disease", {
           patient_id: patient.patient_id,
           disease_id: disease.disease_id,
@@ -70,7 +70,7 @@ const Underlying = ({ props, onInsert, patient }) => {
 
   function handleRemove(disease_id) {
     console.log(patient.patient_id);
-    axios
+    axiosClient
       .delete("/api/clinic/disease", {
         params: {
           patient_id: patient.patient_id,

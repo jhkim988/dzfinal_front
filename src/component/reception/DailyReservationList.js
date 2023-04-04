@@ -8,7 +8,7 @@ import {
     TableHead,
     TableRow
 } from "@material-ui/core";
-import axios from 'axios';
+import { axiosClient } from './../login/AxiosClient';
 
 const Reservation_API_BASE_URL = "/api/reservation";
 
@@ -22,7 +22,7 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
 
 
     useEffect(() => {
-        axios.get(Reservation_API_BASE_URL)
+        axiosClient.get(Reservation_API_BASE_URL)
             .then((response) => {
                 setReservation(response.data);
             })
@@ -33,7 +33,7 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
 
     const handleReservationSelect = (reservation_id) => {
         // 선택된 예약 ID에 해당하는 예약 상세 정보를 가져오는 API 호출
-        axios.get(Reservation_API_BASE_URL + `/${reservation_id}`)
+        axiosClient.get(Reservation_API_BASE_URL + `/${reservation_id}`)
             .then((response) => {
                 console.log("예약환자정보:", response.data);
                 console.log("환자번호:", response.data.patient_id);

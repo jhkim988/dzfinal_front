@@ -4,17 +4,9 @@ import {
     Table, TableBody, TableCell, TableHead, TableRow, Grid, Autocomplete
 } from '@mui/material';
 import { Box } from '@mui/system';
-import SearchIcon from "@material-ui/icons/Search";
-import { InputAdornment } from "@material-ui/core";
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import PopupDom from './PopupDom';
 import PopupPostCode from './PopupPostCode';
-import zIndex from '@mui/material/styles/zIndex';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { axiosClient } from '../login/AxiosClient';
 
 const Patient_API_BASE_URL = "/api/patient";
 
@@ -71,7 +63,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
     const handleSubmit = (event) => {
         event.preventDefault();
         if (window.confirm(patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?")) {
-            axios.post(Patient_API_BASE_URL, patientData)
+            axiosClient.post(Patient_API_BASE_URL, patientData)
                 .then((response) => {
                     alert(response.data.message);
                     console.log("patient_id:" + response.data.patient_id);
@@ -93,7 +85,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
         event.preventDefault();
         if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter") {
             if (patient_name.length > 1) {
-                axios.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
+                axiosClient.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
                     .then((response) => {
                         setAutoCompleteList(response.data);
                     })
@@ -114,7 +106,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
 
     const selectedSearchPatient = (patient_id) => {
         alert(patient_id);
-        axios.get(Patient_API_BASE_URL + `/${patient_id}`)
+        axiosClient.get(Patient_API_BASE_URL + `/${patient_id}`)
             .then((response) => {
                 console.log("자동완성 환자정보:", response.data);
                 setPatientData(prev => ({ ...response.data }));

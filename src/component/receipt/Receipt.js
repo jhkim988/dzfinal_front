@@ -1,5 +1,4 @@
 import * as React from 'react';
-import axios from "axios";
 import ReceptionInformation from './ReceptionInformation';
 import ReceiptPayment from './ReceiptPayment';
 import ReceiptDetails from './ReceiptDetails';

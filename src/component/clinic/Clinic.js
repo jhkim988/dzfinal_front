@@ -8,11 +8,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Diagnosis from "./Diagnosis";
 import Prescription from "./Prescription";
+import { axiosClient } from "../login/AxiosClient";
 
 const Clinic = ({
   reception,
@@ -78,7 +78,7 @@ const Clinic = ({
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
 
-      axios
+      axiosClient
         .post("/api/clinic/clinic", {
           reception_id: reception,
           symptom: symptom,
@@ -100,7 +100,7 @@ const Clinic = ({
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
 
-      axios
+      axiosClient
         .post("/api/clinic/clinic", {
           reception_id: reception,
           symptom: symptom,
@@ -122,7 +122,7 @@ const Clinic = ({
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
 
-      axios
+      axiosClient
         .put("/api/clinic/clinic", {
           reception_id: medicalInfo.reception_id,
           symptom: symptom,

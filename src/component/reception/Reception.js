@@ -1,7 +1,6 @@
 import { Grid, Paper } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
-import axios from "axios";
 import AutoCompleteForm from "./AutoCompleteForm";
 import DailyReservationList from "./DailyReservationList";
 import PatientForm from "./PatientForm";
@@ -11,6 +10,7 @@ import WaitingQueue from "../waiting/WaitingQueue";
 import ReceptionList from "./ReceptionList";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 import ReceiptList from "../receipt/ReceiptList";
+import { axiosClient } from "../login/AxiosClient";
 
 const Reception = () => {
   const [patient_id, setPatient_id] = useState(null);
@@ -58,7 +58,7 @@ const Reception = () => {
   ) => {
     console.log(start?.format("YYYY-MM-DD"));
     console.log(end?.format("YYYY-MM-DD"));
-    axios
+    axiosClient
       .post(
         "/api/receipt/getReceiptList",
         {
@@ -90,7 +90,7 @@ const Reception = () => {
             nextState="수납중"
             clickRowCallback={({ reception_id, patient_id }) => {
               setPatient_id(patient_id);
-              axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+              axiosClient.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
                 setPatientData(data.patient)
                 setReceptionData(data.reception);
                 setReceiptData(data);

@@ -14,13 +14,12 @@ import {
   ViewState,
   IntegratedGrouping,
 } from "@devexpress/dx-react-scheduler";
-import axios from "axios";
+import { axiosClient } from "../login/AxiosClient";
 import { compareDate, offsetDate } from './utils/dateUtils';
 import ReservationForm from './ReservationForm';
 import { doctorData, resources } from "./Reservation";
 
 const cellHeight = 2.7;
-
 const appointmentBackground = {
   '1': "#F29D94",
   '2': "#BEDEF3",
@@ -43,7 +42,7 @@ const ReservationDay = ({
   // month/week
   const loadCalendar = useCallback(() => {
     if (viewDate.viewCalendar === "month") {
-      axios
+      axiosClient
       .get(`/api/reservation/month`, {
         params: {
           start: offsetDate(viewDate.startDate),
@@ -68,7 +67,7 @@ const ReservationDay = ({
         setCalendarAppointments(val);
       });
     } else if (viewDate.viewCalendar === "week") {
-      axios.get(`/api/reservation/week`, {
+      axiosClient.get(`/api/reservation/week`, {
         params: {
           start: offsetDate(viewDate.startDate),
           end: offsetDate(viewDate.endDate)
@@ -96,7 +95,7 @@ const ReservationDay = ({
   
   // day
   const loadDayAppointments = useCallback((dateStr) => {
-    axios.get(`/api/reservation/day?target=${dateStr}`)
+    axiosClient.get(`/api/reservation/day?target=${dateStr}`)
     .then(({data}) => {
       setDaySchedule(data.map((el, idx) => {
         const startDate = new Date(`${dateStr} ${el.wish_time}`);
