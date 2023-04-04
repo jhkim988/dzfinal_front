@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { Button, Paper } from "@mui/material";
-import axios from "axios";
 import { offsetDate } from "./utils/dateUtils";
+import { axiosClient } from "../login/AxiosClient";
 
 const compare = (t1, t2) => {
   return t1.getTime() - t2.getTime();
@@ -43,7 +43,7 @@ const ReservationTimePicker = ({
   const [selectPickTime, setSelectPickTime] = useState(pickTime);
 
   useEffect(() => {
-    viewPickerDate && axios
+    viewPickerDate && axiosClient
       .get(`/api/reservation/impossible/time`, {
         params: {
           doctor,
