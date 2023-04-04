@@ -6,6 +6,8 @@ import PersonPinIcon from '@mui/icons-material/PersonPin';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
 import ChatList from "../../component/chat/ChatList";
+import LogoSection from "./LogoSection";
+import Logo from "../ui-component/Logo";
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
