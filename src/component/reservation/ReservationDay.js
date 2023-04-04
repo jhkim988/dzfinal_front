@@ -14,7 +14,6 @@ import {
   ViewState,
   IntegratedGrouping,
 } from "@devexpress/dx-react-scheduler";
-// import axios from "axios";
 import { axiosClient } from "../login/AxiosClient";
 import { compareDate, offsetDate } from './utils/dateUtils';
 import ReservationForm from './ReservationForm';
@@ -22,7 +21,6 @@ import { doctorData, resources } from "./Reservation";
 
 
 const cellHeight = 2.7;
-
 const appointmentBackground = {
   '1': "#F29D94",
   '2': "#BEDEF3",

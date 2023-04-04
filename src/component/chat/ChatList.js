@@ -1,16 +1,13 @@
 import React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import axios from 'axios';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import { AppBar, Box, Button, getRadioUtilityClass, IconButton, ListItemButton, Paper, TextField, Toolbar } from '@mui/material';
+import { axiosClient } from '../login/AxiosClient';
+import { AppBar, Box, ListItemButton, Paper, Toolbar } from '@mui/material';
 
 const Chat_API_BASE_URL = "/api/chat";
 
@@ -18,7 +15,7 @@ const ChatList = () => {
     const [chatList, setChatList] = useState([]);
 
     useEffect(() => {
-        axios.post(Chat_API_BASE_URL)
+        axiosClient.post(Chat_API_BASE_URL)
             .then((response) => {
                 setChatList(response.data);
             })

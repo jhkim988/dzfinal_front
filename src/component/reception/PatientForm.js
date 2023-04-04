@@ -1,30 +1,12 @@
 import {
-    Button,
-    Checkbox,
-    createTheme,
-    Dialog,
-    FormControlLabel,
-    MenuItem,
-    Paper,
-    TextareaAutosize,
-    TextField,
-    ThemeProvider,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Grid,
-    Autocomplete,
-} from "@mui/material";
-import { Box, height } from "@mui/system";
-import SearchIcon from "@material-ui/icons/Search";
-import { InputAdornment } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import PopupDom from "./PopupDom";
-import PopupPostCode from "./PopupPostCode";
-import axios from "axios";
-import PatientAutoComplete from "./PatientAutoComplete";
+    Button, Checkbox, createTheme, Dialog,
+    FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider,
+    Table, TableBody, TableCell, TableHead, TableRow, Grid, Autocomplete
+} from '@mui/material';
+import { Box } from '@mui/system';
+import React, { useEffect, useState } from 'react';
+import PopupPostCode from './PopupPostCode';
+import { axiosClient } from '../login/AxiosClient';
 
 
 const Patient_API_BASE_URL = "/api/patient";
@@ -88,13 +70,8 @@ const PatientForm = ({
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (
-            window.confirm(
-                patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?"
-            )
-        ) {
-            axios
-                .post(Patient_API_BASE_URL, patientData)
+        if (window.confirm(patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?")) {
+            axiosClient.post(Patient_API_BASE_URL, patientData)
                 .then((response) => {
                     alert(response.data.message);
                     console.log("patient_id:" + response.data.patient_id);
@@ -119,8 +96,7 @@ const PatientForm = ({
             event.key !== "Enter"
         ) {
             if (patient_name.length > 1) {
-                axios
-                    .get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
+                axiosClient.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
                     .then((response) => {
                         setAutoCompleteList(response.data);
                     })
@@ -155,32 +131,16 @@ const PatientForm = ({
     };
 
     const selectedSearchPatient = (patient_id) => {
-        //alert(patient_id);
-        if (
-            window.confirm(
-                "[ 환자번호 : " +
-                patient_id +
-                " ]" +
-                patientData.patient_name +
-                "님의 환자 정보를 보시겠습니까?"
-            )
-        ) {
-            axios
-                .get(Patient_API_BASE_URL + `/${patient_id}`)
-                .then((response) => {
-                    console.log("자동완성 환자정보:", response.data);
-                    setPatientData((prev) => ({ ...response.data }));
-                    setReceptionData((prev) => ({ ...response.data }));
-                    setIsChecked((prev) => ({ ...response.data }));
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } else {
-            alert("취소되었습니다. 환자 재검색 바랍니다.");
-            removeAutoCompleteList();
-        }
-    };
+        alert(patient_id);
+        axiosClient.get(Patient_API_BASE_URL + `/${patient_id}`)
+            .then((response) => {
+                console.log("자동완성 환자정보:", response.data);
+                setPatientData(prev => ({ ...response.data }));
+                setReceptionData(prev => ({ ...response.data }));
+            })
+            .catch((error) => {
+                console.error(error);
+            });
 
 
     //우편번호 검색

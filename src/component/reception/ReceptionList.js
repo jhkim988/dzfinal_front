@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { axiosClient } from '../login/AxiosClient';
 
 const Reception_API_BASE_URL = "/api/reception";
 
 const ReceptionList = () => {
     const [receptionList, setReceptionList] = useState([]);
 
-
-
     useEffect(() => {
-        axios.get(Reception_API_BASE_URL + "/list")
+        axiosClient.get(Reception_API_BASE_URL + "/list")
             .then((response) => {
                 setReceptionList(response.data);
             })

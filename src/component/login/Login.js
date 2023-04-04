@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { Grid, Paper, Box } from "@material-ui/core";
+import { useState, useEffect } from "react";
+import { Grid, Paper } from "@material-ui/core";
 import { TextField, Button, Stack } from "@mui/material";
 import axios from "axios";
+import { axiosClient } from './AxiosClient';
+import { useNavigate } from 'react-router-dom';
 
 const LoginImage = () => {
   return (
@@ -14,25 +16,33 @@ const LoginImage = () => {
   );
 };
 
+const getLoginUserInfo = () => {
+  const user_id = localStorage.getItem("user_id");
+  axiosClient.get(`/emplyee/${user_id}`).then(({ data }) => {
+    console.log(data);
+  });
+};
+
 const LoginForm = () => {
   const [loginForm, setLoginForm] = useState({
     username: "",
     password: "",
   });
-  const grant_type = "password";
-  const scope = "read";
+
   const client_id = "client";
   const client_secret = "secret";
   const base64 = window.btoa(`${client_id}:${client_secret}`);
   const params = new URLSearchParams({
-    grant_type,
+    grant_type: "password",
     ...loginForm,
-    scope,
+    scope: "read",
   });
+
   const headers = {
     Authorization: `Basic ${base64}`,
-    "Content-Type": "application/x-www-form-urlencoded",
+    "Content-Type": "application/json;charset=UTF-8",
   };
+
   const login = () => {
     console.log(loginForm);
     axios
@@ -43,10 +53,14 @@ const LoginForm = () => {
       .then(({ data }) => {
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("refresh_token", data.refresh_token);
-        console.log(data);
         console.log(atob(data.access_token.split(".")[1]));
+        const { user_name, authorities } = JSON.parse(atob(data.access_token.split(".")[1]));
+        localStorage.setItem("user_id", user_name);
+        localStorage.setItem("authorities", authorities);
+        // getLoginUserInfo(user_name);
       });
   };
+
   return (
     <Paper
       component={Stack}
@@ -57,7 +71,12 @@ const LoginForm = () => {
       <TextField
         label="ID"
         variant="outlined"
-        sx={{ width: "100%", marginTop: "10px" }}
+        sx={{
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: "10px",
+        }}
         value={loginForm.username}
         onChange={(e) => {
           setLoginForm({ ...loginForm, username: e.target.value });
@@ -67,7 +86,12 @@ const LoginForm = () => {
         label="Password"
         variant="outlined"
         type="password"
-        sx={{ width: "100%", marginTop: "10px" }}
+        sx={{
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: "10px",
+        }}
         value={loginForm.password}
         onChange={(e) => {
           setLoginForm({ ...loginForm, password: e.target.value });
@@ -75,7 +99,12 @@ const LoginForm = () => {
       />
       <Button
         variant="contained"
-        sx={{ width: "100%", marginTop: "10px" }}
+        sx={{
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: "10px",
+        }}
         onClick={login}
       >
         로그인
@@ -85,6 +114,24 @@ const LoginForm = () => {
 };
 
 const Login = () => {
+  const navi = useNavigate();
+  const movePageWithAuthority = (authority) => {
+    if (authority.includes("ADMIN")) {
+      navi("/management");
+    } else if (authority.includes("DOCTOR")) {
+      navi("/clinic");
+    } else if (authority.includes("KLPN") || authority.includes("ROLE_RN")) {
+      navi("/reception");
+    }
+  }
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const authority = localStorage.getItem("authorities");
+      console.log(token, authority);
+      movePageWithAuthority(authority);
+    }
+  }, []);
   return (
     <Grid container>
       <Grid item xs={9}>

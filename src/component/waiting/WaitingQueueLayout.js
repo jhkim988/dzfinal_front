@@ -7,12 +7,11 @@ import React, {
 } from "react";
 import { Grid, Paper } from "@mui/material";
 import mqtt from "mqtt";
-import axios from "axios";
 import CallButtonSet from "./CallButtonSet";
 import WaitingQueue from "./WaitingQueue";
-
-// const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
-const mqttURL = `mqtt://localhost:8083/mqtt`;
+import { axiosClient } from "../login/AxiosClient";
+const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
+// const mqttURL = `mqtt://localhost:8083/mqtt`;
 const genRanHex = (size) =>
   [...Array(size)]
     .map(() => Math.floor(Math.random() * 16).toString(16))
@@ -122,7 +121,7 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   };
 
   useEffect(() => {
-    axios.get("/api/reception/today").then(({ data }) => {
+    axiosClient.get("/api/reception/today").then(({ data }) => {
       setData(data);
     });
   }, []);

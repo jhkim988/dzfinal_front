@@ -9,12 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect } from "react";
-import axios from "axios";
 import { useState } from "react";
 import { useRef } from "react";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
+import { axiosClient } from "../login/AxiosClient";
 
 const Prescription = ({
   handlePrescriptionAdd,
@@ -35,7 +35,7 @@ const Prescription = ({
       setSearchText(e.target.value);
 
       if (e.target.value.length >= 2) {
-        axios
+        axiosClient
           .get(
             `/api/clinic/drug/${e.target.name}/${encodeURIComponent(
               searchText

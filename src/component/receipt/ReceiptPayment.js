@@ -1,22 +1,16 @@
 import React, { useRef, useEffect, useState } from "react";
 import ReactToPrint from "react-to-print";
-import axios from "axios";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Treatment from "./modal/Treatment";
-import ClinicRequest from "./modal/ClinicRequest";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import {
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
-  Input,
-} from "@mui/material";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Treatment from './modal/Treatment';
+import ClinicRequest from './modal/ClinicRequest';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import { InputLabel, MenuItem, FormControl, Select, Input } from '@mui/material';
+import { axiosClient } from '../login/AxiosClient';
 
-export default function BasicSelect({ user }) {
-  const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance } = user;
+export default function BasicSelect({user}) {
+  const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
   const [showCardForm, setShowCardForm] = useState(false); // 카드 결제 폼을 보여줄지 여부를 저장할 상태 값을 추가합니다.
   const [isCashPayment, setIsCashPayment] = useState(false); // 현금결제 상태 값을 추가합니다.
   const [isCardPayment, setIsCardPayment] = useState(false);
@@ -40,21 +34,17 @@ export default function BasicSelect({ user }) {
   // 현금결제
   const handleCashPayment = async () => {
     try {
-      const response = await axios.post(
-        "/api/receipt/insertReceipt",
-        {
-          reception_id: user.reception_id,
-          ratio: InsuranceRatio,
-          total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
-          card_name: "-",
-          card_number: "-",
-          mode: "현금",
-          creator: 1,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await axiosClient.post('/api/receipt/insertReceipt', {
+        reception_id: user.reception_id,
+        ratio: InsuranceRatio,
+        total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
+        card_name: '-',
+        card_number: '-',
+        mode: '현금',
+        creator: 1
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
         }
       );
       alert("현금결제가 완료되었습니다.");
@@ -133,21 +123,17 @@ export default function BasicSelect({ user }) {
   const handleReceiptInsert = async () => {
     if (card_name && card_number) {
       try {
-        const response = await axios.post(
-          "/api/receipt/insertReceipt",
-          {
-            reception_id: user.reception_id,
-            ratio: InsuranceRatio,
-            total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
-            card_name: card_name,
-            card_number: card_number,
-            mode: "카드",
-            creator: 1,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
+        const response = await axiosClient.post('/api/receipt/insertReceipt', {
+          reception_id: user.reception_id,
+          ratio: InsuranceRatio,
+          total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
+          card_name: card_name,
+          card_number: card_number,
+          mode: '카드',
+          creator: 1
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
           }
         );
         alert("카드결제가 완료되었습니다.");
