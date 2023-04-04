@@ -23,6 +23,9 @@ const Management = Loadable(
 const Register = Loadable(
   lazy(() => import("../../component/management/Register"))
 );
+const Login = Loadable(
+  lazy(() => import("../../component/login/Login"))
+);
 
 const MainRoutes = {
   path: "/",
@@ -52,6 +55,10 @@ const MainRoutes = {
       path: "register",
       element: <Register />,
     },
+    {
+      path: "login",
+      element: <Login />,
+    }
   ],
 };
 
