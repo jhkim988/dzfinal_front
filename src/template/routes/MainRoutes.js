@@ -24,9 +24,7 @@ const Register = Loadable(
   lazy(() => import("../../component/management/Register"))
 );
 
-// const DID = Loadable(
-//   lazy(() => import("../../component/did/DID"))
-// )
+const Mqtt = Loadable(lazy(() => import("../../component/chat/mqtt/Mqtt")));
 
 const MainRoutes = {
   path: "/",
@@ -59,6 +57,10 @@ const MainRoutes = {
     {
       path: "register",
       element: <Register />,
+    },
+    {
+      path: "mqtt",
+      element: <Mqtt />,
     },
   ],
 };
