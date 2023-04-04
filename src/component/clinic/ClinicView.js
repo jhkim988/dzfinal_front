@@ -105,6 +105,7 @@ const ClinicView = () => {
               <MedicalRecordInquiry
                 mri={mri}
                 setMri={setMri}
+                patient={patient}
                 setMedicalInfo={setMedicalInfo}
                 clickMedicalRecordInquiry={clickMedicalRecordInquiry}
                 pagination={pagination}
