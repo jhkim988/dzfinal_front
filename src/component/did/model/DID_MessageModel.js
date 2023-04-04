@@ -1,5 +1,5 @@
-import { useReducer, useContext } from "react";
-import AxiosClientContext from './../../login/AxiosClient';
+import { useReducer } from "react";
+import axiosClient from './../../login/AxiosClient';
 
 const DID_Message_ACTION = {
   INSERT: 1,
@@ -38,7 +38,6 @@ function didMessageReducer(messages, action) {
 }
 
 export default function DID_MessageModel() {
-  const { axiosClient } = useContext(AxiosClientContext);
   const [messages, dispatch] = useReducer(didMessageReducer, []);
 
   const onInsert = (message) => {

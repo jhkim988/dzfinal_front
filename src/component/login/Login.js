@@ -1,9 +1,9 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Grid, Paper } from "@material-ui/core";
 import { TextField, Button, Stack } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import AxiosClientContext from './AxiosClient';
+import AxiosClient from './AxiosClient';
 
 const LoginImage = () => {
   return (
@@ -17,7 +17,6 @@ const LoginImage = () => {
 };
 
 const LoginForm = () => {
-  const { axiosClient } = useContext(AxiosClientContext);
   const [loginForm, setLoginForm] = useState({
     username: "",
     password: "",
@@ -38,33 +37,33 @@ const LoginForm = () => {
   };
 
   const login = () => {
-    console.log(loginForm);
     axios
       .post(`http://localhost:8081/oauth/token`, null, {
         params,
         headers,
       })
       .then(({ data }) => {
-        console.log(data);
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("refresh_token", data.refresh_token);
-        console.log(atob(data.access_token.split(".")[1]));
         const { user_name, authorities } = JSON.parse(atob(data.access_token.split(".")[1]));
         localStorage.setItem("user_id", user_name);
         localStorage.setItem("authorities", authorities);
-        getLoginUserInfo(user_name);
+        AxiosClient.defaults.headers["Authorization"] = `Bearer ${data.access_token}`;
+        getLoginUserInfo();
+        movePageWithAuthority(authorities);
       });
   };
 
   const getLoginUserInfo = () => {
     const user_id = localStorage.getItem("user_id");
-    axiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
-      console.log(data);
+    AxiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
+      localStorage.setItem("userInfo", data);
     });
   };
 
   const navi = useNavigate();
   const movePageWithAuthority = (authority) => {
+    console.log(authority);
     if (authority.includes("ADMIN")) {
       navi("/management");
     } else if (authority.includes("DOCTOR")) {
@@ -78,7 +77,6 @@ const LoginForm = () => {
     if (token) {
       getLoginUserInfo();
       const authority = localStorage.getItem("authorities");
-      console.log(token, authority);
       movePageWithAuthority(authority);
     }
   }, []);

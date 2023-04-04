@@ -4,9 +4,9 @@ import {
     TableCell, TableRow, Grid, Autocomplete
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import PopupPostCode from './PopupPostCode';
-import AxiosClientContext from './../login/AxiosClient';
+import axiosClient from './../login/AxiosClient';
 
 const Patient_API_BASE_URL = "/api/patient";
 
@@ -22,7 +22,6 @@ const gender = [
 ];
 
 const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionData, selectedAddress, setSelectedAddress }) => {
-    const { axiosClient } = useContext(AxiosClientContext);
     const [isChecked, setIsChecked] = useState(false);
     const [open, setOpen] = React.useState(false);
     const [patient_name, setPatient_name] = useState('');
