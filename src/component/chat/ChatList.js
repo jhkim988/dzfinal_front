@@ -1,76 +1,76 @@
-import React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import axios from 'axios';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import { AppBar, Box, Button, getRadioUtilityClass, IconButton, ListItemButton, Paper, TextField, Toolbar } from '@mui/material';
-
-const Chat_API_BASE_URL = "/api/chat";
+import {
+  Avatar,
+  Badge,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@mui/material";
+import axios from "axios";
+import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import ChatRoom from "./ChatRoom";
 
 const ChatList = () => {
-    const [chatList, setChatList] = useState([]);
+  const [chatRoom, setChatRoom] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
-    useEffect(() => {
-        axios.post(Chat_API_BASE_URL)
-            .then((response) => {
-                setChatList(response.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
+  const handleRowClick = (room) => {
+    setSelectedRoom(room);
+  };
 
-    const openChatRoom = () => {
-        alert("채팅방");
-    }
+  const handleBackClick = () => {
+    setSelectedRoom(null);
+  };
 
+  useEffect(() => {
+    axios
+      .get("api/chat/chatlist")
+      .then((response) => {
+        setChatRoom(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const renderChatList = () => {
     return (
-        <div>
-            {/* 로그인 시 자기자신 제외한 채팅방목록 조회 */}
-            <Paper sx={{ marginBottom: 5 }} elevation={2} style={{ width: "400px", height: "550px" }}>
-                <Box>
-                    <AppBar position="static" style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-                        <Toolbar style={{ width: 400, height: 60, alignItems: 'right' }}>
-                            {/* <AccountCircleRoundedIcon style={{ height: 50 }}></AccountCircleRoundedIcon>
-                            <TextField id="outlined-basic"
-                                abel="프로필"
-                                name="profile"
-                                variant="outlined"
-                                style={{}}
-                            /> */}
-                        </Toolbar>
-                    </AppBar>
-
-                    <h3>채팅목록</h3>
-                    {
-                        chatList.map((list) => (
-                            <List sx={{ width: '100%', maxWidth: 400, bgcolor: 'background.paper' }}>
-                                <ListItem alignItems="flex-start" key={list.chatroom_id} onClick={openChatRoom}>
-                                    <ListItemButton style={{ padding: 2 }}>
-                                        <ListItemAvatar>
-                                            <Avatar
-                                                alt={list.chatroom_name}
-                                            //src={`/static/images/avatar/${value + 1}.jpg`}
-                                            />
-                                        </ListItemAvatar>
-                                        <ListItemText primary={list.chatroom_name} />
-                                    </ListItemButton>
-                                </ListItem>
-                                {/* <Divider variant="inset" component="li" /> */}
-                            </List>
-                        ))
-                    }
-                </Box>
-            </Paper >
-        </div >
+      <Table>
+        <TableBody>
+          {chatRoom.map((room) => (
+            <TableRow
+              key={room.chatroom_id}
+              onClick={() => handleRowClick(room)}
+              sx={{
+                "&:hover": { backgroundColor: "lightgray" },
+                borderRadius: "10px",
+              }}
+            >
+              <TableCell>
+                <Avatar></Avatar>
+              </TableCell>
+              <TableCell>{room.chatroom_name}</TableCell>
+              <TableCell>
+                <Badge badgeContent={4} color="error" />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     );
+  };
+
+  const renderChatRoom = () => {
+    return (
+      <>
+        <ChatRoom room={selectedRoom} onBackClick={handleBackClick} />
+      </>
+    );
+  };
+
+  return selectedRoom ? renderChatRoom() : renderChatList();
 };
 
 export default ChatList;
