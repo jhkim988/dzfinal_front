@@ -14,6 +14,7 @@ import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
 import ChatList from "../../component/chat/ChatList";
 import MailIcon from "@mui/icons-material/Mail";
+import LogoSection from "../../template/layout/LogoSection";
 import ChatSection from "../../component/chat/ChatSection";
 
 const Header = ({ handleLeftDrawerToggle }) => {
@@ -53,7 +54,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
           component="span"
           sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
         >
-          <LogoSection/>
+          <LogoSection />
         </Box>
       </Box>
 

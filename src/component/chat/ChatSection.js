@@ -13,8 +13,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Transitions from "../../template/ui-component/Transitions";
 import MainCard from "../../template/ui-component/cards/MainCard";
 import { IconBrandHipchat } from "@tabler/icons";
-import ChatMqtt from "./mqtt/ChatMqtt";
-import ChatList from "./ChatList";
+import ChatMqtt from "./ChatMqtt";
 
 const ChatSection = () => {
   const theme = useTheme();

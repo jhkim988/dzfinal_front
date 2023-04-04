@@ -1,12 +1,25 @@
 import { AppBar, Box, Button, Grid, TextField, Toolbar } from "@mui/material";
 import { IconChevronLeft } from "@tabler/icons";
-import React, { useState } from "react";
-import { Client } from "./mqtt/ChatMqtt";
+import React, { useEffect, useState } from "react";
+import { Client } from "./ChatMqtt";
 import { useContext } from "react";
+import axios from "axios";
 
 const ChatRoom = ({ room, onBackClick }) => {
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const client = useContext(Client);
+
+  useEffect(() => {
+    axios
+      .get(`api/chat/getchatroommessages?chatroom_id=${room.chatroom_id}`)
+      .then((response) => {
+        setMessages(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
   const publish = () => {
     if (client) {
@@ -15,12 +28,14 @@ const ChatRoom = ({ room, onBackClick }) => {
         JSON.stringify({
           mode: "private",
           to: room.chatroom_id,
-          from: "employee", // 수정
+          from: 3, // 수정
           message: message,
         }),
         { qos: 1 }
       );
     }
+    setMessage("");
+    setMessages((prevMessages) => [...prevMessages, message]);
   };
 
   return (
@@ -40,22 +55,30 @@ const ChatRoom = ({ room, onBackClick }) => {
       <Grid item xs={12}>
         <Box
           sx={{
-            display: "flex",
-            height: "100%",
+            display: "block",
+            height: "250px",
             overflowY: "auto",
           }}
         >
-          채팅내역
+          {messages.map((message, index) => (
+            <Box key={index}>{message}</Box>
+          ))}
         </Box>
       </Grid>
       <Grid item xs={12}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <TextField
             multiline
-            rows={4}
+            maxRows={4}
             placeholder="내용을 입력해주세요."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                publish();
+              }
+            }}
             sx={{ width: "100%" }}
           />
           <Box sx={{ display: "flex", alignItems: "center" }}>

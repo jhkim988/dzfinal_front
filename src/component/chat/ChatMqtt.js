@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import mqtt from "mqtt";
 import { createContext } from "react";
-import ChatList from "../ChatList";
+import ChatList from "./ChatList";
 
 export const Client = createContext([]);
 export default function ChatMqtt() {
