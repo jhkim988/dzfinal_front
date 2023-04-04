@@ -44,7 +44,7 @@ const DidView = () => {
     useEffect(() => {
         const interval = setInterval(() => {
           setIndex((prevIndex) => (prevIndex + 1) % getDidSubtitle.length);
-        }, 5000);
+        }, 6000);
         return () => clearInterval(interval);
       }, [getDidSubtitle]);
 

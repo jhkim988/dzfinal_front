@@ -11,8 +11,8 @@ import axios from "axios";
 import CallButtonSet from "./CallButtonSet";
 import WaitingQueue from "./WaitingQueue";
 
-const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
-// const mqttURL = `mqtt://localhost:8083/mqtt`;
+// const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
+const mqttURL = `mqtt://localhost:8083/mqtt`;
 const genRanHex = (size) =>
   [...Array(size)]
     .map(() => Math.floor(Math.random() * 16).toString(16))
