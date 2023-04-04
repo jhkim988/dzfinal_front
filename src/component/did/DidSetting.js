@@ -14,13 +14,16 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
+import { red } from "@mui/material/colors";
 import { tableCellClasses } from "@mui/material/TableCell";
 import axios from "axios";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import DID_MessageModel from "./model/DID_MessageModel";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 const DidSetting = () => {
-  const [messages, onInsert, onToggle, onUpdate, onAppend] = DID_MessageModel();
+  const [messages, onInsert, onToggle, onUpdate, onDelete, onAppend] =
+    DID_MessageModel();
   const inputEl = useRef(null);
   const [value, setValue] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
@@ -191,12 +194,22 @@ const DidSetting = () => {
             </TableRow>
           </TableBody>
         </Table>
-        <Box sx={{ maxHeight: "500px", overflowY: "auto" }}>
+        <Box
+          sx={{
+            maxHeight: "480px",
+            overflowY: "auto",
+            marginLeft: 2,
+            marginRight: 2,
+            border: "1px solid lightgray",
+            borderRadius: 2,
+          }}
+        >
           <Table
             sx={{
               [`& .${tableCellClasses.root}`]: {
                 borderBottom: "none",
               },
+              "& th": { padding: 0 },
             }}
           >
             <TableHead>
@@ -231,6 +244,14 @@ const DidSetting = () => {
                       }}
                     />
                   </TableCell>
+                  <TableCell align="center">
+                    <RemoveCircleOutlineIcon
+                      sx={{ color: red[500] }}
+                      onClick={() => {
+                        onDelete(message.id);
+                      }}
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -240,6 +261,7 @@ const DidSetting = () => {
           sx={{
             display: "flex",
             justifyContent: "space-around",
+            marginTop: 2,
             marginBottom: 2,
           }}
         >

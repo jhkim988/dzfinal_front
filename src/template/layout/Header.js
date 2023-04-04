@@ -7,7 +7,6 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
 import ChatList from "../../component/chat/ChatList";
 
-
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
   const [toggleIcon, setToggleIcon] = useState(false);
@@ -77,7 +76,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
       <Box>
-        <Button variant="contained" onClick={openModal}>
+        {/* <Button variant="contained" onClick={openModal}>
           채팅
         </Button>
         <Dialog open={open} onClose={closeModal}>
@@ -89,8 +88,15 @@ const Header = ({ handleLeftDrawerToggle }) => {
         </ChatList>} */}
       </Box>
       <Box>
-        <AccountCircleRoundedIcon style={{ height: 50 }}></AccountCircleRoundedIcon>
-        <TextField id="outlined-basic" label="프로필" name="profile" variant="outlined" />
+        <AccountCircleRoundedIcon
+          style={{ height: 50 }}
+        ></AccountCircleRoundedIcon>
+        <TextField
+          id="outlined-basic"
+          label="프로필"
+          name="profile"
+          variant="outlined"
+        />
       </Box>
     </>
   );
