@@ -116,25 +116,6 @@ const Reception = () => {
   });
 
 
-
-  const [selectedInformation, setSelectedInformation] = useState({});
-
-
-  // const [patientData, setPatientData] = useState({
-  //   patient_name: "",
-  //   front_registration_number: "",
-  //   back_registration_number: "",
-  //   gender: "",
-  //   phone_number1: "",
-  //   phone_number2: "",
-  //   phone_number3: "",
-  //   insurance: "",
-  //   zip_code: "",
-  //   address: "",
-  //   detail_address: "",
-  //   insurance: "true",
-  // });
-
   return (
     <>
       <Grid container spacing={2}>
@@ -162,7 +143,6 @@ const Reception = () => {
                 <ReceiptList
                   clickRowCallback={clickRowCallback}
                   receiptRecordSearch={receiptRecordSearch}
-                  setSelectedInformation={setSelectedInformation}
                   patient_id={patient_id}
                   // setSelectedOneReceipt={setSelectedOneReceipt}
                 />
