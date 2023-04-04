@@ -1,61 +1,79 @@
 import {
-    Button, Checkbox, createTheme, Dialog,
-    FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider,
-    Table, TableBody, TableCell, TableHead, TableRow, Grid, Autocomplete
-} from '@mui/material';
-import { Box } from '@mui/system';
+    Button,
+    Checkbox,
+    createTheme,
+    Dialog,
+    FormControlLabel,
+    MenuItem,
+    Paper,
+    TextareaAutosize,
+    TextField,
+    ThemeProvider,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Grid,
+    Autocomplete,
+} from "@mui/material";
+import { Box, height } from "@mui/system";
 import SearchIcon from "@material-ui/icons/Search";
 import { InputAdornment } from "@material-ui/core";
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import PopupDom from './PopupDom';
-import PopupPostCode from './PopupPostCode';
-import zIndex from '@mui/material/styles/zIndex';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import React, { useEffect, useState } from "react";
+import PopupDom from "./PopupDom";
+import PopupPostCode from "./PopupPostCode";
+import axios from "axios";
+import PatientAutoComplete from "./PatientAutoComplete";
+
 
 const Patient_API_BASE_URL = "/api/patient";
 
 const gender = [
     {
-        value: 'M',
-        label: 'M'
+        value: "M",
+        label: "M",
     },
     {
-        value: 'F',
-        label: 'F'
-    }
+        value: "F",
+        label: "F",
+    },
 ];
 
-const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionData, selectedAddress, setSelectedAddress }) => {
+const PatientForm = ({
+    setPatient_id,
+    patientData,
+    setPatientData,
+    setReceptionData,
+    selectedAddress,
+    setSelectedAddress,
+}) => {
     const [isChecked, setIsChecked] = useState(false);
     const [open, setOpen] = React.useState(false);
-    const [patient_name, setPatient_name] = useState('');
+    const [patient_name, setPatient_name] = useState("");
     const [autoCompleteList, setAutoCompleteList] = useState([]);
 
     const resetHandler = (event) => {
         setPatientData({
-            patient_name: '',
-            front_registration_number: '',
-            back_registration_number: '',
-            gender: '',
-            phone_number1: '',
-            phone_number2: '',
-            phone_number3: '',
-            detail_address: '',
-            insurance: 'true'
+            patient_name: "",
+            front_registration_number: "",
+            back_registration_number: "",
+            gender: "",
+            phone_number1: "",
+            phone_number2: "",
+            phone_number3: "",
+            detail_address: "",
+            insurance: "true",
         });
         setSelectedAddress({
-            zip_code: '',
-            address: ''
+            zip_code: "",
+            address: "",
         });
     };
 
     const handleCheck = (event) => {
         setIsChecked(event.target.checked);
-    }
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -63,15 +81,20 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
             ...patientData,
             ...selectedAddress,
             ...isChecked,
-            [name]: value
+            [name]: value,
         }));
         setPatient_name(event.target.value);
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (window.confirm(patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?")) {
-            axios.post(Patient_API_BASE_URL, patientData)
+        if (
+            window.confirm(
+                patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?"
+            )
+        ) {
+            axios
+                .post(Patient_API_BASE_URL, patientData)
                 .then((response) => {
                     alert(response.data.message);
                     console.log("patient_id:" + response.data.patient_id);
@@ -85,15 +108,19 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
             alert("환자 등록이 취소되었습니다. 다시 시도 바랍니다.");
             resetHandler();
         }
-
     };
 
     //환자이름검색
     const handleDropDownKey = (event) => {
         event.preventDefault();
-        if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter") {
+        if (
+            event.key !== "ArrowDown" &&
+            event.key !== "ArrowUp" &&
+            event.key !== "Enter"
+        ) {
             if (patient_name.length > 1) {
-                axios.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
+                axios
+                    .get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
                     .then((response) => {
                         setAutoCompleteList(response.data);
                     })
@@ -103,28 +130,58 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
             } else {
                 setAutoCompleteList([]);
             }
-
         }
-    }
+    };
 
     const removeAutoCompleteList = () => {
-        setPatient_name('');
+        setPatient_name("");
         setAutoCompleteList([]);
-    }
+    };
+    const updatePatientInfo = () => {
+        if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 환자 정보를 수정하시겠습니까?")) {
+            axios.post(Patient_API_BASE_URL + "/update", patientData)
+                .then((response) => {
+                    alert("환자 수정 성공");
+                    setPatientData(prev => ({ ...response.data }));
+                })
+                .catch((error) => {
+                    alert("환자 수정 실패, 확인바람 ");
+                    console.error(error);
+                });
+        } else {
+            alert("취소되었습니다.");
+            resetHandler();
+        }
+    };
 
     const selectedSearchPatient = (patient_id) => {
-        alert(patient_id);
-        axios.get(Patient_API_BASE_URL + `/${patient_id}`)
-            .then((response) => {
-                console.log("자동완성 환자정보:", response.data);
-                setPatientData(prev => ({ ...response.data }));
-                setReceptionData(prev => ({ ...response.data }));
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        //alert(patient_id);
+        if (
+            window.confirm(
+                "[ 환자번호 : " +
+                patient_id +
+                " ]" +
+                patientData.patient_name +
+                "님의 환자 정보를 보시겠습니까?"
+            )
+        ) {
+            axios
+                .get(Patient_API_BASE_URL + `/${patient_id}`)
+                .then((response) => {
+                    console.log("자동완성 환자정보:", response.data);
+                    setPatientData((prev) => ({ ...response.data }));
+                    setReceptionData((prev) => ({ ...response.data }));
+                    setIsChecked((prev) => ({ ...response.data }));
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        } else {
+            alert("취소되었습니다. 환자 재검색 바랍니다.");
+            removeAutoCompleteList();
+        }
+    };
 
-    }
 
     //우편번호 검색
     const handleComplete = (data) => {
@@ -138,16 +195,22 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
             ...selectedAddress,
             [e.target.name]: e.target.value,
         })
+
     }
 
+
     const tableStyle = {
+        marginTop: "19px",
+        marginLeft: "5px",
         position: "fixed",
         zIndex: "9999",
         background: "white",
-        width: "150px", height: "auto"
+        width: "250px",
+        height: "auto"
     }
     return (
         <>
+
             <Paper sx={{ height: "24vh" }} elevation={1}>
                 <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
                     <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>환자 등록/수정</h5>
@@ -155,104 +218,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                 <div style={{ marginTop: "1em", marginLeft: "1em" }}>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
-                            <Autocomplete
-                                disablePortal
-                                id="combo-box-demo"
-                                options={autoCompleteList}
-                                onChange={handleChange}
-                                name="patient_name"
-                                value={patientData.patient_name || ''}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="환자이름 검색"
-                                        InputLabelProps={{
-                                            shrink: true
-                                        }}
-                                        sx={{
-                                            width: "100%",
-                                            '& > :not(style)': { m: 0.5 },
-                                            '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
-                                        }}
-                                        name="patient_name"
-                                        value={patientData.patient_name || ''}
-                                        size="small"
-                                        style={{ height: "10px" }}
-                                    />
-                                )}
-                                renderOption={autoCompleteList.map((patient) => (
-                                    <TableRow
-                                        key={patient.patient_id}
-                                        hover
-                                        onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
-
-                                    >
-                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
-                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
-                                        <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
-                                    </TableRow>
-                                ))}
-                            />
-                            {/* <TextField
-                                id="outlined-basic"
-                                InputLabelProps={{
-                                    shrink: "true"
-                                }}
-                                sx={{
-                                    width: "100%",
-                                    '& > :not(style)': { m: 0.5 },
-                                    '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
-                                }}
-                                label="환자이름 검색"
-                                variant="outlined"
-                                name="patient_name"
-                                onChange={handleChange}
-                                value={patientData.patient_name || ''}
-                                size='small'
-                                style={{ height: "10px" }}
-                                autoComplete="off"
-                                onKeyUp={handleDropDownKey}
-                            /> */}
-                            {/* {autoCompleteList.length > 0 && (
-                                <div style={tableStyle}>
-                                    <Table style={{ width: "200px", height: "10px" }}>
-                                        <TableBody>
-                                            {autoCompleteList.map((patient) => (
-                                                <TableRow
-                                                    key={patient.patient_id}
-                                                    hover
-                                                    onClick={() => { selectedSearchPatient(patient.patient_id); removeAutoCompleteList(); }}
-
-                                                >
-                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.patient_name}</TableCell>
-                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.front_registration_number}</TableCell>
-                                                    <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{patient.phone_number3}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                            <TableRow>
-                                                <Button variant="contained" onClick={() => { removeAutoCompleteList(); }}>닫기</Button>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                            )
-                            } */}
-                            {/* {patient_name.length > 1 && autoCompleteList.length === 0 && (
-                                //handleAlet()
-                                <div style={tableStyle}>
-                                    <Table style={{ width: "150px", height: "10px" }}>
-                                        <TableBody>
-                                            <TableCell colSpan={3} align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
-                                                입력하신 환자는 <br />존재하지 않습니다.
-                                            </TableCell>
-                                            <TableRow>
-                                                <Button variant="contained" onClick={() => { removeAutoCompleteList(); }}>닫기</Button>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                            )
-                            } */}
+                            <PatientAutoComplete setPatientData={setPatientData} patientData={patientData} />
                         </Grid>
                         <Grid item xs={5} sx={{ paddingLeft: 0 }}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
@@ -287,7 +253,15 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                         </Grid>
                         <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                                <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>등록</Button>
+                                {patientData.patient_id == null && (
+                                    <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>등록</Button>
+                                )}
+                                {patientData.patient_id != null && patientData.patient_id == 0 && (
+                                    <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>등록</Button>
+                                )}
+                                {patientData.patient_id != null && patientData.patient_id != 0 && (
+                                    <Button type="submit" onClick={updatePatientInfo} variant="contained" style={{ width: "30px", height: "30px" }}>수정</Button>
+                                )}
                                 <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px", marginRight: "5px" }}>취소</Button>
                             </Box>
                         </Grid>
@@ -446,7 +420,7 @@ const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionD
                     </Grid>
 
                 </div >
-            </Paper>
+            </Paper >
         </>
     );
 };
