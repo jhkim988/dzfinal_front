@@ -9,6 +9,7 @@ import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 import axiosClient from './../login/AxiosClient';
+import AccessAllow from './../login/AccessAllow';
 
 const ClinicView = () => {
   const [reception, setReception] = useState();
@@ -83,6 +84,7 @@ const ClinicView = () => {
 
   return (
     <Grid container spacing={2}>
+      <AccessAllow authorities={["DOCTOR"]}/>
       <Grid item xs={2} style={{ height: "90vh" }}>
         <WaitingQueueLayout
           initPanel="2"

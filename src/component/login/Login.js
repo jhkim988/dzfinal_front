@@ -43,12 +43,15 @@ const LoginForm = () => {
         headers,
       })
       .then(({ data }) => {
-        localStorage.setItem("token", data.access_token);
-        localStorage.setItem("refresh_token", data.refresh_token);
         const { user_name, authorities } = JSON.parse(atob(data.access_token.split(".")[1]));
-        localStorage.setItem("user_id", user_name);
-        localStorage.setItem("authorities", authorities);
-        axiosClient.defaults.headers["Authorization"] = `Bearer ${data.access_token}`;
+        const auth = {
+          token: data.access_token,
+          refresh_token: data.refresh_token,
+          user_id: data.user_name,
+          authorities: data.authorities,
+        }
+        localStorage.setItem("auth", JSON.stringify(auth));
+        axiosClient.defaults.headers["Authorization"] = `Bearer ${auth.token}`;
         getLoginUserInfo();
         movePageWithAuthority(authorities);
       });
@@ -63,7 +66,6 @@ const LoginForm = () => {
 
   const navi = useNavigate();
   const movePageWithAuthority = (authority) => {
-    console.log(authority);
     if (authority.includes("ADMIN")) {
       navi("/management");
     } else if (authority.includes("DOCTOR")) {
@@ -73,8 +75,8 @@ const LoginForm = () => {
     }
   }
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    if (auth?.token) {
       getLoginUserInfo();
       const authority = localStorage.getItem("authorities");
       movePageWithAuthority(authority);

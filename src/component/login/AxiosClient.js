@@ -1,16 +1,19 @@
 import axios from "axios";
 
+const auth = localStorage.getItem("auth") ? JSON.parse(localStorage.getItem("auth")) : {};
+
 const axiosClient = axios.create({
   baseURL: "",
   headers: {
     "Content-Type": "application/json;charset=UTF-8",
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    Authorization: `Bearer ${auth?.token}`,
   },
 });
 
 axiosClient.interceptors.request.use((request) => {
+  const auth = JSON.parse(localStorage.getItem("auth"));
   const tokenPayload = JSON.parse(
-    atob(localStorage.getItem("token").split(".")[1])
+    atob(auth.token.split(".")[1])
   );
   if (new Date(tokenPayload.exp * 1000) < new Date()) {
     const client_id = "client";
@@ -20,7 +23,7 @@ axiosClient.interceptors.request.use((request) => {
       .post(`http://localhost:8081/oauth/token`, null, {
         params: {
           grant_type: "refresh_token",
-          refresh_token: localStorage.getItem("refresh_token"),
+          refresh_token: auth.refresh_token,
         },
         headers: {
           Authorization: `Basic ${base64}`,
@@ -28,8 +31,9 @@ axiosClient.interceptors.request.use((request) => {
         },
       })
       .then(({ data }) => {
-        localStorage.setItem("token", data.access_token);
-        localStorage.setItem("refresh_token", data.refresh_token);
+        auth.token = data.access_token;
+        auth.refresh_token = data.refresh_token;
+        localStorage.setItem("auth", JSON.stringify(auth));
       });
   }
   return request;
