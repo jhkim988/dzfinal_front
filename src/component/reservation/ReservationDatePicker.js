@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef, useContext } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
@@ -7,7 +7,7 @@ import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import dayjs from 'dayjs';
 import ReservationTimePicker from "./ReservationTimePicker"; 
 import { compareDate, offsetDate, offsetDateObj } from './utils/dateUtils';
-import AxiosClientContext from "../login/AxiosClient";
+import axiosClient from "../login/AxiosClient";
 
 const ReservationDatePicker = ({
   pickDate,
@@ -15,7 +15,6 @@ const ReservationDatePicker = ({
   setReservationFormData,
   doctor,
 }) => {
-  const { axiosClient } = useContext(AxiosClientContext);
   const requestAbortController = useRef(null);
   const [impossible, setImpossible] = useState(new Set());
   const [viewPickerDate, setViewPickerDate] = useState(pickDate ? offsetDateObj(pickDate) : new Date());

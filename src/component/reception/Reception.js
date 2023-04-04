@@ -1,15 +1,14 @@
 import { Grid, Paper } from "@mui/material";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import DailyReservationList from "./DailyReservationList";
 import PatientForm from "./PatientForm";
 import ReceptionForm from "./ReceptionForm";
 import Receipt from "../receipt/Receipt";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 import ReceiptList from "../receipt/ReceiptList";
-import AxiosClientContext from './../login/AxiosClient';
+import axiosClient from './../login/AxiosClient';
 
 const Reception = () => {
-  const { axiosClient } = useContext(AxiosClientContext);
   const [patient_id, setPatient_id] = useState(null);
   const [selectedReservationDetails, setSelectedReservationDetails] = useState(
     {}

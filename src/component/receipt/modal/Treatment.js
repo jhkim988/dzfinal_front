@@ -1,10 +1,9 @@
 // import * as React from 'react';
 import Box from '@mui/material/Box';
-import React, { useEffect, useState, useContext } from 'react';
-import AxiosClientContext from './../../login/AxiosClient';
+import React, { useEffect, useState } from 'react';
+import axiosClient from './../../login/AxiosClient';
 
 const Treatment = ({user}) => {
-    const { axiosClient } = useContext(AxiosClientContext);
     let now = new Date();
     let year = now.getFullYear();
     let todayMonth = now.getMonth();

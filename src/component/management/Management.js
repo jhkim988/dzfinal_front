@@ -1,12 +1,11 @@
 import { Box, Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import EmployeeCard from "./EmployeeCard";
-import AxiosClientContext from './../login/AxiosClient';
+import axiosClient from './../login/AxiosClient';
 
 const Management = () => {
-  const { axiosClient } = useContext(AxiosClientContext);
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {

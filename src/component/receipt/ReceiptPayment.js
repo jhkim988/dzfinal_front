@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useState } from 'react';
 import ReactToPrint from "react-to-print";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';

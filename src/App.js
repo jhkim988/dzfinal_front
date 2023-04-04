@@ -5,7 +5,6 @@ import { ThemeProvider } from "@mui/material/styles";
 import NavigationScroll from "./template/layout/NavigationScroll";
 import ThemeRoutes from "./template/routes/ThemeRoutes";
 import themes from "./template/themes/theme";
-import AxiosClientContext from "./component/login/AxiosClient";
 
 function App() {
   const customization = useSelector((state) => state.customization);
@@ -14,9 +13,7 @@ function App() {
       <ThemeProvider theme={themes(customization)}>
         <CssBaseline />
         <NavigationScroll>
-<AxiosClientContext>
           <ThemeRoutes />
-</AxiosClientContext>
         </NavigationScroll>
       </ThemeProvider>
     </StyledEngineProvider>

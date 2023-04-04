@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
-import AxiosClientContext from './../login/AxiosClient';
+import React, { useEffect, useState } from 'react';
+import axiosClient from './../login/AxiosClient';
 
 const Reception_API_BASE_URL = "/api/reception";
 
 const ReceptionList = () => {
-    const { axiosClient } = useContext(AxiosClientContext);
     const [receptionList, setReceptionList] = useState([]);
 
     useEffect(() => {
