@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, FormControlLabel, FormGroup, Grid, InputLabel, makeStyles, MenuItem, Paper, TextareaAutosize, TextField } from '@mui/material';
+import React, { useEffect, useState, useContext } from 'react';
+import { Paper, Grid } from '@mui/material';
+import AxiosClientContext from './../login/AxiosClient';
 import {
     Table,
     TableBody,
@@ -8,7 +9,6 @@ import {
     TableHead,
     TableRow
 } from "@material-ui/core";
-import { axiosClient } from './../login/AxiosClient';
 
 const Reservation_API_BASE_URL = "/api/reservation";
 
@@ -17,6 +17,7 @@ const Reservation_API_BASE_URL = "/api/reservation";
 //예약리스트 조회할 때 초진재진 구분 추가할 수도 있음
 
 const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, setReceptionData }) => {
+    const { axiosClient } = useContext(AxiosClientContext);
     const [reservation, setReservation] = useState([]);
     //const [patient_id, setPatient_id] = useState(null);
 

@@ -1,5 +1,5 @@
 import { Grid, Paper } from "@mui/material";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import DrugTaking from "./Drug_Taking";
 import MedicalInfo from "./MedicalInfo";
 import MedicalRecordInquiry from "./MedicalRecordInquiry";
@@ -8,9 +8,10 @@ import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
-import { axiosClient } from "../login/AxiosClient";
+import AxiosClientContext from './../login/AxiosClient';
 
 const ClinicView = () => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const [reception, setReception] = useState();
   const [patient, setPatient] = useState({});
   const [underlying, onInsert, onDelete, onAppend, onReset] = DiseaseModel();

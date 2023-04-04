@@ -1,12 +1,12 @@
 import {
-    Button, Checkbox, createTheme, Dialog,
-    FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider,
-    Table, TableBody, TableCell, TableHead, TableRow, Grid, Autocomplete
+    Button, Checkbox, Dialog,
+    FormControlLabel, MenuItem, Paper, TextField,
+    TableCell, TableRow, Grid, Autocomplete
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PopupPostCode from './PopupPostCode';
-import { axiosClient } from '../login/AxiosClient';
+import AxiosClientContext from './../login/AxiosClient';
 
 const Patient_API_BASE_URL = "/api/patient";
 
@@ -22,6 +22,7 @@ const gender = [
 ];
 
 const PatientForm = ({ setPatient_id, patientData, setPatientData, setReceptionData, selectedAddress, setSelectedAddress }) => {
+    const { axiosClient } = useContext(AxiosClientContext);
     const [isChecked, setIsChecked] = useState(false);
     const [open, setOpen] = React.useState(false);
     const [patient_name, setPatient_name] = useState('');

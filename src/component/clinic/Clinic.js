@@ -8,11 +8,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useContext } from "react";
 import Diagnosis from "./Diagnosis";
 import Prescription from "./Prescription";
-import { axiosClient } from "../login/AxiosClient";
+import AxiosClientContext from './../login/AxiosClient';
 
 const Clinic = ({
   reception,
@@ -31,6 +30,7 @@ const Clinic = ({
   setTreatment,
   setClinic_request,
 }) => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const handleDiagnosisAdd = (disease) => {
     if (diagnosis.some((item) => item.disease_id === disease.disease_id)) {
       alert("이미 추가된 질병입니다.");

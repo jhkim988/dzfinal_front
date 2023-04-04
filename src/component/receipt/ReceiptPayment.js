@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ReactToPrint from "react-to-print";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -7,9 +7,10 @@ import ClinicRequest from './modal/ClinicRequest';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { InputLabel, MenuItem, FormControl, Select, Input } from '@mui/material';
-import { axiosClient } from '../login/AxiosClient';
+import AxiosClientContext from './../login/AxiosClient';
 
 export default function BasicSelect({user}) {
+  const { axiosClient } = useContext(AxiosClientContext);
   const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
   const [showCardForm, setShowCardForm] = useState(false); // 카드 결제 폼을 보여줄지 여부를 저장할 상태 값을 추가합니다.
   const [isCashPayment, setIsCashPayment] = useState(false); // 현금결제 상태 값을 추가합니다.

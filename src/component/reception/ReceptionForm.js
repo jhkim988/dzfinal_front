@@ -1,7 +1,7 @@
 import { Button, MenuItem, Paper,  TextField, Grid, Hidden } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
-import { axiosClient } from '../login/AxiosClient';
+import React, { useContext} from 'react';
+import AxiosClientContext from './../login/AxiosClient';
 
 const doctors = [
     {
@@ -25,7 +25,7 @@ const Reception_API_BASE_URL = "/api/reception";
 
 const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData, setSelectedAddress }) => {
     //console.log(patient_id);
-
+    const { axiosClient } = useContext(AxiosClientContext);
     const resetHandler = (event) => {
         setReceptionData({
             patient_id: '',

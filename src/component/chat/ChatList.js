@@ -4,14 +4,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { axiosClient } from '../login/AxiosClient';
+import { useState, useEffect, useContext } from 'react';
 import { AppBar, Box, ListItemButton, Paper, Toolbar } from '@mui/material';
+import AxiosClientContext from './../login/AxiosClient';
 
 const Chat_API_BASE_URL = "/api/chat";
 
 const ChatList = () => {
+    const { axiosClient } = useContext(AxiosClientContext);
     const [chatList, setChatList] = useState([]);
 
     useEffect(() => {

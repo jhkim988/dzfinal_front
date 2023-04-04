@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import {
   Box,
   Table,
@@ -11,9 +11,10 @@ import {
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
-import { axiosClient } from "../login/AxiosClient";
+import AxiosClientContext from './../login/AxiosClient';
 
 const Underlying = ({ props, onInsert, patient }) => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const [disease_code, setDisease_code] = useState("");
   const [disease_name, setDisease_name] = useState("");
   const [searchList, setSearchList] = useState([]);

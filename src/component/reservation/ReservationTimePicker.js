@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Grid } from "@mui/material";
 import { Button, Paper } from "@mui/material";
 import { offsetDate } from "./utils/dateUtils";
-import { axiosClient } from "../login/AxiosClient";
+import AxiosClientContext from './../login/AxiosClient';
 
 const compare = (t1, t2) => {
   return t1.getTime() - t2.getTime();
@@ -38,6 +38,7 @@ const ReservationTimePicker = ({
   doctor,
   pickTime,
 }) => {
+  const { axiosClient } = useContext(AxiosClientContext);
   const timeArr = getTimeArr("09:00:00", "18:00:00", 20);
   const [impossible, setImpossible] = useState(new Set(timeArr));
   const [selectPickTime, setSelectPickTime] = useState(pickTime);
