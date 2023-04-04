@@ -27,6 +27,7 @@ import koLocale from "dayjs/locale/ko";
 const MedicalRecordInquiry = ({
   mri,
   setMri,
+  patient,
   setMedicalInfo,
   pagination,
   setPagination,
@@ -121,7 +122,7 @@ const MedicalRecordInquiry = ({
 
   const handlePageClick = (pageNumber) => {
     axios
-      .get(`/api/clinic/mri/${1}/${pageNumber}`)
+      .get(`/api/clinic/mri/${patient.patient_id}/${pageNumber}`)
       .then((response) => {
         setMri(response.data.mri);
         setPagination(response.data.pagination);
