@@ -46,16 +46,16 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback, shouldAuto
 
   // mqtt call Patient
   const callPatient = (reception_id) => {
-    console.log("callPatient", reception_id);
     client.current.publish(
       "waiting",
       JSON.stringify({
         method: "PUT",
-        data: { reception_id, state: nextState },
+        data: { ...selected, reception_id, state: nextState },
       }),
       { qos: 1 }
     );
   };
+
   const mqttWaitingController = {
     ADD: (payload) => {
       setData((prev) => [...prev, payload.data]);
@@ -69,13 +69,14 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback, shouldAuto
         );
         return [...ret];
       });
-
       // autoCall
       if (autoCall.current && shouldAutoCall(payload)) {
         const next = autoCallNext.current;
-        setSelected(`${next}`);
-        clickRowCallback && clickRowCallback(next);
-        callPatient(next.reception_id);
+        if (next) {
+          setSelected(`${next}`);
+          clickRowCallback && clickRowCallback(next);
+          callPatient(next.reception_id);  
+        }
       }
     },
     DELETE: (payload) => {
