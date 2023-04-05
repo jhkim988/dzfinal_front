@@ -10,16 +10,16 @@ const ChatRoom = ({ room, onBackClick }) => {
   const [messages, setMessages] = useState([]);
   const client = useContext(Client);
 
-  useEffect(() => {
-    axios
-      .get(`api/chat/getchatroommessages?chatroom_id=${room.chatroom_id}`)
-      .then((response) => {
-        setMessages(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
+  // useEffect(() => {
+  //   axios
+  //     .get(`api/chat/getchatroommessages?chatroom_id=${room.chatroom_id}`)
+  //     .then((response) => {
+  //       setMessages(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // });
 
   const publish = () => {
     if (client) {
