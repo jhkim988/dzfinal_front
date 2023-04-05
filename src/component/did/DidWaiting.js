@@ -1,70 +1,73 @@
 import { Box, Grid, OutlinedInput, Paper, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import React from "react";
+// import './styles.css';
 
 
 
 
 
 const DidView = ({ data }) => {
-  function MyFormHelperText() {
 
-  }
+    function MyFormHelperText() {}
 
-// 진료실1 호출할 사람들을 담음
-const waitingPatients = data.filter((item) => item.state === "진료대기" && item.doctor_id === 1 && item.state !== "진료중");
-const waitingPatientForms = [...Array(Math.max(5 - waitingPatients.length, 0))].map((_, index) => (
-    <FormControl
-        sx={{
-            width: "33%",
-        }}
-        key={waitingPatients.length + index}
-    >
-        <OutlinedInput
-            placeholder={`1 진료실 대기자`}
-            inputProps={{ style: { textAlign: "center" } }}
-            readOnly
-        />
-        <MyFormHelperText />
-    </FormControl>
-));
+    // (진료대기)1 진료실 호출할 사람들을 담음
+    const waitingPatients = data.filter((item) => item.state === "진료대기" && item.doctor_id === 1 && item.state !== "진료중");
+    const waitingPatientForms = [...Array(Math.max(5 - waitingPatients.length, 0))].map((_, index) => (
+        <FormControl
+            sx={{
+                width: "33%",
+                padding: "2.5px",
+            }}
+            key={waitingPatients.length + index}
+        >
+            <OutlinedInput
+                placeholder={`1 진료실 대기자`}
+                inputProps={{ style: { textAlign: "center" } }}
+                readOnly
+            />
+            <MyFormHelperText />
+        </FormControl>
+    ));
 
-// 진료실2 호출할 사람들을 담음
-const waitingPatients2 = data.filter((item) => item.state === "진료대기" && item.doctor_id === 2 && item.state !== "진료중");
-const waitingPatientForms2 = [...Array(Math.max(5 - waitingPatients2.length, 0))].map((_, index) => (
-    <FormControl
-        sx={{
-            width: "33%",
-        }}
-        key={waitingPatients2.length + index}
-    >
-        <OutlinedInput
-            placeholder={`2 진료실 대기자`}
-            inputProps={{ style: { textAlign: "center" } }}
-            readOnly
-        />
-        <MyFormHelperText />
-    </FormControl>
-));
+    // (진료대기)2 진료실 호출할 사람들을 담음
+    const waitingPatients2 = data.filter((item) => item.state === "진료대기" && item.doctor_id === 2 && item.state !== "진료중");
+    const waitingPatientForms2 = [...Array(Math.max(5 - waitingPatients2.length, 0))].map((_, index) => (
+        <FormControl
+            sx={{
+                width: "33%",
+                padding: "2.5px",
+            }}
+            key={waitingPatients2.length + index}
+        >
+            <OutlinedInput
+                placeholder={`2 진료실 대기자`}
+                inputProps={{ style: { textAlign: "center" } }}
+                readOnly
+            />
+            <MyFormHelperText />
+        </FormControl>
+    ));
 
 
-// 수납 호출할 사람들을 담음
-const waitingReceipt = data.filter((item) => item.state === "수납대기" && item.state !== "수납중");
-const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].map((_, index) => (
-    <FormControl
-        sx={{
-            width: "33%",
-        }}
-        key={waitingReceipt.length + index}
-    >
-        <OutlinedInput
-            placeholder={`수납 대기자`}
-            inputProps={{ style: { textAlign: "center" } }}
-            readOnly
-        />
-        <MyFormHelperText />
-    </FormControl>
-));
+    // (수납대기)수납 호출할 사람들을 담음
+    const waitingReceipt = data.filter((item) => item.state === "수납대기" && item.state !== "수납중");
+    const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].map((_, index) => (
+        <FormControl
+            sx={{
+                width: "33%",
+                padding: "2.5px",
+            }}
+            key={waitingReceipt.length + index}
+        >
+            <OutlinedInput
+                placeholder={`수납 대기자`}
+                inputProps={{ style: { textAlign: "center" } }}
+                readOnly
+            />
+            <MyFormHelperText />
+        </FormControl>
+    ));
 
 
 
@@ -91,76 +94,75 @@ const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].m
                         }}
                 >
                 <Box sx={{ flexGrow: 1 }}>
-                <Typography variant="h2">
-                    1 진료실  |  담당의사: 김더존<br/>
-                </Typography>
-                { }
+                    <Typography variant="h2" sx={{ paddingBottom: "25px"}}>
+                        1 진료실  |  김더존 의사<br/>
+                    </Typography>
 
-                <Box component="form" noValidate autoComplete="off">
-                {data.filter((item) => item.state === "진료중" && item.doctor_id === 1).length > 0 ? (
-                data.filter((item) => item.state === "진료중" && item.doctor_id === 1).map((item, index) => (
-                    <FormControl
-                    sx={{
-                        width: "100%",
-                    }}
-                    key={index}
-                    >
-                    <OutlinedInput
-                        placeholder={`진료중 ${index + 1}`}
-                        value={`${item.patient_name}(${item.front_registration_number})`}
-                        inputProps={{ style: { textAlign: "center" } }}
-                        readOnly
-                    />
-                    <MyFormHelperText />
-                    </FormControl>
-                ))
-                ) : (
-                <FormControl
-                    sx={{
-                    width: "100%",
-                    }}
-                >
-                    <OutlinedInput
-                    placeholder={`진료중`}
-                    value={"잠시만 기다려주세용 ^*^"}
-                    inputProps={{ style: { textAlign: "center" } }}
-                    readOnly
-                    />
-                    <MyFormHelperText />
-                </FormControl>
-                )}
-
-                {waitingPatients.slice(0, 5).map((item, index) => (
-                    <FormControl
-                        sx={{
-                            width: "33%",
-                        }}
-                        key={index}
-                    >
+                    <Box component="form" noValidate autoComplete="off">
+                    {data.filter((item) => item.state === "진료중" && item.doctor_id === 1).length > 0 ? (
+                    data.filter((item) => item.state === "진료중" && item.doctor_id === 1).map((item, index) => (
+                        <FormControl
+                            sx={{
+                                width: "100%",
+                                padding: "2.5px", 
+                            }}
+                            key={index}
+                        >
                         <OutlinedInput
-                            placeholder={"1 진료실 대기자"}
                             value={`${item.patient_name}(${item.front_registration_number})`}
+                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            readOnly
+                        />
+                        <MyFormHelperText />
+                        </FormControl>
+                    ))
+                    ) : (
+                        <FormControl
+                            sx={{
+                            width: "100%",
+                            padding: "2.5px",
+                            }}
+                        >
+                            <OutlinedInput
+                            value={"잠시만 기다려주세요 🐒"}
+                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            readOnly
+                            />
+                            <MyFormHelperText />
+                        </FormControl>
+                    )}
+
+                    {waitingPatients.slice(0, 5).map((item, index) => (
+                        <FormControl
+                            sx={{
+                                width: "33%",
+                                padding: "2.5px",
+                            }}
+                            key={index}
+                        >
+                            <OutlinedInput
+                                value={`${item.patient_name}(${item.front_registration_number})`}
+                                inputProps={{ style: { textAlign: "center" } }}
+                                readOnly
+                            />
+                            <MyFormHelperText />
+                        </FormControl>
+                    ))}
+                    {waitingPatientForms}
+                    <FormControl sx={{ width: "33%", padding: "2.5px", }}>
+                        <OutlinedInput
+                            placeholder={
+                                waitingPatients.length <= 5
+                                    ? `외 0명`
+                                    : `외 ${waitingPatients.length - 5}명`
+                            }
                             inputProps={{ style: { textAlign: "center" } }}
                             readOnly
                         />
                         <MyFormHelperText />
                     </FormControl>
-                ))}
-                {waitingPatientForms}
-                <FormControl sx={{ width: "33%" }}>
-                    <OutlinedInput
-                        placeholder={
-                            waitingPatients.length <= 5
-                                ? `외 0명`
-                                : `외 ${waitingPatients.length - 5}명`
-                        }
-                        inputProps={{ style: { textAlign: "center" } }}
-                        readOnly
-                    />
-                    <MyFormHelperText />
-                </FormControl>
 
-                </Box>
+                    </Box>
                 </Box>
                 </Paper>
             </Grid>
@@ -179,8 +181,8 @@ const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].m
                         }}
                 >
                 <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="h2">
-                    2 진료실  |  담당의사: 이을지
+                    <Typography variant="h2" sx={{ paddingBottom: "25px"}}>
+                    2 진료실  |  이을지 의사
                     </Typography>
                     { }
 
@@ -190,43 +192,43 @@ const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].m
                         <FormControl
                         sx={{
                             width: "100%",
+                            padding: "2.5px",
                         }}
                         key={index}
                         >
                         <OutlinedInput
-                            placeholder={`진료중 ${index + 1}`}
                             value={`${item.patient_name}(${item.front_registration_number})`}
-                            inputProps={{ style: { textAlign: "center" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
                             readOnly
                         />
                         <MyFormHelperText />
                         </FormControl>
                     ))
                     ) : (
-                    <FormControl
-                        sx={{
-                        width: "100%",
-                        }}
-                    >
-                        <OutlinedInput
-                        placeholder={`진료중`}
-                        value={"잠시만 기다려주세용 ^*^"}
-                        inputProps={{ style: { textAlign: "center" } }}
-                        readOnly
-                        />
-                        <MyFormHelperText />
-                    </FormControl>
+                        <FormControl
+                            sx={{
+                            width: "100%",
+                            padding: "2.5px",
+                            }}
+                        >
+                            <OutlinedInput
+                            value={"잠시만 기다려주세요 🐒"}
+                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            readOnly
+                            />
+                            <MyFormHelperText />
+                        </FormControl>
                     )}
 
                     {waitingPatients2.slice(0, 5).map((item, index) => (
                         <FormControl
                             sx={{
                                 width: "33%",
+                                padding: "2.5px",
                             }}
                             key={index}
                         >
                             <OutlinedInput
-                                placeholder={"1 진료실 대기자"}
                                 value={`${item.patient_name}(${item.front_registration_number})`}
                                 inputProps={{ style: { textAlign: "center" } }}
                                 readOnly
@@ -235,7 +237,7 @@ const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].m
                         </FormControl>
                     ))}
                     {waitingPatientForms2}
-                    <FormControl sx={{ width: "33%" }}>
+                    <FormControl sx={{ width: "33%", padding: "2.5px", }}>
                         <OutlinedInput
                             placeholder={
                                 waitingPatients2.length <= 5
@@ -267,25 +269,23 @@ const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].m
                         }}
                 >
                 <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="h2">
+                    <Typography variant="h2" sx={{ paddingBottom: "25px"}}>
                     수납
-                    <br/>
                     </Typography>
-                    { }
 
-                        {/* 수납대기: {waitingReceipt.length} 명 */}
                     <Box component="form" noValidate autoComplete="off">
                     {data.filter((item) => item.state === "수납중").length > 0 ? (
                     data.filter((item) => item.state === "수납중").map((item, index) => (
                         <FormControl
-                        sx={{
-                            width: "100%",
-                        }}
-                        key={index}
+                            sx={{
+                                width: "100%",
+                                padding: "2.5px",
+                            }}
+                            key={index}
                         >
                         <OutlinedInput
                             value={`${item.patient_name}(${item.front_registration_number})`}
-                            inputProps={{ style: { textAlign: "center" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
                             readOnly
                         />
                         <MyFormHelperText />
@@ -295,12 +295,12 @@ const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].m
                     <FormControl
                         sx={{
                         width: "100%",
+                        padding: "2.5px",
                         }}
                     >
                         <OutlinedInput
-                        placeholder={`진료중`}
-                        value={"잠시만 기다려주세용 ^*^"}
-                        inputProps={{ style: { textAlign: "center" } }}
+                        value={"잠시만 기다려주세요 🐒"}
+                        inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" }}}
                         readOnly
                         />
                         <MyFormHelperText />
@@ -310,11 +310,11 @@ const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].m
                         <FormControl
                             sx={{
                             width: "33%",
+                            padding: "2.5px",
                             }}
                             key={index}
                         >
                             <OutlinedInput
-                            placeholder={"1 진료실 대기자"}
                             value={`${item.patient_name}(${item.front_registration_number})`}
                             inputProps={{ style: { textAlign: "center" } }}
                             readOnly
@@ -324,7 +324,7 @@ const waitingReceiptForms = [...Array(Math.max(5 - waitingReceipt.length, 0))].m
                     ))}
 
                     {waitingReceiptForms}
-                    <FormControl sx={{ width: "33%" }}>
+                    <FormControl sx={{ width: "33%", padding: "2.5px", }}>
                         <OutlinedInput
                             placeholder={
                                 waitingReceipt.length <= 5

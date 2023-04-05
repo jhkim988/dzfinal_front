@@ -7,8 +7,8 @@ import axios from "axios";
 import mqtt from "mqtt";
 
 
-const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
-// const mqttURL = `mqtt://localhost:8083/mqtt`;
+// const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
+const mqttURL = `mqtt://localhost:8083/mqtt`;
 
 const genRanHex = (size) =>
   [...Array(size)]
@@ -35,7 +35,6 @@ const doctor_id = 1;
 const DID = ({ nextState }) => {
   const client = useRef();
   const [data, setData] = useState([]);
-  const [selected, setSelected] = useState(null);
   const autoCall = useRef(false);
   const setAutoCall = (flag) => (autoCall.current = flag);
   const [doctorFilter, setDoctorFilter] = useState({
@@ -79,16 +78,6 @@ const DID = ({ nextState }) => {
           );
           return [...ret];
         });
-        // if (!autoCall.current) return;
-        // if (
-        //   (initPanel === "2" && payload.data.state === "수납대기") ||
-        //   (initPanel === "3" && payload.data.state === "수납완료")
-        // ) {
-        //   const next = autoCallNext.current;
-        //   setSelected(`${next.reception_id}`);
-        //   // clickRowCallback && clickRowCallback(next);
-        //   callPatient(next.reception_id);
-        // }
       } else if (payload.method === "DELETE") {
         setData((prev) =>
           prev.filter((d) => d.reception_id !== payload.data.reception_id)
@@ -127,7 +116,7 @@ const DID = ({ nextState }) => {
         spacing={2}
         sx={{ justifyContent: "center", alignItems: "center" }}
       >
-        <Grid item xs={7.5}>
+        <Grid item xs={9}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Paper
@@ -166,7 +155,7 @@ const DID = ({ nextState }) => {
           </Grid>
         </Grid>
 
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <DidWaiting 

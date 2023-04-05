@@ -14,6 +14,7 @@ function Receipt({ receiptData }) {
   const [user, setUser] = useState({
     receipt_id: 0,      // 데이터 선택 후 수정을 하기 위해 추가
     reception_id: 0,
+    state: "",
     patient_name: "",
     insurance: 0,
     treatment: 0,
@@ -34,6 +35,7 @@ function Receipt({ receiptData }) {
       const ret = ({
         receipt_id: receiptData.receipt?.receipt_id,
         reception_id: receiptData.reception.reception_id,
+        state: receiptData.reception.state,
         patient_name: receiptData.patient.patient_name,
         insurance: receiptData.patient.insuarance,
         treatment: receiptData.clinic?.treatment,
@@ -89,27 +91,56 @@ function Receipt({ receiptData }) {
   // }, [reception_id]);
 
   
-
+    // <Paper elevation={3} style={{padding: "5px", height: "82vh"}}>
+    //         {/* <h2>수납하기</h2> */}
+    //           <br/>
+    //           {/* 접수정보 */}
+    //           <ReceptionInformation 
+    //             user={user}
+    //           />
+    //           <br/>
+    //           {/* 다음진료예약 */}
+    //           <Reservation />
+    //           {/* 결제내역정보 */}
+    //           <ReceiptDetails user={user}/>
+    //           <br/>
+    //           {/* 결제방식&처방전,진료의뢰서 */}
+    //           <ReceiptPayment user={user}/>
+    //       </Paper>
 
   return (
     <div style={{ height: "480px" }}>
       <div style={{height: "400px"}}>
-        <Paper elevation={3} style={{padding: "5px", height: "82vh"}}>
-          {/* <h2>수납하기</h2> */}
-            <br/>
-            {/* 접수정보 */}
-            <ReceptionInformation 
-              user={user}
-            />
-            <br/>
+
+      <Paper elevation={3} style={{padding: "5px", height: "82vh"}}>
+        {/* <h2>수납하기</h2> */}
+        <br />
+        {/* 접수정보 */}
+        {user.state !== "진료대기" && user.state !== "진료중" ? (
+          <>
+            <ReceptionInformation user={user} />
             {/* 다음진료예약 */}
             <Reservation />
             {/* 결제내역정보 */}
-            <ReceiptDetails user={user}/>
-            <br/>
+            <ReceiptDetails user={user} />
+            <br />
             {/* 결제방식&처방전,진료의뢰서 */}
-            <ReceiptPayment user={user}/>
-        </Paper>
+            <ReceiptPayment user={user} />
+          </>
+        ) : (
+          <>
+            <ReceptionInformation user={user} disabled={true}/>
+            {/* 다음진료예약 */}
+            <Reservation />
+            {/* 결제내역정보 */}
+            <ReceiptDetails user={user} disabled={true}/>
+            <br />
+            {/* 결제방식&처방전,진료의뢰서 */}
+            <ReceiptPayment user={user} disabled={true}/>
+          </>
+        )}
+      </Paper>
+      
      </div>
     </div>
   );

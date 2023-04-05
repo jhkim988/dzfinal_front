@@ -15,6 +15,7 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
 import axios from 'axios';
+import "./style.css";
 import useEnhancedEffect from '@mui/material/utils/useEnhancedEffect';
 
 
@@ -120,7 +121,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
             <Select
               value={type}
               onChange={handleTypeChange}
-              size="medium"
+              size="small"
             >
               <MenuItem value={"patient_name"}>환자이름</MenuItem>
               <MenuItem value={"reception_id"}>접수번호</MenuItem>
