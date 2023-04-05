@@ -1,9 +1,10 @@
-import menuitems from './menuitems';
+import authitems from "./authitems";
+import menuitems from "./menuitems";
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-    items: [menuitems]
+  items: [menuitems, authitems],
 };
 
 export default menuItems;

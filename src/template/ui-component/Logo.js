@@ -1,12 +1,27 @@
-import React from 'react';
+import React from "react";
 
 const Logo = () => {
-    return (
-        // <svg width="92" height="32" viewBox="0 0 92 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        //  </svg>
-        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="66px" height="32px" viewBox="0 0 66 32" enable-background="new 0 0 66 32">
-            <image id="image0" width="66" height="32" x="0" y="0"
-    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAgCAYAAACmaK65AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+  return (
+    // <svg width="92" height="32" viewBox="0 0 92 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    //  </svg>
+    <svg
+      version="1.1"
+      id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width="66px"
+      height="32px"
+      viewBox="0 0 66 32"
+      enable-background="new 0 0 66 32"
+    >
+      <image
+        id="image0"
+        width="66"
+        height="32"
+        x="0"
+        y="0"
+        href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAgCAYAAACmaK65AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAA
 CXBIWXMAAA7EAAAOxAGVKw4bAAAPRklEQVRo3qWZfXBVdXrHP79zzj03uTe5CQIhIQuJCgkVGd4s
 XZDyIrXaVkfxBccpTtpKO2qV7qqzvuw4nWZ0d2x1F3SVnWGYtbxUBbsILs4IgtBZZnDxJQu7oECA
@@ -79,9 +94,10 @@ wFfUxhV1paYd1uRprGXR0dFBW1sblmVRU1NDIpHA9336+/vp7OwMc1PhLGT06NHEYjGU0vyhX3Os
 13RvU0ptxscUvm90ON/eTiaTobKykmg0im3bdHd309HRQXV1NQDt7e3h+9yAaUajUcaMGRPK/l+0
 Llq8RYLPggAAACF0RVh0Q3JlYXRpb24gVGltZQAyMDIzOjA0OjAzIDAzOjI1OjM4Plkt3AAAACV0
 RVh0ZGF0ZTpjcmVhdGUAMjAyMy0wNC0wMlQyMDoyOToyNSswMjowMKQvVcQAAAAldEVYdGRhdGU6
-bW9kaWZ5ADIwMjMtMDQtMDJUMjA6Mjk6MjUrMDI6MDDVcu14AAAAAElFTkSuQmCC" />
-</svg>
-    );
+bW9kaWZ5ADIwMjMtMDQtMDJUMjA6Mjk6MjUrMDI6MDDVcu14AAAAAElFTkSuQmCC"
+      />
+    </svg>
+  );
 };
 
 export default Logo;
