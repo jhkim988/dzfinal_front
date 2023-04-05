@@ -94,6 +94,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
 
     };
     const receptDataHandleSubmit = (event) => {
+        console.log("재진: ", receptionData);
         event.preventDefault();
         // if (window.confirm(receptionData.patient_name + "님의 접수 등록을 진행하시겠습니까?")) {
         if (window.confirm("접수 등록을 진행하시겠습니까?")) {
