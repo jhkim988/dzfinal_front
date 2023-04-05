@@ -24,16 +24,16 @@ const ChatList = () => {
     setSelectedRoom(null);
   };
 
-  // useEffect(() => {
-  //   axios
-  //     .get("api/chat/chatlist")
-  //     .then((response) => {
-  //       setChatRoom(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get("api/chat/chatlist")
+      .then((response) => {
+        setChatRoom(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const renderChatList = () => {
     return (
