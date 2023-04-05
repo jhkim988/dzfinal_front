@@ -126,6 +126,8 @@ export default function InputAdornments( {user} ) {
             접수번호 <Input id="reception_id" name="reception_id" inputProps={ariaLabel} value={user.reception_id} defaultValue="" readOnly />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             환자이름 <Input id="patient_id" name="patient_id" inputProps={ariaLabel} value={user.patient_name} defaultValue="" readOnly />
+            <br/>
+            환자상태: {user.state}
         </Box>
       </Box>
   );

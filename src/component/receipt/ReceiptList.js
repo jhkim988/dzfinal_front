@@ -15,12 +15,13 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
 import axios from 'axios';
+import "./style.css";
 import useEnhancedEffect from '@mui/material/utils/useEnhancedEffect';
 
 
 
 
-const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) => {
+const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
 
@@ -37,9 +38,9 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
   };
 
   useEffect(() => {
-    console.log(patient_name);
-    receiptRecordSearch({ type: "patient_name", searchText: patient_name }, setReceiptList);
-  }, [patient_name]);
+    console.log(patient_id);
+    receiptRecordSearch({ type: "patient_id", searchText: patient_id }, setReceiptList);
+  }, [patient_id]);
 
   const getReceiptList = useCallback(() => {
     receiptRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText }, setReceiptList);
@@ -78,16 +79,16 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
   
 
 
-  useEffect(() => {
-    axios.get(`/api/receipt/getReceiptList?page=${page}`)
-    .then(response => {
-      setReceiptList(response.data.content);
-      setTotalPages(response.data.totalPages);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`/api/receipt/getReceiptList?page=${page}`)
+  //   .then(response => {
+  //     setReceiptList(response.data.content);
+  //     setTotalPages(response.data.totalPages);
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
+  // }, []);
 
 
   // 수납내역목록에서 데이터 선택하면 데이터가져오기
@@ -111,16 +112,17 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
     setPage(value);
   }
 
-  useEffect(() => {
-    axios.get(`/api/receipt/getReceiptList?page=${page}`)
-    .then(response => {
-      setReceiptList(response.data.content);
-      setTotalPages(response.data.totalPages);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-  }, [page]);
+  // useEffect(() => {
+  //   // axios.get(`/api/receipt/getReceiptList?page=${page}`)
+  //   // .then(response => {
+  //   //   setReceiptList(response.data.content);
+  //   //   setTotalPages(response.data.totalPages);
+  //   // })
+  //   // .catch(error => {
+  //   //   console.log(error);
+  //   // });
+  //   axios.post(`/api/receipt/getReceiptList`)
+  // }, [page]);
 
   return (
     <>
@@ -132,7 +134,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
             <Select
               value={type}
               onChange={handleTypeChange}
-              size="medium"
+              size="small"
             >
               <MenuItem value={"patient_name"}>환자이름</MenuItem>
               <MenuItem value={"reception_id"}>접수번호</MenuItem>
