@@ -101,6 +101,9 @@ const ClinicView = () => {
               patient_id
             );
           }}
+          shouldAutoCall={({ data: { state }}) => state === "수납완료"}
+          findNextAutoCall={({ state, doctor_id }) => state === "진료대기" && doctor_id === 1}
+          shouldDisableCallButton={({ state }) => state !== "수납대기"}
         />
       </Grid>
       <Grid item xs={5}>

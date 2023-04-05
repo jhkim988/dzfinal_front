@@ -124,15 +124,9 @@ const Reception = () => {
             initPanel="3"
             nextState="수납중"
             clickRowCallback={clickRowCallback}
-            // clickRowCallback={({ reception_id, patient_id }) => {
-            //   setPatient_id(patient_id);
-            //   axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
-            //     setPatientData(data.patient)
-            //     setReceptionData(data.reception);
-            //     setReceiptData(data);
-            //     console.log(data);
-            //   });
-            // }}
+            shouldAutoCall={({ data: { state }}) => state === "수납대기"}
+            findNextAutoCall={({ state }) => state === "수납대기"}
+            shouldDisableCallButton={({ state, doctor_id }) => state !== "진료대기" || doctor_id !== 1}
           />
         </Grid>
 
