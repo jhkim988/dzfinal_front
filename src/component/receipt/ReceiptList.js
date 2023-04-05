@@ -77,6 +77,16 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
 
 
 
+  // useEffect(() => {
+  //   axios.get(`/api/receipt/getReceiptList?page=${page}`)
+  //   .then(response => {
+  //     setReceiptList(response.data.content);
+  //     setTotalPages(response.data.totalPages);
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
+  // }, []);
 
 
   // 수납내역목록에서 데이터 선택하면 데이터가져오기
