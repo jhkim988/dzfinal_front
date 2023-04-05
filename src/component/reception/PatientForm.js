@@ -218,7 +218,7 @@ const PatientForm = ({
                 <div style={{ marginTop: "1em", marginLeft: "1em" }}>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
-                            <PatientAutoComplete setPatientData={setPatientData} patientData={patientData} />
+                            <PatientAutoComplete setPatientData={setPatientData} patientData={patientData} setReceptionData={setReceptionData} setIsChecked={setIsChecked}/>
                         </Grid>
                         <Grid item xs={5} sx={{ paddingLeft: 0 }}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
