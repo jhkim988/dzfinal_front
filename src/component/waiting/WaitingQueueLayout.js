@@ -26,15 +26,7 @@ const mqttOptions = {
   password: "emqx_test",
 };
 
-// TODO: doctor_id 적용
-const autoCallInfo = {
-  2: (d) => d.state === "진료대기",
-  3: (d) => d.state === "수납대기",
-};
-
-const doctor_id = 1;
-
-const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
+const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback, shouldAutoCall, findNextAutoCall, shouldDisableCallButton }) => {
   const client = useRef();
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -47,8 +39,9 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
 
   const autoCallNext = useRef();
   const setAutoCallNext = (next) => (autoCallNext.current = next);
+
   useEffect(() => {
-    setAutoCallNext(data.find(autoCallInfo[initPanel]));
+    setAutoCallNext(data.find(findNextAutoCall));
   }, [data]);
 
   // mqtt call Patient
@@ -63,39 +56,40 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
       { qos: 1 }
     );
   };
+  const mqttWaitingController = {
+    ADD: (payload) => {
+      setData((prev) => [...prev, payload.data]);
+    },
+    PUT: (payload) => {
+      setData((prev) => {
+        const ret = [...prev].map((d) =>
+          `${d.reception_id}` === `${payload.data.reception_id}`
+            ? { ...d, state: payload.data.state }
+            : d
+        );
+        return [...ret];
+      });
+
+      // autoCall
+      if (autoCall.current && shouldAutoCall(payload)) {
+        const next = autoCallNext.current;
+        setSelected(`${next}`);
+        clickRowCallback && clickRowCallback(next);
+        callPatient(next.reception_id);
+      }
+    },
+    DELETE: (payload) => {
+      setData((prev) =>
+        prev.filter((d) => d.reception_id !== payload.data.reception_id)
+      );
+    },
+  }
 
   const mqttEventListener = useCallback((topic, payload, packet) => {
     payload = JSON.parse(payload);
     console.log("message", payload);
     if (topic === "waiting") {
-      if (payload.method === "ADD") {
-        setData((prev) => [...prev, payload.data]);
-      } else if (payload.method === "PUT") {
-        setData((prev) => {
-          const ret = [...prev].map((d) =>
-            `${d.reception_id}` === `${payload.data.reception_id}`
-              ? { ...d, state: payload.data.state }
-              : d
-          );
-          return [...ret];
-        });
-        if (!autoCall.current) return;
-        if (
-          (initPanel === "2" && payload.data.state === "수납대기") ||
-          (initPanel === "3" && payload.data.state === "수납완료")
-        ) {
-          const next = autoCallNext.current;
-          setSelected(`${next.reception_id}`);
-          clickRowCallback && clickRowCallback(next);
-          callPatient(next.reception_id);
-        }
-      } else if (payload.method === "DELETE") {
-        setData((prev) =>
-          prev.filter((d) => d.reception_id !== payload.data.reception_id)
-        );
-      } else {
-        throw new Error("Unsupported Operation");
-      }
+      mqttWaitingController[payload.method](payload);
     }
   }, []);
 
@@ -107,18 +101,9 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   }, []);
 
   const onRowClick = (e) => {
-    setSelected(e.currentTarget.dataset.reception_id);
-    console.log(
-      data.filter(
-        (el) => `${el.reception_id}` === e.currentTarget.dataset.reception_id
-      )[0]
-    );
-    clickRowCallback &&
-      clickRowCallback(
-        data.filter(
-          (el) => `${el.reception_id}` === e.currentTarget.dataset.reception_id
-        )[0]
-      );
+    const selectData = data.find(d => `${d.reception_id}` === `${e.currentTarget.dataset.reception_id}`);
+    setSelected(selectData);
+    clickRowCallback && clickRowCallback(selectData);
   };
 
   useEffect(() => {
@@ -128,13 +113,8 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback }) => {
   }, []);
 
   const disabledCallButton = useMemo(() => {
-    const selectData = data.find((d) => `${d.reception_id}` === `${selected}`);
-    if (!selectData) return true;
-    return (
-      (initPanel === "3" && selectData.state !== "수납대기") ||
-      (initPanel === "2" && selectData.state !== "진료대기") ||
-      (initPanel === "2" && selectData.doctor_id !== doctor_id)
-    );
+    if (!selected) return true;
+    return shouldDisableCallButton(selected);
   }, [data, selected]);
 
   return (
