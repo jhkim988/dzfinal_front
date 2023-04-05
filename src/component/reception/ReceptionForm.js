@@ -94,7 +94,6 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
 
     };
     const receptDataHandleSubmit = (event) => {
-        console.log("재진: ", receptionData);
         event.preventDefault();
         // if (window.confirm(receptionData.patient_name + "님의 접수 등록을 진행하시겠습니까?")) {
         if (window.confirm("접수 등록을 진행하시겠습니까?")) {
@@ -142,7 +141,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     </div>
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
-                            <Hidden id="outlined-basic"
+                            <TextField id="outlined-basic"
                                 label="환자번호"
                                 name="patient_id"
                                 InputLabelProps={{
