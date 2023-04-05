@@ -18,7 +18,7 @@ const DidVideo = () => {
 
   return (
     <div>
-      <h5>비디오 출력 부분</h5>
+      <h1>비디오 출력 부분</h1>
       {getDidVideo.type}
       <br />
       {getDidVideo.video}
