@@ -32,7 +32,7 @@ function Receipt({ receiptData }) {
   useEffect(() => {
     setUser(prev => {
       const ret = ({
-        receipt_id: receiptData.receipt.receipt_id,
+        receipt_id: receiptData.receipt?.receipt_id,
         reception_id: receiptData.reception.reception_id,
         patient_name: receiptData.patient.patient_name,
         insurance: receiptData.patient.insuarance,
@@ -43,10 +43,10 @@ function Receipt({ receiptData }) {
         back_registration_number: receiptData.patient.back_registration_number,
         address: receiptData.patient.address,
         detail_address: receiptData.patient.detail_address,
-        clinic_request: receiptData.clinic.clinic_request,
-        has_prescription: receiptData.clinic.has_prescription,
-        card_name: receiptData.receipt.card_name,
-        card_number: receiptData.receipt.card_number,
+        clinic_request: receiptData.clinic?.clinic_request,
+        has_prescription: receiptData.clinic?.has_prescription,
+        card_name: receiptData.receipt?.card_name,
+        card_number: receiptData.receipt?.card_number,
       });
 
       // // 수납된 정보인지 아닌지 여부 확인

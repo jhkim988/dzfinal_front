@@ -47,6 +47,11 @@ const ClinicView = () => {
         .catch((error) => {
           console.log(error);
         });
+        setDiagnosis([]);
+        setPrescription([]);
+        setSymptom("");
+        setTreatment(false);
+        setClinic_request(false);
   }, [reception]);
 
   useEffect(() => {

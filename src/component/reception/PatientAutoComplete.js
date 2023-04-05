@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Autocomplete, TextField, Typography } from "@mui/material";
 import axios from "axios";
 
-const PatientAutoComplete = ({ setPatientData, patientData }) => {
+const PatientAutoComplete = ({ setPatientData, patientData, setReceptionData, setIsChecked }) => {
   const [text, setText] = useState("");
   const [comboBoxData, setComboBoxData] = useState([]);
 
@@ -23,8 +23,11 @@ const PatientAutoComplete = ({ setPatientData, patientData }) => {
     axios
       .get(`/api/patient/${value.patient_id}`)
       .then(({ data }) => {
+        console.log("환자 선택", data);
         setPatientData(data);
         setText(value.patient_name);
+        setReceptionData(prev => ({ ...prev, ...data }));
+        setIsChecked(Boolean(data.insurance));
       });
   }
 
