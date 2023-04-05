@@ -124,9 +124,9 @@ const Reception = () => {
             initPanel="3"
             nextState="수납중"
             clickRowCallback={clickRowCallback}
-            shouldAutoCall={({ data: { state }}) => state === "수납대기"}
+            shouldAutoCall={({ data: { state }}) => state === "수납완료"}
             findNextAutoCall={({ state }) => state === "수납대기"}
-            shouldDisableCallButton={({ state, doctor_id }) => state !== "진료대기" || doctor_id !== 1}
+            shouldDisableCallButton={({ state }) => state !== "수납대기"}
           />
         </Grid>
 
