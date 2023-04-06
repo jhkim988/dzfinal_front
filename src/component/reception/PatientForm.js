@@ -223,9 +223,9 @@ const PatientForm = ({
                         <Grid item xs={5} sx={{ paddingLeft: 0 }}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                 <TextField
-                                    id="outlined-basic"
+                                    
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={{
                                         '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
@@ -238,7 +238,7 @@ const PatientForm = ({
                                     size='small'
                                 />-
                                 <TextField
-                                    id="outlined-basic"
+                                    
                                     onChange={handleChange}
                                     sx={{
                                         marginRight: 0.5,
@@ -270,9 +270,9 @@ const PatientForm = ({
                         <Grid item xs={7}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                 <TextField
-                                    id="outlined-basic"
+                                    
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={{
                                         marginLeft: 0.5,
@@ -285,7 +285,7 @@ const PatientForm = ({
                                     variant="outlined"
                                     size='small' />ㅡ
                                 <TextField
-                                    id="outlined-basic"
+                                    
                                     sx={{
                                         '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
                                     }}
@@ -296,7 +296,7 @@ const PatientForm = ({
                                     size='small'
                                 />ㅡ
                                 <TextField
-                                    id="outlined-basic"
+                                    
                                     sx={{
                                         '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
                                     }}
@@ -313,7 +313,7 @@ const PatientForm = ({
                                 id="outlined-select-currency"
                                 select
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true
                                 }}
                                 sx={{
                                     width: "100%",
@@ -355,9 +355,9 @@ const PatientForm = ({
                                     '& > :not(style)': { m: 0.5 },
                                     '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
                                 }}
-                                id="outlined-basic"
+                                
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true
                                 }}
                                 label="우편번호"
                                 name="zip_code"
@@ -372,14 +372,14 @@ const PatientForm = ({
                         </Grid>
                         <Grid item xs={8} sx={{ display: "flex", justifyContent: "space-around" }}>
                             <TextField
-                                id="outlined-basic"
+                                
                                 sx={{
                                     m: 0.5,
                                     width: "100%",
                                     '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
                                 }}
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true
                                 }}
                                 label="주소"
                                 name="address"
@@ -400,7 +400,7 @@ const PatientForm = ({
                     <Grid container spacing={1}>
                         <Grid item xs={11}>
                             <TextField
-                                id="outlined-basic"
+                                
                                 label="상세주소"
                                 name="detail_address"
                                 onChange={handleChange}
@@ -408,7 +408,7 @@ const PatientForm = ({
                                 variant="outlined"
                                 size='small'
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true
                                 }}
                                 sx={{
                                     width: "100%",
