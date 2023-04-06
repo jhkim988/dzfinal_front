@@ -27,7 +27,7 @@ const examinationTextField = {
 
 const Reception_API_BASE_URL = "/api/reception";
 
-const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData, setSelectedAddress }) => {
+const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData }) => {
     //console.log(patient_id);
 
     const resetHandler = (event) => {
@@ -51,15 +51,16 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
             phone_number2: '',
             phone_number3: '',
             insurance: 'true',
-
+            zip_code: '',
+            address: '',
             detail_address: '',
             insurance: ''
         });
-        setSelectedAddress({
-            zip_code: '',
-            address: ''
+        // setSelectedAddress({
+        //     zip_code: '',
+        //     address: ''
 
-        });
+        // });
 
     };
 

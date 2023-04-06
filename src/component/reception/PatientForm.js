@@ -1,27 +1,15 @@
 import {
     Button,
     Checkbox,
-    createTheme,
     Dialog,
     FormControlLabel,
     MenuItem,
     Paper,
-    TextareaAutosize,
     TextField,
-    ThemeProvider,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
     Grid,
-    Autocomplete,
 } from "@mui/material";
-import { Box, height } from "@mui/system";
-import SearchIcon from "@material-ui/icons/Search";
-import { InputAdornment } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import PopupDom from "./PopupDom";
+import { Box } from "@mui/system";
+import React, { useState } from "react";
 import PopupPostCode from "./PopupPostCode";
 import axios from "axios";
 import PatientAutoComplete from "./PatientAutoComplete";
@@ -52,6 +40,7 @@ const PatientForm = ({
     const [open, setOpen] = React.useState(false);
     const [patient_name, setPatient_name] = useState("");
 
+    //초기화
     const resetHandler = (event) => {
         setPatientData({
             patient_name: "",
@@ -70,6 +59,18 @@ const PatientForm = ({
         });
     };
 
+    const setCompanyAddress = (companyAddress) => {
+        setPatientData({
+            ...patientData,
+            zip_code: companyAddress.zip_code,
+            address: companyAddress.address
+        });
+        setSelectedAddress({
+            zip_code: companyAddress.zip_code,
+            address: companyAddress.address
+        });
+    }
+
     const handleCheck = (event) => {
         setIsChecked(event.target.checked);
     };
@@ -80,7 +81,7 @@ const PatientForm = ({
             ...patientData,
             ...selectedAddress,
             ...isChecked,
-            [name]: value,
+            [name]: value
         }));
         setPatient_name(event.target.value);
     };
@@ -117,6 +118,7 @@ const PatientForm = ({
                 .then((response) => {
                     alert("환자 수정 성공");
                     setPatientData(prev => ({ ...response.data }));
+                    resetHandler();
                 })
                 .catch((error) => {
                     alert("환자 수정 실패, 확인바람 ");
@@ -137,11 +139,11 @@ const PatientForm = ({
     }
 
     const handleInput = (e) => {
+        console.log("aaaaaaaaaaaaaaaaaaaaaaa", e.target);
         setSelectedAddress({
             ...selectedAddress,
-            [e.target.name]: e.target.value,
+            [e.target.name]: e.target.value
         })
-
     }
 
     return (
@@ -329,7 +331,7 @@ const PatientForm = ({
                                 autoComplete="false"
                             />
                             <Dialog open={open} onClose={closePostCode}>
-                                <PopupPostCode company={selectedAddress} setcompany={setSelectedAddress} onClose={closePostCode}></PopupPostCode>
+                                <PopupPostCode company={selectedAddress} setCompany={setCompanyAddress} onClose={closePostCode}></PopupPostCode>
                             </Dialog>
                         </Grid>
                     </Grid>
