@@ -83,11 +83,6 @@ export default function DenseTable({user}) {
         </TableBody>
       </Table>
     </TableContainer>
-
-    {/* 결제방식&처방전,진료의뢰서 */}
-    {/* <ReceiptPayment 
-      user={user}
-    /> */}
     </>
   );
 }

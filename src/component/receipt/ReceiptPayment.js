@@ -52,8 +52,8 @@ export default function BasicSelect({ user }) {
           reception_id: user.reception_id,
           ratio: InsuranceRatio,
           total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
-          card_name: "-",
-          card_number: "-",
+          card_name: "",
+          card_number: "",
           mode: "현금",
           creator: 1,
         },
@@ -79,19 +79,18 @@ export default function BasicSelect({ user }) {
 
   // select 값 받아오기
   const [card_name, setCard_name] = React.useState("");
-  const [editCardValue, setEditCardValue] = React.useState("");
-  // const handleChange = (event) => {
-  //   setCard_name(event.target.value);
-  // };
-
-  const handleChange = (event) => {
-    if (modifyReceipt) {
-      setCard_name(editCardValue);
-      setEditCardValue(event.target.value);
-    } else {
-      setCard_name(event.target.value);
-    }
+  const handleCardNameChange = (event) => {
+    setCard_name(event.target.value);
   };
+
+  // const handleChange = (event) => {
+  //   if (modifyReceipt) {
+  //     setCard_name(editCardValue);
+  //     setEditCardValue(event.target.value);
+  //   } else {
+  //     setCard_name(event.target.value);
+  //   }
+  // };
   const ariaLabel = { "aria-label": "description" };
 
   const [card_number, setCard_number] = useState("");
@@ -156,24 +155,18 @@ export default function BasicSelect({ user }) {
       const insertUrl = "/api/receipt/insertReceipt";
       const updateUrl = "/api/receipt/updateReceipt";
   
-      if (modifyReceipt && user.mode !== "카드") {
-        url = "/api/receipt/updateReceipt";
-      }
-      const response = await axios.post(
-        url,
-        {
-          receipt_id: user.receipt_id,
-          reception_id: user.reception_id,
-          ratio: InsuranceRatio,
-          total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
-          card_name: card_name,
-          card_number: card_number,
-          mode: "카드",
-          creator: 1,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+      if (modifyReceipt) {
+        const response = await axios.post(
+          updateUrl,
+          {
+            receipt_id: user.receipt_id,
+            reception_id: user.reception_id,
+            ratio: InsuranceRatio,
+            total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
+            card_name: card_name,
+            card_number: card_number,
+            mode: "카드",
+            creator: 1,
           },
           {
             headers: {
@@ -211,6 +204,69 @@ export default function BasicSelect({ user }) {
       console.log(error);
     }
   };
+
+
+
+  // const handleReceiptInsert = async () => {
+  //   try {
+  //     const insertUrl = "/api/receipt/insertReceipt";
+  //     const updateUrl = "/api/receipt/updateReceipt";
+  
+  //     if (modifyReceipt && user.mode !== "카드") {
+  //       url = "/api/receipt/updateReceipt";
+  //     }
+  //     const response = await axios.post(
+  //       url,
+  //       {
+  //         receipt_id: user.receipt_id,
+  //         reception_id: user.reception_id,
+  //         ratio: InsuranceRatio,
+  //         total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
+  //         card_name: card_name,
+  //         card_number: card_number,
+  //         mode: "카드",
+  //         creator: 1,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       alert("수납정보가 변경되었습니다.");
+  //       console.log("Modify Payment successful", response.data);
+  //     } else {
+  //       const response = await axios.post(
+  //         insertUrl,
+  //         {
+  //           receipt_id: user.receipt_id,
+  //           reception_id: user.reception_id,
+  //           ratio: InsuranceRatio,
+  //           total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
+  //           card_name: card_name,
+  //           card_number: card_number,
+  //           mode: "카드",
+  //           creator: 1,
+  //         },
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       alert("카드결제가 완료되었습니다.");
+  //       console.log("Payment successful", response.data);
+  //     }
+  //     setIsCardPayment(true);
+  //     setIsReceipt(true);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
 
   const style = {
@@ -278,7 +334,6 @@ export default function BasicSelect({ user }) {
             fontSize: "12px",
           }}
           variant="contained"
-          href="#contained-buttons"
           disabled={user.treatment !== 0 && !isReceipt}
           onClick={handleTreatmentModalOpen}
         >
@@ -294,7 +349,6 @@ export default function BasicSelect({ user }) {
         <Button
           sx={{ backgroundColor: "green", fontSize: "12px" }}
           variant="contained"
-          href="#contained-buttons"
           disabled={user.clinic_request !== 0 && !isReceipt}
           onClick={handleClinicRequestModalOpen}
         >
@@ -326,7 +380,7 @@ export default function BasicSelect({ user }) {
                 label="카드사"
                 size="small"
                 margin="dense"
-                onChange={handleChange}
+                onChange={handleCardNameChange}
                 disabled={!showCardForm}
               >
                 <MenuItem value={null} disabled >결제하실 카드를 선택해주세요</MenuItem>
@@ -407,6 +461,7 @@ export default function BasicSelect({ user }) {
             >
               {user.receipt_id > 0 ? "수정" : "확인"}
             </Button>
+            
             <Button
               disabled={!showCardForm}
               type="reset"
@@ -422,6 +477,7 @@ export default function BasicSelect({ user }) {
             >
               취소
             </Button>
+
             <Button
               sx={{
                 backgroundColor: "green",
@@ -431,16 +487,19 @@ export default function BasicSelect({ user }) {
               variant="contained"
               disabled={user.state !== "수납완료"}
               onClick={handleModifyReceipt}
-              // disabled={!showCardForm}
             >
               수정
             </Button>
+
           </Stack>
         </Box>
+
         카드이름: {user.card_name}
         <br />
         카드번호: {user.card_number}
-        <div></div>
+        <div>
+
+        </div>
       </div>
     </>
   );
