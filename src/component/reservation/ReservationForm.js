@@ -166,7 +166,7 @@ const ReservationForm = ({
                   </FormControl>
                 </Grid>
                 <Grid item xs={1} style={{ alignSelf: "flex-end" }}>
-                  -
+                  ─
                 </Grid>
                 <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
                   <FormControl>
@@ -179,7 +179,7 @@ const ReservationForm = ({
                   </FormControl>
                 </Grid>
                 <Grid item xs={1} style={{ alignSelf: "flex-end" }}>
-                  -
+                  ─
                 </Grid>
                 <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
                   <FormControl>

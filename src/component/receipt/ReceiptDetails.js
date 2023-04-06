@@ -67,7 +67,7 @@ export default function DenseTable({user}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows2.map((row) => (
+          {rows2.map((row) => {console.log(row); return(
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -75,11 +75,11 @@ export default function DenseTable({user}) {
               <TableCell align="right" component="th" scope="row">
                 총계
               </TableCell>
-              <TableCell align="right">{row.total_price}</TableCell>
+              <TableCell align="right">{row.total_price || ""}</TableCell>
               <TableCell align="right">{row.ratio}</TableCell>
-              <TableCell align="right">{row.receipt_price}</TableCell>
+              <TableCell align="right">{row.receipt_price || ""}</TableCell>
             </TableRow>
-          ))}
+          )})}
         </TableBody>
       </Table>
     </TableContainer>
