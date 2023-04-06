@@ -15,7 +15,7 @@ const autoCallInfo = {
 
 const doctor_id = 1;
 
-const DID = ({ nextState }) => {
+const MultiDID = ({ nextState }) => {
   const client = useContext(MqttContext);
   const [data, setData] = useState([]);
 
@@ -128,4 +128,4 @@ const DID = ({ nextState }) => {
   );
 };
 
-export default DID;
+export default MultiDID;
