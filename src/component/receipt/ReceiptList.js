@@ -159,16 +159,34 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
               onToggle={handleToggle}
-              renderInput={(startProps, endProps) => (
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}>
-                  <TextField {...startProps} variant="outlined" sx={{ height: "20px" }} />
-                  <Box sx={{ mx: 1 }}>~</Box>
-                  <TextField {...endProps} variant="outlined" size="small" />
-                </Box>
-              )}
+              slots={{
+                startInput: {
+                  inputProps: {
+                    style: {
+                      height: "20px",
+                    },
+                  },
+                  variant: "outlined",
+                },
+                endInput: {
+                  inputProps: {
+                    style: {
+                      height: "20px",
+                    },
+                  },
+                  variant: "outlined",
+                },
+              }}
+              // renderInput={(startProps, endProps) => (
+              //   <Box sx={{
+              //     display: "flex",
+              //     alignItems: "center",
+              //   }}>
+              //     <TextField {...startProps} variant="outlined" sx={{ height: "20px" }} />
+              //     <Box sx={{ mx: 1 }}>~</Box>
+              //     <TextField {...endProps} variant="outlined" size="small" />
+              //   </Box>
+              // )}
             />
           </LocalizationProvider>
           <TextField
