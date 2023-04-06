@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useEffect } from "react";
 import { useReducer } from "react";
 
 const DID_Message_ACTION = {
   INSERT: 1,
   TOGGLE: 2,
   UPDATE: 3,
-  APPEND: 4,
+  DELETE: 4,
+  APPEND: 5,
 };
 Object.freeze(DID_Message_ACTION);
 
@@ -31,6 +31,8 @@ function didMessageReducer(messages, action) {
         }
         return message;
       });
+    case DID_Message_ACTION.DELETE:
+      return messages.filter((message) => message.id !== action.id);
     case DID_Message_ACTION.APPEND:
       return messages.concat(action.messages);
     default:
@@ -92,9 +94,20 @@ export default function DID_MessageModel() {
       });
   };
 
+  const onDelete = (id) => {
+    axios
+      .delete("/api/did/did_subtitle", { params: { id: id } })
+      .then((response) => {
+        dispatch({ type: DID_Message_ACTION.DELETE, id });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const onAppend = (messageList) => {
     dispatch({ type: DID_Message_ACTION.APPEND, messages: messageList });
   };
 
-  return [messages, onInsert, onToggle, onUpdate, onAppend];
+  return [messages, onInsert, onToggle, onUpdate, onDelete, onAppend];
 }

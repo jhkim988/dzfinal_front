@@ -23,10 +23,12 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import axios from "axios";
 import koLocale from "dayjs/locale/ko";
+import "./style.css";
 
 const MedicalRecordInquiry = ({
   mri,
   setMri,
+  patient,
   setMedicalInfo,
   pagination,
   setPagination,
@@ -121,7 +123,7 @@ const MedicalRecordInquiry = ({
 
   const handlePageClick = (pageNumber) => {
     axios
-      .get(`/api/clinic/mri/${1}/${pageNumber}`)
+      .get(`/api/clinic/mri/${patient.patient_id}/${pageNumber}`)
       .then((response) => {
         setMri(response.data.mri);
         setPagination(response.data.pagination);
@@ -136,11 +138,15 @@ const MedicalRecordInquiry = ({
       <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
         진료기록조회
       </Typography>
-      {/* alignItems: "flex-end" */}
-      <Box sx={{ m: 1, display: "flex", alignItems: "flex-end" }}>
+      <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
         <FormControl sx={{ minWidth: 120 }}>
           <InputLabel>분류</InputLabel>
-          <Select value={type} label="분류" onChange={handleChange}>
+          <Select
+            value={type}
+            label="분류"
+            size="small"
+            onChange={handleChange}
+          >
             <MenuItem value={"patient_name"}>환자이름</MenuItem>
             <MenuItem value={"reception_id"}>접수번호</MenuItem>
           </Select>
@@ -150,19 +156,22 @@ const MedicalRecordInquiry = ({
             <DateRangePicker
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
+              sx={{ marginLeft: 1, marginRight: 1 }}
               onChange={handleDateChange}
             />
           </DemoContainer>
         </LocalizationProvider>
         <TextField
           label="검색어"
-          sx={{ alignSelf: "flex-end" }}
+          size="small"
+          sx={{ marginRight: 1 }}
           onChange={handleInputChange}
         />
         <Box sx={{ alignSelf: "center" }}>
           <Button
             variant="contained"
-            sx={{ height: "40px", alignSelf: "center" }}
+            size="small"
+            sx={{ alignSelf: "center" }}
             onClick={() => onSearchList(1)}
           >
             검색

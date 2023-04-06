@@ -14,7 +14,6 @@ import PopupPostCode from "./PopupPostCode";
 import axios from "axios";
 import PatientAutoComplete from "./PatientAutoComplete";
 
-
 const Patient_API_BASE_URL = "/api/patient";
 
 const gender = [
@@ -39,6 +38,7 @@ const PatientForm = ({
     const [isChecked, setIsChecked] = useState(false);
     const [open, setOpen] = React.useState(false);
     const [patient_name, setPatient_name] = useState("");
+    const [autoCompleteList, setAutoCompleteList] = useState([]);
 
     //초기화
     const resetHandler = (event) => {
@@ -110,15 +110,39 @@ const PatientForm = ({
         }
     };
 
+    //환자이름검색
+    const handleDropDownKey = (event) => {
+        event.preventDefault();
+        if (
+            event.key !== "ArrowDown" &&
+            event.key !== "ArrowUp" &&
+            event.key !== "Enter"
+        ) {
+            if (patient_name.length > 1) {
+                axios
+                    .get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
+                    .then((response) => {
+                        setAutoCompleteList(response.data);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else {
+                setAutoCompleteList([]);
+            }
+        }
+    };
 
-    //환자 수정
+    const removeAutoCompleteList = () => {
+        setPatient_name("");
+        setAutoCompleteList([]);
+    };
     const updatePatientInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 환자 정보를 수정하시겠습니까?")) {
             axios.post(Patient_API_BASE_URL + "/update", patientData)
                 .then((response) => {
                     alert("환자 수정 성공");
                     setPatientData(prev => ({ ...response.data }));
-                    resetHandler();
                 })
                 .catch((error) => {
                     alert("환자 수정 실패, 확인바람 ");
@@ -130,77 +154,176 @@ const PatientForm = ({
         }
     };
 
+    const selectedSearchPatient = (patient_id) => {
+        //alert(patient_id);
+        if (
+            window.confirm(
+                "[ 환자번호 : " +
+                patient_id +
+                " ]" +
+                patientData.patient_name +
+                "님의 환자 정보를 보시겠습니까?"
+            )
+        ) {
+            axios
+                .get(Patient_API_BASE_URL + `/${patient_id}`)
+                .then((response) => {
+                    console.log("자동완성 환자정보:", response.data);
+                    setPatientData((prev) => ({ ...response.data }));
+                    setReceptionData((prev) => ({ ...response.data }));
+                    setIsChecked((prev) => ({ ...response.data }));
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        } else {
+            alert("취소되었습니다. 환자 재검색 바랍니다.");
+            removeAutoCompleteList();
+        }
+    };
+
+
     //우편번호 검색
     const handleComplete = (data) => {
         setOpen(true);
-    }
+    };
     const closePostCode = () => {
         setOpen(false);
-    }
-
+    };
     const handleInput = (e) => {
-        console.log("aaaaaaaaaaaaaaaaaaaaaaa", e.target);
         setSelectedAddress({
             ...selectedAddress,
-            [e.target.name]: e.target.value
-        })
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const tableStyle = {
+        marginTop: "19px",
+        marginLeft: "5px",
+        position: "fixed",
+        zIndex: "9999",
+        background: "white",
+        width: "250px",
+        height: "auto",
+    };
+
+    const onSelect = (e, value) => {
+        axios
+            .get(`/api/patient/${value.patient_id}`)
+            .then(({ data }) => {
+                setPatientData(data);
+                setReceptionData(prev => ({ ...prev, ...data }));
+                setIsChecked(Boolean(data.insurance));
+            });
     }
 
     return (
         <>
-
             <Paper sx={{ height: "24vh" }} elevation={1}>
-                <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
-                    <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>환자 등록/수정</h5>
-                </div>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
+                            <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
+                                환자 등록/수정
+
+                            </h5>
+                        </div>
+                    </Grid>
+                </Grid>
                 <div style={{ marginTop: "1em", marginLeft: "1em" }}>
                     <Grid container spacing={2}>
+                        {/* <Grid item xs={12}>
+              환자 등록/수정
+            </Grid> */}
                         <Grid item xs={4}>
-                            <PatientAutoComplete setPatientData={setPatientData} patientData={patientData} setIsChecked={setIsChecked} setReceptionData={setReceptionData} />
+                            <PatientAutoComplete
+                                patient_name={patientData.patient_name}
+                                onSelect={onSelect}
+                                onInputChange={(e, value, reason) => {
+                                    if (reason === "input") {
+                                        resetHandler();
+                                        setPatientData(prev => ({ ...prev, patient_name: value }));
+                                    } else if (reason === "clear") {
+                                        resetHandler();
+                                    }
+                                }}
+                            />
                         </Grid>
                         <Grid item xs={5} sx={{ paddingLeft: 0 }}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                 <TextField
-                                    id="outlined-basic"
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true,
                                     }}
                                     sx={{
-                                        '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                        "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                            { padding: "0.5em", paddingLeft: "10px" },
                                     }}
                                     label="주민등록번호"
                                     variant="outlined"
                                     name="front_registration_number"
                                     onChange={handleChange}
-                                    value={patientData.front_registration_number || ''}
-                                    size='small'
-                                />-
+                                    value={patientData.front_registration_number || ""}
+                                    size="small"
+                                />
+                                <p style={{ margin: 5 }}>─</p>
                                 <TextField
-                                    id="outlined-basic"
                                     onChange={handleChange}
                                     sx={{
                                         marginRight: 0.5,
-                                        '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                        "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                            { padding: "0.5em", paddingLeft: "10px" },
                                     }}
                                     name="back_registration_number"
-                                    value={patientData.back_registration_number || ''}
+                                    value={patientData.back_registration_number || ""}
                                     variant="outlined"
-                                    size='small'
+                                    size="small"
                                 />
                             </Box>
                         </Grid>
                         <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                 {patientData.patient_id == null && (
-                                    <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>등록</Button>
+                                    <Button
+                                        type="submit"
+                                        onClick={handleSubmit}
+                                        variant="contained"
+                                        style={{ width: "30px", height: "30px" }}
+                                    >
+                                        등록
+                                    </Button>
                                 )}
-                                {patientData.patient_id != null && patientData.patient_id == 0 && (
-                                    <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>등록</Button>
-                                )}
-                                {patientData.patient_id != null && patientData.patient_id != 0 && (
-                                    <Button type="submit" onClick={updatePatientInfo} variant="contained" style={{ width: "30px", height: "30px" }}>수정</Button>
-                                )}
-                                <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px", marginRight: "5px" }}>취소</Button>
+                                {patientData.patient_id != null &&
+                                    patientData.patient_id == 0 && (
+                                        <Button
+                                            type="submit"
+                                            onClick={handleSubmit}
+                                            variant="contained"
+                                            style={{ width: "30px", height: "30px" }}
+                                        >
+                                            등록
+                                        </Button>
+                                    )}
+                                {patientData.patient_id != null &&
+                                    patientData.patient_id != 0 && (
+                                        <Button
+                                            type="submit"
+                                            onClick={updatePatientInfo}
+                                            variant="contained"
+                                            style={{ width: "30px", height: "30px" }}
+                                        >
+                                            수정
+                                        </Button>
+                                    )}
+                                <Button
+                                    type="reset"
+                                    variant="contained"
+                                    color="error"
+                                    onClick={resetHandler}
+                                    style={{ width: "30px", height: "30px", marginRight: "5px" }}
+                                >
+                                    취소
+                                </Button>
                             </Box>
                         </Grid>
                     </Grid>
@@ -208,41 +331,45 @@ const PatientForm = ({
                         <Grid item xs={7}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                 <TextField
-                                    id="outlined-basic"
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true,
                                     }}
                                     sx={{
                                         marginLeft: 0.5,
-                                        '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                        "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                            { padding: "0.5em", paddingLeft: "10px" },
                                     }}
                                     label="연락처"
                                     name="phone_number1"
                                     onChange={handleChange}
-                                    value={patientData.phone_number1 || ''}
+                                    value={patientData.phone_number1 || ""}
                                     variant="outlined"
-                                    size='small' />ㅡ
+                                    size="small"
+                                />
+                                <p style={{ margin: 5 }}>─</p>
+
                                 <TextField
-                                    id="outlined-basic"
                                     sx={{
-                                        '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                        "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                            { padding: "0.5em", paddingLeft: "10px" },
                                     }}
                                     name="phone_number2"
                                     onChange={handleChange}
-                                    value={patientData.phone_number2 || ''}
+                                    value={patientData.phone_number2 || ""}
                                     variant="outlined"
-                                    size='small'
-                                />ㅡ
+                                    size="small"
+                                />
+                                <p style={{ margin: 5 }}>─</p>
                                 <TextField
-                                    id="outlined-basic"
                                     sx={{
-                                        '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                        "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                            { padding: "0.5em", paddingLeft: "10px" },
                                     }}
                                     name="phone_number3"
                                     onChange={handleChange}
-                                    value={patientData.phone_number3 || ''}
+                                    value={patientData.phone_number3 || ""}
                                     variant="outlined"
-                                    size='small'
+                                    size="small"
                                 />
                             </Box>
                         </Grid>
@@ -251,19 +378,20 @@ const PatientForm = ({
                                 id="outlined-select-currency"
                                 select
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true,
                                 }}
                                 sx={{
                                     width: "100%",
                                     height: 10,
-                                    '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                    ".css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                        { padding: "0.5em", paddingLeft: "10px" },
                                 }}
                                 label="성별"
-                                size='small'
+                                size="small"
                                 name="gender"
                                 onChange={handleChange}
-                                value={patientData.gender || ''}
-                            // style={{ width: "70px", height: "10px" }}
+                                value={patientData.gender || ""}
+                                style={{ width: "70px", height: "10px" }}
                             >
                                 {gender.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
@@ -272,13 +400,15 @@ const PatientForm = ({
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={3} >
+                        <Grid item xs={3}>
                             <FormControlLabel
-                                control={<Checkbox
-                                    checked={isChecked}
-                                    onChange={handleCheck}
-                                    value={patientData.insurance === true ? 1 : 0}
-                                />}
+                                control={
+                                    <Checkbox
+                                        checked={isChecked}
+                                        onChange={handleCheck}
+                                        value={patientData.insurance === true ? 1 : 0}
+                                    />
+                                }
                                 name="insurance"
                                 label="보험여부"
                                 margin="dense"
@@ -290,75 +420,82 @@ const PatientForm = ({
                         <Grid item xs={3}>
                             <TextField
                                 sx={{
-                                    '& > :not(style)': { m: 0.5 },
-                                    '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                    "& > :not(style)": { m: 0.5 },
+                                    "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                        { padding: "0.5em", paddingLeft: "10px" },
                                 }}
-                                id="outlined-basic"
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true,
                                 }}
                                 label="우편번호"
                                 name="zip_code"
                                 onChange={handleInput}
                                 onClick={handleComplete}
-                                placeholder='주소 검색'
-                                value={patientData.zip_code || '' || selectedAddress.zip_code}
+                                placeholder="주소 검색"
+                                value={patientData.zip_code || "" || selectedAddress.zip_code}
                                 variant="outlined"
-                                size='small'
+                                size="small"
                                 inputProps={{ readOnly: true }}
                             />
                         </Grid>
-                        <Grid item xs={8} sx={{ display: "flex", justifyContent: "space-around" }}>
+                        <Grid
+                            item
+                            xs={8}
+                            sx={{ display: "flex", justifyContent: "space-around" }}
+                        >
                             <TextField
-                                id="outlined-basic"
                                 sx={{
                                     m: 0.5,
                                     width: "100%",
-                                    '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                    "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                        { padding: "0.5em", paddingLeft: "10px" },
                                 }}
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true,
                                 }}
                                 label="주소"
                                 name="address"
-                                value={patientData.address || '' || selectedAddress.address}
+                                value={patientData.address || "" || selectedAddress.address}
                                 margin="dense"
                                 onChange={handleInput}
                                 variant="outlined"
-                                size='small'
-                                placeholder='주소 검색시 클릭하세요.'
+                                size="small"
+                                placeholder="주소 검색시 클릭하세요."
                                 onClick={handleComplete}
                                 autoComplete="false"
                             />
                             <Dialog open={open} onClose={closePostCode}>
-                                <PopupPostCode company={selectedAddress} setCompany={setCompanyAddress} onClose={closePostCode}></PopupPostCode>
+                                <PopupPostCode
+                                    company={selectedAddress}
+                                    setcompany={setSelectedAddress}
+                                    onClose={closePostCode}
+                                ></PopupPostCode>
                             </Dialog>
                         </Grid>
                     </Grid>
                     <Grid container spacing={1}>
                         <Grid item xs={11}>
                             <TextField
-                                id="outlined-basic"
                                 label="상세주소"
                                 name="detail_address"
                                 onChange={handleChange}
-                                value={patientData.detail_address || ''}
+                                value={patientData.detail_address || ""}
                                 variant="outlined"
-                                size='small'
+                                size="small"
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true,
                                 }}
                                 sx={{
                                     width: "100%",
-                                    '& > :not(style)': { m: 0.5 },
-                                    '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                    "& > :not(style)": { m: 0.5 },
+                                    "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                        { padding: "0.5em", paddingLeft: "10px" },
                                 }}
                             />
                         </Grid>
                     </Grid>
-
-                </div >
-            </Paper >
+                </div>
+            </Paper>
         </>
     );
 };

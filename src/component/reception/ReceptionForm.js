@@ -164,21 +164,21 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     </div>
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
-                            <Hidden id="outlined-basic"
+                            {/* <TextField 
                                 label="환자번호"
                                 name="patient_id"
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true
                                 }}
                                 sx={examinationTextField}
                                 value={receptionData.patient_id || ''}
                                 variant="outlined"
                                 size='small'
-                                readOnly={true} />
+                                readOnly={true} /> */}
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="키   [cm]"
@@ -189,9 +189,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="체중  [kg]"
@@ -202,9 +202,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="BMI"
@@ -216,9 +216,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     readOnly={true} />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="최고혈압"
@@ -229,9 +229,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="최저혈압"
@@ -242,9 +242,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="혈당"
@@ -263,7 +263,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     id="outlined-select-currency"
                                     select
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     label="담당의"
                                     size='small'
@@ -286,7 +286,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                 <TextField
                                     label="내원사유"
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     rows={1}
                                     size='small'
@@ -319,10 +319,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     </div>
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
-                            <Hidden
-                                id="outlined-basic"
+                            {/* <TestField
                                 InputLabelProps={{
-                                    shrink: "true"
+                                    shrink: true
                                 }}
                                 label="환자번호"
                                 name="patient_id"
@@ -330,11 +329,11 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                 variant="outlined"
                                 size='small'
                                 readOnly={true}
-                            />
+                            /> */}
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="키  [cm]"
@@ -345,9 +344,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="체중  [kg]"
@@ -358,9 +357,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="BMI"
@@ -372,9 +371,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     readOnly={true} />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="최고혈압"
@@ -385,9 +384,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="최저혈압"
@@ -398,9 +397,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField id="outlined-basic"
+                                <TextField
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     sx={examinationTextField}
                                     label="혈당"
@@ -419,7 +418,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     id="outlined-select-currency"
                                     select
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     label="담당의"
                                     size='small'
@@ -442,7 +441,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                 <TextField
                                     label="내원사유"
                                     InputLabelProps={{
-                                        shrink: "true"
+                                        shrink: true
                                     }}
                                     rows={1}
                                     size='small'

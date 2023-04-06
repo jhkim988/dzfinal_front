@@ -68,6 +68,14 @@ const menuItems = {
       icon: icons.IconUsers,
       breadcrumbs: false,
     },
+    {
+      id: "login",
+      title: "로그인",
+      type: "item",
+      url: "/login",
+      icon: icons.IconUsers,
+      breadcrumbs: false,
+    },
   ],
 };
 

@@ -122,17 +122,11 @@ const Reception = () => {
         <Grid item xs={2}>
           <WaitingQueueLayout
             initPanel="3"
-            nextState="수납완료"
+            nextState="수납중"
             clickRowCallback={clickRowCallback}
-            // clickRowCallback={({ reception_id, patient_id }) => {
-            //   setPatient_id(patient_id);
-            //   axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
-            //     setPatientData(data.patient)
-            //     setReceptionData(data.reception);
-            //     setReceiptData(data);
-            //     console.log(data);
-            //   });
-            // }}
+            shouldAutoCall={({ data: { state }}) => state === "수납완료"}
+            findNextAutoCall={({ state }) => state === "수납대기"}
+            shouldDisableCallButton={({ state }) => state !== "수납대기"}
           />
         </Grid>
 

@@ -2,57 +2,70 @@ import { useState } from "react";
 import { Autocomplete, TextField, Typography } from "@mui/material";
 import axios from "axios";
 
-const PatientAutoComplete = ({ setPatientData, patientData, setReceptionData, setIsChecked }) => {
+const PatientAutoComplete = ({ patient_name, onSelect, onInputChange, variant }) => {
   const [text, setText] = useState("");
   const [comboBoxData, setComboBoxData] = useState([]);
 
-  const onChange = (e) => {
-    const searchText = e.target.value;
-    setText(searchText);
-    if (searchText.length < 2) return;
+  const autoCompleteRequest = (e, value) => {
+    setText(value);
+    if (value.length < 2) return;
     axios
-      .get(`/api/patient/list`, { params: { patient_name: searchText } })
+      .get(`/api/patient/list`, { params: { patient_name: value } })
       .then(({ data }) => {
-        const formattedData = data.map((el) => ({ ...el, label: el.patient_name, value: el.patient_id }));
-        console.log(formattedData);
+        const formattedData = data.map((el) => ({
+          ...el,
+          label: el.patient_name,
+          value: el.patient_id,
+        }));
         setComboBoxData(formattedData);
       });
   };
 
-  const onSelect = (e, value) => {
-    axios
-      .get(`/api/patient/${value.patient_id}`)
-      .then(({ data }) => {
-        setPatientData(data);
-        setText(value.patient_name);
-        setReceptionData((prev) => ({ ...data }));
-        setIsChecked((prev) => ({ ...data }));
-      });
-  }
+  const onSelectCallback = (e, value) => {
+    value && onSelect(e, value);
+    setText(value?.patient_name);
+  };
 
   return (
     <Autocomplete
       sx={{
         width: "100%",
-        "& > :not(style)": { m: 0.5 },
-        "& .css-1mb7k4z-MuiInputBase-root-MuiOutlinedInput-root":
-          { padding: "0", paddingLeft: "10px" },
+        "& > :not(style)": { marginLeft: 0.5 },
+        "& .css-1mb7k4z-MuiInputBase-root-MuiOutlinedInput-root": {
+          padding: "0",
+          paddingLeft: "10px",
+        },
         "& .css-mn1mr4-MuiInputBase-input-MuiOutlinedInput-input": {
           padding: "0",
-        }
+        },
       }}
       freeSolo
-      value={patientData.patient_name}
-      onChange={onSelect}
+      value={patient_name || ""}
+      onChange={onSelectCallback}
+      onInputChange={(e, value, reason) => {
+        if (reason === "input") {
+          autoCompleteRequest(e, value);
+        }
+        onInputChange(e,value,reason);
+      }}
       disablePortal
       options={comboBoxData}
-      renderOption={(props, option) => <Typography {...props}>{option.patient_name} {option.front_registration_number} {option.phone_number3}</Typography>}
+      renderOption={(props, option) => (
+        <Typography {...props}>
+          {option.patient_name} {option.front_registration_number}{" "}
+          {option.phone_number3}
+        </Typography>
+      )}
       renderInput={(params) => (
-        <TextField {...params} value={text} label="환자이름 검색"
+        <TextField
+          {...params}
+          value={text}
+          label="환자이름 검색"
           InputLabelProps={{
-            shrink: "true"
+            shrink: true,
           }}
-          onChange={onChange} onBlur={e => { setPatientData(prev => ({ ...prev, patient_name: e.target.value })) }} />
+          variant={variant || "outlined"}
+        />
       )}
     />
   );
