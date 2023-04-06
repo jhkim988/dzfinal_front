@@ -79,8 +79,18 @@ export default function BasicSelect({ user }) {
 
   // select 값 받아오기
   const [card_name, setCard_name] = React.useState("");
+  const [editCardValue, setEditCardValue] = React.useState("");
+  // const handleChange = (event) => {
+  //   setCard_name(event.target.value);
+  // };
+
   const handleChange = (event) => {
-    setCard_name(event.target.value);
+    if (modifyReceipt) {
+      setCard_name(editCardValue);
+      setEditCardValue(event.target.value);
+    } else {
+      setCard_name(event.target.value);
+    }
   };
   const ariaLabel = { "aria-label": "description" };
 
@@ -141,10 +151,11 @@ export default function BasicSelect({ user }) {
 
   // 카드결제
   // axios로 데이터 삽입하기
-  // 현금결제
   const handleReceiptInsert = async () => {
     try {
-      let url = "/api/receipt/insertReceipt";
+      const insertUrl = "/api/receipt/insertReceipt";
+      const updateUrl = "/api/receipt/updateReceipt";
+  
       if (modifyReceipt && user.mode !== "카드") {
         url = "/api/receipt/updateReceipt";
       }
@@ -164,12 +175,33 @@ export default function BasicSelect({ user }) {
           headers: {
             "Content-Type": "application/json",
           },
-        }
-      );
-      if (modifyReceipt) {
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         alert("수납정보가 변경되었습니다.");
         console.log("Modify Payment successful", response.data);
       } else {
+        const response = await axios.post(
+          insertUrl,
+          {
+            receipt_id: user.receipt_id,
+            reception_id: user.reception_id,
+            ratio: InsuranceRatio,
+            total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
+            card_name: card_name,
+            card_number: card_number,
+            mode: "카드",
+            creator: 1,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         alert("카드결제가 완료되었습니다.");
         console.log("Payment successful", response.data);
       }
@@ -179,34 +211,7 @@ export default function BasicSelect({ user }) {
       console.log(error);
     }
   };
-  // const handleReceiptInsert = async () => {
-  //   if (card_name && card_number) {
-  //     try {
-  //       const response = await axios.post(
-  //         "/api/receipt/insertReceipt",
-  //         {
-  //           reception_id: user.reception_id,
-  //           ratio: InsuranceRatio,
-  //           total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
-  //           card_name: card_name,
-  //           card_number: card_number,
-  //           mode: "카드",
-  //           creator: 1,
-  //         },
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
-  //       alert("카드결제가 완료되었습니다.");
-  //       console.log("Payment successful", response.data);
-  //       setIsReceipt(true);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
+
 
   const style = {
     position: "absolute",
@@ -312,8 +317,8 @@ export default function BasicSelect({ user }) {
       <div style={{ height: 180 }}>
         <Box disabled>
           <Box sx={{ height: 50, maxWidth: 150 }}>
-            <FormControl fullWidth>
-              <InputLabel id="cardName-label">카드사</InputLabel>
+          <FormControl fullWidth>
+            <InputLabel id="cardName-label">카드사</InputLabel>
               <Select
                 labelId="cardName-label"
                 id="card_name"
@@ -324,6 +329,7 @@ export default function BasicSelect({ user }) {
                 onChange={handleChange}
                 disabled={!showCardForm}
               >
+                <MenuItem value={null} disabled >결제하실 카드를 선택해주세요</MenuItem>
                 <MenuItem value={"현대카드"}>현대카드</MenuItem>
                 <MenuItem value={"삼성카드"}>삼성카드</MenuItem>
                 <MenuItem value={"신한카드"}>신한카드</MenuItem>
@@ -411,6 +417,7 @@ export default function BasicSelect({ user }) {
                 setCard_number("");
                 setCard_number("");
                 setCard_number("");
+                
               }}
             >
               취소
