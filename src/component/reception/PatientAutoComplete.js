@@ -51,7 +51,7 @@ const PatientAutoComplete = ({ setPatientData, patientData, setReceptionData, se
       renderInput={(params) => (
         <TextField {...params} value={text} label="환자이름 검색"
           InputLabelProps={{
-            shrink: "true"
+            shrink: true
           }}
           onChange={onChange} onBlur={e => { setPatientData(prev => ({ ...prev, patient_name: e.target.value })) }} />
       )}
