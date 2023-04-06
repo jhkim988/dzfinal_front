@@ -32,7 +32,6 @@ const ChatRoom = ({ room, onBackClick }) => {
       .get(`api/chat/getchatroommessages?chatroom_id=${room.chatroom_id}`)
       .then((response) => {
         setMessages(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -93,7 +92,11 @@ const ChatRoom = ({ room, onBackClick }) => {
                 }}
               >
                 <Avatar sx={{ alignSelf: "center", marginRight: 1 }}>
-                  사진
+                  <img
+                    src={`/api/chat/getthumbnail?thumbnail_image=${message.thumbnail_image}`}
+                    alt="사진"
+                    style={{ width: "100%" }}
+                  />
                 </Avatar>
                 <Box sx={{ display: "flex", marginTop: 1, marginBottom: 1 }}>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
