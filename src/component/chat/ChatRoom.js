@@ -1,14 +1,14 @@
 import { AppBar, Box, Button, Grid, TextField, Toolbar } from "@mui/material";
 import { IconChevronLeft } from "@tabler/icons";
 import React, { useEffect, useState } from "react";
-import { Client } from "./ChatMqtt";
 import { useContext } from "react";
 import axios from "axios";
+import { MqttContext } from "../waiting/MqttContextProvider";
 
 const ChatRoom = ({ room, onBackClick }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const client = useContext(Client);
+  const { current: client } = useContext(MqttContext);
 
   // useEffect(() => {
   //   axios
