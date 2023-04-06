@@ -27,7 +27,7 @@ const examinationTextField = {
 
 const Reception_API_BASE_URL = "/api/reception";
 
-const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData, setSelectedAddress }) => {
+const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData }) => {
     //console.log(patient_id);
 
     const resetHandler = (event) => {
@@ -51,31 +51,44 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
             phone_number2: '',
             phone_number3: '',
             insurance: 'true',
-
+            zip_code: '',
+            address: '',
             detail_address: '',
             insurance: ''
         });
-        setSelectedAddress({
-            zip_code: '',
-            address: ''
+        // setSelectedAddress({
+        //     zip_code: '',
+        //     address: ''
 
-        });
+        // });
 
     };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setReceptionData((receptionData) => ({
-            ...receptionData,
-            [name]: value
-        }));
+
+        let updateData = { ...receptionData };
+
+        if (name == 'height' || name == 'weight') {
+            updateData[name] = value;
+            updateData.bmi = calculateBMI(updateData.height, updateData.weight);
+        } else {
+            updateData[name] = value;
+        }
+
+        setReceptionData(updateData);
+
+        // setReceptionData((receptionData) => ({
+        //     ...receptionData,
+        //     [name]: value
+        // }));
     }
 
+    //초진 환자 등록 후 접수 등록
     const handleSubmit = (event) => {
         event.preventDefault();
         const newReceptionData = { ...receptionData, patient_id: patient_id };
         console.log("newReceptionData->", newReceptionData);
-        // if (window.confirm(newReceptionData.patient_name + "님의 접수 등록을 진행하시겠습니까?")) {
         if (window.confirm("접수 등록을 진행하시겠습니까?")) {
             axios.post(Reception_API_BASE_URL, newReceptionData)
                 .then((response) => {
@@ -93,10 +106,11 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
         }
 
     };
+
+    //재진 환자 접수 등록
     const receptDataHandleSubmit = (event) => {
         console.log(receptionData);
         event.preventDefault();
-        // if (window.confirm(receptionData.patient_name + "님의 접수 등록을 진행하시겠습니까?")) {
         if (window.confirm("접수 등록을 진행하시겠습니까?")) {
             axios.post(Reception_API_BASE_URL, receptionData)
                 .then((response) => {
@@ -115,6 +129,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
 
     }
 
+    //접수 수정
     const updateReceptionInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 접수 정보를 수정하시겠습니까?")) {
             axios.post(Reception_API_BASE_URL + "/update", receptionData)
@@ -131,6 +146,13 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
             alert("취소되었습니다.");
             resetHandler();
         }
+    }
+
+    //bmi 자동 계산
+    const calculateBMI = (height, weight) => {
+        const heightInMeters = height / 100;
+        const bmi = weight / (heightInMeters * heightInMeters);
+        return bmi.toFixed(1);
     }
 
     return (
@@ -154,12 +176,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                 size='small'
                                 readOnly={true} /> */}
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
                                     sx={examinationTextField}
-                                    label="키"
+                                    label="키   [cm]"
                                     name="height"
                                     onChange={handleChange}
                                     value={receptionData.height || ''}
@@ -167,12 +189,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
                                     sx={examinationTextField}
-                                    label="체중"
+                                    label="체중  [kg]"
                                     name="weight"
                                     onChange={handleChange}
                                     value={receptionData.weight || ''}
@@ -180,7 +202,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -188,12 +210,13 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     label="BMI"
                                     name="bmi"
                                     onChange={handleChange}
-                                    value={receptionData.bmi || ''}
+                                    value={receptionData.bmi || '' || calculateBMI(receptionData.height, receptionData.weight)}
                                     variant="outlined"
-                                    size='small' />
+                                    size='small'
+                                    readOnly={true} />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -206,7 +229,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -219,7 +242,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -308,12 +331,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                 readOnly={true}
                             /> */}
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
                                     sx={examinationTextField}
-                                    label="키"
+                                    label="키  [cm]"
                                     name="height"
                                     onChange={handleChange}
                                     value={receptionData.height || ''}
@@ -321,12 +344,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
                                     sx={examinationTextField}
-                                    label="체중"
+                                    label="체중  [kg]"
                                     name="weight"
                                     onChange={handleChange}
                                     value={receptionData.weight || ''}
@@ -334,7 +357,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -342,12 +365,13 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     label="BMI"
                                     name="bmi"
                                     onChange={handleChange}
-                                    value={receptionData.bmi || ''}
+                                    value={receptionData.bmi || '' || calculateBMI(receptionData.height, receptionData.weight)}
                                     variant="outlined"
-                                    size='small' />
+                                    size='small'
+                                    readOnly={true} />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -360,7 +384,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -373,7 +397,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     size='small' />
                             </Grid>
                             <Grid item xs={2}>
-                                <TextField 
+                                <TextField
                                     InputLabelProps={{
                                         shrink: true
                                     }}
