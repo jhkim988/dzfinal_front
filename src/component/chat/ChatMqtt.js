@@ -1,6 +1,4 @@
 import React, { useEffect, useContext } from "react";
-import mqtt from "mqtt";
-import { createContext } from "react";
 import ChatList from "./ChatList";
 import { MqttContext } from "../waiting/MqttContextProvider";
 
