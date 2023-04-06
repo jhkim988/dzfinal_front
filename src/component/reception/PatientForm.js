@@ -228,7 +228,7 @@ const PatientForm = ({
   return (
     <>
       <Paper sx={{ height: "24vh" }} elevation={1}>
-        {/* <Grid container>
+        <Grid container>
           <Grid item xs={12}>
           <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
           <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
@@ -237,12 +237,12 @@ const PatientForm = ({
           </h5>
         </div>
           </Grid>
-        </Grid> */}
+        </Grid>
         <div style={{ marginTop: "1em", marginLeft: "1em"}}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               환자 등록/수정
-            </Grid>
+            </Grid> */}
             <Grid item xs={4}>
               <PatientAutoComplete
                 patient_name={patientData.patient_name}
@@ -275,7 +275,7 @@ const PatientForm = ({
                   value={patientData.front_registration_number || ""}
                   size="small"
                 />
-                -
+                <p style={{ margin: 5 }}>─</p>
                 <TextField
                   onChange={handleChange}
                   sx={{
@@ -355,7 +355,8 @@ const PatientForm = ({
                   variant="outlined"
                   size="small"
                 />
-                ㅡ
+                <p style={{ margin: 5 }}>─</p>
+
                 <TextField
                   sx={{
                     "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
@@ -367,7 +368,7 @@ const PatientForm = ({
                   variant="outlined"
                   size="small"
                 />
-                ㅡ
+                <p style={{ margin: 5 }}>─</p>
                 <TextField
                   sx={{
                     "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
