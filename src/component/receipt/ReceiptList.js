@@ -1,6 +1,19 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
-import { Select, Box, FormControl, Button, Pagination, InputLabel, MenuItem, Paper, TextField } from '@mui/material';
+import { 
+  Select, 
+  Box, 
+  FormControl, 
+  Button, 
+  Pagination, 
+  InputLabel, 
+  MenuItem, 
+  Paper, 
+  TextField,
+  DeleteIcon,
+  IconButton,
+  Tooltip,
+  } from '@mui/material';
 import {
   Table,
   TableBody,
@@ -146,22 +159,40 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
               onToggle={handleToggle}
-              renderInput={(startProps, endProps) => (
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}>
-                  <TextField {...startProps} variant="outlined" sx={{ height: "20px" }} />
-                  <Box sx={{ mx: 1 }}>~</Box>
-                  <TextField {...endProps} variant="outlined" size="small" />
-                </Box>
-              )}
+              slots={{
+                startInput: {
+                  inputProps: {
+                    style: {
+                      height: "20px",
+                    },
+                  },
+                  variant: "outlined",
+                },
+                endInput: {
+                  inputProps: {
+                    style: {
+                      height: "20px",
+                    },
+                  },
+                  variant: "outlined",
+                },
+              }}
+              // renderInput={(startProps, endProps) => (
+              //   <Box sx={{
+              //     display: "flex",
+              //     alignItems: "center",
+              //   }}>
+              //     <TextField {...startProps} variant="outlined" sx={{ height: "20px" }} />
+              //     <Box sx={{ mx: 1 }}>~</Box>
+              //     <TextField {...endProps} variant="outlined" size="small" />
+              //   </Box>
+              // )}
             />
           </LocalizationProvider>
           <TextField
             label="검색어"
-            size="medium"
-            sx={{ alignSelf: "center" }}
+            size="small"
+            sx={{ alignSelf: "center", paddingLeft:"10px", paddingRight: "10px", }}
             value={searchText}
             onChange={handleSearchTextChange}
           />
@@ -204,7 +235,9 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
                         {receiptList[idx].disease_count > 1 ? `${receiptList[idx].disease_name} 외 ${receiptList[idx].disease_count - 1} 건` : `${receiptList[idx].disease_name}`}
                       </TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
-                        {receiptList[idx].prescription_count > 1 ? `${receiptList[idx].drug_name} 외 ${receiptList[idx].prescription_count - 1} 건` : `${receiptList[idx].drug_name}`}
+                        {/* <Tooltip> */}
+                          {receiptList[idx].prescription_count > 1 ? `${receiptList[idx].drug_name} 외 ${receiptList[idx].prescription_count - 1} 건` : `${receiptList[idx].drug_name}`}
+                        {/* </Tooltip> */}
                       </TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].total_amount}</TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].mode}</TableCell>
