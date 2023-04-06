@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Autocomplete, TextField, Typography } from "@mui/material";
 import axios from "axios";
 
-const PatientAutoComplete = ({ setPatientData, patientData, setReceptionData, setIsChecked }) => {
+const PatientAutoComplete = ({ patient_name, onBlur, onSelect }) => {
   const [text, setText] = useState("");
   const [comboBoxData, setComboBoxData] = useState([]);
 
@@ -13,47 +13,55 @@ const PatientAutoComplete = ({ setPatientData, patientData, setReceptionData, se
     axios
       .get(`/api/patient/list`, { params: { patient_name: searchText } })
       .then(({ data }) => {
-        const formattedData = data.map((el) => ({ ...el, label: el.patient_name, value: el.patient_id }));
-        console.log(formattedData);
+        const formattedData = data.map((el) => ({
+          ...el,
+          label: el.patient_name,
+          value: el.patient_id,
+        }));
         setComboBoxData(formattedData);
       });
   };
 
-  const onSelect = (e, value) => {
-    axios
-      .get(`/api/patient/${value.patient_id}`)
-      .then(({ data }) => {
-        console.log("환자 선택", data);
-        setPatientData(data);
-        setText(value.patient_name);
-        setReceptionData(prev => ({ ...prev, ...data }));
-        setIsChecked(Boolean(data.insurance));
-      });
-  }
+  const onSelectCallback = (e, value) => {
+    onSelect(e, value);
+    setText(value.patient_name);
+  };
 
   return (
     <Autocomplete
       sx={{
         width: "100%",
         "& > :not(style)": { m: 0.5 },
-        "& .css-1mb7k4z-MuiInputBase-root-MuiOutlinedInput-root":
-          { padding: "0", paddingLeft: "10px" },
+        "& .css-1mb7k4z-MuiInputBase-root-MuiOutlinedInput-root": {
+          padding: "0",
+          paddingLeft: "10px",
+        },
         "& .css-mn1mr4-MuiInputBase-input-MuiOutlinedInput-input": {
           padding: "0",
-        }
+        },
       }}
       freeSolo
-      value={patientData.patient_name}
-      onChange={onSelect}
+      value={patient_name}
+      onChange={onSelectCallback}
       disablePortal
       options={comboBoxData}
-      renderOption={(props, option) => <Typography {...props}>{option.patient_name} {option.front_registration_number} {option.phone_number3}</Typography>}
+      renderOption={(props, option) => (
+        <Typography {...props}>
+          {option.patient_name} {option.front_registration_number}{" "}
+          {option.phone_number3}
+        </Typography>
+      )}
       renderInput={(params) => (
-        <TextField {...params} value={text} label="환자이름 검색"
+        <TextField
+          {...params}
+          value={text}
+          label="환자이름 검색"
           InputLabelProps={{
-            shrink: true
+            shrink: true,
           }}
-          onChange={onChange} onBlur={e => { setPatientData(prev => ({ ...prev, patient_name: e.target.value })) }} />
+          onChange={onChange}
+          onBlur={onBlur}
+        />
       )}
     />
   );
