@@ -46,9 +46,17 @@ const menuItems = {
     },
     {
       id: "did",
-      title: "DID",
+      title: "VIDEO DID",
       type: "item",
       url: "/view",
+      icon: icons.IconDeviceTv,
+      breadcrumbs: false,
+    },    
+    {
+      id: "did",
+      title: "BIG DID",
+      type: "item",
+      url: "/big_did",
       icon: icons.IconDeviceTv,
       breadcrumbs: false,
     },
