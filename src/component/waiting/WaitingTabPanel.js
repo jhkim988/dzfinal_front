@@ -28,7 +28,7 @@ const WaitingTabPanel = ({ data, selected, onRowClick }) => {
               key={`waitingQueue#${el.reception_id}`}
               data-reception_id={el.reception_id}
               onClick={onRowClick}
-              sx={{ backgroundColor: selected === `${el.reception_id}` ? 'rgba(33, 150, 243, 0.1)' : undefined }}
+              sx={{ backgroundColor: `${selected?.reception_id}` === `${el.reception_id}` ? 'rgba(33, 150, 243, 0.1)' : undefined }}
             >
                 <TableCell>
                   {el.patient_name}
