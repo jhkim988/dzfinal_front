@@ -4,30 +4,18 @@ import React, {
   useCallback,
   useMemo,
   useRef,
+  useContext
 } from "react";
 import { Grid, Paper } from "@mui/material";
-import mqtt from "mqtt";
 import axios from "axios";
 import CallButtonSet from "./CallButtonSet";
 import WaitingQueue from "./WaitingQueue";
-
-const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
-// const mqttURL = `mqtt://localhost:8083/mqtt`;
-const genRanHex = (size) =>
-  [...Array(size)]
-    .map(() => Math.floor(Math.random() * 16).toString(16))
-    .join("");
-
-const mqttOptions = {
-  clean: true,
-  connectTimeout: 30 * 1000,
-  clientId: `React${genRanHex(6)}`,
-  username: `React${genRanHex(6)}`,
-  password: "emqx_test",
-};
+import { MqttContext } from "./MqttContextProvider";
 
 const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback, shouldAutoCall, findNextAutoCall, shouldDisableCallButton }) => {
-  const client = useRef();
+  // const client = useRef();
+  const client = useContext(MqttContext);
+
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
   const autoCall = useRef(false);
@@ -95,8 +83,7 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback, shouldAuto
   }, []);
 
   useEffect(() => {
-    console.log("client init");
-    client.current = mqtt.connect(mqttURL, mqttOptions);
+    console.log("client", client);
     client.current.subscribe("waiting", { qos: 1 });
     client.current.on("message", mqttEventListener);
   }, []);
