@@ -9,7 +9,7 @@ import {
     TableRow,
     Grid
 } from "@material-ui/core";
-import { axiosClient } from '../login/AxiosClient';
+import axiosClient from '../login/AxiosClient';
 
 const Reservation_API_BASE_URL = "/api/reservation";
 
