@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Grid } from '@mui/material';
-import axiosClient from './../login/AxiosClient';
+import { Paper } from '@mui/material';
 import {
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow,
+    Grid
 } from "@material-ui/core";
+import { axiosClient } from '../login/AxiosClient';
 
 const Reservation_API_BASE_URL = "/api/reservation";
 
@@ -40,7 +41,6 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
                 //setPatient_id(response.data.patient_id);
                 setSelectedReservationDetails(response.data);
                 // 환자 onchange
-
                 setPatientData(prev => ({ ...response.data }));
                 // 접수
                 setReceptionData(prev => ({ ...response.data }));
@@ -71,7 +71,9 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
                             </TableHead>
                             {reservation.length === 0 && (
                                 <TableBody>
+                                    <TableRow>
                                     <TableCell colSpan={6} align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>금일 예약환자가 존재하지 않습니다.</TableCell>
+                                    </TableRow>
                                 </TableBody>
                             )}
                             {/* <Box ></Box> */}

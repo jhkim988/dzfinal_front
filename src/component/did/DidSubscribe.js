@@ -52,7 +52,7 @@ const DidView = () => {
     
     return (
         <div>
-            <Typography variant="h1" gutterBottom>{getDidSubtitle[index]?.message}</Typography>
+            <Typography style={{fontSize: "4.5rem" , fontWeight: "bold"}}>{getDidSubtitle[index]?.message}</Typography>
            
         </div>
     );

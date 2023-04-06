@@ -11,10 +11,12 @@ import {
   Select,
   MenuItem,
   InputAdornment,
+  OutlinedInput,
 } from "@mui/material";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { offsetDate } from "./utils/dateUtils";
 import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
+import PatientAutoComplete from './../reception/PatientAutoComplete';
 import axiosClient from './../login/AxiosClient';
 
 
@@ -109,10 +111,6 @@ const ReservationForm = ({
     }
   }, [reservationFormModal.modalState, pickDate, pickTime]);
 
-  useEffect(() => {
-
-  }, [reservationFormModal]);
-
   return (
     <>
       <Modal
@@ -141,8 +139,8 @@ const ReservationForm = ({
           ref={anchorRef}
         >
           <Grid container>
-            <Grid item xs={12} style={style}>
-              <FormControl>
+            <Grid item xs={6} style={style}>
+              {/* <FormControl>
                 <InputLabel htmlFor="patient_name">예약자 성함</InputLabel>
                 <Input
                   id="patient_name"
@@ -150,9 +148,30 @@ const ReservationForm = ({
                   onChange={formOnChange}
                   value={reservationFormData.patient_name}
                 />
-              </FormControl>
+              </FormControl> */}
+              <PatientAutoComplete
+                patient_name={reservationFormData.patient_name}
+                onSelect={(e, value) => {
+                  setReservationFormData((prev) => ({ ...prev
+                  , patient_id: value.patient_id
+                  , patient_name: value.patient_name
+                  , phone_number1: value.phone_number1
+                  , phone_number2: value.phone_number2
+                  , phone_number3: value.phone_number3 }))
+                }}
+                onInputChange={(e, value, reason) => {
+                  if (reason === "input") {
+                    setReservationFormData(prev => ({ ...prev, patient_name: value, patient_id: 0, phone_number1: "", phone_number2: "", phone_number3: "" }));
+                  } else if (reason === "reset") {
+                    setReservationFormData(prev => ({ ...prev, patient_name: "", patient_id: 0, phone_number1: "", phone_number2: "", phone_number3: "" }));
+                  } else if (reason === "clear") {
+                    setReservationFormData(prev => ({ ...prev, patient_name: "", patient_id: 0, phone_number1: "", phone_number2: "", phone_number3: "" }));
+                  }
+                }}
+                variant="standard"
+              />
             </Grid>
-
+            <Grid item xs={6}/>
             <Grid item xs={12} style={style}>
               <Grid container spacing={2}>
                 <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
@@ -162,12 +181,12 @@ const ReservationForm = ({
                       id="phone_number1"
                       name="phone_number1"
                       onChange={formOnChange}
-                      value={reservationFormData.phone_number1}
+                      value={reservationFormData.phone_number1 || ""}
                     />
                   </FormControl>
                 </Grid>
                 <Grid item xs={1} style={{ alignSelf: "flex-end" }}>
-                  -
+                  ─
                 </Grid>
                 <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
                   <FormControl>
@@ -175,12 +194,12 @@ const ReservationForm = ({
                       id="phone_number2"
                       name="phone_number2"
                       onChange={formOnChange}
-                      value={reservationFormData.phone_number2}
+                      value={reservationFormData.phone_number2 || ""}
                     />
                   </FormControl>
                 </Grid>
                 <Grid item xs={1} style={{ alignSelf: "flex-end" }}>
-                  -
+                  ─
                 </Grid>
                 <Grid item xs={3} style={{ alignSelf: "flex-end" }}>
                   <FormControl>
@@ -188,7 +207,7 @@ const ReservationForm = ({
                       id="phone_number3"
                       name="phone_number3"
                       onChange={formOnChange}
-                      value={reservationFormData.phone_number3}
+                      value={reservationFormData.phone_number3 || ""}
                     />
                   </FormControl>
                 </Grid>
@@ -202,10 +221,9 @@ const ReservationForm = ({
                   id="doctor-select"
                   labelId="doctor_label"
                   label="doctor"
-                  defaultValue={1}
                   name="doctor"
                   onChange={formOnChange}
-                  value={reservationFormData.doctor}
+                  value={reservationFormData.doctor || 1}
                 >
                   <MenuItem value="1">김더존</MenuItem>
                   <MenuItem value="2">이을지</MenuItem>
@@ -219,10 +237,9 @@ const ReservationForm = ({
                 <Select
                   labelId="state"
                   label="state"
-                  defaultValue="예약중"
                   name="state"
                   onChange={formOnChange}
-                  value={reservationFormData.state}
+                  value={reservationFormData.state || "예약중"}
                 >
                   <MenuItem value="예약중">예약중</MenuItem>
                   <MenuItem value="완료">완료</MenuItem>
@@ -256,14 +273,14 @@ const ReservationForm = ({
 
             <Grid item xs={12} style={style}>
               <FormControl>
-                <TextField
-                  placeholder="예약메모"
+                <InputLabel sx={{ background: "white" }}>예약메모</InputLabel>
+                <OutlinedInput
                   minRows={5}
                   multiline
                   style={{ width: 410 }}
                   name="treatment_reason"
                   onChange={formOnChange}
-                  value={reservationFormData.treatment_reason}
+                  value={reservationFormData.treatment_reason || ""}
                 />
               </FormControl>
             </Grid>
@@ -286,7 +303,7 @@ const ReservationForm = ({
                   });
                 }}
               >
-                취소
+                닫기
               </Button>
             </Grid>
           </Grid>

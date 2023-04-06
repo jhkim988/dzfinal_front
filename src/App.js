@@ -5,6 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import NavigationScroll from "./template/layout/NavigationScroll";
 import ThemeRoutes from "./template/routes/ThemeRoutes";
 import themes from "./template/themes/theme";
+import MqttContextProvider from "./component/waiting/MqttContextProvider";
 
 function App() {
   const customization = useSelector((state) => state.customization);
@@ -13,7 +14,9 @@ function App() {
       <ThemeProvider theme={themes(customization)}>
         <CssBaseline />
         <NavigationScroll>
-          <ThemeRoutes />
+          <MqttContextProvider>
+            <ThemeRoutes />
+          </MqttContextProvider>
         </NavigationScroll>
       </ThemeProvider>
     </StyledEngineProvider>

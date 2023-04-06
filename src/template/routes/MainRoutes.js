@@ -44,7 +44,7 @@ const MainRoutes = {
     {
       path: "reception",
       element: <Reception />,
-    },    
+    },
     // {
     //   path: "view",
     //   element: <DID />,
