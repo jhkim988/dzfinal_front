@@ -51,7 +51,6 @@ const PatientForm = ({
     const [isChecked, setIsChecked] = useState(false);
     const [open, setOpen] = React.useState(false);
     const [patient_name, setPatient_name] = useState("");
-    const [autoCompleteList, setAutoCompleteList] = useState([]);
 
     const resetHandler = (event) => {
         setPatientData({
@@ -110,33 +109,8 @@ const PatientForm = ({
         }
     };
 
-    //환자이름검색
-    const handleDropDownKey = (event) => {
-        event.preventDefault();
-        if (
-            event.key !== "ArrowDown" &&
-            event.key !== "ArrowUp" &&
-            event.key !== "Enter"
-        ) {
-            if (patient_name.length > 1) {
-                axios
-                    .get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
-                    .then((response) => {
-                        setAutoCompleteList(response.data);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            } else {
-                setAutoCompleteList([]);
-            }
-        }
-    };
 
-    const removeAutoCompleteList = () => {
-        setPatient_name("");
-        setAutoCompleteList([]);
-    };
+    //환자 수정
     const updatePatientInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 환자 정보를 수정하시겠습니까?")) {
             axios.post(Patient_API_BASE_URL + "/update", patientData)
@@ -154,35 +128,6 @@ const PatientForm = ({
         }
     };
 
-    const selectedSearchPatient = (patient_id) => {
-        //alert(patient_id);
-        if (
-            window.confirm(
-                "[ 환자번호 : " +
-                patient_id +
-                " ]" +
-                patientData.patient_name +
-                "님의 환자 정보를 보시겠습니까?"
-            )
-        ) {
-            axios
-                .get(Patient_API_BASE_URL + `/${patient_id}`)
-                .then((response) => {
-                    console.log("자동완성 환자정보:", response.data);
-                    setPatientData((prev) => ({ ...response.data }));
-                    setReceptionData((prev) => ({ ...response.data }));
-                    setIsChecked((prev) => ({ ...response.data }));
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } else {
-            alert("취소되었습니다. 환자 재검색 바랍니다.");
-            removeAutoCompleteList();
-        }
-    };
-
-
     //우편번호 검색
     const handleComplete = (data) => {
         setOpen(true);
@@ -190,6 +135,7 @@ const PatientForm = ({
     const closePostCode = () => {
         setOpen(false);
     }
+
     const handleInput = (e) => {
         setSelectedAddress({
             ...selectedAddress,
@@ -198,16 +144,6 @@ const PatientForm = ({
 
     }
 
-
-    const tableStyle = {
-        marginTop: "19px",
-        marginLeft: "5px",
-        position: "fixed",
-        zIndex: "9999",
-        background: "white",
-        width: "250px",
-        height: "auto"
-    }
     return (
         <>
 
