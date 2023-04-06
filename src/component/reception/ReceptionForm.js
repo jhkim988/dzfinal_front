@@ -1,10 +1,10 @@
-import { Button, Checkbox, createTheme, FormControlLabel, MenuItem, Paper, TextareaAutosize, TextField, ThemeProvider, Grid, Hidden } from '@mui/material';
+import { Button, MenuItem, Paper, TextField, Grid } from '@mui/material';
 import { Box } from '@mui/system';
-import SearchIcon from "@material-ui/icons/Search";
-import { InputAdornment } from "@material-ui/core";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 
 const doctors = [
@@ -161,6 +161,11 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                 <Grid container spacing={2}>
                     <div style={{ width: "500px", height: "10px", marginBottom: "10px", marginTop: "2px" }}>
                         <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>접수 등록/수정&nbsp;&nbsp;[환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]</h5>
+                        <Tooltip title="Delete">
+                            <IconButton>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
                     </div>
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
@@ -299,12 +304,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                             <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
                                 <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                     {receptionData.reception_id != null && (
-                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px" }}>수정</Button>
+                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>수정</Button>
                                     )}
                                     {receptionData.reception_id == null && (
-                                        <Button type="submit" onClick={receptDataHandleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>접수</Button>
+                                        <Button type="submit" onClick={receptDataHandleSubmit} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>접수</Button>
                                     )}
-                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px" }}>취소</Button>
+                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px", marginLeft: "5px" }}>취소</Button>
                                 </Box>
                             </Grid>
                         </Grid>
@@ -454,12 +459,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                             <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
                                 <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                     {receptionData.reception_id != null && (
-                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px" }}>수정</Button>
+                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>수정</Button>
                                     )}
                                     {receptionData.reception_id == null && (
-                                        <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>접수</Button>
+                                        <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>접수</Button>
                                     )}
-                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px" }}>취소</Button>
+                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px", marginLeft: "5px" }}>취소</Button>
                                 </Box>
                             </Grid>
                         </Grid>

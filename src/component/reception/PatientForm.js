@@ -222,7 +222,7 @@ const PatientForm = ({
                                         type="submit"
                                         onClick={handleSubmit}
                                         variant="contained"
-                                        style={{ width: "30px", height: "30px" }}
+                                        style={{ width: "30px", height: "30px", marginLeft: "5px" }}
                                     >
                                         등록
                                     </Button>
@@ -233,7 +233,7 @@ const PatientForm = ({
                                             type="submit"
                                             onClick={handleSubmit}
                                             variant="contained"
-                                            style={{ width: "30px", height: "30px" }}
+                                            style={{ width: "30px", height: "30px", marginLeft: "5px" }}
                                         >
                                             등록
                                         </Button>
@@ -244,7 +244,7 @@ const PatientForm = ({
                                             type="submit"
                                             onClick={updatePatientInfo}
                                             variant="contained"
-                                            style={{ width: "30px", height: "30px" }}
+                                            style={{ width: "30px", height: "30px", marginLeft: "5px" }}
                                         >
                                             수정
                                         </Button>
@@ -254,7 +254,7 @@ const PatientForm = ({
                                     variant="contained"
                                     color="error"
                                     onClick={resetHandler}
-                                    style={{ width: "30px", height: "30px", marginRight: "5px" }}
+                                    style={{ width: "30px", height: "30px", marginRight: "5px", marginLeft: "5px" }}
                                 >
                                     취소
                                 </Button>
