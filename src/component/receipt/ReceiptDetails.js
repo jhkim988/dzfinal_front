@@ -67,7 +67,7 @@ export default function DenseTable({user}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows2.map((row) => {console.log(row); return(
+          {rows2.map((row) => {(
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
