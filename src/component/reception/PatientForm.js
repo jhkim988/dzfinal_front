@@ -224,21 +224,38 @@ const PatientForm = ({
       });
   }
 
+  console.log(patientData);
   return (
     <>
       <Paper sx={{ height: "24vh" }} elevation={1}>
-        <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
+        {/* <Grid container>
+          <Grid item xs={12}>
+          <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
           <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
-            환자 등록/수정
+          환자 등록/수정
+
           </h5>
         </div>
-        <div style={{ marginTop: "1em", marginLeft: "1em" }}>
+          </Grid>
+        </Grid> */}
+        <div style={{ marginTop: "1em", marginLeft: "1em"}}>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              환자 등록/수정
+            </Grid>
             <Grid item xs={4}>
               <PatientAutoComplete
-                onSelect={onSelect}
-                onBlur={e => { setPatientData(prev => ({ ...prev, patient_name: e.target.value }))}}
                 patient_name={patientData.patient_name}
+                onSelect={onSelect}
+                onInputChange={(e, value, reason) => {
+                  console.log("onInputChange");
+                  if (reason === "input") {
+                    resetHandler();
+                    setPatientData(prev => ({ ...prev, patient_name: value}));
+                  } else if (reason === "clear") {
+                    resetHandler();
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={5} sx={{ paddingLeft: 0 }}>
@@ -382,7 +399,7 @@ const PatientForm = ({
                 name="gender"
                 onChange={handleChange}
                 value={patientData.gender || ""}
-                // style={{ width: "70px", height: "10px" }}
+                style={{ width: "70px", height: "10px" }}
               >
                 {gender.map((option) => (
                   <MenuItem key={option.value} value={option.value}>

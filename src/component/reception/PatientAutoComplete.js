@@ -2,16 +2,15 @@ import { useState } from "react";
 import { Autocomplete, TextField, Typography } from "@mui/material";
 import axios from "axios";
 
-const PatientAutoComplete = ({ patient_name, onBlur, onSelect }) => {
+const PatientAutoComplete = ({ patient_name, onSelect, onInputChange, variant }) => {
   const [text, setText] = useState("");
   const [comboBoxData, setComboBoxData] = useState([]);
 
-  const onChange = (e) => {
-    const searchText = e.target.value;
-    setText(searchText);
-    if (searchText.length < 2) return;
+  const autoCompleteRequest = (e, value) => {
+    setText(value);
+    if (value.length < 2) return;
     axios
-      .get(`/api/patient/list`, { params: { patient_name: searchText } })
+      .get(`/api/patient/list`, { params: { patient_name: value } })
       .then(({ data }) => {
         const formattedData = data.map((el) => ({
           ...el,
@@ -23,15 +22,15 @@ const PatientAutoComplete = ({ patient_name, onBlur, onSelect }) => {
   };
 
   const onSelectCallback = (e, value) => {
-    onSelect(e, value);
-    setText(value.patient_name);
+    value && onSelect(e, value);
+    setText(value?.patient_name);
   };
 
   return (
     <Autocomplete
       sx={{
         width: "100%",
-        "& > :not(style)": { m: 0.5 },
+        "& > :not(style)": { marginLeft: 0.5 },
         "& .css-1mb7k4z-MuiInputBase-root-MuiOutlinedInput-root": {
           padding: "0",
           paddingLeft: "10px",
@@ -41,8 +40,14 @@ const PatientAutoComplete = ({ patient_name, onBlur, onSelect }) => {
         },
       }}
       freeSolo
-      value={patient_name}
+      value={patient_name || ""}
       onChange={onSelectCallback}
+      onInputChange={(e, value, reason) => {
+        if (reason === "input") {
+          autoCompleteRequest(e, value);
+        }
+        onInputChange(e,value,reason);
+      }}
       disablePortal
       options={comboBoxData}
       renderOption={(props, option) => (
@@ -59,8 +64,7 @@ const PatientAutoComplete = ({ patient_name, onBlur, onSelect }) => {
           InputLabelProps={{
             shrink: true,
           }}
-          onChange={onChange}
-          onBlur={onBlur}
+          variant={variant || "outlined"}
         />
       )}
     />
