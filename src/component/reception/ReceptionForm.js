@@ -27,7 +27,7 @@ const examinationTextField = {
 
 const Reception_API_BASE_URL = "/api/reception";
 
-const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData }) => {
+const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData, loadDailyReservationList }) => {
     //console.log(patient_id);
 
     const resetHandler = (event) => {
@@ -117,6 +117,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     alert(response.data.message);
                     console.log(response.data);
                     resetHandler(event);
+                    if (receptionData.reservation_id != 0) loadDailyReservationList();
                 })
                 .catch((error) => {
                     alert("접수등록실패");
@@ -148,6 +149,26 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
         }
     }
 
+    //접수 취소
+    const deleteReception = () => {
+        //alert("접수 취소");
+        if (window.confirm("[환자번호 :" + patientData.patient_id + "]" + patientData.patient_name + "님의 접수 정보를 취소하시겠습니까?")) {
+            axios.post(Reception_API_BASE_URL + "/delete", receptionData)
+                .then((response) => {
+                    alert(response.data.message);
+                    console.log(response.data);
+                    resetHandler();
+                })
+                .catch((error) => {
+                    alert("진료대기환자인 경우만 접수 취소가 가능합니다.");
+                    console.error(error);
+                })
+        } else {
+            alert("접수 취소가 중지되었습니다.")
+            resetHandler();
+        }
+    }
+
     //bmi 자동 계산
     const calculateBMI = (height, weight) => {
         const heightInMeters = height / 100;
@@ -159,14 +180,24 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
         <Paper elevation={1} sx={{ padding: 2, height: "15.3vh" }}>
             {receptionData != null && patient_id == null && (
                 <Grid container spacing={2}>
-                    <div style={{ width: "500px", height: "10px", marginBottom: "10px", marginTop: "2px" }}>
-                        <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>접수 등록/수정&nbsp;&nbsp;[환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]</h5>
-                        <Tooltip title="Delete">
-                            <IconButton>
-                                <DeleteIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </div>
+                    <Grid item xs={12}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={10}>
+                                <div style={{ width: "100%", height: "10px", marginBottom: "10px", marginTop: "2px" }}>
+                                    <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
+                                        접수 등록/수정&nbsp;&nbsp;[환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]
+                                    </h5>
+                                </div>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Tooltip title="접수 취소">
+                                    <IconButton onClick={deleteReception}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        </Grid>
+                    </Grid>
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
                             {/* <TextField 
@@ -319,9 +350,24 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
 
             {receptionData != null && patient_id != null && (
                 <Grid container spacing={2}>
-                    <div style={{ width: "500px", height: "10px", marginBottom: "10px", marginTop: "2px" }}>
-                        <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>접수 등록/수정&nbsp;&nbsp;[환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]</h5>
-                    </div>
+                    <Grid item xs={12}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={10}>
+                                <div style={{ width: "100%", height: "10px", marginBottom: "10px", marginTop: "2px" }}>
+                                    <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
+                                        접수 등록/수정&nbsp;&nbsp;[환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]
+                                    </h5>
+                                </div>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Tooltip title="접수 취소">
+                                    <IconButton onClick={deleteReception}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        </Grid>
+                    </Grid>
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
                             {/* <TestField

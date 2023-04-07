@@ -12,6 +12,8 @@ import ReceptionList from "./ReceptionList";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 import ReceiptList from "../receipt/ReceiptList";
 
+const Reservation_API_BASE_URL = "/api/reservation";
+
 const Reception = () => {
   const [patient_id, setPatient_id] = useState(null);
   const [selectedReservationDetails, setSelectedReservationDetails] = useState(
@@ -54,7 +56,10 @@ const Reception = () => {
     receipt: {},
   });
 
-  const clickRowCallback = async({ reception_id, patient_id }) => {
+  // DailyReservation
+  const [reservation, setReservation] = useState([]);
+
+  const clickRowCallback = async ({ reception_id, patient_id }) => {
     setPatient_id(patient_id);
     try {
       axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
@@ -63,7 +68,7 @@ const Reception = () => {
         setReceiptData(data);
         console.log(data);
       });
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }
@@ -115,7 +120,15 @@ const Reception = () => {
     has_prescription: 0,
   });
 
-
+  const loadDailyReservationList = () => {
+    axios.get(Reservation_API_BASE_URL)
+      .then((response) => {
+        setReservation(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
   return (
     <>
       <Grid container spacing={2}>
@@ -124,7 +137,7 @@ const Reception = () => {
             initPanel="3"
             nextState="수납중"
             clickRowCallback={clickRowCallback}
-            shouldAutoCall={({ data: { state }}) => state === "수납완료"}
+            shouldAutoCall={({ data: { state } }) => state === "수납완료"}
             findNextAutoCall={({ state }) => state === "수납대기"}
             shouldDisableCallButton={({ state }) => state !== "수납대기"}
           />
@@ -138,7 +151,7 @@ const Reception = () => {
                   clickRowCallback={clickRowCallback}
                   receiptRecordSearch={receiptRecordSearch}
                   patient_id={patient_id}
-                  // setSelectedOneReceipt={setSelectedOneReceipt}
+                // setSelectedOneReceipt={setSelectedOneReceipt}
                 />
               </Paper>
             </Grid>
@@ -150,6 +163,9 @@ const Reception = () => {
                       setPatientData={setPatientData}
                       setReceptionData={setReceptionData}
                       setSelectedReservationDetails={setSelectedReservationDetails}
+                      loadDailyReservationList={loadDailyReservationList}
+                      reservation={reservation}
+                      setReservation={setReservation}
                     />
                   </Grid>
                   <Grid item xs={7}>
@@ -173,6 +189,7 @@ const Reception = () => {
                           patientData={patientData}
                           setPatientData={setPatientData}
                           setSelectedAddress={setSelectedAddress}
+                          loadDailyReservationList={loadDailyReservationList}
                         />
                       </Grid>
                     </Grid>
@@ -184,9 +201,9 @@ const Reception = () => {
         </Grid>
 
         <Grid item xs={2.5}>
-          <Receipt 
-            receiptData={receiptData} 
-            // selectedOneReceipt={selectedOneReceipt}
+          <Receipt
+            receiptData={receiptData}
+          // selectedOneReceipt={selectedOneReceipt}
           />
         </Grid>
       </Grid>
