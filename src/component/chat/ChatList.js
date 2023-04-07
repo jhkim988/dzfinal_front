@@ -26,7 +26,7 @@ const ChatList = () => {
 
   useEffect(() => {
     axios
-      .get(`api/chat/chatlist?participants_id=1`) //수정
+      .get(`api/chat/chatlist?participants_id=3`) //수정
       .then((response) => {
         setChatRoom(response.data);
         console.log(response.data);
@@ -56,7 +56,7 @@ const ChatList = () => {
                 {room.chatroom_name || room.employee_names[0]}
               </TableCell>
               <TableCell>
-                <Badge badgeContent={4} color="error" />
+                <Badge badgeContent={0} color="error" />
               </TableCell>
             </TableRow>
           ))}

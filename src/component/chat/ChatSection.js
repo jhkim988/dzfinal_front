@@ -9,18 +9,19 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Transitions from "../../template/ui-component/Transitions";
 import MainCard from "../../template/ui-component/cards/MainCard";
 import { IconBrandHipchat } from "@tabler/icons";
-import ChatMqtt from "./ChatMqtt";
+import ChatList from "./ChatList";
+import { MqttContext } from "../waiting/MqttContextProvider";
 
 const ChatSection = () => {
+  const client = useContext(MqttContext);
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
@@ -35,12 +36,24 @@ const ChatSection = () => {
   };
 
   const prevOpen = useRef(open);
+
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
     prevOpen.current = open;
   }, [open]);
+
+  useEffect(() => {
+    if (client) {
+      // 수정
+      client.current.subscribe(`notification/1`, { qos: 1 }, (error) => {
+        if (error) {
+          console.log("Subscribe to topic error", error);
+        }
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -113,7 +126,7 @@ const ChatSection = () => {
                   <Grid container direction="column" spacing={2}>
                     <Grid item xs={12}>
                       <Box sx={{ px: 2, pt: 0.25 }}>
-                        <ChatMqtt />
+                        <ChatList />
                       </Box>
                     </Grid>
                   </Grid>

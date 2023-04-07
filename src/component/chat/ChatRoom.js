@@ -20,7 +20,7 @@ const ChatRoom = ({ room, onBackClick }) => {
   const [message, setMessage] = useState({
     mode: "private",
     chatroom_id: room.chatroom_id,
-    from: 1, // 수정
+    from: 3, // 수정
     message: "",
     created_at: new Date().toISOString(),
   });
@@ -39,6 +39,28 @@ const ChatRoom = ({ room, onBackClick }) => {
   }, []);
 
   useEffect(() => {
+    const handleMessage = (topic, message) => {
+      const receivedMessage = JSON.parse(message.toString());
+      if (topic === `chat/${room.chatroom_id}`) {
+        setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+      }
+    };
+
+    client.subscribe(`chat/${room.chatroom_id}`, { qos: 1 }, (error) => {
+      if (error) {
+        console.log("Subscribe to topics error", error);
+        return;
+      }
+    });
+
+    client.on("message", handleMessage);
+
+    return () => {
+      client.unsubscribe(`chat/${room.chatroom_id}`);
+    };
+  }, []);
+
+  useEffect(() => {
     const messagesBox = document.getElementById("messages-box");
     messagesBox.scrollTop = messagesBox.scrollHeight;
   }, [messages]);
@@ -48,18 +70,19 @@ const ChatRoom = ({ room, onBackClick }) => {
       const newMessage = {
         mode: "private",
         chatroom_id: room.chatroom_id,
-        from: 1, // 수정
+        from: 3, // 수정
         message: message.message,
         created_at: new Date().toISOString(),
       };
-      client.publish("chat", JSON.stringify(newMessage), { qos: 1 });
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      client.publish(`chat/${room.chatroom_id}`, JSON.stringify(newMessage), {
+        qos: 1,
+      });
     }
     setMessage({ message: "" });
   };
 
   return (
-    <Grid container spacing={1} sx={{ height: 400 }}>
+    <Grid container spacing={1} sx={{ width: 400, height: 600 }}>
       <Grid item xs={12}>
         <AppBar
           position="static"
@@ -77,13 +100,12 @@ const ChatRoom = ({ room, onBackClick }) => {
           id="messages-box"
           sx={{
             display: "block",
-            height: "250px",
+            height: "400px",
             overflowY: "auto",
           }}
         >
-          {/* 목록 출력 */}
           {messages.map((message, index) =>
-            message.from !== 1 ? ( // 수정
+            message.from !== 3 ? ( // 수정
               <Card
                 key={index}
                 sx={{
@@ -107,6 +129,7 @@ const ChatRoom = ({ room, onBackClick }) => {
                       </Paper>
                       <Box
                         sx={{
+                          fontSize: "12px",
                           display: "flex",
                           alignItems: "flex-end",
                           marginLeft: 1,
@@ -138,7 +161,7 @@ const ChatRoom = ({ room, onBackClick }) => {
                   </Box>
                   <Paper
                     elevation={2}
-                    sx={{ marginLeft: 1, backgroundColor: "yellow" }}
+                    sx={{ marginLeft: 1, backgroundColor: "#ffea00" }}
                   >
                     <Box sx={{ padding: 1 }}>{message.message}</Box>
                   </Paper>
