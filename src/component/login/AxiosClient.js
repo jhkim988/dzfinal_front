@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getLoginUserInfo } from "./Login";
 
 const auth = localStorage.getItem("auth") ? JSON.parse(localStorage.getItem("auth")) : {};
 
@@ -34,6 +35,7 @@ axiosClient.interceptors.request.use((request) => {
         auth.token = data.access_token;
         auth.refresh_token = data.refresh_token;
         localStorage.setItem("auth", JSON.stringify(auth));
+        getLoginUserInfo();
       });
   }
   return request;

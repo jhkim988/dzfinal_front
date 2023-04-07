@@ -16,6 +16,13 @@ const LoginImage = () => {
   );
 };
 
+export const getLoginUserInfo = () => {
+  const user_id = localStorage.getItem("user_id");
+  axiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
+    localStorage.setItem("userInfo", data);
+  });
+};
+
 const LoginForm = () => {
   const [loginForm, setLoginForm] = useState({
     username: "",
@@ -55,13 +62,6 @@ const LoginForm = () => {
         getLoginUserInfo();
         movePageWithAuthority(authorities);
       });
-  };
-
-  const getLoginUserInfo = () => {
-    const user_id = localStorage.getItem("user_id");
-    axiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
-      localStorage.setItem("userInfo", data);
-    });
   };
 
   const navi = useNavigate();

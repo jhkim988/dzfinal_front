@@ -3,8 +3,7 @@ import DidSubscribe from "./DidSubscribe";
 import DidVideo from "./DidVideo";
 import DidWaiting from "./DidWaiting";
 import { Grid, Paper } from "@mui/material";
-import axios from "axios";
-import mqtt from "mqtt";
+import axiosClient from "../login/AxiosClient";
 import { MqttContext } from "../waiting/MqttContextProvider";
 
 // TODO: doctor_id 적용
@@ -57,7 +56,7 @@ const MultiDID = ({ nextState }) => {
   }, []);
 
   useEffect(() => {
-    axios.get("/api/reception/today", {
+    axiosClient.get("/api/reception/today", {
       headers: {
         "Content-Type": "application/json",
       }
