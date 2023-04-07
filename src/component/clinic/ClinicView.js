@@ -89,7 +89,6 @@ const ClinicView = () => {
 
   return (
     <Grid container spacing={2}>
-      <AccessAllow authorities={["DOCTOR"]}/>
       <Grid item xs={2} style={{ height: "90vh" }}>
         <WaitingQueueLayout
           initPanel="2"

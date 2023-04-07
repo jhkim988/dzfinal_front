@@ -7,14 +7,14 @@ const axiosClient = axios.create({
   baseURL: "",
   headers: {
     "Content-Type": "application/json;charset=UTF-8",
-    Authorization: `Bearer ${auth?.token}`,
+    Authorization: `Bearer ${auth?.access_token}`,
   },
 });
 
 axiosClient.interceptors.request.use((request) => {
   const auth = JSON.parse(localStorage.getItem("auth"));
   const tokenPayload = JSON.parse(
-    atob(auth.token.split(".")[1])
+    atob(auth.access_token.split(".")[1])
   );
   if (new Date(tokenPayload.exp * 1000) < new Date()) {
     const client_id = "client";

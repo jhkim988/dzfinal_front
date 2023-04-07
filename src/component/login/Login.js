@@ -17,9 +17,9 @@ const LoginImage = () => {
 };
 
 export const getLoginUserInfo = () => {
-  const user_id = localStorage.getItem("user_id");
+  const { user_id } = JSON.parse(localStorage.getItem("auth"));
   axiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
-    localStorage.setItem("userInfo", data);
+    localStorage.setItem("userInfo", JSON.stringify(data));
   });
 };
 
@@ -52,13 +52,12 @@ const LoginForm = () => {
       .then(({ data }) => {
         const { user_name, authorities } = JSON.parse(atob(data.access_token.split(".")[1]));
         const auth = {
-          token: data.access_token,
-          refresh_token: data.refresh_token,
-          user_id: data.user_name,
-          authorities: data.authorities,
+          ...data,
+          user_id: user_name,
+          authorities: authorities,
         }
         localStorage.setItem("auth", JSON.stringify(auth));
-        axiosClient.defaults.headers["Authorization"] = `Bearer ${auth.token}`;
+        axiosClient.defaults.headers["Authorization"] = `Bearer ${auth.access_token}`;
         getLoginUserInfo();
         movePageWithAuthority(authorities);
       });

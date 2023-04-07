@@ -2,6 +2,7 @@ import { lazy } from "react";
 
 import MainLayout from "../layout/MainLayout";
 import Loadable from "../ui-component/Loadable";
+import AccessAllow from './../../component/login/AccessAllow';
 
 const ClinicView = Loadable(
   lazy(() => import("../../component/clinic/ClinicView"))
@@ -29,13 +30,16 @@ const Logout = Loadable(
 );
 
 
+
 const MainRoutes = {
   path: "/",
   element: <MainLayout />,
   children: [
     {
       path: "clinic",
-      element: <ClinicView />,
+      element: <AccessAllow authorities={["DOCTOR"]}>
+          <ClinicView />
+        </AccessAllow>,
     },
     {
       path: "reservation",
