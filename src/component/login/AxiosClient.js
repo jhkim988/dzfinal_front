@@ -18,7 +18,7 @@ axiosClient.interceptors.request.use((request) => {
   if (new Date(tokenPayload.exp * 1000) < new Date()) {
     const client_id = "client";
     const client_secret = "secret";
-    const base64 = btoa(`${client_id}:${client_secret}}`);
+    const base64 = btoa(`${client_id}:${client_secret}`);
     axios
       .post(`http://localhost:8081/oauth/token`, null, {
         params: {
