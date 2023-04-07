@@ -56,11 +56,7 @@ const MultiDID = ({ nextState }) => {
   }, []);
 
   useEffect(() => {
-    axiosClient.get("/api/reception/today", {
-      headers: {
-        "Content-Type": "application/json",
-      }
-    }).then(({ data }) => {
+    axiosClient.get("/api/reception/today").then(({ data }) => {
       setData(data);
     });
   }, []);

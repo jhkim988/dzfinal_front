@@ -75,7 +75,6 @@ const MedicalRecordInquiry = ({
   const onSearchList = (currentPage) => {
     if (!type) return alert("분류를 정해주세요");
     setSearchMode(2);
-
     axiosClient
       .post(
         "/api/clinic/mri/search",
@@ -85,11 +84,6 @@ const MedicalRecordInquiry = ({
           end: formattedDates?.end || "",
           keyword: keyword,
           currentPage: currentPage,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       )
       .then((response) => {

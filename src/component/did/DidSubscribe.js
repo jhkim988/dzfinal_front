@@ -30,11 +30,7 @@ const DidView = () => {
 
 
     useEffect(() => {
-        axiosClient.get(`/api/view/getDidSubtitle`, {
-            headers: {
-              "Content-Type": "application/json",
-            }
-          })
+        axiosClient.get(`/api/view/getDidSubtitle`)
         .then(response => {
             setGetDidSubtitle(response.data);
         })
