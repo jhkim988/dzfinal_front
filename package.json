@@ -51,6 +51,7 @@
     "react-scripts": "^5.0.1",
     "react-to-print": "^2.14.12",
     "react-virtualized": "^9.22.3",
+    "react-youtube": "^10.1.0",
     "redux": "^4.2.1",
     "sass": "^1.59.3",
     "styled-components": "^5.3.9",

@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import YouTube from "react-youtube";
 
 const DidVideo = () => {
-  const [getDidVideo, setGetDidVideo] = useState([]);
+  const [getDidVideo, setGetDidVideo] = useState(null);
+
+  const opts = {
+    height: "740px",
+    width: "1436px",
+    playerVars: {
+      autoplay: 1,
+    },
+  };
+
+  const videoId = "UIV52pBSTN8"; // YouTube 비디오 ID
+
 
   useEffect(() => {
     axios
@@ -16,15 +28,21 @@ const DidVideo = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (getDidVideo) {
+      console.log(getDidVideo.video_real_name);
+    }
+  }, [getDidVideo]);
 
   return (
     <div>
-      {/* <h1>비디오 출력 부분</h1> */}
-      비디오 이름: { getDidVideo.video_real_name }
-      <video width="1436px" height="751px" autoplay loop controls>
-        <source src="/api/view/getDidVideo" type="video/mp4" />
-      </video>
-      <br />
+      {getDidVideo ? (
+        <video width="1436px" height="740px" autoplay loop controls>
+          <source src="/api/view/getDidVideo" type="video/mp4" />
+        </video>
+      ) : (
+        <YouTube videoId={videoId} opts={opts} />
+      )}
     </div>
   );
 };
