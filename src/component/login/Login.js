@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { Grid, Paper } from "@material-ui/core";
-import { TextField, Button, Stack } from "@mui/material";
+import { FormControl, Grid, Paper } from "@material-ui/core";
+import { TextField, Button, Stack, FormGroup } from "@mui/material";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
-import axiosClient from './AxiosClient';
+import { useNavigate } from "react-router-dom";
+import axiosClient from "./AxiosClient";
 
 const LoginImage = () => {
   return (
     <img
-      src={`loginImage.png`}
+      src={`loginImage2.png`}
       alt={`로그인 이미지`}
       loading="lazy"
       style={{ width: "100%", height: "100vh" }}
@@ -43,21 +43,26 @@ const LoginForm = () => {
     "Content-Type": "application/json;charset=UTF-8",
   };
 
-  const login = () => {
+  const login = (e) => {
+    e.preventDefault();
     axios
       .post(`http://localhost:8081/oauth/token`, null, {
         params,
         headers,
       })
       .then(({ data }) => {
-        const { user_name, authorities } = JSON.parse(atob(data.access_token.split(".")[1]));
+        const { user_name, authorities } = JSON.parse(
+          atob(data.access_token.split(".")[1])
+        );
         const auth = {
           ...data,
           user_id: user_name,
           authorities: authorities,
-        }
+        };
         localStorage.setItem("auth", JSON.stringify(auth));
-        axiosClient.defaults.headers["Authorization"] = `Bearer ${auth.access_token}`;
+        axiosClient.defaults.headers[
+          "Authorization"
+        ] = `Bearer ${auth.access_token}`;
         getLoginUserInfo();
         movePageWithAuthority(authorities);
       });
@@ -72,64 +77,58 @@ const LoginForm = () => {
     } else if (authority.includes("KLPN") || authority.includes("ROLE_RN")) {
       navi("/reception");
     }
-  }
+  };
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth"));
-    if (auth?.token) {
+    if (auth?.access_token) {
       getLoginUserInfo();
       const authority = localStorage.getItem("authorities");
       movePageWithAuthority(authority);
     }
   }, []);
 
+  const style = {
+    width: "80%",
+    marginLeft: "10%",
+    marginRight: "10%",
+    marginTop: "20px"
+  }
+
   return (
     <Paper
       component={Stack}
       direction="column"
-      justifyContent="center"
       minHeight="100vh"
+      justifyContent="center"
     >
-      <TextField
-        label="ID"
-        variant="outlined"
-        sx={{
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          marginTop: "10px",
-        }}
-        value={loginForm.username}
-        onChange={(e) => {
-          setLoginForm({ ...loginForm, username: e.target.value });
-        }}
-      />
-      <TextField
-        label="Password"
-        variant="outlined"
-        type="password"
-        sx={{
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          marginTop: "10px",
-        }}
-        value={loginForm.password}
-        onChange={(e) => {
-          setLoginForm({ ...loginForm, password: e.target.value });
-        }}
-      />
-      <Button
-        variant="contained"
-        sx={{
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          marginTop: "10px",
-        }}
-        onClick={login}
-      >
-        로그인
-      </Button>
+      <form onSubmit={login}>
+          <TextField
+            sx={style}
+            label="ID"
+            variant="outlined"
+            value={loginForm.username}
+            onChange={(e) => {
+              setLoginForm({ ...loginForm, username: e.target.value });
+            }}
+          />
+          <TextField
+            sx={style}
+            label="Password"
+            variant="outlined"
+            type="password"
+            value={loginForm.password}
+            onChange={(e) => {
+              setLoginForm({ ...loginForm, password: e.target.value });
+            }}
+          />
+        <Button
+          type="submit"
+          variant="contained"
+          sx={style}
+        >
+          로그인
+        </Button>
+      </form>
     </Paper>
   );
 };

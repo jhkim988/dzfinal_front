@@ -7,7 +7,7 @@ import React, {
   useContext
 } from "react";
 import { Grid, Paper } from "@mui/material";
-import axiosClient from "axios";
+import axiosClient from "./../login/AxiosClient";
 import CallButtonSet from "./CallButtonSet";
 import WaitingQueue from "./WaitingQueue";
 import { MqttContext } from "./MqttContextProvider";

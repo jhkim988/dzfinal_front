@@ -10,7 +10,7 @@ const check_token = () => {
     const client_id = "client";
     const client_secret = "secret";
     const { access_token } = JSON.parse(localStorage.getItem("auth"));
-    axiosClient.post(`http://localhost:8081/oauth/check_token`, {
+    return axiosClient.post(`http://localhost:8081/oauth/check_token`, {
         param: {
             token: access_token
         }
@@ -19,20 +19,25 @@ const check_token = () => {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': `Basic ${btoa(`${client_id}:${client_secret}`)}}`
         }
-    }).then(res => {
-        console.log(res);
     });
 }
 
 const AccessAllow = ({ authorities, children }) => {
     const navigate = useNavigate();
+    const back = () => {
+        navigate(-1);
+        alert("접근 권한이 없습니다.");
+    }
+
     useEffect(() => {
         const auth = JSON.parse(localStorage.getItem("auth"));
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         console.log("auth: ", auth, "userInfo: ", userInfo);
-        if (!auth || !isIntersection(auth.authorities, authorities)) {
-            navigate(-1);
-            alert("접근 권한이 없습니다.");
+        if (!auth) return back();
+        if (!isIntersection(auth.authorities, authorities)) {
+            check_token().catch(err => {
+                back();
+            });
         }
     }, []);
     return <>{children}</>

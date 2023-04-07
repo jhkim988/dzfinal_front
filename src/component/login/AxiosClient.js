@@ -32,9 +32,7 @@ axiosClient.interceptors.request.use((request) => {
         },
       })
       .then(({ data }) => {
-        auth.token = data.access_token;
-        auth.refresh_token = data.refresh_token;
-        localStorage.setItem("auth", JSON.stringify(auth));
+        localStorage.setItem("auth", JSON.stringify({ ...auth, ...data }));
         getLoginUserInfo();
       });
   }
