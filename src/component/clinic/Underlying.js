@@ -32,9 +32,6 @@ const Underlying = ({ props, onInsert, patient }) => {
           )
           .then((response) => {
             setSearchList(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
           });
       } else {
         setSearchList([]);

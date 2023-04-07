@@ -32,9 +32,8 @@ const AccessAllow = ({ authorities, children }) => {
     useEffect(() => {
         const auth = JSON.parse(localStorage.getItem("auth"));
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        console.log("auth: ", auth, "userInfo: ", userInfo);
         if (!auth) return back();
-        if (!isIntersection(auth.authorities, authorities)) {
+        if (!isIntersection(auth.authorities, userInfo.authority)) {
             check_token().catch(err => {
                 back();
             });

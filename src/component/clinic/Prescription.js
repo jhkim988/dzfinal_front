@@ -30,7 +30,7 @@ const Prescription = ({
 
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
-      setSearchText(e.target.value);
+      setSearchText(e.target.value || "");
 
       if (e.target.value.length >= 2) {
         axiosClient
@@ -40,7 +40,7 @@ const Prescription = ({
             )}`
           )
           .then((response) => {
-            setSearchList(response.data);
+            setSearchList(response.data || []);
             console.log(response.data);
           })
           .catch((error) => {

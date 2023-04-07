@@ -1,7 +1,9 @@
 import axios from "axios";
 import { getLoginUserInfo } from "./Login";
 
-const auth = localStorage.getItem("auth") ? JSON.parse(localStorage.getItem("auth")) : {};
+const auth = localStorage.getItem("auth")
+  ? JSON.parse(localStorage.getItem("auth"))
+  : {};
 
 const axiosClient = axios.create({
   baseURL: "",
@@ -13,9 +15,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use((request) => {
   const auth = JSON.parse(localStorage.getItem("auth"));
-  const tokenPayload = JSON.parse(
-    atob(auth.access_token.split(".")[1])
-  );
+  const tokenPayload = JSON.parse(atob(auth.access_token.split(".")[1]));
   if (new Date(tokenPayload.exp * 1000) < new Date()) {
     const client_id = "client";
     const client_secret = "secret";
@@ -38,4 +38,16 @@ axiosClient.interceptors.request.use((request) => {
   }
   return request;
 });
+
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (err) => {
+    if (err.response.status === 401 || err.response.status === 403) {
+      alert("권한이 없습니다.");
+    }
+    return err;
+  }
+);
 export default axiosClient;

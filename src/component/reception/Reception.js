@@ -89,9 +89,6 @@ const Reception = () => {
       .then((response) => {
         callback(response.data);
         console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
       });
   };
 

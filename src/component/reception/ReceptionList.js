@@ -10,9 +10,6 @@ const ReceptionList = () => {
         axiosClient.get(Reception_API_BASE_URL + "/list")
             .then((response) => {
                 setReceptionList(response.data);
-            })
-            .catch((error) => {
-                console.error(error);
             });
     }, []);
 
