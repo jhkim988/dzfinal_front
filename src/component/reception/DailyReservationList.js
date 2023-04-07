@@ -41,7 +41,6 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
                 //setPatient_id(response.data.patient_id);
                 setSelectedReservationDetails(response.data);
                 // 환자 onchange
-
                 setPatientData(prev => ({ ...response.data }));
                 // 접수
                 setReceptionData(prev => ({ ...response.data }));
