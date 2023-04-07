@@ -11,8 +11,8 @@ import {
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import PopupPostCode from "./PopupPostCode";
-import axios from "axios";
 import PatientAutoComplete from "./PatientAutoComplete";
+import axiosClient from './../login/AxiosClient';
 
 const Patient_API_BASE_URL = "/api/patient";
 
@@ -88,13 +88,8 @@ const PatientForm = ({
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (
-            window.confirm(
-                patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?"
-            )
-        ) {
-            axios
-                .post(Patient_API_BASE_URL, patientData)
+        if (window.confirm(patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?")) {
+            axiosClient.post(Patient_API_BASE_URL, patientData)
                 .then((response) => {
                     alert(response.data.message);
                     console.log("patient_id:" + response.data.patient_id);
@@ -112,7 +107,7 @@ const PatientForm = ({
 
     const updatePatientInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 환자 정보를 수정하시겠습니까?")) {
-            axios.post(Patient_API_BASE_URL + "/update", patientData)
+            axiosClient.post(Patient_API_BASE_URL + "/update", patientData)
                 .then((response) => {
                     alert("환자 수정 성공");
                     setPatientData(prev => ({ ...response.data }));
@@ -142,7 +137,7 @@ const PatientForm = ({
     };
 
     const onSelect = (e, value) => {
-        axios
+        axiosClient
             .get(`/api/patient/${value.patient_id}`)
             .then(({ data }) => {
                 setPatientData(data);

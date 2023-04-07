@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
-import axios from "axios";
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axiosClient from './../../login/AxiosClient';
 
 const ClinicRequest = ({user}, ref) => {
     let now = new Date();
@@ -11,7 +11,7 @@ const ClinicRequest = ({user}, ref) => {
     const [clinicRequest, setClinicRequest] = useState({});
 
     useEffect(() => {
-        axios.get('/api/receipt/getClinicRequest')
+        axiosClient.get('/api/receipt/getClinicRequest')
             .then(response => {
                 setClinicRequest(response.data);
             })

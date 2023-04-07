@@ -21,8 +21,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
-import axios from "axios";
 import koLocale from "dayjs/locale/ko";
+import axiosClient from "../login/AxiosClient";
 import "./style.css";
 
 const MedicalRecordInquiry = ({
@@ -43,7 +43,7 @@ const MedicalRecordInquiry = ({
   const onClick = (reception_id) => {
     setMedicalInfo({});
 
-    axios
+    axiosClient
       .get(`/api/clinic/medicalinfo/${reception_id}`)
       .then((response) => {
         setMedicalInfo(response.data);
@@ -75,8 +75,7 @@ const MedicalRecordInquiry = ({
   const onSearchList = (currentPage) => {
     if (!type) return alert("분류를 정해주세요");
     setSearchMode(2);
-
-    axios
+    axiosClient
       .post(
         "/api/clinic/mri/search",
         {
@@ -85,11 +84,6 @@ const MedicalRecordInquiry = ({
           end: formattedDates?.end || "",
           keyword: keyword,
           currentPage: currentPage,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       )
       .then((response) => {
@@ -122,8 +116,8 @@ const MedicalRecordInquiry = ({
   };
 
   const handlePageClick = (pageNumber) => {
-    axios
-      .get(`/api/clinic/mri/${patient.patient_id}/${pageNumber}`)
+    axiosClient
+      .get(`/api/clinic/mri/${1}/${pageNumber}`)
       .then((response) => {
         setMri(response.data.mri);
         setPagination(response.data.pagination);

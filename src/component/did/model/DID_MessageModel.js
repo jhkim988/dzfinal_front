@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useReducer } from "react";
+import axiosClient from './../../login/AxiosClient';
 
 const DID_Message_ACTION = {
   INSERT: 1,
@@ -44,7 +44,7 @@ export default function DID_MessageModel() {
   const [messages, dispatch] = useReducer(didMessageReducer, []);
 
   const onInsert = (message) => {
-    axios
+    axiosClient
       .post("/api/did/did_subtitle", {
         message: message,
         active: 1,
@@ -61,7 +61,7 @@ export default function DID_MessageModel() {
   };
 
   const onToggle = (id, active) => {
-    axios
+    axiosClient
       .put("/api/did/did_subtitle", {
         id: id,
         active: !active,
@@ -81,7 +81,7 @@ export default function DID_MessageModel() {
   };
 
   const onUpdate = (id, updatedMessage) => {
-    axios
+    axiosClient
       .put("/api/did/updatemessage", {
         id: id,
         message: updatedMessage,
@@ -95,7 +95,7 @@ export default function DID_MessageModel() {
   };
 
   const onDelete = (id) => {
-    axios
+    axiosClient
       .delete("/api/did/did_subtitle", { params: { id: id } })
       .then((response) => {
         dispatch({ type: DID_Message_ACTION.DELETE, id });

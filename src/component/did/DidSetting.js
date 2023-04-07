@@ -16,14 +16,13 @@ import {
 } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { tableCellClasses } from "@mui/material/TableCell";
-import axios from "axios";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import DID_MessageModel from "./model/DID_MessageModel";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import axiosClient from './../login/AxiosClient';
+import RemoveCircleOutlineIcon  from '@mui/icons-material/RemoveCircleOutline';
 
 const DidSetting = () => {
-  const [messages, onInsert, onToggle, onUpdate, onDelete, onAppend] =
-    DID_MessageModel();
+  const [messages, onInsert, onToggle, onUpdate, onAppend, onDelete] = DID_MessageModel();
   const inputEl = useRef(null);
   const [value, setValue] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
@@ -33,7 +32,7 @@ const DidSetting = () => {
   };
 
   useEffect(() => {
-    axios
+    axiosClient
       .get("/api/did/did_subtitle")
       .then((response) => {
         const existingData = messages.find(
@@ -77,7 +76,7 @@ const DidSetting = () => {
     formData.append("file", file);
     formData.append("type", selectedValue);
 
-    axios
+    axiosClient
       .post("/api/did/did_setting", formData, {
         headers: {
           "content-type": "multipart/form-data",

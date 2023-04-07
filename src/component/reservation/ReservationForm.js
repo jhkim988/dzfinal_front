@@ -14,10 +14,11 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import axios from "axios";
 import { offsetDate } from "./utils/dateUtils";
 import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
 import PatientAutoComplete from './../reception/PatientAutoComplete';
+import axiosClient from './../login/AxiosClient';
+
 
 const style = { margin: "20px 0px" };
 
@@ -52,7 +53,7 @@ const ReservationForm = ({
   }, [setReservationFormData]);
 
   const postReservation = useCallback((e) => {
-    axios.post("/api/reservation", reservationFormData, {
+    axiosClient.post("/api/reservation", reservationFormData, {
       headers: { 'Content-Type': 'application/json;charset=utf-8' }
     }).then((res) => {
       if (res.status === 200) {
@@ -63,7 +64,7 @@ const ReservationForm = ({
   }, [reservationFormData]);
 
   const putReservation = useCallback((e) => {
-    axios.put("/api/reservation", reservationFormData).then((res) => {
+    axiosClient.put("/api/reservation", reservationFormData).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
         requestSuccessCallback(reservationFormData, res.data);
@@ -88,7 +89,7 @@ const ReservationForm = ({
         doctor: reservationFormModal.doctor,
       });
     } else if (reservationFormModal.mode === "PUT") {
-      axios.get(`/api/reservation/${reservationFormModal.reservation_id}`)
+      axiosClient.get(`/api/reservation/${reservationFormModal.reservation_id}`)
         .then(({ data }) => {
           const data_date = new Date(data.wish_date);
           const wish_date = offsetDate(data_date);
