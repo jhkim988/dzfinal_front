@@ -18,6 +18,19 @@ const ChatList = () => {
 
   const handleRowClick = (room) => {
     setSelectedRoom(room);
+
+    const status = {
+      chatroom_id: room.chatroom_id,
+      participants_id: 1, // 현재 사용자의 participants_id 값으로 대체
+    };
+
+    axios.put("/api/chat/lastreadtime", status)
+      .then(response => {
+        console.log("Last read time updated successfully!");
+      })
+      .catch(error => {
+        console.error("Failed to update last read time:", error);
+      });
   };
 
   const handleBackClick = () => {
@@ -26,10 +39,9 @@ const ChatList = () => {
 
   useEffect(() => {
     axios
-      .get(`api/chat/chatlist?participants_id=3`) //수정
+      .get(`api/chat/chatlist?participants_id=1`) //수정
       .then((response) => {
         setChatRoom(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

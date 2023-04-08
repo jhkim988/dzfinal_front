@@ -20,7 +20,7 @@ const ChatRoom = ({ room, onBackClick }) => {
   const [message, setMessage] = useState({
     mode: "private",
     chatroom_id: room.chatroom_id,
-    from: 3, // 수정
+    from: 1, // 수정
     message: "",
     created_at: new Date().toISOString(),
   });
@@ -57,6 +57,11 @@ const ChatRoom = ({ room, onBackClick }) => {
 
     return () => {
       client.unsubscribe(`chat/${room.chatroom_id}`);
+      const status = {
+        chatroom_id: room.chatroom_id,
+        participants_id: 1,
+      };
+      axios.put("/api/chat/exit", status);
     };
   }, []);
 
@@ -70,7 +75,7 @@ const ChatRoom = ({ room, onBackClick }) => {
       const newMessage = {
         mode: "private",
         chatroom_id: room.chatroom_id,
-        from: 3, // 수정
+        from: 1, // 수정
         message: message.message,
         created_at: new Date().toISOString(),
       };
@@ -105,7 +110,7 @@ const ChatRoom = ({ room, onBackClick }) => {
           }}
         >
           {messages.map((message, index) =>
-            message.from !== 3 ? ( // 수정
+            message.from !== 1 ? ( // 수정
               <Card
                 key={index}
                 sx={{
