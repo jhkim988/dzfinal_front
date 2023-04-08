@@ -24,11 +24,10 @@ const ChatList = () => {
       participants_id: 1, // 현재 사용자의 participants_id 값으로 대체
     };
 
-    axios.put("/api/chat/lastreadtime", status)
-      .then(response => {
-        console.log("Last read time updated successfully!");
-      })
-      .catch(error => {
+    axios
+      .put("/api/chat/lastreadtime", status)
+      .then((response) => {})
+      .catch((error) => {
         console.error("Failed to update last read time:", error);
       });
   };
