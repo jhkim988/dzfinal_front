@@ -34,7 +34,7 @@ const MainRoutes = {
     {
       path: "clinic",
       element: (
-        <AccessAllow authorities={["DOCTOR", "RN", "KLPN"]}>
+        <AccessAllow authorities={["ADMIN", "DOCTOR", "RN", "KLPN"]}>
           <ClinicView />
         </AccessAllow>
       ),
@@ -42,7 +42,7 @@ const MainRoutes = {
     {
       path: "reservation",
       element: (
-        <AccessAllow authorities={["DOCTOR", "RN", "KLPN"]}>
+        <AccessAllow authorities={["ADMIN", "DOCTOR", "RN", "KLPN"]}>
           <Reservation />
         </AccessAllow>
       ),
@@ -50,7 +50,7 @@ const MainRoutes = {
     {
       path: "reception",
       element: (
-        <AccessAllow authorities={["DOCTOR", "RN", "KLPN"]}>
+        <AccessAllow authorities={["ADMIN", "DOCTOR", "RN", "KLPN"]}>
           <Reception />
         </AccessAllow>
       ),

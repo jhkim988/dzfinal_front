@@ -4,6 +4,7 @@ const Logout = () => {
     const navigate = useNavigate();
     useEffect(() => {
         localStorage.removeItem('auth');
+        localStorage.removeItem('userInfo');
         navigate('/login');
     }, []);
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { FormControl, Grid, Paper } from "@material-ui/core";
-import { TextField, Button, Stack, FormGroup } from "@mui/material";
+import { Grid, Paper } from "@material-ui/core";
+import { TextField, Button, Stack } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "./AxiosClient";
@@ -16,10 +16,11 @@ const LoginImage = () => {
   );
 };
 
-export const getLoginUserInfo = () => {
+export const getLoginUserInfo = (callback) => {
   const { user_id } = JSON.parse(localStorage.getItem("auth"));
   axiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
     localStorage.setItem("userInfo", JSON.stringify(data));
+    callback && callback();
   });
 };
 
@@ -63,8 +64,11 @@ const LoginForm = () => {
         axiosClient.defaults.headers[
           "Authorization"
         ] = `Bearer ${auth.access_token}`;
-        getLoginUserInfo();
-        movePageWithAuthority(authorities);
+        getLoginUserInfo(() => {
+          const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+          console.log(userInfo);
+          movePageWithAuthority(userInfo.authority);
+        });
       });
   };
 
@@ -74,21 +78,23 @@ const LoginForm = () => {
       navi("/management");
     } else if (authority.includes("DOCTOR")) {
       navi("/clinic");
-    } else if (authority.includes("KLPN") || authority.includes("ROLE_RN")) {
+    } else if (authority.includes("KLPN") || authority.includes("RN")) {
       navi("/reception");
     }
   };
+
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth"));
     if (auth?.access_token) {
-      getLoginUserInfo();
-      const authority = localStorage.getItem("authorities");
-      movePageWithAuthority(authority);
+      getLoginUserInfo(() => {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        movePageWithAuthority(userInfo.authority);
+      });
     }
   }, []);
 
   const style = {
-    width: "80%",
+    width: "80%", 
     marginLeft: "10%",
     marginRight: "10%",
     marginTop: "20px"
