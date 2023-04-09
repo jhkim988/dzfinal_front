@@ -45,7 +45,7 @@ const menuItems = {
       breadcrumbs: false,
     },
     {
-      id: "did",
+      id: "video_did",
       title: "VIDEO DID",
       type: "item",
       url: "/view",
@@ -53,7 +53,7 @@ const menuItems = {
       breadcrumbs: false,
     },    
     {
-      id: "did",
+      id: "big_did",
       title: "BIG DID",
       type: "item",
       url: "/big_did",
@@ -77,10 +77,10 @@ const menuItems = {
       breadcrumbs: false,
     },
     {
-      id: "login",
-      title: "로그인",
+      id: "logout",
+      title: "로그아웃",
       type: "item",
-      url: "/login",
+      url: "/logout",
       icon: icons.IconUsers,
       breadcrumbs: false,
     },
