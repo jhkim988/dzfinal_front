@@ -4,8 +4,8 @@ import {
   Button,
   FormControl,
   InputLabel,
-  Link,
   MenuItem,
+  Pagination,
   Select,
   Table,
   TableBody,
@@ -22,16 +22,18 @@ import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import axios from "axios";
-import dayjs from "dayjs";
 import koLocale from "dayjs/locale/ko";
+import "./style.css";
 
 const MedicalRecordInquiry = ({
   mri,
   setMri,
-  setMode,
+  patient,
   setMedicalInfo,
   pagination,
   setPagination,
+  searchMode,
+  setSearchMode,
 }) => {
   const [type, setType] = useState("");
   const handleChange = (e) => {
@@ -39,7 +41,6 @@ const MedicalRecordInquiry = ({
   };
 
   const onClick = (reception_id) => {
-    setMode(0);
     setMedicalInfo({});
 
     axios
@@ -52,21 +53,18 @@ const MedicalRecordInquiry = ({
       });
   };
 
-  const [selectedDates, setSelectedDates] = useState({
-    start: dayjs(),
-    end: dayjs(),
-  });
+  const [selectedDates, setSelectedDates] = useState({});
 
   const handleDateChange = (dates) => {
     setSelectedDates({
-      start: dates[0],
-      end: dates[1],
+      start: dates[0]?.format("YYYY-MM-DD"),
+      end: dates[1]?.format("YYYY-MM-DD"),
     });
   };
 
   const formattedDates = {
-    start: selectedDates.start.format("YYYY-MM-DD"),
-    end: selectedDates.end.format("YYYY-MM-DD"),
+    start: selectedDates.start,
+    end: selectedDates.end,
   };
 
   const [keyword, setKeyword] = useState("");
@@ -74,10 +72,9 @@ const MedicalRecordInquiry = ({
     setKeyword(e.target.value);
   };
 
-  const onSearchList = () => {
+  const onSearchList = (currentPage) => {
     if (!type) return alert("분류를 정해주세요");
-
-    console.log(formattedDates.start + "/" + formattedDates.end);
+    setSearchMode(2);
 
     axios
       .post(
@@ -87,6 +84,7 @@ const MedicalRecordInquiry = ({
           start: formattedDates?.start || "",
           end: formattedDates?.end || "",
           keyword: keyword,
+          currentPage: currentPage,
         },
         {
           headers: {
@@ -95,7 +93,8 @@ const MedicalRecordInquiry = ({
         }
       )
       .then((response) => {
-        setMri(response.data);
+        setMri(response.data.mri);
+        setPagination(response.data.pagination);
       })
       .catch((error) => {
         console.log(error);
@@ -103,12 +102,8 @@ const MedicalRecordInquiry = ({
   };
 
   useEffect(() => {
-    handleToggle(false);
-  }, []);
-
-  useEffect(() => {
     handleToggle(true);
-  }, [selectedDates]);
+  }, []);
 
   const handleToggle = (isOpen) => {
     let intervalId = null;
@@ -121,24 +116,14 @@ const MedicalRecordInquiry = ({
           const firstDiv =
             dateRangePickerRoot.querySelector("div:first-of-type");
           firstDiv.style.opacity = 0;
-          clearInterval(intervalId);
         }
       }, 100);
-    } else {
-      clearInterval(intervalId);
-      const dateRangePickerRoot = document.querySelector(
-        ".css-e47596-MuiDateRangeCalendar-root"
-      );
-      if (dateRangePickerRoot) {
-        const firstDiv = dateRangePickerRoot.querySelector("div:first-of-type");
-        firstDiv.style.opacity = 1;
-      }
     }
   };
 
   const handlePageClick = (pageNumber) => {
     axios
-      .get(`/api/clinic/mri/${1}/${pageNumber}`)
+      .get(`/api/clinic/mri/${patient.patient_id}/${pageNumber}`)
       .then((response) => {
         setMri(response.data.mri);
         setPagination(response.data.pagination);
@@ -153,11 +138,15 @@ const MedicalRecordInquiry = ({
       <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
         진료기록조회
       </Typography>
-      {/* alignItems: "flex-end" */}
-      <Box sx={{ m: 1, display: "flex", alignItems: "flex-end" }}>
+      <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
         <FormControl sx={{ minWidth: 120 }}>
           <InputLabel>분류</InputLabel>
-          <Select value={type} label="분류" onChange={handleChange}>
+          <Select
+            value={type}
+            label="분류"
+            size="small"
+            onChange={handleChange}
+          >
             <MenuItem value={"patient_name"}>환자이름</MenuItem>
             <MenuItem value={"reception_id"}>접수번호</MenuItem>
           </Select>
@@ -167,22 +156,23 @@ const MedicalRecordInquiry = ({
             <DateRangePicker
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
-              value={[dayjs(selectedDates.start), dayjs(selectedDates.end)]}
-              onToggle={handleToggle}
+              sx={{ marginLeft: 1, marginRight: 1 }}
               onChange={handleDateChange}
             />
           </DemoContainer>
         </LocalizationProvider>
         <TextField
           label="검색어"
-          sx={{ alignSelf: "flex-end" }}
+          size="small"
+          sx={{ marginRight: 1 }}
           onChange={handleInputChange}
         />
         <Box sx={{ alignSelf: "center" }}>
           <Button
             variant="contained"
-            sx={{ height: "40px", alignSelf: "center" }}
-            onClick={onSearchList}
+            size="small"
+            sx={{ alignSelf: "center" }}
+            onClick={() => onSearchList(1)}
           >
             검색
           </Button>
@@ -208,75 +198,75 @@ const MedicalRecordInquiry = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {mri.map((row) => (
-                <TableRow
-                  key={row.reception_id}
-                  hover
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: "#90caf9 !important",
-                    },
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                  onClick={() => onClick(row.reception_id)}
-                >
-                  <TableCell scope="row" align="center">
-                    {row.patient_name}
-                  </TableCell>
-                  <TableCell align="center">{row.employee_name}</TableCell>
-                  <TableCell align="center">
-                    {row.diagnosisList.length > 0 &&
-                      `[${
-                        row.diagnosisList[0].disease_code
-                      }]${row.diagnosisList[0].disease_name.substring(
-                        0,
-                        5
-                      )}...`}
-                    {row.diagnosisList.length > 1 &&
-                      ` 외${row.diagnosisList.length - 1}`}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.prescriptionList.length > 0 &&
-                      `[${
-                        row.prescriptionList[0].drug_code
-                      }]${row.prescriptionList[0].drug_name.substring(
-                        0,
-                        5
-                      )}...`}
-                    {row.prescriptionList.length > 1 &&
-                      ` 외${row.prescriptionList.length - 1}`}
-                  </TableCell>
-                  <TableCell align="center">
-                    {row.created_at.substring(0, 10)}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {mri &&
+                mri.length > 0 &&
+                mri.map((row) => (
+                  <TableRow
+                    key={row.reception_id}
+                    hover
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#90caf9 !important",
+                      },
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}
+                    onClick={() => onClick(row.reception_id)}
+                  >
+                    <TableCell scope="row" align="center">
+                      {row.patient_name}
+                    </TableCell>
+                    <TableCell align="center">{row.employee_name}</TableCell>
+                    <TableCell align="center">
+                      {row.diagnosisList.length > 0 &&
+                        `[${
+                          row.diagnosisList[0].disease_code
+                        }]${row.diagnosisList[0].disease_name.substring(
+                          0,
+                          5
+                        )}...`}
+                      {row.diagnosisList.length > 1 &&
+                        ` 외${row.diagnosisList.length - 1}`}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.prescriptionList.length > 0 &&
+                        `[${
+                          row.prescriptionList[0].drug_code
+                        }]${row.prescriptionList[0].drug_name.substring(
+                          0,
+                          5
+                        )}...`}
+                      {row.prescriptionList.length > 1 &&
+                        ` 외${row.prescriptionList.length - 1}`}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.created_at.substring(0, 10)}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        {pagination.prev && (
-          <Button onClick={() => handlePageClick(pagination.startPage - 1)}>
-            {"<"}
-          </Button>
-        )}{" "}
-        {Array.from(Array(pagination.endPage), (e, i) => {
-          return (
-            <Button
-              sx={{ padding: 0 }}
-              key={pagination.currentPage === i + 1 ? "active" : i}
-              onClick={() => handlePageClick(i + 1)}
-            >
-              {i + 1}
-            </Button>
-          );
-        })}
-        {pagination.next && (
-          <Button onClick={() => handlePageClick(pagination.endPage + 1)}>
-            {">"}
-          </Button>
-        )}
+        <Stack spacing={2}>
+          {searchMode === 1 ? (
+            <Pagination
+              count={Math.ceil(pagination.total / 10)}
+              size="small"
+              onChange={(e, page) => {
+                handlePageClick(page);
+              }}
+            />
+          ) : (
+            <Pagination
+              count={Math.ceil(pagination.total / 10)}
+              size="small"
+              onChange={(e, page) => {
+                onSearchList(page);
+              }}
+            />
+          )}
+        </Stack>
       </Box>
     </>
   );

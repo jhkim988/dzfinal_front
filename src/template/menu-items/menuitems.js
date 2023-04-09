@@ -4,6 +4,7 @@ import {
   IconClipboardList,
   IconSettings,
   IconUsers,
+  IconDeviceTv,
 } from "@tabler/icons";
 
 const icons = {
@@ -12,6 +13,7 @@ const icons = {
   IconClipboardList,
   IconSettings,
   IconUsers,
+  IconDeviceTv,
 };
 
 const menuItems = {
@@ -43,6 +45,14 @@ const menuItems = {
       breadcrumbs: false,
     },
     {
+      id: "did",
+      title: "DID",
+      type: "item",
+      url: "/view",
+      icon: icons.IconDeviceTv,
+      breadcrumbs: false,
+    },
+    {
       id: "did_setting",
       title: "DID 설정",
       type: "item",
@@ -55,6 +65,14 @@ const menuItems = {
       title: "유저관리",
       type: "item",
       url: "/management",
+      icon: icons.IconUsers,
+      breadcrumbs: false,
+    },
+    {
+      id: "login",
+      title: "로그인",
+      type: "item",
+      url: "/login",
       icon: icons.IconUsers,
       breadcrumbs: false,
     },

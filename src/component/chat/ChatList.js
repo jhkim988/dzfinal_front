@@ -1,72 +1,120 @@
-import React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import axios from 'axios';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import { AppBar, Box, Button, getRadioUtilityClass, IconButton, ListItemButton, Paper, TextField, Toolbar } from '@mui/material';
+import {
+  Avatar,
+  Badge,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@mui/material";
+import axios from "axios";
+import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import ChatRoom from "./ChatRoom";
 
-const Chat_API_BASE_URL = "/api/chat";
+const ChatList = ({ messageCount, setMessageCount }) => {
+  const [chatRoom, setChatRoom] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
-const ChatList = () => {
-    const [chatList, setChatList] = useState([]);
+  const handleRowClick = (room) => {
+    setSelectedRoom(room);
 
-    useEffect(() => {
-        axios.post(Chat_API_BASE_URL)
-            .then((response) => {
-                setChatList(response.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
+    const status = {
+      chatroom_id: room.chatroom_id,
+      participants_id: 1, // 현재 사용자의 participants_id 값으로 대체
+    };
 
-    return (
-        <div>
-            {/* 로그인 시 자기자신 제외한 채팅방목록 조회 */}
-            <Paper sx={{ marginBottom: 5 }} elevation={2} style={{ width: "300px", height: "550px" }}>
-                <Box>
-                    <AppBar position="static" style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-                        <Toolbar style={{ width: 300, height: 60, alignItems: 'right' }}>
-                            {/* <AccountCircleRoundedIcon style={{ height: 50 }}></AccountCircleRoundedIcon>
-                            <TextField id="outlined-basic"
-                                abel="프로필"
-                                name="profile"
-                                variant="outlined"
-                                style={{}}
-                            /> */}
-                        </Toolbar>
-                    </AppBar>
+    axios
+      .put("/api/chat/lastreadtime", status)
+      .then((response) => {})
+      .catch((error) => {
+        console.error("Failed to update last read time:", error);
+      });
 
-                    <h3>채팅목록</h3>
-                    {
-                        chatList.map((list) => (
-                            <List sx={{ width: '100%', maxWidth: 300, bgcolor: 'background.paper' }}>
-                                <ListItem alignItems="flex-start" key={list.chatroom_id}>
-                                    <ListItemButton style={{ padding: 2 }}>
-                                        <ListItemAvatar>
-                                            <Avatar
-                                                alt={list.chatroom_name}
-                                            //src={`/static/images/avatar/${value + 1}.jpg`}
-                                            />
-                                        </ListItemAvatar>
-                                        <ListItemText primary={list.chatroom_name} />
-                                    </ListItemButton>
-                                </ListItem>
-                                {/* <Divider variant="inset" component="li" /> */}
-                            </List>
-                        ))
-                    }
-                </Box>
-            </Paper >
-        </div >
+    const messageCountIndex = messageCount.findIndex(
+      (count) => count.chatroom_id === room.chatroom_id
     );
+    if (messageCountIndex !== -1) {
+      const updatedMessageCount = [...messageCount];
+      const chatroomMessageCount =
+        updatedMessageCount[messageCountIndex].message_count;
+      if (chatroomMessageCount !== 0) {
+        updatedMessageCount[messageCountIndex].message_count = 0;
+        setMessageCount(updatedMessageCount);
+      }
+    }
+  };
+
+  const handleBackClick = () => {
+    setSelectedRoom(null);
+  };
+
+  useEffect(() => {
+    axios
+      .get(`api/chat/chatlist?participants_id=1`) //수정
+      .then((response) => {
+        setChatRoom(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const renderChatList = () => {
+    return (
+      <Table>
+        <TableBody>
+          {chatRoom.map((room) => (
+            <TableRow
+              key={room.chatroom_id}
+              onClick={() => handleRowClick(room)}
+              sx={{
+                "&:hover": { backgroundColor: "lightgray" },
+                borderRadius: "10px",
+              }}
+            >
+              <TableCell>
+                {room.chatroom_name ? (
+                  <Avatar />
+                ) : (
+                  <Avatar>
+                    <img
+                      src={`/api/chat/getthumbnail?thumbnail_image=${room.thumbnail_images[0]}`}
+                      alt="사진"
+                      style={{ width: "100%" }}
+                    />
+                  </Avatar>
+                )}
+              </TableCell>
+              <TableCell>
+                {room.chatroom_name || room.employee_names[0]}
+              </TableCell>
+              <TableCell>
+                <Badge
+                  badgeContent={
+                    messageCount.find(
+                      (count) => count.chatroom_id === room.chatroom_id
+                    )?.message_count || 0
+                  }
+                  color="error"
+                />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  };
+
+  const renderChatRoom = () => {
+    return (
+      <>
+        <ChatRoom room={selectedRoom} onBackClick={handleBackClick} />
+      </>
+    );
+  };
+
+  return selectedRoom ? renderChatRoom() : renderChatList();
 };
 
 export default ChatList;

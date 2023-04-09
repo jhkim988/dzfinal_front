@@ -19,7 +19,7 @@ const Underlying = ({ props, onInsert, patient }) => {
   const [searchList, setSearchList] = useState([]);
   const searchListRef = useRef();
   const [underlying, setUnderlying] = useState(props);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
@@ -57,7 +57,7 @@ const Underlying = ({ props, onInsert, patient }) => {
     } else {
       axios
         .post("/api/clinic/disease", {
-          patient_id: 83,
+          patient_id: patient.patient_id,
           disease_id: disease.disease_id,
         })
         .then((response) => {})
@@ -69,6 +69,7 @@ const Underlying = ({ props, onInsert, patient }) => {
   };
 
   function handleRemove(disease_id) {
+    console.log(patient.patient_id);
     axios
       .delete("/api/clinic/disease", {
         params: {
@@ -160,6 +161,7 @@ const Underlying = ({ props, onInsert, patient }) => {
             autoComplete="off"
             onChange={(e) => setDisease_code(e.target.value)}
             onKeyUp={handleKeyUp}
+            onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
           />
           <TextField
@@ -171,6 +173,7 @@ const Underlying = ({ props, onInsert, patient }) => {
             autoComplete="off"
             onChange={(e) => setDisease_name(e.target.value)}
             onKeyUp={handleKeyUp}
+            onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
           />
         </Box>

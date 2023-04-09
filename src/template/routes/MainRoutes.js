@@ -40,6 +40,10 @@ const MainRoutes = {
       path: "reception",
       element: <Reception />,
     },
+    // {
+    //   path: "view",
+    //   element: <DID />,
+    // },
     {
       path: "did_setting",
       element: <DidSetting />,

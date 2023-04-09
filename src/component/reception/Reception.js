@@ -45,6 +45,8 @@ const Reception = () => {
     weight: "",
     bmi: "",
   });
+
+  // (Receipt)수납
   const [receiptData, setReceiptData] = useState({
     reception: {},
     patient: {},
@@ -52,7 +54,22 @@ const Reception = () => {
     receipt: {},
   });
 
-  const receptionRecordSearch = (
+  const clickRowCallback = async({ reception_id, patient_id }) => {
+    setPatient_id(patient_id);
+    try {
+      axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+        setPatientData(data.patient)
+        setReceptionData(data.reception);
+        setReceiptData(data);
+        console.log(data);
+      });
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  // 수납내역목록 검색
+  const receiptRecordSearch = (
     { start, end, type, searchText },
     callback
   ) => {
@@ -81,6 +98,24 @@ const Reception = () => {
         console.log(error);
       });
   };
+
+  const [selectedOneReceipt, setSelectedOneReceipt] = useState({
+    receipt_id: 0,      // 데이터 선택 후 수정을 하기 위해 추가
+    reception_id: 0,
+    patient_name: "",
+    insurance: 0,
+    treatment: 0,
+    doctor: 0,
+    gender: 0,
+    front_registration_number: "",
+    back_registration_number: "",
+    address: "",
+    detail_address: "",
+    clinic_request: 0,
+    has_prescription: 0,
+  });
+
+
   return (
     <>
       <Grid container spacing={2}>
@@ -88,15 +123,10 @@ const Reception = () => {
           <WaitingQueueLayout
             initPanel="3"
             nextState="수납중"
-            clickRowCallback={({ reception_id, patient_id }) => {
-              setPatient_id(patient_id);
-              axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
-                setPatientData(data.patient)
-                setReceptionData(data.reception);
-                setReceiptData(data);
-                console.log(data);
-              });
-            }}
+            clickRowCallback={clickRowCallback}
+            shouldAutoCall={({ data: { state }}) => state === "수납완료"}
+            findNextAutoCall={({ state }) => state === "수납대기"}
+            shouldDisableCallButton={({ state }) => state !== "수납대기"}
           />
         </Grid>
 
@@ -105,8 +135,10 @@ const Reception = () => {
             <Grid item xs={12}>
               <Paper elevation={3}>
                 <ReceiptList
-                  receptionRecordSearch={receptionRecordSearch}
+                  clickRowCallback={clickRowCallback}
+                  receiptRecordSearch={receiptRecordSearch}
                   patient_id={patient_id}
+                  // setSelectedOneReceipt={setSelectedOneReceipt}
                 />
               </Paper>
             </Grid>
@@ -115,11 +147,9 @@ const Reception = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={5}>
                     <DailyReservationList
-                      setSelectedReservationDetails={
-                        setSelectedReservationDetails
-                      }
                       setPatientData={setPatientData}
                       setReceptionData={setReceptionData}
+                      setSelectedReservationDetails={setSelectedReservationDetails}
                     />
                   </Grid>
                   <Grid item xs={7}>
@@ -154,7 +184,10 @@ const Reception = () => {
         </Grid>
 
         <Grid item xs={2.5}>
-          <Receipt receiptData={receiptData} />
+          <Receipt 
+            receiptData={receiptData} 
+            // selectedOneReceipt={selectedOneReceipt}
+          />
         </Grid>
       </Grid>
     </>

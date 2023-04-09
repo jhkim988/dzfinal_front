@@ -81,7 +81,7 @@ const Patient = (props) => {
         <TextField
           disabled
           size="small"
-          value={`${patient.diastolic}/${patient.systolic}`}
+          value={`${patient.diastolic ?? ""}/${patient.systolic ?? ""}`}
           label="혈압"
           InputProps={{
             endAdornment: <InputAdornment position="end">mmHg</InputAdornment>,

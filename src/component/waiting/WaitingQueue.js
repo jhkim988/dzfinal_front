@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Box, Tab } from '@mui/material';
+import { TableContainer } from '@mui/material';
 import { TabPanel, TabContext, TabList } from "@mui/lab";
 import WaitingTabPanel from './WaitingTabPanel';
 
@@ -21,7 +22,7 @@ const WaitingQueue = ({ initPanel, data, selected, onRowClick, doctorFilter }) =
   return (
     <>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", minWidth: 260 }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList
             variant="fullWidth"
             sx={{ minWidth: 260 }}

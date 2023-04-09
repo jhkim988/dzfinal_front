@@ -2,16 +2,17 @@ import { Paper, TableContainer, Table, TableHead, TableRow, TableBody, TableCell
 
 const WaitingTabPanel = ({ data, selected, onRowClick }) => {
 
-  const dummyData = new Array(Math.max(17 - data.length, 0)).fill({});
+  const dummyData = new Array(Math.max(20 - data.length, 0)).fill({});
 
   return (
     <Paper>
       <TableContainer sx={{
-        minWidth: 260,
-        ".MuiTableCell-root": { fontSize: 12, padding: 1, textAlign: "center" }
+        ".MuiTableCell-root": { fontSize: 11, padding: 1, textAlign: "center" },
+        maxHeight: "70vh",
+        overflowY: "auto"
         }}
       >
-        <Table>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>환자 이름</TableCell>
@@ -27,7 +28,7 @@ const WaitingTabPanel = ({ data, selected, onRowClick }) => {
               key={`waitingQueue#${el.reception_id}`}
               data-reception_id={el.reception_id}
               onClick={onRowClick}
-              sx={{ backgroundColor: selected === `${el.reception_id}` ? 'rgba(33, 150, 243, 0.1)' : undefined }}
+              sx={{ backgroundColor: `${selected?.reception_id}` === `${el.reception_id}` ? 'rgba(33, 150, 243, 0.1)' : undefined }}
             >
                 <TableCell>
                   {el.patient_name}

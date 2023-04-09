@@ -15,29 +15,29 @@ const MedicalInfo = ({
   setMode,
   setDiagnosis,
   setPrescription,
+  setSymptom,
   setTreatment,
   setClinic_request,
 }) => {
-  const onCopy = () => {
-    setMode(1);
+  const copyMedicalInfo = () => {
+    if (!medicalInfo) {
+      return;
+    }
     setDiagnosis(medicalInfo.diagnosis);
     setPrescription(medicalInfo.prescription);
+    setSymptom(medicalInfo.symptom);
     setTreatment(medicalInfo.treatment);
     setClinic_request(medicalInfo.clinic_request);
-    console.log(
-      `mode : ${mode} / treatment : ${medicalInfo.treatment} / clinic_request : ${medicalInfo.clinic_request}`
-    );
+  };
+
+  const onCopy = () => {
+    copyMedicalInfo();
+    setMode(1);
   };
 
   const onUpdate = () => {
+    copyMedicalInfo();
     setMode(2);
-    setDiagnosis(medicalInfo.diagnosis);
-    setPrescription(medicalInfo.prescription);
-    setTreatment(medicalInfo.treatment);
-    setClinic_request(medicalInfo.clinic_request);
-    console.log(
-      `mode : ${mode} / treatment : ${medicalInfo.treatment} / clinic_request : ${medicalInfo.clinic_request}`
-    );
   };
 
   return (
