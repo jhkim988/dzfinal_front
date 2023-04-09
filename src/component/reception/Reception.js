@@ -72,23 +72,22 @@ const Reception = () => {
     console.log(start?.format("YYYY-MM-DD"));
     console.log(end?.format("YYYY-MM-DD"));
     axiosClient
-      .post(
+      .get(
         "/api/receipt/getReceiptList",
         {
-          type,
-          searchText,
-          start_date: start?.format("YYYY-MM-DD"),
-          end_date: end?.format("YYYY-MM-DD"),
-        },
-        {
+          params: {
+            type,
+            searchText,
+            start_date: start?.format("YYYY-MM-DD"),
+            end_date: end?.format("YYYY-MM-DD"),
+          },
           headers: {
             "Content-Type": "application/json",
           },
         }
       )
       .then((response) => {
-        callback(response.data);
-        console.log(response.data);
+        callback(response.data || []);
       });
   };
 
