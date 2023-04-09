@@ -47,11 +47,11 @@ const ClinicView = () => {
         .catch((error) => {
           console.log(error);
         });
-        setDiagnosis([]);
-        setPrescription([]);
-        setSymptom("");
-        setTreatment(false);
-        setClinic_request(false);
+    setDiagnosis([]);
+    setPrescription([]);
+    setSymptom("");
+    setTreatment(false);
+    setClinic_request(false);
   }, [reception]);
 
   useEffect(() => {
@@ -101,9 +101,15 @@ const ClinicView = () => {
               patient_id
             );
           }}
-          shouldAutoCall={({ data: { state, doctor_id }}) => (state === "수납대기" && doctor_id === 1)}
-          findNextAutoCall={({ state, doctor_id }) => state === "진료대기" && doctor_id === 1}
-          shouldDisableCallButton={({ state, doctor_id }) => state !== "진료대기" || doctor_id !== 1}
+          shouldAutoCall={({ data: { state, doctor_id } }) =>
+            state === "수납대기" && doctor_id === 1
+          }
+          findNextAutoCall={({ state, doctor_id }) =>
+            state === "진료대기" && doctor_id === 1
+          }
+          shouldDisableCallButton={({ state, doctor_id }) =>
+            state !== "진료대기" || doctor_id !== 1
+          }
         />
       </Grid>
       <Grid item xs={5}>

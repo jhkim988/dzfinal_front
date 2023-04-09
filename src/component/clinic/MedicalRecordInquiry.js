@@ -13,6 +13,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -216,28 +217,54 @@ const MedicalRecordInquiry = ({
                       {row.patient_name}
                     </TableCell>
                     <TableCell align="center">{row.employee_name}</TableCell>
-                    <TableCell align="center">
-                      {row.diagnosisList.length > 0 &&
-                        `[${
-                          row.diagnosisList[0].disease_code
-                        }]${row.diagnosisList[0].disease_name.substring(
-                          0,
-                          5
-                        )}...`}
-                      {row.diagnosisList.length > 1 &&
-                        ` 외${row.diagnosisList.length - 1}`}
-                    </TableCell>
-                    <TableCell align="center">
-                      {row.prescriptionList.length > 0 &&
-                        `[${
-                          row.prescriptionList[0].drug_code
-                        }]${row.prescriptionList[0].drug_name.substring(
-                          0,
-                          5
-                        )}...`}
-                      {row.prescriptionList.length > 1 &&
-                        ` 외${row.prescriptionList.length - 1}`}
-                    </TableCell>
+                    <Tooltip
+                      title={
+                        <div>
+                          {row.diagnosisList.map((diagnosis) => (
+                            <div key={diagnosis.disease_code}>
+                              [{diagnosis.disease_code}]{" "}
+                              {diagnosis.disease_name}
+                            </div>
+                          ))}
+                        </div>
+                      }
+                    >
+                      <TableCell align="center">
+                        {row.diagnosisList.length > 0 &&
+                          `[${
+                            row.diagnosisList[0].disease_code
+                          }]${row.diagnosisList[0].disease_name.substring(
+                            0,
+                            5
+                          )}...`}
+                        {row.diagnosisList.length > 1 &&
+                          ` 외${row.diagnosisList.length - 1}`}
+                      </TableCell>
+                    </Tooltip>
+                    <Tooltip
+                      title={
+                        <div>
+                          {row.prescriptionList.map((prescription) => (
+                            <div key={prescription.drug_code}>
+                              [{prescription.drug_code}]{" "}
+                              {prescription.drug_name}
+                            </div>
+                          ))}
+                        </div>
+                      }
+                    >
+                      <TableCell align="center">
+                        {row.prescriptionList.length > 0 &&
+                          `[${
+                            row.prescriptionList[0].drug_code
+                          }]${row.prescriptionList[0].drug_name.substring(
+                            0,
+                            5
+                          )}...`}
+                        {row.prescriptionList.length > 1 &&
+                          ` 외${row.prescriptionList.length - 1}`}
+                      </TableCell>
+                    </Tooltip>
                     <TableCell align="center">
                       {row.created_at.substring(0, 10)}
                     </TableCell>
