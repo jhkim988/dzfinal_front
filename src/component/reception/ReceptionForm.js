@@ -294,12 +294,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                             <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
                                 <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                     {receptionData.reception_id != null && (
-                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px" }}>수정</Button>
+                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}>수정</Button>
                                     )}
                                     {receptionData.reception_id == null && (
-                                        <Button type="submit" onClick={receptDataHandleSubmit} variant="contained" style={{ width: "30px", height: "30px" }}>접수</Button>
+                                        <Button type="submit" onClick={receptDataHandleSubmit} variant="contained" sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}>접수</Button>
                                     )}
-                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px" }}>취소</Button>
+                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} sx={{ width: "10vw", height: "3.5vh", marginLeft: 1 }}>취소</Button>
                                 </Box>
                             </Grid>
                         </Grid>

@@ -151,19 +151,14 @@ const PatientForm = ({
             <Paper sx={{ height: "24vh" }} elevation={1}>
                 <Grid container>
                     <Grid item xs={12}>
-                        <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
-                            <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
-                                환자 등록/수정
+                        <h5 style={{ marginTop: 0, marginBottom: 0 }}>
+                            환자 등록/수정
 
-                            </h5>
-                        </div>
+                        </h5>
                     </Grid>
                 </Grid>
-                <div style={{ marginTop: "1em", marginLeft: "1em" }}>
+                <div style={{ marginTop: "1vh", marginLeft: "0.7vw" }}>
                     <Grid container spacing={2}>
-                        {/* <Grid item xs={12}>
-              환자 등록/수정
-            </Grid> */}
                         <Grid item xs={4}>
                             <PatientAutoComplete
                                 patient_name={patientData.patient_name}
@@ -217,7 +212,7 @@ const PatientForm = ({
                                         type="submit"
                                         onClick={handleSubmit}
                                         variant="contained"
-                                        style={{ width: "30px", height: "30px" }}
+                                        sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}
                                     >
                                         등록
                                     </Button>
@@ -228,7 +223,7 @@ const PatientForm = ({
                                             type="submit"
                                             onClick={handleSubmit}
                                             variant="contained"
-                                            style={{ width: "30px", height: "30px" }}
+                                            sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}
                                         >
                                             등록
                                         </Button>
@@ -239,7 +234,7 @@ const PatientForm = ({
                                             type="submit"
                                             onClick={updatePatientInfo}
                                             variant="contained"
-                                            style={{ width: "30px", height: "30px" }}
+                                            sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}
                                         >
                                             수정
                                         </Button>
@@ -249,7 +244,7 @@ const PatientForm = ({
                                     variant="contained"
                                     color="error"
                                     onClick={resetHandler}
-                                    style={{ width: "30px", height: "30px", marginRight: "5px" }}
+                                    sx={{ width: "10vw", height: "3.5vh", marginLeft: 1 }}
                                 >
                                     취소
                                 </Button>
