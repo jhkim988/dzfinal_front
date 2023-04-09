@@ -167,7 +167,10 @@ const ChatSection = () => {
                   <Grid container direction="column" spacing={2}>
                     <Grid item xs={12}>
                       <Box sx={{ px: 2, pt: 0.25 }}>
-                        <ChatList messageCount={messageCount} setMessageCount={setMessageCount}/>
+                        <ChatList
+                          messageCount={messageCount}
+                          setMessageCount={setMessageCount}
+                        />
                       </Box>
                     </Grid>
                   </Grid>

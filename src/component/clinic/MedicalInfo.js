@@ -246,7 +246,7 @@ const MedicalInfo = ({
               label="증상"
               multiline
               rows={2}
-              value={medicalInfo.symptom}
+              value={medicalInfo.symptom || ""}
             />
             {/* <Box
               sx={{

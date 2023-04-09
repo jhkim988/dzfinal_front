@@ -48,6 +48,7 @@ const MedicalRecordInquiry = ({
       .get(`/api/clinic/medicalinfo/${reception_id}`)
       .then((response) => {
         setMedicalInfo(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
