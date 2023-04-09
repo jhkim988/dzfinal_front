@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import ChatRoom from "./ChatRoom";
 
-const ChatList = () => {
+const ChatList = ({messageCount, setMessageCount}) => {
   const [chatRoom, setChatRoom] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
 
@@ -30,6 +30,19 @@ const ChatList = () => {
       .catch((error) => {
         console.error("Failed to update last read time:", error);
       });
+      
+      const messageCountIndex = messageCount.findIndex(
+        (count) => count.chatroom_id === room.chatroom_id
+      );
+      if (messageCountIndex !== -1) {
+        const updatedMessageCount = [...messageCount];
+        const chatroomMessageCount = updatedMessageCount[messageCountIndex]
+          .message_count;
+        if (chatroomMessageCount !== 0) {
+          updatedMessageCount[messageCountIndex].message_count = 0;
+          setMessageCount(updatedMessageCount);
+        }
+      }
   };
 
   const handleBackClick = () => {
@@ -67,7 +80,7 @@ const ChatList = () => {
                 {room.chatroom_name || room.employee_names[0]}
               </TableCell>
               <TableCell>
-                <Badge badgeContent={0} color="error" />
+                <Badge badgeContent={messageCount.find((count) => count.chatroom_id === room.chatroom_id)?.message_count || 0} color="error" />
               </TableCell>
             </TableRow>
           ))}

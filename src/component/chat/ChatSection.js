@@ -59,10 +59,10 @@ const ChatSection = () => {
   }, [open]);
 
   useEffect(() => {
-    const handleMessage = (receivedTopic) => {
+    const handleMessage = (receivedTopic, payload) => {
       if (receivedTopic === `notification/1`) {
-        console.log("+1");
-        // setMessageCount((count) => count + 1);
+        console.log(JSON.parse(payload));
+        setMessageCount(JSON.parse(payload));
       }
     };
 
@@ -167,7 +167,7 @@ const ChatSection = () => {
                   <Grid container direction="column" spacing={2}>
                     <Grid item xs={12}>
                       <Box sx={{ px: 2, pt: 0.25 }}>
-                        <ChatList />
+                        <ChatList messageCount={messageCount} setMessageCount={setMessageCount}/>
                       </Box>
                     </Grid>
                   </Grid>

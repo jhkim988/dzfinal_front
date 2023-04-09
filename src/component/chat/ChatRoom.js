@@ -25,13 +25,20 @@ const ChatRoom = ({ room, onBackClick }) => {
     created_at: new Date().toISOString(),
   });
   const [messages, setMessages] = useState([]);
+  const [page, setPage] = useState(1);
+  const [scrollTop, setScrollTop] = useState(0);
   const { current: client } = useContext(MqttContext);
 
   useEffect(() => {
     axios
-      .get(`api/chat/getchatroommessages?chatroom_id=${room.chatroom_id}`)
+      .get("api/chat/getchatroommessages", {
+        params: {
+          chatroom_id: room.chatroom_id,
+          page: page,
+        },
+        })
       .then((response) => {
-        setMessages(response.data);
+        setMessages(response.data.reverse());
       })
       .catch((error) => {
         console.log(error);
@@ -68,7 +75,17 @@ const ChatRoom = ({ room, onBackClick }) => {
   useEffect(() => {
     const messagesBox = document.getElementById("messages-box");
     messagesBox.scrollTop = messagesBox.scrollHeight;
+  
+    // 스크롤 탑 위치값 저장
+    setScrollTop(messagesBox.scrollTop);
   }, [messages]);
+  
+  useEffect(() => {
+    const messagesBox = document.getElementById("messages-box");
+  
+    // 스크롤 탑 위치 재설정
+    messagesBox.scrollTop = scrollTop;
+  }, [scrollTop]);
 
   const publish = () => {
     if (client) {
@@ -84,6 +101,30 @@ const ChatRoom = ({ room, onBackClick }) => {
       });
     }
     setMessage({ message: "" });
+  };
+
+  const handleMessagesScroll = (event) => {
+    const { scrollTop } = event.target;
+    if (scrollTop === 0) {
+      setPage((prevPage) => prevPage + 1);
+
+      axios
+      .get("api/chat/getchatroommessages", {
+        params: {
+          chatroom_id: room.chatroom_id,
+          page: page,
+        },
+        })
+      .then((response) => {
+        setMessages(prevMessages => [...response.data.reverse(), ...prevMessages]);
+        setScrollTop(event.target.scrollTop + event.target.scrollHeight);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } else {
+      setScrollTop(scrollTop);
+    }
   };
 
   return (
@@ -108,6 +149,7 @@ const ChatRoom = ({ room, onBackClick }) => {
             height: "400px",
             overflowY: "auto",
           }}
+          onScroll={handleMessagesScroll}
         >
           {messages.map((message, index) =>
             message.from !== 1 ? ( // 수정
