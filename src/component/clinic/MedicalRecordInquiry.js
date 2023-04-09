@@ -219,14 +219,16 @@ const MedicalRecordInquiry = ({
                     <TableCell align="center">{row.employee_name}</TableCell>
                     <Tooltip
                       title={
-                        <div>
-                          {row.diagnosisList.map((diagnosis) => (
-                            <div key={diagnosis.disease_code}>
-                              [{diagnosis.disease_code}]{" "}
-                              {diagnosis.disease_name}
-                            </div>
-                          ))}
-                        </div>
+                        row.diagnosisList.length > 0 && (
+                          <div>
+                            {row.diagnosisList.map((diagnosis) => (
+                              <div key={diagnosis.disease_code}>
+                                [{diagnosis.disease_code}]{" "}
+                                {diagnosis.disease_name}
+                              </div>
+                            ))}
+                          </div>
+                        )
                       }
                     >
                       <TableCell align="center">
@@ -243,14 +245,16 @@ const MedicalRecordInquiry = ({
                     </Tooltip>
                     <Tooltip
                       title={
-                        <div>
-                          {row.prescriptionList.map((prescription) => (
-                            <div key={prescription.drug_code}>
-                              [{prescription.drug_code}]{" "}
-                              {prescription.drug_name}
-                            </div>
-                          ))}
-                        </div>
+                        row.prescriptionList.length > 0 && (
+                          <div>
+                            {row.prescriptionList.map((prescription) => (
+                              <div key={prescription.drug_code}>
+                                [{prescription.drug_code}]{" "}
+                                {prescription.drug_name}
+                              </div>
+                            ))}
+                          </div>
+                        )
                       }
                     >
                       <TableCell align="center">
