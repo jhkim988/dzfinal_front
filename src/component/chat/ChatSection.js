@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Box,
   ButtonBase,
   ClickAwayListener,
@@ -9,19 +10,33 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Transitions from "../../template/ui-component/Transitions";
 import MainCard from "../../template/ui-component/cards/MainCard";
 import { IconBrandHipchat } from "@tabler/icons";
-import ChatMqtt from "./ChatMqtt";
+import ChatList from "./ChatList";
+import { MqttContext } from "../waiting/MqttContextProvider";
+import axios from "axios";
 
 const ChatSection = () => {
+  const { current: client } = useContext(MqttContext);
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
   const anchorRef = useRef(null);
+  const [messageCount, setMessageCount] = useState([]);
+
+  const totalMessageCount = messageCount.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.message_count,
+    0
+  );
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -35,12 +50,58 @@ const ChatSection = () => {
   };
 
   const prevOpen = useRef(open);
+
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
     prevOpen.current = open;
   }, [open]);
+
+  useEffect(() => {
+    const handleMessage = (receivedTopic, payload) => {
+      if (receivedTopic === `notification/1`) {
+        console.log("호출");
+        //수정
+        axios
+          .get("/api/chat/getmessagecount", {
+            params: {
+              participants_id: 1, // 수정
+            },
+          })
+          .then((response) => {
+            setMessageCount(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    };
+
+    // 수정
+    client.subscribe(`notification/1`, { qos: 1 }, (error) => {
+      if (error) {
+        console.log("Subscribe to topic error", error);
+      }
+    });
+
+    client.on("message", handleMessage);
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("/api/chat/getmessagecount", {
+        params: {
+          participants_id: 1, // 수정
+        },
+      })
+      .then((response) => {
+        setMessageCount(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <>
@@ -75,6 +136,11 @@ const ChatSection = () => {
           >
             <IconBrandHipchat stroke={1.5} size="1.3rem" color="#00aaff" />
           </Avatar>
+          <Badge
+            sx={{ alignSelf: "flex-start" }}
+            badgeContent={totalMessageCount}
+            color="error"
+          />
         </ButtonBase>
       </Box>
       <Popper
@@ -113,7 +179,10 @@ const ChatSection = () => {
                   <Grid container direction="column" spacing={2}>
                     <Grid item xs={12}>
                       <Box sx={{ px: 2, pt: 0.25 }}>
-                        <ChatMqtt />
+                        <ChatList
+                          messageCount={messageCount}
+                          setMessageCount={setMessageCount}
+                        />
                       </Box>
                     </Grid>
                   </Grid>
