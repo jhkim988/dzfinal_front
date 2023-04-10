@@ -28,15 +28,15 @@ const WaitingQueue = ({ initPanel, data, selected, onRowClick, doctorFilter }) =
             sx={{ minWidth: 260 }}
             onChange={handleChange}
           >
-            {tabInfo.map((el, idx) => <Tab key={`Tab${idx}`}sx={{ minWidth: 65 }} value={el.value} label={el.label} />)}
+            {tabInfo.map((el, idx) => <Tab key={`Tab${idx}`} sx={{ minWidth: 65 }} value={el.value} label={el.label} />)}
           </TabList>
         </Box>
         {
           tabInfo.map((el, idx) => <TabPanel
-              key={`TabPanel${idx}`}
-              sx={{ minWidth: 260, padding: 0 }}
-              value={el.value}
-            >
+            key={`TabPanel${idx}`}
+            sx={{ minWidth: 260, padding: 0 }}
+            value={el.value}
+          >
             <WaitingTabPanel
               data={data.filter(d => el.filter(d) && doctorFilter[d.doctor_id])}
               selected={selected}
