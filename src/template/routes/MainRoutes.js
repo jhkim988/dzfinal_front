@@ -2,6 +2,7 @@ import { lazy } from "react";
 
 import MainLayout from "../layout/MainLayout";
 import Loadable from "../ui-component/Loadable";
+import AccessAllow from "./../../component/login/AccessAllow";
 
 const ClinicView = Loadable(
   lazy(() => import("../../component/clinic/ClinicView"))
@@ -24,21 +25,35 @@ const Register = Loadable(
   lazy(() => import("../../component/management/Register"))
 );
 
+const Logout = Loadable(lazy(() => import("../../component/login/Logout")));
+
 const MainRoutes = {
   path: "/",
   element: <MainLayout />,
   children: [
     {
       path: "clinic",
-      element: <ClinicView />,
+      element: (
+        <AccessAllow authorities={["ADMIN", "DOCTOR", "RN", "KLPN"]}>
+          <ClinicView />
+        </AccessAllow>
+      ),
     },
     {
       path: "reservation",
-      element: <Reservation />,
+      element: (
+        <AccessAllow authorities={["ADMIN", "DOCTOR", "RN", "KLPN"]}>
+          <Reservation />
+        </AccessAllow>
+      ),
     },
     {
       path: "reception",
-      element: <Reception />,
+      element: (
+        <AccessAllow authorities={["ADMIN", "DOCTOR", "RN", "KLPN"]}>
+          <Reception />
+        </AccessAllow>
+      ),
     },
     // {
     //   path: "view",
@@ -46,15 +61,31 @@ const MainRoutes = {
     // },
     {
       path: "did_setting",
-      element: <DidSetting />,
+      element: (
+        <AccessAllow authorities={["DOCTOR", "RN", "KLPN", "ADMIN"]}>
+          <DidSetting />
+        </AccessAllow>
+      ),
     },
     {
       path: "management",
-      element: <Management />,
+      element: (
+        <AccessAllow authorities={["ADMIN"]}>
+          <Management />
+        </AccessAllow>
+      ),
     },
     {
       path: "register",
-      element: <Register />,
+      element: (
+        <AccessAllow authorities={["ADMIN"]}>
+          <Register />
+        </AccessAllow>
+      ),
+    },
+    {
+      path: "logout",
+      element: <Logout />,
     },
   ],
 };

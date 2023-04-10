@@ -13,7 +13,7 @@ const Logo = () => {
       width="66px"
       height="32px"
       viewBox="0 0 66 32"
-      enable-background="new 0 0 66 32"
+      enableBackground="new 0 0 66 32"
     >
       <image
         id="image0"

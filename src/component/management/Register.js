@@ -17,13 +17,21 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
-import axios from "axios";
 import dayjs from "dayjs";
 import React from "react";
 import { useState } from "react";
 import "dayjs/locale/ko";
+import axios from "axios";
+import axiosClient from './../login/AxiosClient';
 
 dayjs.locale("ko");
+
+const roleMapping = {
+  ADMIN: "관리자",
+  DOCTOR: "의사",
+  RN: "간호사",
+  KLPN: "간호조무사",
+}
 
 const Register = () => {
   const navigate = useNavigate();
@@ -62,17 +70,17 @@ const Register = () => {
     }));
   };
 
-  const registerClick = () => {
+  const createEmployee = () => {
     const formData = new FormData();
     formData.append("file", file);
-
+    setEmployee(prev => ({ ...prev, role: roleMapping[prev.role] }));
     const info = new Blob([JSON.stringify(employee)], {
       type: "application/json",
     });
 
     formData.append("employee", info);
-
-    axios
+  
+    axiosClient
       .post("/api/admin/employee", formData, {
         headers: {
           "content-type": "multipart/form-data",
@@ -95,6 +103,25 @@ const Register = () => {
         console.log(error);
       });
   };
+
+  const registerClick = () => {
+    createSecurityUser().then(res => {
+      createEmployee();
+    });
+  }
+
+  const createSecurityUser = () => {
+    return axios.post("http://localhost:8081/user", {
+      username: employee.user_id,
+      password: employee.birth,
+      authority: [employee.role]
+    }, {
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": `Basic ${btoa("client:secret")}`
+      }
+    });
+  }
 
   return (
     <Grid container spacing={3}>
@@ -189,9 +216,9 @@ const Register = () => {
                           inputProps={{ name: "role" }}
                           onChange={handleInputChange}
                         >
-                          <MenuItem value={"doctor"}>의사</MenuItem>
-                          <MenuItem value={"rn"}>간호사</MenuItem>
-                          <MenuItem value={"klpn"}>조무사</MenuItem>
+                          <MenuItem value={"DOCTOR"}>의사</MenuItem>
+                          <MenuItem value={"RN"}>간호사</MenuItem>
+                          <MenuItem value={"KLPN"}>조무사</MenuItem>
                         </Select>
                       </FormControl>
                     </TableCell>

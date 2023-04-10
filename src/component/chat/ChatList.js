@@ -6,25 +6,25 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
-import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import ChatRoom from "./ChatRoom";
+import axiosClient from './../login/AxiosClient';
 
 const ChatList = ({ messageCount, setMessageCount }) => {
   const [chatRoom, setChatRoom] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
-
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  console.log(userInfo);
   const handleRowClick = (room) => {
     setSelectedRoom(room);
-
     const status = {
       chatroom_id: room.chatroom_id,
-      participants_id: 1, // 현재 사용자의 participants_id 값으로 대체
+      participants_id: userInfo.employ_id, // 현재 사용자의 participants_id 값으로 대체
     };
 
-    axios
+    axiosClient
       .put("/api/chat/lastreadtime", status)
       .then((response) => {})
       .catch((error) => {
@@ -50,8 +50,8 @@ const ChatList = ({ messageCount, setMessageCount }) => {
   };
 
   useEffect(() => {
-    axios
-      .get(`api/chat/chatlist?participants_id=1`) //수정
+    axiosClient
+      .get(`api/chat/chatlist?participants_id=${userInfo.employ_id}`)
       .then((response) => {
         setChatRoom(response.data);
       })

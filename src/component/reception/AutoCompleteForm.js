@@ -1,8 +1,6 @@
-import { ImageTwoTone } from '@material-ui/icons';
-import { Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@mui/material';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import { Table, TableBody, TableCell, TableRow, TextField } from '@mui/material';
+import React, { useState } from 'react'
+import { axiosClient } from '../login/AxiosClient';
 
 const Patient_API_BASE_URL = "/api/patient";
 
@@ -19,7 +17,7 @@ const AutoCompleteForm = ({ setPatientData, setReceptionData }) => {
         event.preventDefault();
         if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter") {
             if (patient_name.length > 1) {
-                axios.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
+                axiosClient.get(Patient_API_BASE_URL + `/list?patient_name=${patient_name}`)
                     .then((response) => {
                         setAutoCompleteList(response.data);
                     })
@@ -57,7 +55,7 @@ const AutoCompleteForm = ({ setPatientData, setReceptionData }) => {
         // setPatient_name({
         //     patient_name: patient_name
         // });
-        axios.get(Patient_API_BASE_URL + `/${patient_id}`)
+        axiosClient.get(Patient_API_BASE_URL + `/${patient_id}`)
             .then((response) => {
                 console.log("자동완성 환자정보:", response.data);
                 setPatientData(prev => ({ ...response.data }));

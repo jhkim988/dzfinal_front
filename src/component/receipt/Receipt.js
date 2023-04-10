@@ -1,5 +1,4 @@
 import * as React from 'react';
-import axios from "axios";
 import ReceptionInformation from './ReceptionInformation';
 import ReceiptPayment from './ReceiptPayment';
 import ReceiptDetails from './ReceiptDetails';
@@ -116,7 +115,6 @@ function Receipt({ receiptData }) {
         {/* <h2>수납하기</h2> */}
         <br />
         {/* 접수정보 */}
-        {user.state !== "진료대기" && user.state !== "진료중" ? (
           <>
             <ReceptionInformation user={user} />
             {/* 다음진료예약 */}
@@ -127,18 +125,6 @@ function Receipt({ receiptData }) {
             {/* 결제방식&처방전,진료의뢰서 */}
             <ReceiptPayment user={user} />
           </>
-        ) : (
-          <>
-            <ReceptionInformation user={user} disabled={true}/>
-            {/* 다음진료예약 */}
-            <Reservation />
-            {/* 결제내역정보 */}
-            <ReceiptDetails user={user} disabled={true}/>
-            <br />
-            {/* 결제방식&처방전,진료의뢰서 */}
-            <ReceiptPayment user={user} disabled={true}/>
-          </>
-        )}
       </Paper>
       
      </div>

@@ -11,7 +11,7 @@ import {
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
-import axios from "axios";
+import axiosClient from './../login/AxiosClient';
 
 const DrugTaking = ({ props, patient }) => {
   const [drug_code, setDrug_code] = useState("");
@@ -24,7 +24,7 @@ const DrugTaking = ({ props, patient }) => {
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
       if (e.target.value.length >= 2) {
-        axios
+        axiosClient
           .get(
             `/api/clinic/drug/${e.target.name}/${encodeURIComponent(
               e.target.value
@@ -55,7 +55,7 @@ const DrugTaking = ({ props, patient }) => {
     if (drugTaking.some((item) => item.drug_id === drug.drug_id)) {
       alert("이미 추가된 약품입니다.");
     } else {
-      axios
+      axiosClient
         .post("/api/clinic/drug", {
           patient_id: patient.patient_id,
           drug_id: drug.drug_id,
@@ -69,7 +69,7 @@ const DrugTaking = ({ props, patient }) => {
   };
 
   function handleRemove(drug_id) {
-    axios
+    axiosClient
       .delete("/api/clinic/drug", {
         params: {
           patient_id: patient.patient_id,

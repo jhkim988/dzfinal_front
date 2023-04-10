@@ -25,6 +25,7 @@ import { MqttContext } from "../waiting/MqttContextProvider";
 import axios from "axios";
 
 const ChatSection = () => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const { current: client } = useContext(MqttContext);
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
@@ -60,14 +61,26 @@ const ChatSection = () => {
 
   useEffect(() => {
     const handleMessage = (receivedTopic, payload) => {
-      if (receivedTopic === `notification/1`) {
-        console.log(JSON.parse(payload));
-        setMessageCount(JSON.parse(payload));
+      if (receivedTopic === `notification/${userInfo.employ_id}`) {
+        console.log("호출");
+        //수정
+        axios
+          .get("/api/chat/getmessagecount", {
+            params: {
+              participants_id: userInfo.employ_id, // 수정
+            },
+          })
+          .then((response) => {
+            setMessageCount(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     };
 
     // 수정
-    client.subscribe(`notification/1`, { qos: 1 }, (error) => {
+    client.subscribe(`notification/${userInfo.employ_id}`, { qos: 1 }, (error) => {
       if (error) {
         console.log("Subscribe to topic error", error);
       }
@@ -80,7 +93,7 @@ const ChatSection = () => {
     axios
       .get("/api/chat/getmessagecount", {
         params: {
-          participants_id: 1, // 수정
+          participants_id: userInfo.employ_id, // 수정
         },
       })
       .then((response) => {
