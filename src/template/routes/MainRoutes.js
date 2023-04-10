@@ -24,6 +24,10 @@ const Register = Loadable(
   lazy(() => import("../../component/management/Register"))
 );
 
+const PwdChange = Loadable(
+  lazy(() => import("../../component/pwd/PwdChange"))
+);
+
 const MainRoutes = {
   path: "/",
   element: <MainLayout />,
@@ -55,6 +59,9 @@ const MainRoutes = {
     {
       path: "register",
       element: <Register />,
+    }, {
+      path: "pwdchange",
+      element: <PwdChange />,
     },
   ],
 };

@@ -5,6 +5,7 @@ import {
   IconSettings,
   IconUsers,
   IconDeviceTv,
+  IconLock
 } from "@tabler/icons";
 
 const icons = {
@@ -14,6 +15,7 @@ const icons = {
   IconSettings,
   IconUsers,
   IconDeviceTv,
+  IconLock
 };
 
 const menuItems = {
@@ -74,6 +76,14 @@ const menuItems = {
       type: "item",
       url: "/login",
       icon: icons.IconUsers,
+      breadcrumbs: false,
+    },
+    {
+      id: "pwdchange",
+      title: "비밀번호 변경",
+      type: "item",
+      url: "/pwdchange",
+      icon: icons.IconLock,
       breadcrumbs: false,
     },
   ],
