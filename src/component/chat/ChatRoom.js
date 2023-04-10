@@ -131,7 +131,7 @@ const ChatRoom = ({ room, onBackClick }) => {
   };
 
   return (
-    <Grid container spacing={1} sx={{ width: 400, height: 600 }}>
+    <Grid container spacing={1} sx={{ maxWidth: 400, maxHeight: 600 }}>
       <Grid item xs={12}>
         <AppBar
           position="static"
