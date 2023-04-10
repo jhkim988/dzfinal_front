@@ -19,6 +19,7 @@ const LoginImage = () => {
 export const getLoginUserInfo = (callback) => {
   const { user_id } = JSON.parse(localStorage.getItem("auth"));
   axiosClient.get(`/api/employee/${user_id}`).then(({ data }) => {
+    console.log(data);
     localStorage.setItem("userInfo", JSON.stringify(data));
     callback && callback();
   });
@@ -67,7 +68,7 @@ const LoginForm = () => {
         getLoginUserInfo(() => {
           const userInfo = JSON.parse(localStorage.getItem("userInfo"));
           console.log(userInfo);
-          movePageWithAuthority(userInfo.authority);
+          movePageWithAuthority(auth.authorities);
         });
       });
   };
@@ -87,8 +88,7 @@ const LoginForm = () => {
     const auth = JSON.parse(localStorage.getItem("auth"));
     if (auth?.access_token) {
       getLoginUserInfo(() => {
-        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        movePageWithAuthority(userInfo.authority);
+        movePageWithAuthority(auth.authorities);
       });
     }
   }, []);
