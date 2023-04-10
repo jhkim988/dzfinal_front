@@ -24,7 +24,7 @@ const ChatList = ({ messageCount, setMessageCount }) => {
       participants_id: 1, // 현재 사용자의 participants_id 값으로 대체
     };
 
-    axios
+    axiosClient
       .put("/api/chat/lastreadtime", status)
       .then((response) => {})
       .catch((error) => {
@@ -50,7 +50,7 @@ const ChatList = ({ messageCount, setMessageCount }) => {
   };
 
   useEffect(() => {
-    axios
+    axiosClient
       .get(`api/chat/chatlist?participants_id=1`) //수정
       .then((response) => {
         setChatRoom(response.data);
