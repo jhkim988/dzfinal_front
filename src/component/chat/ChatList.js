@@ -6,11 +6,11 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
-import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import ChatRoom from "./ChatRoom";
+import axiosClient from './../login/AxiosClient';
 
 const ChatList = ({ messageCount, setMessageCount }) => {
   const [chatRoom, setChatRoom] = useState([]);

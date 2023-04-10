@@ -16,14 +16,14 @@ const DidVideo = () => {
       });
   }, []);
 
+
   return (
     <div>
-      <h1>비디오 출력 부분</h1>
-      {getDidVideo.type}
-      <br />
-      {getDidVideo.video}
-      <br />
-      {getDidVideo.real_name}
+      {/* <h1>비디오 출력 부분</h1> */}
+      비디오 이름: { getDidVideo.video_real_name }
+      <video width="1436px" height="751px" autoplay loop controls>
+        <source src="/api/view/getDidVideo" type="video/mp4" />
+      </video>
       <br />
     </div>
   );

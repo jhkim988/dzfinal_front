@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
-import axios from "axios";
 import {Box, InputLabel, MenuItem, FormControl, Select, Input, Button, Stack} from '@mui/material';
-import userEvent from '@testing-library/user-event';
+import { axiosClient } from '../../utils/axiosClient';
 
 const Card = ({user}) => {
 
@@ -71,7 +70,7 @@ const Card = ({user}) => {
   const handleReceiptInsert = async () => {
     if (card_name && card_number) {
       try {
-        const response = await axios.post('/api/receipt/insertReceipt', {
+        const response = await axiosClient.post('/api/receipt/insertReceipt', {
           reception_id: user.reception_id,
           ratio: InsuranceRatio,
           total_amount: (ClinicPrice+TreatmentPrice)*InsuranceRatio,

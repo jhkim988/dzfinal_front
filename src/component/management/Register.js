@@ -17,11 +17,11 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
-import axios from "axios";
 import dayjs from "dayjs";
 import React from "react";
 import { useState } from "react";
 import "dayjs/locale/ko";
+import axiosClient from './../login/AxiosClient';
 
 dayjs.locale("ko");
 
@@ -72,7 +72,7 @@ const Register = () => {
 
     formData.append("employee", info);
 
-    axios
+    axiosClient
       .post("/api/admin/employee", formData, {
         headers: {
           "content-type": "multipart/form-data",

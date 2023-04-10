@@ -7,7 +7,7 @@ import React, {
   useContext,
 } from "react";
 import { Grid, Paper } from "@mui/material";
-import axios from "axios";
+import axiosClient from "./../login/AxiosClient";
 import CallButtonSet from "./CallButtonSet";
 import WaitingQueue from "./WaitingQueue";
 import { MqttContext } from "./MqttContextProvider";
@@ -104,7 +104,7 @@ const WaitingQueueLayout = ({
   };
 
   useEffect(() => {
-    axios.get("/api/reception/today").then(({ data }) => {
+    axiosClient.get("/api/reception/today").then(({ data }) => {
       setData(data);
     });
   }, []);
