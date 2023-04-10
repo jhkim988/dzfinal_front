@@ -27,7 +27,6 @@ const AccessAllow = ({ authorities, children }) => {
 
     useEffect(() => {
         const auth = JSON.parse(localStorage.getItem("auth"));
-        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (!auth) {
             back();
             setIsChecked(false);
