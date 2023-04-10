@@ -1,24 +1,64 @@
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Box, Button, Card, CardMedia, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Paper, TextField } from "@mui/material";
 import React from "react";
+import { useEffect } from "react";
+import axiosClient from './../login/AxiosClient';
+import { useState } from "react";
+import axios from "axios";
 
 const PwdChange = () => {
-    const [showPassword, setShowPassword] = React.useState(false);
-
+    const init = {
+        currentPwd: "",
+        newPwd: "",
+        checkPwd: ""
+    }
+    const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const [input, setInput] = useState(init);
+    const [employeeInfo, setEmployeeInfo] = useState({});
+
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    // const employ_id = userInfo.employ_id;
+    // console.log(auth);
+    // console.log(atob(auth.access_token.split('.')[1]));
+    // console.log(userInfo);
+    console.log(input);
+
+    useEffect(() => {
+        axiosClient.get(`/api/employee/by_token`)
+            .then((response) => {
+                console.log(response.data);
+                setEmployeeInfo(response.data);
+            })
+    }, []);
 
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
 
-    const resetHandelr = () => {
-
+    const onChange = (event) => {
+        console.log(event.target.name, event.target.value);
+        setInput((prev) => ({
+            ...prev,
+            [event.target.name]: event.target.value
+        }))
     }
 
-    const employee = 1;
+    const resetHandelr = () => {
+        setInput(init);
+    }
 
-    const onDelete = () => { };
+    const onSubmit = () => {
+        axios.put(`http://localhost:8081/changePwd/${employeeInfo.user_id}`, input)
+            .then((response) => {
+                alert("성공");
 
+            }).catch(error => {
+                alert("실패");
+            })
+    }
     return (
         <>
             <Grid container={1}>
@@ -39,6 +79,7 @@ const PwdChange = () => {
                                         component="img"
                                         height="220"
                                         sx={{ maxWidth: "180px" }}
+                                        src={`/api/admin/getimage?real_image=${userInfo.real_image}`}
                                     />
                                     <Box sx={{ width: "100%", marginLeft: 2, marginRight: 2 }}>
                                         <Box
@@ -49,25 +90,21 @@ const PwdChange = () => {
                                             }}
                                         >
                                             <Box>
-                                                <h2 style={{ color: "#757575" }}>{employee.employee_name}</h2>
+                                                <h2 style={{ color: "#757575" }}>{userInfo.employee_name}</h2>
                                             </Box>
                                         </Box>
                                         <Box sx={{ display: "block" }}>
                                             <Box sx={{ marginTop: 1, marginBottom: 1 }}>
-                                                직책 :{" "}
-                                                {employee.role === "doctor"
-                                                    ? "의사"
-                                                    : employee.role === "rn"
-                                                        ? "간호사"
-                                                        : employee.role === "klpn"
-                                                            ? "조무사"
-                                                            : ""}
+                                                직책 :{userInfo.authority}
                                                 <br />
                                                 <br />
-                                                아이디 : {employee.user_id}
+                                                아이디 : {auth.user_id}
                                                 <br />
                                                 <br />
-                                                생년월일 : {employee.birth}
+                                                생년월일 : {employeeInfo.birth}
+                                                <br />
+                                                <br />
+                                                이메일 : {employeeInfo.employee_email}
                                             </Box>
                                             <Box
                                                 sx={{
@@ -77,7 +114,7 @@ const PwdChange = () => {
                                                     color: "#69F0AE",
                                                 }}
                                             >
-                                                <h3>{employee.employee_email}</h3>
+                                                {/* <h3>{employeeInfo.employee_email}</h3> */}
                                             </Box>
                                         </Box>
                                     </Box>
@@ -89,9 +126,11 @@ const PwdChange = () => {
                                     <Grid item xs={10}>
                                         <FormControl sx={{ m: 1, width: "100%", margin: "10px" }} variant="outlined">
                                             <OutlinedInput
-                                                id="outlined-adornment-password"
+                                                name="currentPwd"
                                                 type={showPassword ? 'text' : 'password'}
                                                 placeholder="현재 비밀번호를 입력하세요."
+                                                onChange={onChange}
+                                                value={input.currentPwd || ""}
                                                 endAdornment={
                                                     <InputAdornment position="end">
                                                         <IconButton
@@ -116,9 +155,12 @@ const PwdChange = () => {
                                     <Grid item xs={10}>
                                         <FormControl sx={{ m: 1, width: "100%", margin: "10px" }} variant="outlined">
                                             <OutlinedInput
-                                                id="outlined-adornment-password"
                                                 type={showPassword ? 'text' : 'password'}
                                                 placeholder="변경할 비밀번호를 입력하세요."
+                                                name="newPwd"
+                                                value={input.newPwd || ""}
+                                                onChange={onChange}
+
                                                 endAdornment={
                                                     <InputAdornment position="end">
                                                         <IconButton
@@ -143,9 +185,11 @@ const PwdChange = () => {
                                     <Grid item xs={10}>
                                         <FormControl sx={{ m: 1, width: "100%", margin: "10px" }} variant="outlined">
                                             <OutlinedInput
-                                                id="outlined-adornment-password"
                                                 type={showPassword ? 'text' : 'password'}
                                                 placeholder="변경할 비밀번호를 재입력하세요."
+                                                name="checkPwd"
+                                                value={input.checkPwd || ""}
+                                                onChange={onChange}
                                                 endAdornment={
                                                     <InputAdornment position="end">
                                                         <IconButton
@@ -166,7 +210,7 @@ const PwdChange = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                    <Button variant="contained">확인</Button>
+                                    <Button variant="contained" onClick={onSubmit} >확인</Button>
                                     <Button variant="contained" color="error" onClick={resetHandelr}>취소</Button>
                                 </Box>
 
