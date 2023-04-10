@@ -36,7 +36,7 @@ const ChatRoom = ({ room, onBackClick }) => {
           chatroom_id: room.chatroom_id,
           page: page,
         },
-        })
+      })
       .then((response) => {
         setMessages(response.data.reverse());
       })
@@ -47,8 +47,8 @@ const ChatRoom = ({ room, onBackClick }) => {
 
   useEffect(() => {
     const handleMessage = (topic, message) => {
-      const receivedMessage = JSON.parse(message.toString());
       if (topic === `chat/${room.chatroom_id}`) {
+        const receivedMessage = JSON.parse(message.toString());
         setMessages((prevMessages) => [...prevMessages, receivedMessage]);
       }
     };
@@ -75,14 +75,14 @@ const ChatRoom = ({ room, onBackClick }) => {
   useEffect(() => {
     const messagesBox = document.getElementById("messages-box");
     messagesBox.scrollTop = messagesBox.scrollHeight;
-  
+
     // 스크롤 탑 위치값 저장
     setScrollTop(messagesBox.scrollTop);
   }, [messages]);
-  
+
   useEffect(() => {
     const messagesBox = document.getElementById("messages-box");
-  
+
     // 스크롤 탑 위치 재설정
     messagesBox.scrollTop = scrollTop;
   }, [scrollTop]);
@@ -109,19 +109,22 @@ const ChatRoom = ({ room, onBackClick }) => {
       setPage((prevPage) => prevPage + 1);
 
       axios
-      .get("api/chat/getchatroommessages", {
-        params: {
-          chatroom_id: room.chatroom_id,
-          page: page,
-        },
+        .get("api/chat/getchatroommessages", {
+          params: {
+            chatroom_id: room.chatroom_id,
+            page: page,
+          },
         })
-      .then((response) => {
-        setMessages(prevMessages => [...response.data.reverse(), ...prevMessages]);
-        setScrollTop(event.target.scrollTop + event.target.scrollHeight);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((response) => {
+          setMessages((prevMessages) => [
+            ...response.data.reverse(),
+            ...prevMessages,
+          ]);
+          setScrollTop(event.target.scrollTop + event.target.scrollHeight);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       setScrollTop(scrollTop);
     }

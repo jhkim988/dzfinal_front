@@ -61,8 +61,20 @@ const ChatSection = () => {
   useEffect(() => {
     const handleMessage = (receivedTopic, payload) => {
       if (receivedTopic === `notification/1`) {
-        console.log(JSON.parse(payload));
-        setMessageCount(JSON.parse(payload));
+        console.log("호출");
+        //수정
+        axios
+          .get("/api/chat/getmessagecount", {
+            params: {
+              participants_id: 1, // 수정
+            },
+          })
+          .then((response) => {
+            setMessageCount(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     };
 
@@ -167,7 +179,10 @@ const ChatSection = () => {
                   <Grid container direction="column" spacing={2}>
                     <Grid item xs={12}>
                       <Box sx={{ px: 2, pt: 0.25 }}>
-                        <ChatList messageCount={messageCount} setMessageCount={setMessageCount}/>
+                        <ChatList
+                          messageCount={messageCount}
+                          setMessageCount={setMessageCount}
+                        />
                       </Box>
                     </Grid>
                   </Grid>
