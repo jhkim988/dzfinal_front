@@ -1,12 +1,9 @@
-import { Button, MenuItem, Paper, TextField, Grid } from '@mui/material';
+import { Button, MenuItem, Paper, TextField, Grid, Hidden, Tooltip } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import axiosClient from './../login/AxiosClient';
+import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-
-
 const doctors = [
     {
         value: '1',
@@ -90,7 +87,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
         const newReceptionData = { ...receptionData, patient_id: patient_id };
         console.log("newReceptionData->", newReceptionData);
         if (window.confirm("접수 등록을 진행하시겠습니까?")) {
-            axios.post(Reception_API_BASE_URL, newReceptionData)
+            axiosClient.post(Reception_API_BASE_URL, newReceptionData)
                 .then((response) => {
                     alert(response.data.message);
                     console.log(response.data);
@@ -112,7 +109,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
         console.log(receptionData);
         event.preventDefault();
         if (window.confirm("접수 등록을 진행하시겠습니까?")) {
-            axios.post(Reception_API_BASE_URL, receptionData)
+            axiosClient.post(Reception_API_BASE_URL, receptionData)
                 .then((response) => {
                     alert(response.data.message);
                     console.log(response.data);
@@ -133,7 +130,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
     //접수 수정
     const updateReceptionInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 접수 정보를 수정하시겠습니까?")) {
-            axios.post(Reception_API_BASE_URL + "/update", receptionData)
+            axiosClient.post(Reception_API_BASE_URL + "/update", receptionData)
                 .then((response) => {
                     alert("접수 수정 성공");
                     setPatientData(prev => ({ ...response.data }));
@@ -153,7 +150,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
     const deleteReception = () => {
         //alert("접수 취소");
         if (window.confirm("[환자번호 :" + patientData.patient_id + "]" + patientData.patient_name + "님의 접수 정보를 취소하시겠습니까?")) {
-            axios.post(Reception_API_BASE_URL + "/delete", receptionData)
+            axiosClient.post(Reception_API_BASE_URL + "/delete", receptionData)
                 .then((response) => {
                     alert(response.data.message);
                     console.log(response.data);
@@ -328,12 +325,12 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                             <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
                                 <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                     {receptionData.reception_id != null && (
-                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>수정</Button>
+                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}>수정</Button>
                                     )}
                                     {receptionData.reception_id == null && (
-                                        <Button type="submit" onClick={receptDataHandleSubmit} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>접수</Button>
+                                        <Button type="submit" onClick={receptDataHandleSubmit} variant="contained" sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}>접수</Button>
                                     )}
-                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px", marginLeft: "5px" }}>취소</Button>
+                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} sx={{ width: "10vw", height: "3.5vh", marginLeft: 1 }}>취소</Button>
                                 </Box>
                             </Grid>
                         </Grid>

@@ -5,10 +5,9 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { Paper } from "@mui/material";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import dayjs from 'dayjs';
-import axios from "axios";
-
 import ReservationTimePicker from "./ReservationTimePicker"; 
 import { compareDate, offsetDate, offsetDateObj } from './utils/dateUtils';
+import axiosClient from "../login/AxiosClient";
 
 const ReservationDatePicker = ({
   pickDate,
@@ -23,7 +22,7 @@ const ReservationDatePicker = ({
 
   const getImpossible = useCallback((doctor, year, month) => {
     const controller = new AbortController();
-    axios.get("/api/reservation/impossible/day", {
+    axiosClient.get("/api/reservation/impossible/day", {
       params: { doctor, year, month }
     }).then(({ data }) => {
       setImpossible(new Set(data));

@@ -3,8 +3,7 @@ import DidSubscribe from "./DidSubscribe";
 import DidVideo from "./DidVideo";
 import DidWaiting from "./DidWaiting";
 import { Grid, Paper } from "@mui/material";
-import axios from "axios";
-import mqtt from "mqtt";
+import axiosClient from "../login/AxiosClient";
 import { MqttContext } from "../waiting/MqttContextProvider";
 
 // TODO: doctor_id 적용
@@ -15,7 +14,7 @@ const autoCallInfo = {
 
 const doctor_id = 1;
 
-const DID = ({ nextState }) => {
+const MultiDID = ({ nextState }) => {
   const client = useContext(MqttContext);
   const [data, setData] = useState([]);
 
@@ -57,11 +56,7 @@ const DID = ({ nextState }) => {
   }, []);
 
   useEffect(() => {
-    axios.get("/api/reception/today", {
-      headers: {
-        "Content-Type": "application/json",
-      }
-    }).then(({ data }) => {
+    axiosClient.get("/api/reception/today").then(({ data }) => {
       setData(data);
     });
   }, []);
@@ -128,4 +123,4 @@ const DID = ({ nextState }) => {
   );
 };
 
-export default DID;
+export default MultiDID;

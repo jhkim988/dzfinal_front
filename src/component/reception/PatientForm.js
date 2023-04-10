@@ -11,8 +11,8 @@ import {
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import PopupPostCode from "./PopupPostCode";
-import axios from "axios";
 import PatientAutoComplete from "./PatientAutoComplete";
+import axiosClient from './../login/AxiosClient';
 
 const Patient_API_BASE_URL = "/api/patient";
 
@@ -88,13 +88,8 @@ const PatientForm = ({
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (
-            window.confirm(
-                patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?"
-            )
-        ) {
-            axios
-                .post(Patient_API_BASE_URL, patientData)
+        if (window.confirm(patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?")) {
+            axiosClient.post(Patient_API_BASE_URL, patientData)
                 .then((response) => {
                     alert(response.data.message);
                     console.log("patient_id:" + response.data.patient_id);
@@ -112,7 +107,7 @@ const PatientForm = ({
 
     const updatePatientInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 환자 정보를 수정하시겠습니까?")) {
-            axios.post(Patient_API_BASE_URL + "/update", patientData)
+            axiosClient.post(Patient_API_BASE_URL + "/update", patientData)
                 .then((response) => {
                     alert("환자 수정 성공");
                     setPatientData(prev => ({ ...response.data }));
@@ -142,7 +137,7 @@ const PatientForm = ({
     };
 
     const onSelect = (e, value) => {
-        axios
+        axiosClient
             .get(`/api/patient/${value.patient_id}`)
             .then(({ data }) => {
                 setPatientData(data);
@@ -156,19 +151,14 @@ const PatientForm = ({
             <Paper sx={{ height: "24vh" }} elevation={1}>
                 <Grid container>
                     <Grid item xs={12}>
-                        <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
-                            <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
-                                환자 등록/수정
+                        <h5 style={{ marginTop: 0, marginBottom: 0 }}>
+                            환자 등록/수정
 
-                            </h5>
-                        </div>
+                        </h5>
                     </Grid>
                 </Grid>
-                <div style={{ marginTop: "1em", marginLeft: "1em" }}>
+                <div style={{ marginTop: "1vh", marginLeft: "0.7vw" }}>
                     <Grid container spacing={2}>
-                        {/* <Grid item xs={12}>
-              환자 등록/수정
-            </Grid> */}
                         <Grid item xs={4}>
                             <PatientAutoComplete
                                 patient_name={patientData.patient_name}
@@ -222,7 +212,7 @@ const PatientForm = ({
                                         type="submit"
                                         onClick={handleSubmit}
                                         variant="contained"
-                                        style={{ width: "30px", height: "30px", marginLeft: "5px" }}
+                                        sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}
                                     >
                                         등록
                                     </Button>
@@ -233,7 +223,7 @@ const PatientForm = ({
                                             type="submit"
                                             onClick={handleSubmit}
                                             variant="contained"
-                                            style={{ width: "30px", height: "30px", marginLeft: "5px" }}
+                                            sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}
                                         >
                                             등록
                                         </Button>
@@ -244,7 +234,7 @@ const PatientForm = ({
                                             type="submit"
                                             onClick={updatePatientInfo}
                                             variant="contained"
-                                            style={{ width: "30px", height: "30px", marginLeft: "5px" }}
+                                            sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}
                                         >
                                             수정
                                         </Button>
@@ -254,7 +244,7 @@ const PatientForm = ({
                                     variant="contained"
                                     color="error"
                                     onClick={resetHandler}
-                                    style={{ width: "30px", height: "30px", marginRight: "5px", marginLeft: "5px" }}
+                                    sx={{ width: "10vw", height: "3.5vh", marginLeft: 1 }}
                                 >
                                     취소
                                 </Button>

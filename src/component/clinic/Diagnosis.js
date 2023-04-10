@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
-import axios from "axios";
+import axiosClient from "axios";
 import { red } from "@mui/material/colors";
 
 const Diagnosis = ({
@@ -29,7 +29,7 @@ const Diagnosis = ({
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
       if (e.target.value.length >= 2) {
-        axios
+        axiosClient
           .get(
             `/api/clinic/disease/${e.target.name}/${encodeURIComponent(
               e.target.value

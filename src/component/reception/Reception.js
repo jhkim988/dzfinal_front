@@ -1,16 +1,12 @@
 import { Grid, Paper } from "@mui/material";
-import { Box } from "@mui/system";
 import { useState } from "react";
-import axios from "axios";
-import AutoCompleteForm from "./AutoCompleteForm";
 import DailyReservationList from "./DailyReservationList";
 import PatientForm from "./PatientForm";
 import ReceptionForm from "./ReceptionForm";
 import Receipt from "../receipt/Receipt";
-import WaitingQueue from "../waiting/WaitingQueue";
-import ReceptionList from "./ReceptionList";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 import ReceiptList from "../receipt/ReceiptList";
+import axiosClient from './../login/AxiosClient';
 
 const Reservation_API_BASE_URL = "/api/reservation";
 
@@ -62,7 +58,7 @@ const Reception = () => {
   const clickRowCallback = async ({ reception_id, patient_id }) => {
     setPatient_id(patient_id);
     try {
-      axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+      axiosClient.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
         setPatientData(data.patient)
         setReceptionData(data.reception);
         setReceiptData(data);
@@ -80,27 +76,23 @@ const Reception = () => {
   ) => {
     console.log(start?.format("YYYY-MM-DD"));
     console.log(end?.format("YYYY-MM-DD"));
-    axios
-      .post(
+    axiosClient
+      .get(
         "/api/receipt/getReceiptList",
         {
-          type,
-          searchText,
-          start_date: start?.format("YYYY-MM-DD"),
-          end_date: end?.format("YYYY-MM-DD"),
-        },
-        {
+          params: {
+            type,
+            searchText,
+            start_date: start?.format("YYYY-MM-DD"),
+            end_date: end?.format("YYYY-MM-DD"),
+          },
           headers: {
             "Content-Type": "application/json",
           },
         }
       )
       .then((response) => {
-        callback(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
+        callback(response.data || []);
       });
   };
 
@@ -121,7 +113,7 @@ const Reception = () => {
   });
 
   const loadDailyReservationList = () => {
-    axios.get(Reservation_API_BASE_URL)
+    axiosClient.get(Reservation_API_BASE_URL)
       .then((response) => {
         setReservation(response.data);
       })

@@ -1,8 +1,7 @@
 // import * as React from 'react';
 import Box from '@mui/material/Box';
-import axios from "axios";
 import React, { useEffect, useState } from 'react';
-
+import axiosClient from './../../login/AxiosClient';
 
 const Treatment = ({user}) => {
     let now = new Date();
@@ -13,7 +12,7 @@ const Treatment = ({user}) => {
     const [treatmentInfo, setTreatmentInfo] = useState({});
 
     useEffect(() => {
-        axios.get('/api/receipt/getTreatment') // 시험용(map으로 받아오는 중)
+        axiosClient.get('/api/receipt/getTreatment') // 시험용(map으로 받아오는 중)
             .then(response => {
                 setTreatmentInfo(response.data);
             })

@@ -16,6 +16,7 @@ import ChatList from "../../component/chat/ChatList";
 import MailIcon from "@mui/icons-material/Mail";
 import LogoSection from "../../template/layout/LogoSection";
 import ChatSection from "../../component/chat/ChatSection";
+import UserInfoSection from "../../component/login/UserInfoSection";
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
@@ -85,7 +86,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
-
+      <UserInfoSection />
       <ChatSection />
     </>
   );
