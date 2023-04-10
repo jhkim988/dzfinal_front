@@ -2,7 +2,7 @@ import { Button, MenuItem, Paper, TextField, Grid, Hidden, Tooltip } from '@mui/
 import { Box } from '@mui/system';
 import React from 'react';
 import axiosClient from './../login/AxiosClient';
-import { IconButton } from '@material-ui/core';
+import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 const doctors = [
     {

@@ -53,7 +53,7 @@ const menuItems = {
       url: "/view",
       icon: icons.IconDeviceTv,
       breadcrumbs: false,
-    },    
+    },
     {
       id: "big_did",
       title: "BIG DID",
@@ -91,7 +91,7 @@ const menuItems = {
       title: "비밀번호 변경",
       type: "item",
       url: "/pwdchange",
-      icon: icons.IconLock,
+      icon: icons.IconUsers,
       breadcrumbs: false,
     },
   ],

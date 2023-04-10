@@ -115,7 +115,7 @@ const Reception = () => {
   const loadDailyReservationList = () => {
     axiosClient.get(Reservation_API_BASE_URL)
       .then((response) => {
-        setReservation(response.data);
+        setReservation(response.data || []);
       })
       .catch((error) => {
         console.error(error);
