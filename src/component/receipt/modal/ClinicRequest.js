@@ -3,19 +3,28 @@ import axios from "axios";
 import React, { useRef, useEffect, useState } from 'react';
 
 const ClinicRequest = ({user}, ref) => {
+
+    const [disease, setDisease] = useState([]);
+    useEffect(() => {
+        axios.get(`/api/receipt/getDisease/${user.reception_id}`)
+            .then(response => {
+                setDisease(response.data);
+            })
+    }, [])
+
+    const [drug, setDrug] = useState([]);
+    useEffect(() => {
+        axios.get(`/api/receipt/getDrug/${user.reception_id}`)
+            .then(response => {
+                setDrug(response.data);
+            })
+    }, [])
+
+    
     let now = new Date();
     let year = now.getFullYear();
     let todayMonth = now.getMonth();
     let todayDate = now.getDate();
-
-    const [clinicRequest, setClinicRequest] = useState({});
-
-    useEffect(() => {
-        axios.get('/api/receipt/getClinicRequest')
-            .then(response => {
-                setClinicRequest(response.data);
-            })
-    }, {})
 
     let doctor = "";
     if (user.doctor === 1) {
@@ -53,23 +62,29 @@ const ClinicRequest = ({user}, ref) => {
                     내원날짜: ~ <br/>
 
                     환자이름: {user.patient_name}<br/>
+                    환자번호: {user.patient_id}<br/>
                     성별: {gender}<br/>
                     주민등록번호(앞/뒤): {user.front_registration_number}-{user.back_registration_number}<br/>
                     주소: {user.address}&nbsp;{user.detail_address}<br/>
                     
-                    {/* <div>
-                        <ul>
-                            {clinicRequest.map((list) => (
-                                <li key={list.disease_code}>{list.disease_name}</li>
-                            ))}
-                        </ul>
-                    </div> */}
+                    {disease.map((item, index) => (
+                        <div key={index}>
+                            질병코드: {item.disease_code}<br/>
+                            질병명: {item.disease_name}<br/>
+                        </div>
+                    ))}
 
+                    {drug.map((item, index) => (
+                        <div key={index}>
+                            약품코드: {item.drug_code}<br/>
+                            약품명: {item.drug_name}<br/>
+                        </div>
+                    ))}
 
                     출력날짜: {year}-{todayMonth+1}-{todayDate}<br/>
                     담당의사: {doctor}<br/>
 
-                    내용: 상기 환자 분은 내원 직전 {clinicRequest.disease_name}로 본원 내원하신 분으로 고진선처 바랍니다.<br/>
+                    내용: 상기 환자 분은 내원 직전  로 본원 내원하신 분으로 고진선처 바랍니다.<br/>
     
                     주 : 1. 이 진료의뢰서는 1차진료후 2차진료를 받고자 하는 경우 1차 진료담당의사로부터 요양급여 기준에 따라 무상 교부됩니다.<br/>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. 의사의 발급일부터 7일(공휴일 제외)이내에 사용하여야 합니다.

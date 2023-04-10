@@ -5,19 +5,29 @@ import React, { useEffect, useState } from 'react';
 
 
 const Treatment = ({user}) => {
+
+    const [disease, setDisease] = useState([]);
+    useEffect(() => {
+        axios.get(`/api/receipt/getDisease/${user.reception_id}`)
+            .then(response => {
+                setDisease(response.data);
+            })
+    }, [])
+
+    const [drug, setDrug] = useState([]);
+    useEffect(() => {
+        axios.get(`/api/receipt/getDrug/${user.reception_id}`)
+            .then(response => {
+                setDrug(response.data);
+            })
+    }, [])
+
+
+
     let now = new Date();
     let year = now.getFullYear();
     let todayMonth = now.getMonth();
     let todayDate = now.getDate();
-
-    const [treatmentInfo, setTreatmentInfo] = useState({});
-
-    useEffect(() => {
-        axios.get('/api/receipt/getTreatment') // 시험용(map으로 받아오는 중)
-            .then(response => {
-                setTreatmentInfo(response.data);
-            })
-    }, {})
 
     let doctor = "";
     if (user.doctor === 1) {
@@ -53,10 +63,21 @@ const Treatment = ({user}) => {
                 환자이름: {user.patient_name}<br/>
                 성별: {gender}<br/>
                 주민등록번호(앞/뒤): {user.front_registration_number}-{user.back_registration_number}<br/>
-                질병코드: {treatmentInfo.disease_code}<br/>
-                질병명: {treatmentInfo.disease_name}<br/>
-                약품코드: {treatmentInfo.drug_code}<br/>
-                약품명: {treatmentInfo.drug_name}<br/>
+
+                {disease.map((item, index) => (
+                    <div key={index}>
+                        질병코드: {item.disease_code}<br/>
+                        질병명: {item.disease_name}<br/>
+                    </div>
+                ))}
+
+                {drug.map((item, index) => (
+                    <div key={index}>
+                        약품코드: {item.drug_code}<br/>
+                        약품명: {item.drug_name}<br/>
+                    </div>
+                ))}
+
                 출력날짜: {year}-{todayMonth+1}-{todayDate}<br/>
                 담당의사: {doctor}<br/>
 

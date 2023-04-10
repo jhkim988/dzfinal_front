@@ -15,6 +15,7 @@ function Receipt({ receiptData }) {
     receipt_id: 0,      // 데이터 선택 후 수정을 하기 위해 추가
     reception_id: 0,
     state: "",
+    patient_id: 0,
     patient_name: "",
     insurance: 0,
     treatment: 0,
@@ -36,6 +37,7 @@ function Receipt({ receiptData }) {
         receipt_id: receiptData.receipt?.receipt_id,
         reception_id: receiptData.reception.reception_id,
         state: receiptData.reception.state,
+        patient_id: receiptData.patient.patient_id,
         patient_name: receiptData.patient.patient_name,
         insurance: receiptData.patient.insuarance,
         treatment: receiptData.clinic?.treatment,

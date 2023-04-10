@@ -99,21 +99,21 @@ const Reception = () => {
       });
   };
 
-  const [selectedOneReceipt, setSelectedOneReceipt] = useState({
-    receipt_id: 0,      // 데이터 선택 후 수정을 하기 위해 추가
-    reception_id: 0,
-    patient_name: "",
-    insurance: 0,
-    treatment: 0,
-    doctor: 0,
-    gender: 0,
-    front_registration_number: "",
-    back_registration_number: "",
-    address: "",
-    detail_address: "",
-    clinic_request: 0,
-    has_prescription: 0,
-  });
+  // const [selectedOneReceipt, setSelectedOneReceipt] = useState({
+  //   receipt_id: 0,      // 데이터 선택 후 수정을 하기 위해 추가
+  //   reception_id: 0,
+  //   patient_name: "",
+  //   insurance: 0,
+  //   treatment: 0,
+  //   doctor: 0,
+  //   gender: 0,
+  //   front_registration_number: "",
+  //   back_registration_number: "",
+  //   address: "",
+  //   detail_address: "",
+  //   clinic_request: 0,
+  //   has_prescription: 0,
+  // });
 
 
   return (
