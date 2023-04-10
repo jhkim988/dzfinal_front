@@ -51,7 +51,7 @@ const menuItems = {
       url: "/view",
       icon: icons.IconDeviceTv,
       breadcrumbs: false,
-    },    
+    },
     {
       id: "big_did",
       title: "BIG DID",
@@ -81,6 +81,14 @@ const menuItems = {
       title: "로그아웃",
       type: "item",
       url: "/logout",
+      icon: icons.IconUsers,
+      breadcrumbs: false,
+    },
+    {
+      id: "pwdchange",
+      title: "비밀번호 변경",
+      type: "item",
+      url: "/pwdchange",
       icon: icons.IconUsers,
       breadcrumbs: false,
     },
