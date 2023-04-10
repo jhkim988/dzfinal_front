@@ -134,6 +134,7 @@ const Prescription = ({
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginRight: 1 }}
           />
           <TextField
             size="small"
@@ -146,6 +147,7 @@ const Prescription = ({
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginLeft: 1 }}
           />
         </Box>
         <Box
