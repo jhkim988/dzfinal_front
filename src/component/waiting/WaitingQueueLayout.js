@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useMemo,
   useRef,
-  useContext
+  useContext,
 } from "react";
 import { Grid, Paper } from "@mui/material";
 import axiosClient from "./../login/AxiosClient";
@@ -12,7 +12,15 @@ import CallButtonSet from "./CallButtonSet";
 import WaitingQueue from "./WaitingQueue";
 import { MqttContext } from "./MqttContextProvider";
 
-const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback, shouldAutoCall, findNextAutoCall, shouldDisableCallButton }) => {
+const WaitingQueueLayout = ({
+  initPanel,
+  nextState,
+  clickRowCallback,
+  shouldAutoCall,
+  findNextAutoCall,
+  shouldDisableCallButton,
+}) => {
+  // const client = useRef();
   const client = useContext(MqttContext);
 
   const [data, setData] = useState([]);
@@ -62,7 +70,7 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback, shouldAuto
         if (next) {
           setSelected(`${next}`);
           clickRowCallback && clickRowCallback(next);
-          callPatient(next.reception_id);  
+          callPatient(next.reception_id);
         }
       }
     },
@@ -71,12 +79,12 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback, shouldAuto
         prev.filter((d) => d.reception_id !== payload.data.reception_id)
       );
     },
-  }
+  };
 
   const mqttEventListener = useCallback((topic, payload, packet) => {
-    payload = JSON.parse(payload);
-    console.log("message", payload);
     if (topic === "waiting") {
+      payload = JSON.parse(payload);
+      console.log("message", payload);
       mqttWaitingController[payload.method](payload);
     }
   }, []);
@@ -88,14 +96,16 @@ const WaitingQueueLayout = ({ initPanel, nextState, clickRowCallback, shouldAuto
   }, []);
 
   const onRowClick = (e) => {
-    const selectData = data.find(d => `${d.reception_id}` === `${e.currentTarget.dataset.reception_id}`);
+    const selectData = data.find(
+      (d) => `${d.reception_id}` === `${e.currentTarget.dataset.reception_id}`
+    );
     setSelected(selectData);
     clickRowCallback && clickRowCallback(selectData);
   };
 
   useEffect(() => {
     axiosClient.get("/api/reception/today").then(({ data }) => {
-      setData(data);
+      setData(data || []);
     });
   }, []);
 
