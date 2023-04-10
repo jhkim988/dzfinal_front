@@ -22,8 +22,7 @@ const PopupPostCode = (props) => {
         console.log(fullAddress)
         console.log(data.zonecode)
         props.onClose()
-        props.setcompany({
-            ...props.company,
+        props.setCompany({
             address: fullAddress,
             zip_code: zonecode
         })

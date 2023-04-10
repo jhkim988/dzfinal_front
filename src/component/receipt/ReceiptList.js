@@ -1,6 +1,19 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
-import { Select, Box, FormControl, Button, Pagination, InputLabel, MenuItem, Paper, TextField } from '@mui/material';
+import { 
+  Select, 
+  Box, 
+  FormControl, 
+  Button, 
+  Pagination, 
+  InputLabel, 
+  MenuItem, 
+  Paper, 
+  TextField,
+  DeleteIcon,
+  IconButton,
+  Tooltip,
+  } from '@mui/material';
 import {
   Table,
   TableBody,
@@ -15,12 +28,13 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
 import axios from 'axios';
+import "./style.css";
 import useEnhancedEffect from '@mui/material/utils/useEnhancedEffect';
 
 
 
 
-const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) => {
+const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
 
@@ -37,9 +51,8 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
   };
 
   useEffect(() => {
-    console.log(patient_name);
-    receiptRecordSearch({ type: "patient_name", searchText: patient_name }, setReceiptList);
-  }, [patient_name]);
+    receiptRecordSearch({ type: "patient_id", searchText: patient_id }, setReceiptList);
+  }, [patient_id]);
 
   const getReceiptList = useCallback(() => {
     receiptRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText }, setReceiptList);
@@ -77,6 +90,16 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
 
 
 
+  // useEffect(() => {
+  //   axios.get(`/api/receipt/getReceiptList?page=${page}`)
+  //   .then(response => {
+  //     setReceiptList(response.data.content);
+  //     setTotalPages(response.data.totalPages);
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
+  // }, []);
 
 
   // 수납내역목록에서 데이터 선택하면 데이터가져오기
@@ -100,16 +123,16 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
     setPage(value);
   }
 
-  useEffect(() => {
-    axios.get(`/api/receipt/getReceiptList?page=${page}`)
-      .then(response => {
-        setReceiptList(response.data.content);
-        setTotalPages(response.data.totalPages);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [page]);
+  // useEffect(() => {
+  //   axios.get(`/api/receipt/getReceiptList?page=${page}`)
+  //     .then(response => {
+  //       setReceiptList(response.data.content);
+  //       setTotalPages(response.data.totalPages);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // }, [page]);
 
   return (
     <>
@@ -121,7 +144,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
             <Select
               value={type}
               onChange={handleTypeChange}
-              size="medium"
+              size="small"
             >
               <MenuItem value={"patient_name"}>환자이름</MenuItem>
               <MenuItem value={"reception_id"}>접수번호</MenuItem>
@@ -136,22 +159,40 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
               localeText={{ start: "기간 시작", end: "기간 끝" }}
               format="YYYY-MM-DD"
               onToggle={handleToggle}
-              renderInput={(startProps, endProps) => (
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}>
-                  <TextField {...startProps} variant="outlined" sx={{ height: "20px" }} />
-                  <Box sx={{ mx: 1 }}>~</Box>
-                  <TextField {...endProps} variant="outlined" size="small" />
-                </Box>
-              )}
+              slots={{
+                startInput: {
+                  inputProps: {
+                    style: {
+                      height: "20px",
+                    },
+                  },
+                  variant: "outlined",
+                },
+                endInput: {
+                  inputProps: {
+                    style: {
+                      height: "20px",
+                    },
+                  },
+                  variant: "outlined",
+                },
+              }}
+              // renderInput={(startProps, endProps) => (
+              //   <Box sx={{
+              //     display: "flex",
+              //     alignItems: "center",
+              //   }}>
+              //     <TextField {...startProps} variant="outlined" sx={{ height: "20px" }} />
+              //     <Box sx={{ mx: 1 }}>~</Box>
+              //     <TextField {...endProps} variant="outlined" size="small" />
+              //   </Box>
+              // )}
             />
           </LocalizationProvider>
           <TextField
             label="검색어"
-            size="medium"
-            sx={{ alignSelf: "center" }}
+            size="small"
+            sx={{ alignSelf: "center", paddingLeft:"10px", paddingRight: "10px", }}
             value={searchText}
             onChange={handleSearchTextChange}
           />
@@ -194,7 +235,9 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_name }) =>
                         {receiptList[idx].disease_count > 1 ? `${receiptList[idx].disease_name} 외 ${receiptList[idx].disease_count - 1} 건` : `${receiptList[idx].disease_name}`}
                       </TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
-                        {receiptList[idx].prescription_count > 1 ? `${receiptList[idx].drug_name} 외 ${receiptList[idx].prescription_count - 1} 건` : `${receiptList[idx].drug_name}`}
+                        {/* <Tooltip> */}
+                          {receiptList[idx].prescription_count > 1 ? `${receiptList[idx].drug_name} 외 ${receiptList[idx].prescription_count - 1} 건` : `${receiptList[idx].drug_name}`}
+                        {/* </Tooltip> */}
                       </TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].total_amount}</TableCell>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].mode}</TableCell>

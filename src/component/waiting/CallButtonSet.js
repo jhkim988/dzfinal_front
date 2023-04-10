@@ -28,8 +28,8 @@ const CallButtonSet = ({
           disabled={disabledCallButton}
           sx={{ width: "100%", margin: 1 }}
           onClick={(e) => {
-            if (selected === null) return;
-            callPatient(selected);
+            if (!selected) return;
+            callPatient(selected.reception_id);
           }}
         >
           호출

@@ -4,7 +4,8 @@ import { lazy } from 'react';
 import Loadable from '../ui-component/Loadable';
 import MinimalLayout from '../layout/MinimalLayout';
 
-const DID = Loadable(lazy(() => import('../../component/did/DID')));
+const MultiDID = Loadable(lazy(() => import('../../component/did/MultiDID')));
+const BigDID = Loadable(lazy(() => import('../../component/did/BigDID')));
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 
@@ -14,8 +15,12 @@ const DidRoutes = {
     children: [
         {
             path: '/view',
-            element: <DID />
-        }
+            element: <MultiDID />
+        },
+        {
+            path: '/big_did',
+            element: <BigDID />
+        },
     ]
 };
 

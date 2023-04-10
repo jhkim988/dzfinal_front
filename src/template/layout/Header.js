@@ -1,11 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
-import { Avatar, Box, Button, ButtonBase, Dialog, TextField } from "@mui/material";
-import PersonPinIcon from '@mui/icons-material/PersonPin';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import {
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  ButtonBase,
+  Dialog,
+  TextField,
+} from "@mui/material";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
 import ChatList from "../../component/chat/ChatList";
+import MailIcon from "@mui/icons-material/Mail";
+import LogoSection from "../../template/layout/LogoSection";
+import ChatSection from "../../component/chat/ChatSection";
+import UserInfoSection from "../../component/login/UserInfoSection";
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
@@ -18,7 +29,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
   const closeModal = () => {
     setOpen(false);
-  }
+  };
 
   const handleToggleIcon = () => {
     setToggleIcon(!toggleIcon);
@@ -44,7 +55,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
           component="span"
           sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
         >
-          <Box>DREAM_EULJI</Box>
+          <LogoSection />
         </Box>
       </Box>
 
@@ -75,29 +86,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
-      <Box>
-        {/* <Button variant="contained" onClick={openModal}>
-          채팅
-        </Button>
-        <Dialog open={open} onClose={closeModal}>
-          <ChatList onRequestClose={closeModal}>
-          </ChatList>
-        </Dialog>
-        {/* {<ChatList isOpen={modalIsOpen} onRequestClose={closeModal}>
-          <button onClick={closeModal}>Close Modal</button>
-        </ChatList>} */}
-      </Box>
-      <Box>
-        <AccountCircleRoundedIcon
-          style={{ height: 50 }}
-        ></AccountCircleRoundedIcon>
-        <TextField
-          id="outlined-basic"
-          label="프로필"
-          name="profile"
-          variant="outlined"
-        />
-      </Box>
+      <UserInfoSection />
+      <ChatSection />
     </>
   );
 };

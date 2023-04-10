@@ -1,5 +1,4 @@
 import { Grid, Paper } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import DrugTaking from "./Drug_Taking";
 import MedicalInfo from "./MedicalInfo";
@@ -9,6 +8,8 @@ import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
+import axiosClient from './../login/AxiosClient';
+import AccessAllow from './../login/AccessAllow';
 
 const ClinicView = () => {
   const [reception, setReception] = useState();
@@ -36,7 +37,7 @@ const ClinicView = () => {
 
   useEffect(() => {
     reception &&
-      axios
+      axiosClient
         .get(`/api/clinic/${reception}`)
         .then((response) => {
           setPatient(response.data);
@@ -47,11 +48,16 @@ const ClinicView = () => {
         .catch((error) => {
           console.log(error);
         });
+        setDiagnosis([]);
+        setPrescription([]);
+        setSymptom("");
+        setTreatment(false);
+        setClinic_request(false);
   }, [reception]);
 
   useEffect(() => {
     patient?.patient_id &&
-      axios
+      axiosClient
         .get(`/api/clinic/mri/${patient.patient_id}/${pagination.currentPage}`)
         .then((response) => {
           setMri(response.data.mri);
@@ -68,7 +74,7 @@ const ClinicView = () => {
       setMedicalInfo({});
 
       if (!type) return alert("분류를 정해주세요");
-      axios
+      axiosClient
         .get(`/api/clinic/mri/${patient_id}/${pagination.currentPage}`)
         .then((response) => {
           setMri(response.data);
@@ -96,6 +102,9 @@ const ClinicView = () => {
               patient_id
             );
           }}
+          shouldAutoCall={({ data: { state, doctor_id }}) => (state === "수납대기" && doctor_id === 1)}
+          findNextAutoCall={({ state, doctor_id }) => state === "진료대기" && doctor_id === 1}
+          shouldDisableCallButton={({ state, doctor_id }) => state !== "진료대기" || doctor_id !== 1}
         />
       </Grid>
       <Grid item xs={5}>

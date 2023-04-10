@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useState } from 'react';
 import ReactToPrint from "react-to-print";
-import axios from "axios";
+import axiosClient from './../login/AxiosClient';
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Treatment from "./modal/Treatment";
@@ -12,18 +12,19 @@ import {
   MenuItem,
   FormControl,
   Select,
-  Input,
+  OutlinedInput,
 } from "@mui/material";
 
-export default function BasicSelect({ user }) {
-  const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance } = user;
+export default function BasicSelect({user}) {
+  const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
   const [showCardForm, setShowCardForm] = useState(false); // 카드 결제 폼을 보여줄지 여부를 저장할 상태 값을 추가합니다.
   const [isCashPayment, setIsCashPayment] = useState(false); // 현금결제 상태 값을 추가합니다.
   const [isCardPayment, setIsCardPayment] = useState(false);
   const [modifyReceipt, setModifyReceipt] = useState(false);
 
-
-  
+  const handleModifyReceipt = () => {
+    setModifyReceipt(true);
+  };
 
   const handleCardPayment = () => {
     setIsCashPayment(false); // 카드결제 버튼을 클릭하면 현금결제 상태 값을 false로 변경합니다.
@@ -40,14 +41,19 @@ export default function BasicSelect({ user }) {
   // 현금결제
   const handleCashPayment = async () => {
     try {
-      const response = await axios.post(
-        "/api/receipt/insertReceipt",
+      let url = "/api/receipt/insertReceipt";
+      if (modifyReceipt && user.mode !== "현금") {
+        url = "/api/receipt/updateReceipt";
+      }
+      const response = await axiosClient.post(
+        url,
         {
+          receipt_id: user.receipt_id,
           reception_id: user.reception_id,
           ratio: InsuranceRatio,
           total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
-          card_name: "-",
-          card_number: "-",
+          card_name: "",
+          card_number: "",
           mode: "현금",
           creator: 1,
         },
@@ -57,8 +63,13 @@ export default function BasicSelect({ user }) {
           },
         }
       );
-      alert("현금결제가 완료되었습니다.");
-      console.log("Payment successful", response.data);
+      if (modifyReceipt) {
+        alert("수납정보가 변경되었습니다.");
+        console.log("Modify Payment successful", response.data);
+      } else {
+        alert("현금결제가 완료되었습니다.");
+        console.log("Payment successful", response.data);
+      }
       setIsCardPayment(true);
       setIsReceipt(true);
     } catch (error) {
@@ -68,9 +79,18 @@ export default function BasicSelect({ user }) {
 
   // select 값 받아오기
   const [card_name, setCard_name] = React.useState("");
-  const handleChange = (event) => {
+  const handleCardNameChange = (event) => {
     setCard_name(event.target.value);
   };
+
+  // const handleChange = (event) => {
+  //   if (modifyReceipt) {
+  //     setCard_name(editCardValue);
+  //     setEditCardValue(event.target.value);
+  //   } else {
+  //     setCard_name(event.target.value);
+  //   }
+  // };
   const ariaLabel = { "aria-label": "description" };
 
   const [card_number, setCard_number] = useState("");
@@ -131,11 +151,36 @@ export default function BasicSelect({ user }) {
   // 카드결제
   // axios로 데이터 삽입하기
   const handleReceiptInsert = async () => {
-    if (card_name && card_number) {
-      try {
-        const response = await axios.post(
-          "/api/receipt/insertReceipt",
+    try {
+      const insertUrl = "/api/receipt/insertReceipt";
+      const updateUrl = "/api/receipt/updateReceipt";
+  
+      if (modifyReceipt) {
+        const response = await axiosClient.post(
+          updateUrl,
           {
+            receipt_id: user.receipt_id,
+            reception_id: user.reception_id,
+            ratio: InsuranceRatio,
+            total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
+            card_name: card_name,
+            card_number: card_number,
+            mode: "카드",
+            creator: 1,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        alert("수납정보가 변경되었습니다.");
+        console.log("Modify Payment successful", response.data);
+      } else {
+        const response = await axiosClient.post(
+          insertUrl,
+          {
+            receipt_id: user.receipt_id,
             reception_id: user.reception_id,
             ratio: InsuranceRatio,
             total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
@@ -152,12 +197,77 @@ export default function BasicSelect({ user }) {
         );
         alert("카드결제가 완료되었습니다.");
         console.log("Payment successful", response.data);
-        setIsReceipt(true);
-      } catch (error) {
-        console.log(error);
       }
+      setIsCardPayment(true);
+      setIsReceipt(true);
+    } catch (error) {
+      console.log(error);
     }
   };
+
+
+
+  // const handleReceiptInsert = async () => {
+  //   try {
+  //     const insertUrl = "/api/receipt/insertReceipt";
+  //     const updateUrl = "/api/receipt/updateReceipt";
+  
+  //     if (modifyReceipt && user.mode !== "카드") {
+  //       url = "/api/receipt/updateReceipt";
+  //     }
+  //     const response = await axios.post(
+  //       url,
+  //       {
+  //         receipt_id: user.receipt_id,
+  //         reception_id: user.reception_id,
+  //         ratio: InsuranceRatio,
+  //         total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
+  //         card_name: card_name,
+  //         card_number: card_number,
+  //         mode: "카드",
+  //         creator: 1,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       alert("수납정보가 변경되었습니다.");
+  //       console.log("Modify Payment successful", response.data);
+  //     } else {
+  //       const response = await axios.post(
+  //         insertUrl,
+  //         {
+  //           receipt_id: user.receipt_id,
+  //           reception_id: user.reception_id,
+  //           ratio: InsuranceRatio,
+  //           total_amount: (ClinicPrice + TreatmentPrice) * InsuranceRatio,
+  //           card_name: card_name,
+  //           card_number: card_number,
+  //           mode: "카드",
+  //           creator: 1,
+  //         },
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       alert("카드결제가 완료되었습니다.");
+  //       console.log("Payment successful", response.data);
+  //     }
+  //     setIsCardPayment(true);
+  //     setIsReceipt(true);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
 
   const style = {
     position: "absolute",
@@ -173,7 +283,8 @@ export default function BasicSelect({ user }) {
     p: 4,
   };
   const [treatmentModalOpen, setTreatmentModalOpen] = React.useState(false);
-  const [clinicRequestModalOpen, setClinicRequestModalOpen] = React.useState(false);
+  const [clinicRequestModalOpen, setClinicRequestModalOpen] =
+    React.useState(false);
 
   // 처방전 모달
   const handleTreatmentModalOpen = () => {
@@ -197,18 +308,24 @@ export default function BasicSelect({ user }) {
         <Button
           sx={{ fontSize: "12px" }}
           variant="contained"
+          disabled={
+            !modifyReceipt &&
+            (user.state === "수납중" || user.state === "진료대기")
+          }
           onClick={handleCardPayment}
         >
-          {" "}
-          카드결제{" "}
+          카드결제
         </Button>
         <Button
           sx={{ fontSize: "12px" }}
           variant="contained"
           onClick={handleCashPayment}
+          disabled={
+            !modifyReceipt &&
+            (user.state === "진료중" || user.state === "진료대기")
+          }
         >
-          {" "}
-          현금결제{" "}
+          현금결제
         </Button>
 
         <Button
@@ -217,7 +334,6 @@ export default function BasicSelect({ user }) {
             fontSize: "12px",
           }}
           variant="contained"
-          href="#contained-buttons"
           disabled={user.treatment !== 0 && !isReceipt}
           onClick={handleTreatmentModalOpen}
         >
@@ -233,7 +349,6 @@ export default function BasicSelect({ user }) {
         <Button
           sx={{ backgroundColor: "green", fontSize: "12px" }}
           variant="contained"
-          href="#contained-buttons"
           disabled={user.clinic_request !== 0 && !isReceipt}
           onClick={handleClinicRequestModalOpen}
         >
@@ -254,22 +369,21 @@ export default function BasicSelect({ user }) {
       <br />
 
       <div style={{ height: 180 }}>
-        카드사
-        <br />
         <Box disabled>
           <Box sx={{ height: 50, maxWidth: 150 }}>
-            <FormControl fullWidth>
-              <InputLabel id="cardName-label">카드사</InputLabel>
+          <FormControl fullWidth>
+            <InputLabel id="cardName-label">카드사</InputLabel>
               <Select
                 labelId="cardName-label"
                 id="card_name"
-                value={user.card_name}
+                value={user.card_name || ""}
                 label="카드사"
                 size="small"
                 margin="dense"
-                onChange={handleChange}
+                onChange={handleCardNameChange}
                 disabled={!showCardForm}
               >
+                <MenuItem value={null} disabled >결제하실 카드를 선택해주세요</MenuItem>
                 <MenuItem value={"현대카드"}>현대카드</MenuItem>
                 <MenuItem value={"삼성카드"}>삼성카드</MenuItem>
                 <MenuItem value={"신한카드"}>신한카드</MenuItem>
@@ -278,56 +392,68 @@ export default function BasicSelect({ user }) {
               </Select>
             </FormControl>
           </Box>
-          카드번호
           <Box
             component="form"
             sx={{
-              "& > :not(style)": { m: 0.5, width: 70 },
+              "& > :not(style)": { marginRight: 1, width: "22.5%" },
+              ".css-1qb9p1k-MuiInputBase-input-MuiOutlinedInput-input": { marginLeft: 1 },
             }}
             noValidate
             autoComplete="off"
           >
-            <Input
-              onChange={handleCardNumber}
-              disabled={!showCardForm}
-              type="number"
-              id="card_number1"
-              name="card_number1"
-              value={user.card_number}
-              max={4}
-              placeholder="카드번호1"
-              inputProps={ariaLabel}
-            />
-            <Input
-              onChange={handleCardNumber}
-              disabled={!showCardForm}
-              type={hidePassword ? "password" : "text"}
-              id="card_number2"
-              name="card_number2"
-              placeholder="카드번호2"
-              inputProps={ariaLabel}
-            />
-            <Input
-              onChange={handleCardNumber}
-              disabled={!showCardForm}
-              type={hidePassword ? "password" : "text"}
-              id="card_number3"
-              name="card_number3"
-              placeholder="카드번호3"
-              inputProps={ariaLabel}
-            />
-            <Input
-              onChange={handleCardNumber}
-              disabled={!showCardForm}
-              type="number"
-              id="card_number4"
-              name="card_number4"
-              placeholder="카드번호4"
-              inputProps={ariaLabel}
-            />
+            <FormControl>
+              <InputLabel shrink={true} variant="outlined" sx={{ backgroundColor: "white" }}>카드번호</InputLabel>
+              <OutlinedInput
+                onChange={handleCardNumber}
+                disabled={!showCardForm}
+                type="number"
+                id="card_number1"
+                name="card_number1"
+                value={user.card_number ? user.card_number.substring(0, 4) : ""}
+                max={4}
+                inputProps={ariaLabel}
+              />
+              { console.log(user.card_number)}
+            </FormControl>
+            <FormControl>
+              <InputLabel></InputLabel>
+              <OutlinedInput
+                onChange={handleCardNumber}
+                disabled={!showCardForm}
+                type={hidePassword ? "password" : "text"}
+                id="card_number2"
+                name="card_number2"
+                value={user.card_number ? user.card_number.substring(4, 8) : ""}
+                inputProps={ariaLabel}
+              />
+            </FormControl>
+            <FormControl>
+              <InputLabel></InputLabel>
+              <OutlinedInput
+                onChange={handleCardNumber}
+                disabled={!showCardForm}
+                type={hidePassword ? "password" : "text"}
+                id="card_number3"
+                name="card_number3"
+                value={user.card_number ? user.card_number.substring(8, 12) : ""}
+                inputProps={ariaLabel}
+              />
+            </FormControl>
+            <FormControl>
+              <InputLabel></InputLabel>
+              <OutlinedInput
+                onChange={handleCardNumber}
+                disabled={!showCardForm}
+                type="number"
+                id="card_number4"
+                name="card_number4"
+                value={user.card_number ? user.card_number.substring(12, 16) : ""}
+                inputProps={ariaLabel}
+              />
+            </FormControl>
           </Box>
           <br />
-          <Stack spacing={2} direction="row" sx={{display: 'flex'}}>
+          <Stack spacing={2} direction="row" sx={{ display: "flex" }}>
             <Button
               disabled={!showCardForm}
               variant="contained"
@@ -335,6 +461,7 @@ export default function BasicSelect({ user }) {
             >
               {user.receipt_id > 0 ? "수정" : "확인"}
             </Button>
+            
             <Button
               disabled={!showCardForm}
               type="reset"
@@ -345,24 +472,34 @@ export default function BasicSelect({ user }) {
                 setCard_number("");
                 setCard_number("");
                 setCard_number("");
+                
               }}
             >
               취소
             </Button>
+
             <Button
-              sx={{ backgroundColor: "green", fontSize: "12px", marginLeft: "auto" }}
+              sx={{
+                backgroundColor: "green",
+                fontSize: "12px",
+                marginLeft: "auto",
+              }}
               variant="contained"
-              disabled={user.receipt_id < 0}
-              // disabled={!showCardForm}
+              disabled={user.state !== "수납완료"}
+              onClick={handleModifyReceipt}
             >
               수정
             </Button>
+
           </Stack>
         </Box>
-        수납번호: {user.receipt_id}<br/>
-        카드이름: {user.card_name}<br/>
+
+        카드이름: {user.card_name}
+        <br />
         카드번호: {user.card_number}
-        <div></div>
+        <div>
+
+        </div>
       </div>
     </>
   );
