@@ -8,8 +8,8 @@ import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
-import axiosClient from './../login/AxiosClient';
-import AccessAllow from './../login/AccessAllow';
+import axiosClient from "./../login/AxiosClient";
+import AccessAllow from "./../login/AccessAllow";
 
 const ClinicView = () => {
   const [reception, setReception] = useState();
@@ -55,19 +55,6 @@ const ClinicView = () => {
     setClinic_request(false);
   }, [reception]);
 
-  useEffect(() => {
-    patient?.patient_id &&
-      axiosClient
-        .get(`/api/clinic/mri/${patient.patient_id}/${pagination.currentPage}`)
-        .then((response) => {
-          setMri(response.data.mri);
-          setPagination(response.data.pagination);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-  }, [patient.patient_id]);
-
   const clickMedicalRecordInquiry = useCallback(
     (type, formattedDates, keyword, patient_id) => {
       setSearchMode(1);
@@ -77,14 +64,14 @@ const ClinicView = () => {
       axiosClient
         .get(`/api/clinic/mri/${patient_id}/${pagination.currentPage}`)
         .then((response) => {
-          setMri(response.data);
+          setMri(response.data.mri);
           setPagination(response.data.pagination);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    []
+    [pagination.currentPage]
   );
 
   return (
