@@ -19,7 +19,7 @@ const doctors = [
 ];
 
 const examinationTextField = {
-
+    maringTop: "2px",
     '& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': {
         padding: "0.5em", paddingLeft: "10px"
     }
@@ -175,29 +175,22 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
         const bmi = weight / (heightInMeters * heightInMeters);
         return bmi.toFixed(1);
     }
-
     return (
         <Paper elevation={1} sx={{ padding: 2, height: "15.3vh" }}>
             {receptionData != null && patient_id == null && (
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={10}>
-                                <div style={{ width: "100%", height: "10px", marginBottom: "10px", marginTop: "2px" }}>
-                                    <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
-                                        접수 등록/수정&nbsp;&nbsp;[환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]
-                                    </h5>
-                                </div>
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Tooltip title="접수 취소">
-                                    <IconButton onClick={deleteReception}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                    <Box sx={{ marginTop: "2px", display: "flex", justifyContent: "space-between" }} style={{ width: "100%", height: "20px", marginBottom: "10px", marginTop: "2px", }}>
+                        <div>
+                            <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
+                                접수 등록/수정&nbsp;&nbsp;[환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]
+                            </h5>
+                        </div>
+                        <Tooltip title="접수 취소">
+                            <IconButton onClick={deleteReception}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
                             {/* <TextField 
@@ -346,31 +339,27 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                         </Grid>
                     </Grid>
                 </Grid>
-            )}
+            )
+            }
 
-            {receptionData != null && patient_id != null && (
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={10}>
-                                <div style={{ width: "100%", height: "10px", marginBottom: "10px", marginTop: "2px" }}>
-                                    <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
-                                        접수 등록/수정&nbsp;&nbsp;[환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]
-                                    </h5>
-                                </div>
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Tooltip title="접수 취소">
-                                    <IconButton onClick={deleteReception}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid container spacing={2}>
-                            {/* <TestField
+            {
+                receptionData != null && patient_id != null && (
+                    <Grid container spacing={2}>
+                        <Box sx={{ marginTop: "2px", display: "flex", justifyContent: "space-between" }} style={{ width: "100%", height: "20px", marginBottom: "10px", marginTop: "2px", }}>
+                            <div>
+                                <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
+                                    접수 등록/수정&nbsp;&nbsp;[환자정보: {patientData.patient_name},{patientData.front_registration_number},{patientData.phone_number3}]
+                                </h5>
+                            </div>
+                            <Tooltip title="접수 취소">
+                                <IconButton onClick={deleteReception}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                        <Grid item xs={12}>
+                            <Grid container spacing={2}>
+                                {/* <TestField
                                 InputLabelProps={{
                                     shrink: true
                                 }}
@@ -381,144 +370,145 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                 size='small'
                                 readOnly={true}
                             /> */}
-                            <Grid item xs={2}>
-                                <TextField
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    sx={examinationTextField}
-                                    label="키  [cm]"
-                                    name="height"
-                                    onChange={handleChange}
-                                    value={receptionData.height || ''}
-                                    variant="outlined"
-                                    size='small' />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <TextField
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    sx={examinationTextField}
-                                    label="체중  [kg]"
-                                    name="weight"
-                                    onChange={handleChange}
-                                    value={receptionData.weight || ''}
-                                    variant="outlined"
-                                    size='small' />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <TextField
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    sx={examinationTextField}
-                                    label="BMI"
-                                    name="bmi"
-                                    onChange={handleChange}
-                                    value={receptionData.bmi || '' || calculateBMI(receptionData.height, receptionData.weight)}
-                                    variant="outlined"
-                                    size='small'
-                                    readOnly={true} />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <TextField
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    sx={examinationTextField}
-                                    label="최고혈압"
-                                    name="systolic"
-                                    onChange={handleChange}
-                                    value={receptionData.systolic || ''}
-                                    variant="outlined"
-                                    size='small' />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <TextField
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    sx={examinationTextField}
-                                    label="최저혈압"
-                                    name="diastolic"
-                                    onChange={handleChange}
-                                    value={receptionData.diastolic || ''}
-                                    variant="outlined"
-                                    size='small' />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <TextField
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    sx={examinationTextField}
-                                    label="혈당"
-                                    name="blood_sugar"
-                                    onChange={handleChange}
-                                    value={receptionData.blood_sugar || ''}
-                                    variant="outlined"
-                                    size='small' />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid container spacing={2} >
-                            <Grid item xs={2} sx={{ '.MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2 css-1o7apob-MuiGrid-root': { marginLeft: "20px" } }} >
-                                <TextField
-                                    id="outlined-select-currency"
-                                    select
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    label="담당의"
-                                    size='small'
-                                    name="doctor"
-                                    onChange={handleChange}
-                                    value={receptionData.doctor || ''}
-                                    style={{ height: "10px", width: "100%" }}
-                                    sx={{
-                                        '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
-                                    }}
-                                >
-                                    {doctors.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </Grid>
-                            <Grid item xs={7.5}>
-                                <TextField
-                                    label="내원사유"
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    rows={1}
-                                    size='small'
-                                    name="treatment_reason"
-                                    onChange={handleChange}
-                                    value={receptionData.treatment_reason || ''}
-                                    sx={{ width: "100%", ".css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall": { padding: "0.5em" } }}
-                                />
-                            </Grid>
-                            <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
-                                <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                                    {receptionData.reception_id != null && (
-                                        <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>수정</Button>
-                                    )}
-                                    {receptionData.reception_id == null && (
-                                        <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>접수</Button>
-                                    )}
-                                    <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px", marginLeft: "5px" }}>취소</Button>
-                                </Box>
+                                <Grid item xs={2}>
+                                    <TextField
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        sx={examinationTextField}
+                                        label="키  [cm]"
+                                        name="height"
+                                        onChange={handleChange}
+                                        value={receptionData.height || ''}
+                                        variant="outlined"
+                                        size='small' />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <TextField
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        sx={examinationTextField}
+                                        label="체중  [kg]"
+                                        name="weight"
+                                        onChange={handleChange}
+                                        value={receptionData.weight || ''}
+                                        variant="outlined"
+                                        size='small' />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <TextField
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        sx={examinationTextField}
+                                        label="BMI"
+                                        name="bmi"
+                                        onChange={handleChange}
+                                        value={receptionData.bmi || '' || calculateBMI(receptionData.height, receptionData.weight)}
+                                        variant="outlined"
+                                        size='small'
+                                        readOnly={true} />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <TextField
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        sx={examinationTextField}
+                                        label="최고혈압"
+                                        name="systolic"
+                                        onChange={handleChange}
+                                        value={receptionData.systolic || ''}
+                                        variant="outlined"
+                                        size='small' />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <TextField
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        sx={examinationTextField}
+                                        label="최저혈압"
+                                        name="diastolic"
+                                        onChange={handleChange}
+                                        value={receptionData.diastolic || ''}
+                                        variant="outlined"
+                                        size='small' />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <TextField
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        sx={examinationTextField}
+                                        label="혈당"
+                                        name="blood_sugar"
+                                        onChange={handleChange}
+                                        value={receptionData.blood_sugar || ''}
+                                        variant="outlined"
+                                        size='small' />
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
+                        <Grid item xs={12}>
+                            <Grid container spacing={2} >
+                                <Grid item xs={2} sx={{ '.MuiGrid-root MuiGrid-item MuiGrid-grid-xs-2 css-1o7apob-MuiGrid-root': { marginLeft: "20px" } }} >
+                                    <TextField
+                                        id="outlined-select-currency"
+                                        select
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        label="담당의"
+                                        size='small'
+                                        name="doctor"
+                                        onChange={handleChange}
+                                        value={receptionData.doctor || ''}
+                                        style={{ height: "10px", width: "100%" }}
+                                        sx={{
+                                            '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
+                                        }}
+                                    >
+                                        {doctors.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={7.5}>
+                                    <TextField
+                                        label="내원사유"
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        rows={1}
+                                        size='small'
+                                        name="treatment_reason"
+                                        onChange={handleChange}
+                                        value={receptionData.treatment_reason || ''}
+                                        sx={{ width: "100%", ".css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall": { padding: "0.5em" } }}
+                                    />
+                                </Grid>
+                                <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
+                                    <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+                                        {receptionData.reception_id != null && (
+                                            <Button type="submit" onClick={updateReceptionInfo} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>수정</Button>
+                                        )}
+                                        {receptionData.reception_id == null && (
+                                            <Button type="submit" onClick={handleSubmit} variant="contained" style={{ width: "30px", height: "30px", marginLeft: "10px" }}>접수</Button>
+                                        )}
+                                        <Button type="reset" variant="contained" color="error" onClick={resetHandler} style={{ width: "30px", height: "30px", marginLeft: "5px" }}>취소</Button>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </Grid>
 
-                </Grid>
-            )}
-        </Paper>
+                    </Grid>
+                )
+            }
+        </Paper >
     );
 };
 
