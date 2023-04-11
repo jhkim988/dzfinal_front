@@ -11,7 +11,7 @@ import {
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
-import axios from "axios";
+import axiosClient from "./../login/AxiosClient";
 
 const Underlying = ({ props, onInsert, patient }) => {
   const [disease_code, setDisease_code] = useState("");
@@ -24,7 +24,7 @@ const Underlying = ({ props, onInsert, patient }) => {
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
       if (e.target.value.length >= 2) {
-        axios
+        axiosClient
           .get(
             `/api/clinic/disease/${e.target.name}/${encodeURIComponent(
               e.target.value
@@ -32,9 +32,6 @@ const Underlying = ({ props, onInsert, patient }) => {
           )
           .then((response) => {
             setSearchList(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
           });
       } else {
         setSearchList([]);
@@ -55,7 +52,7 @@ const Underlying = ({ props, onInsert, patient }) => {
     if (underlying.some((item) => item.disease_id === disease.disease_id)) {
       alert("이미 추가된 질병입니다.");
     } else {
-      axios
+      axiosClient
         .post("/api/clinic/disease", {
           patient_id: patient.patient_id,
           disease_id: disease.disease_id,
@@ -70,7 +67,7 @@ const Underlying = ({ props, onInsert, patient }) => {
 
   function handleRemove(disease_id) {
     console.log(patient.patient_id);
-    axios
+    axiosClient
       .delete("/api/clinic/disease", {
         params: {
           patient_id: patient.patient_id,
@@ -163,6 +160,7 @@ const Underlying = ({ props, onInsert, patient }) => {
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginRight: 1 }}
           />
           <TextField
             size="small"
@@ -175,6 +173,7 @@ const Underlying = ({ props, onInsert, patient }) => {
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginLeft: 1 }}
           />
         </Box>
         <Box
@@ -221,7 +220,7 @@ const Underlying = ({ props, onInsert, patient }) => {
       <Box
         sx={{
           marginTop: 1,
-          height: "170px",
+          height: "150px",
           overflowY: "auto",
           border: "1px solid lightgray",
           borderRadius: 2,

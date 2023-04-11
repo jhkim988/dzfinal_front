@@ -5,6 +5,7 @@ import {
   IconSettings,
   IconUsers,
   IconDeviceTv,
+  IconLock
 } from "@tabler/icons";
 
 const icons = {
@@ -14,6 +15,7 @@ const icons = {
   IconSettings,
   IconUsers,
   IconDeviceTv,
+  IconLock
 };
 
 const menuItems = {
@@ -45,10 +47,18 @@ const menuItems = {
       breadcrumbs: false,
     },
     {
-      id: "did",
-      title: "DID",
+      id: "video_did",
+      title: "VIDEO DID",
       type: "item",
       url: "/view",
+      icon: icons.IconDeviceTv,
+      breadcrumbs: false,
+    },
+    {
+      id: "big_did",
+      title: "BIG DID",
+      type: "item",
+      url: "/big_did",
       icon: icons.IconDeviceTv,
       breadcrumbs: false,
     },
@@ -69,10 +79,18 @@ const menuItems = {
       breadcrumbs: false,
     },
     {
-      id: "login",
-      title: "로그인",
+      id: "logout",
+      title: "로그아웃",
       type: "item",
-      url: "/login",
+      url: "/logout",
+      icon: icons.IconUsers,
+      breadcrumbs: false,
+    },
+    {
+      id: "pwdchange",
+      title: "비밀번호 변경",
+      type: "item",
+      url: "/pwdchange",
       icon: icons.IconUsers,
       breadcrumbs: false,
     },

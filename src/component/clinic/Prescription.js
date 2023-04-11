@@ -8,13 +8,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
-import axios from "axios";
-import { useState } from "react";
-import { useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
+import axiosClient from "./../login/AxiosClient";
 
 const Prescription = ({
   handlePrescriptionAdd,
@@ -32,17 +30,17 @@ const Prescription = ({
 
   function handleKeyUp(e) {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
-      setSearchText(e.target.value);
+      setSearchText(e.target.value || "");
 
       if (e.target.value.length >= 2) {
-        axios
+        axiosClient
           .get(
             `/api/clinic/drug/${e.target.name}/${encodeURIComponent(
               searchText
             )}`
           )
           .then((response) => {
-            setSearchList(response.data);
+            setSearchList(response.data || []);
             console.log(response.data);
           })
           .catch((error) => {
@@ -134,6 +132,7 @@ const Prescription = ({
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginRight: 1 }}
           />
           <TextField
             size="small"
@@ -146,6 +145,7 @@ const Prescription = ({
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginLeft: 1 }}
           />
         </Box>
         <Box

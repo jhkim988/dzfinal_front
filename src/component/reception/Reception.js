@@ -1,16 +1,14 @@
 import { Grid, Paper } from "@mui/material";
-import { Box } from "@mui/system";
 import { useState } from "react";
-import axios from "axios";
-import AutoCompleteForm from "./AutoCompleteForm";
 import DailyReservationList from "./DailyReservationList";
 import PatientForm from "./PatientForm";
 import ReceptionForm from "./ReceptionForm";
 import Receipt from "../receipt/Receipt";
-import WaitingQueue from "../waiting/WaitingQueue";
-import ReceptionList from "./ReceptionList";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 import ReceiptList from "../receipt/ReceiptList";
+import axiosClient from './../login/AxiosClient';
+
+const Reservation_API_BASE_URL = "/api/reservation";
 
 const Reception = () => {
   const [patient_id, setPatient_id] = useState(null);
@@ -54,16 +52,19 @@ const Reception = () => {
     receipt: {},
   });
 
-  const clickRowCallback = async({ reception_id, patient_id }) => {
+  // DailyReservation
+  const [reservation, setReservation] = useState([]);
+
+  const clickRowCallback = async ({ reception_id, patient_id }) => {
     setPatient_id(patient_id);
     try {
-      axios.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+      axiosClient.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
         setPatientData(data.patient)
         setReceptionData(data.reception);
         setReceiptData(data);
         console.log(data);
       });
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }
@@ -75,27 +76,23 @@ const Reception = () => {
   ) => {
     console.log(start?.format("YYYY-MM-DD"));
     console.log(end?.format("YYYY-MM-DD"));
-    axios
-      .post(
+    axiosClient
+      .get(
         "/api/receipt/getReceiptList",
         {
-          type,
-          searchText,
-          start_date: start?.format("YYYY-MM-DD"),
-          end_date: end?.format("YYYY-MM-DD"),
-        },
-        {
+          params: {
+            type,
+            searchText,
+            start_date: start?.format("YYYY-MM-DD"),
+            end_date: end?.format("YYYY-MM-DD"),
+          },
           headers: {
             "Content-Type": "application/json",
           },
         }
       )
       .then((response) => {
-        callback(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
+        callback(response.data || []);
       });
   };
 
@@ -115,7 +112,15 @@ const Reception = () => {
     has_prescription: 0,
   });
 
-
+  const loadDailyReservationList = () => {
+    axiosClient.get(Reservation_API_BASE_URL)
+      .then((response) => {
+        setReservation(response.data || []);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
   return (
     <>
       <Grid container spacing={2}>
@@ -124,7 +129,7 @@ const Reception = () => {
             initPanel="3"
             nextState="수납중"
             clickRowCallback={clickRowCallback}
-            shouldAutoCall={({ data: { state }}) => state === "수납완료"}
+            shouldAutoCall={({ data: { state } }) => state === "수납완료"}
             findNextAutoCall={({ state }) => state === "수납대기"}
             shouldDisableCallButton={({ state }) => state !== "수납대기"}
           />
@@ -138,7 +143,7 @@ const Reception = () => {
                   clickRowCallback={clickRowCallback}
                   receiptRecordSearch={receiptRecordSearch}
                   patient_id={patient_id}
-                  // setSelectedOneReceipt={setSelectedOneReceipt}
+                // setSelectedOneReceipt={setSelectedOneReceipt}
                 />
               </Paper>
             </Grid>
@@ -150,6 +155,9 @@ const Reception = () => {
                       setPatientData={setPatientData}
                       setReceptionData={setReceptionData}
                       setSelectedReservationDetails={setSelectedReservationDetails}
+                      loadDailyReservationList={loadDailyReservationList}
+                      reservation={reservation}
+                      setReservation={setReservation}
                     />
                   </Grid>
                   <Grid item xs={7}>
@@ -173,6 +181,7 @@ const Reception = () => {
                           patientData={patientData}
                           setPatientData={setPatientData}
                           setSelectedAddress={setSelectedAddress}
+                          loadDailyReservationList={loadDailyReservationList}
                         />
                       </Grid>
                     </Grid>
@@ -184,9 +193,9 @@ const Reception = () => {
         </Grid>
 
         <Grid item xs={2.5}>
-          <Receipt 
-            receiptData={receiptData} 
-            // selectedOneReceipt={selectedOneReceipt}
+          <Receipt
+            receiptData={receiptData}
+          // selectedOneReceipt={selectedOneReceipt}
           />
         </Grid>
       </Grid>
