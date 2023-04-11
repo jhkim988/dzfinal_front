@@ -22,10 +22,14 @@ import MainCard from "../../template/ui-component/cards/MainCard";
 import { IconBrandHipchat } from "@tabler/icons";
 import ChatList from "./ChatList";
 import { MqttContext } from "../waiting/MqttContextProvider";
-import axios from "axios";
+import axiosClient from "../login/AxiosClient";
 
 const ChatSection = () => {
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") === "undefined" ? "{}" : localStorage.getItem("userInfo"));
+  const userInfo = JSON.parse(
+    localStorage.getItem("userInfo") === "undefined"
+      ? "{}"
+      : localStorage.getItem("userInfo")
+  );
   const { current: client } = useContext(MqttContext);
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
@@ -64,7 +68,7 @@ const ChatSection = () => {
       if (receivedTopic === `notification/${userInfo.employ_id}`) {
         console.log("호출");
         //수정
-        axios
+        axiosClient
           .get("/api/chat/getmessagecount", {
             params: {
               participants_id: userInfo.employ_id, // 수정
@@ -80,17 +84,21 @@ const ChatSection = () => {
     };
 
     // 수정
-    client.subscribe(`notification/${userInfo.employ_id}`, { qos: 1 }, (error) => {
-      if (error) {
-        console.log("Subscribe to topic error", error);
+    client.subscribe(
+      `notification/${userInfo.employ_id}`,
+      { qos: 1 },
+      (error) => {
+        if (error) {
+          console.log("Subscribe to topic error", error);
+        }
       }
-    });
+    );
 
     client.on("message", handleMessage);
   }, []);
 
   useEffect(() => {
-    axios
+    axiosClient
       .get("/api/chat/getmessagecount", {
         params: {
           participants_id: userInfo.employ_id, // 수정
