@@ -74,45 +74,15 @@ const BigDID = ({ nextState }) => {
           spacing={2}
           sx={{ justifyContent: "center", alignContent: "center" }}>
             <Grid item xs={4}>
-                <Paper 
-                  elevation={3} 
-                  sx={{ 
-                    height: "98vh",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                    }}
-                >
-                    <Clinic1 />
-                </Paper>
+                <Clinic1 data={data}/>
             </Grid>
 
             <Grid item xs={4}>
-                <Paper 
-                  elevation={3} 
-                  sx={{ 
-                    height: "98vh",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                    }}
-                >
-                    2 진료실
-                </Paper>
+                <Clinic2 data={data}/>
             </Grid>
 
             <Grid item xs={4}>
-                <Paper 
-                  elevation={3} 
-                  sx={{ 
-                    height: "98vh",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                    }}
-                >
-                    수납
-                </Paper>
+                    <Receipt data={data}/>
             </Grid>
         </Grid>
     </div>
