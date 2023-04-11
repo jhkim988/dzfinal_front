@@ -53,7 +53,7 @@ const ReservationTimePicker = ({
       .then(({ data }) => {
         setImpossible(new Set(data));
       });
-  }, [viewPickerDate]);
+  }, [viewPickerDate, doctor]);
 
   return (
     <Paper style={{ width: 320, padding: 10, margin: "auto" }}>
