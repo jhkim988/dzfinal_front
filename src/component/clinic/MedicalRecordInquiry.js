@@ -13,6 +13,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -47,6 +48,7 @@ const MedicalRecordInquiry = ({
       .get(`/api/clinic/medicalinfo/${reception_id}`)
       .then((response) => {
         setMedicalInfo(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -76,16 +78,13 @@ const MedicalRecordInquiry = ({
     if (!type) return alert("분류를 정해주세요");
     setSearchMode(2);
     axiosClient
-      .post(
-        "/api/clinic/mri/search",
-        {
-          type: type,
-          start: formattedDates?.start || "",
-          end: formattedDates?.end || "",
-          keyword: keyword,
-          currentPage: currentPage,
-        }
-      )
+      .post("/api/clinic/mri/search", {
+        type: type,
+        start: formattedDates?.start || "",
+        end: formattedDates?.end || "",
+        keyword: keyword,
+        currentPage: currentPage,
+      })
       .then((response) => {
         setMri(response.data.mri);
         setPagination(response.data.pagination);
@@ -176,7 +175,7 @@ const MedicalRecordInquiry = ({
         <TableContainer sx={{ height: "242px" }}>
           <Table
             sx={{
-              minWidth: 650,
+              minWidth: 630,
               "& td": { padding: 0 },
               "& th": { padding: 0, fontWeight: "bold" },
             }}
@@ -210,28 +209,58 @@ const MedicalRecordInquiry = ({
                       {row.patient_name}
                     </TableCell>
                     <TableCell align="center">{row.employee_name}</TableCell>
-                    <TableCell align="center">
-                      {row.diagnosisList.length > 0 &&
-                        `[${
-                          row.diagnosisList[0].disease_code
-                        }]${row.diagnosisList[0].disease_name.substring(
-                          0,
-                          5
-                        )}...`}
-                      {row.diagnosisList.length > 1 &&
-                        ` 외${row.diagnosisList.length - 1}`}
-                    </TableCell>
-                    <TableCell align="center">
-                      {row.prescriptionList.length > 0 &&
-                        `[${
-                          row.prescriptionList[0].drug_code
-                        }]${row.prescriptionList[0].drug_name.substring(
-                          0,
-                          5
-                        )}...`}
-                      {row.prescriptionList.length > 1 &&
-                        ` 외${row.prescriptionList.length - 1}`}
-                    </TableCell>
+                    <Tooltip
+                      title={
+                        row.diagnosisList.length > 0 && (
+                          <div>
+                            {row.diagnosisList.map((diagnosis) => (
+                              <div key={diagnosis.disease_code}>
+                                [{diagnosis.disease_code}]{" "}
+                                {diagnosis.disease_name}
+                              </div>
+                            ))}
+                          </div>
+                        )
+                      }
+                    >
+                      <TableCell align="center">
+                        {row.diagnosisList.length > 0 &&
+                          `[${
+                            row.diagnosisList[0].disease_code
+                          }]${row.diagnosisList[0].disease_name.substring(
+                            0,
+                            5
+                          )}...`}
+                        {row.diagnosisList.length > 1 &&
+                          ` 외${row.diagnosisList.length - 1}`}
+                      </TableCell>
+                    </Tooltip>
+                    <Tooltip
+                      title={
+                        row.prescriptionList.length > 0 && (
+                          <div>
+                            {row.prescriptionList.map((prescription) => (
+                              <div key={prescription.drug_code}>
+                                [{prescription.drug_code}]{" "}
+                                {prescription.drug_name}
+                              </div>
+                            ))}
+                          </div>
+                        )
+                      }
+                    >
+                      <TableCell align="center">
+                        {row.prescriptionList.length > 0 &&
+                          `[${
+                            row.prescriptionList[0].drug_code
+                          }]${row.prescriptionList[0].drug_name.substring(
+                            0,
+                            5
+                          )}...`}
+                        {row.prescriptionList.length > 1 &&
+                          ` 외${row.prescriptionList.length - 1}`}
+                      </TableCell>
+                    </Tooltip>
                     <TableCell align="center">
                       {row.created_at.substring(0, 10)}
                     </TableCell>

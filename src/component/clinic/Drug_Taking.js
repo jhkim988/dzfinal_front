@@ -11,7 +11,7 @@ import {
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
-import axiosClient from './../login/AxiosClient';
+import axiosClient from "./../login/AxiosClient";
 
 const DrugTaking = ({ props, patient }) => {
   const [drug_code, setDrug_code] = useState("");
@@ -160,6 +160,7 @@ const DrugTaking = ({ props, patient }) => {
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginRight: 1 }}
           />
           <TextField
             size="small"
@@ -172,6 +173,7 @@ const DrugTaking = ({ props, patient }) => {
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginLeft: 1 }}
           />
         </Box>
         <Box
@@ -218,7 +220,7 @@ const DrugTaking = ({ props, patient }) => {
       <Box
         sx={{
           marginTop: 1,
-          height: "170px",
+          height: "150px",
           overflowY: "auto",
           border: "1px solid lightgray",
           borderRadius: 2,
