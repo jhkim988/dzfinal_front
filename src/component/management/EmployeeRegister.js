@@ -17,15 +17,14 @@ const EmployeeRegister = () => {
     ({ file, employee, setEmployee }) =>
     () => {
       createSecurityUser({ file, employee, setEmployee }).then((res) => {
-        createEmployee(employee);
+        createEmployee({ file, employee, setEmployee });
       });
     };
 
   const createEmployee = ({ file, employee, setEmployee }) => {
     const formData = new FormData();
     formData.append("file", file);
-    setEmployee((prev) => ({ ...prev, role: roleMapping[prev.role] }));
-    const info = new Blob([JSON.stringify(employee)], {
+    const info = new Blob([JSON.stringify({...employee, role: roleMapping[employee.role]})], {
       type: "application/json",
     });
 
@@ -55,7 +54,7 @@ const EmployeeRegister = () => {
       });
   };
 
-  const createSecurityUser = (employee) => {
+  const createSecurityUser = ({employee}) => {
     return axios.post(
       "http://localhost:8081/user",
       {

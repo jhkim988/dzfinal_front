@@ -12,6 +12,13 @@ const roleMapping = {
   KLPN: "간호조무사",
 };
 
+const role2code = {
+  "의사": "DOCTOR",
+  "간호사": "RN",
+  "간호조무사": "KLPN",
+  "관리자":"ADMIN"
+}
+
 const EmployeeUpdate = () => {
 	const { state } = useLocation();
   const navigate = useNavigate();
@@ -31,7 +38,7 @@ const EmployeeUpdate = () => {
 			.get(`/api/admin/employee/${state.employ_id}`)
 			.then((response) => {
 				console.log("api/admin/employee", response.data);
-				setInit({...response.data});
+				setInit({...response.data, role: role2code[response.data.role]});
 			})
 			.catch((error) => {
 				console.log(error);
@@ -40,48 +47,42 @@ const EmployeeUpdate = () => {
   const buttonClick =
     ({ file, employee, setEmployee }) =>
     () => {
-      updateSecurityUser({ file, employee, setEmployee }).then((res) => {
-        updateEmployee(employee);
+      console.log(file, employee);
+      updateSecurityUser(employee).then((res) => {
+        updateEmployee({ file, employee, setEmployee});
       });
     };
 
   const updateEmployee = ({ file, employee, setEmployee }) => {
+    console.log(file, employee);
     const formData = new FormData();
     formData.append("file", file);
-    setEmployee((prev) => ({ ...prev, role: roleMapping[prev.role] }));
-    const info = new Blob([JSON.stringify(employee)], {
+    const info = new Blob([JSON.stringify({...employee, role: roleMapping[employee.role]})], {
       type: "application/json",
     });
 
     formData.append("employee", info);
 
     axiosClient
-      .put("/api/admin/employee", formData, {
+      .put(`/api/admin/employee/${employee.employ_id}`, formData, {
         headers: {
           "content-type": "multipart/form-data",
         },
       })
       .then((response) => {
-        if (response.data === true) {
           alert("수정 완료");
           navigate("/management");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
       });
+      console.log("axiosClient After");
   };
 
   const updateSecurityUser = (employee) => {
     return axios.put(
-      "http://localhost:8081/user",
+      `http://localhost:8081/user/${employee.user_id}`,
       {
-        username: employee.user_id,
-        password: employee.birth,
         authority: [employee.role],
       },
       {
-				params: { employ_id: employee.employee_id},
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
           Authorization: `Basic ${btoa("client:secret")}`,

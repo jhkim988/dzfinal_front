@@ -23,13 +23,6 @@ import "dayjs/locale/ko";
 
 dayjs.locale("ko");
 
-const role2code = {
-  "의사": "DOCTOR",
-  "간호사": "RN",
-  "간호조무사": "KLPN",
-  "관리자":"ADMIN"
-}
-
 const EmployeeForm = ({ title, buttonName, buttonClick, init }) => {
   const [file, setFile] = useState(null);
 
@@ -39,7 +32,7 @@ const EmployeeForm = ({ title, buttonName, buttonClick, init }) => {
 
   const handleFileChange = (event) => {
     if (!event.target.files[0]) return;
-    setFile(URL.createObjectURL(event.target.files[0]));
+    setFile(event.target.files[0]);
   };
 
   const [employee, setEmployee] = useState({
@@ -106,7 +99,7 @@ const EmployeeForm = ({ title, buttonName, buttonClick, init }) => {
               >
                 {file ? (
                   <img
-                    src={file}
+                    src={typeof file === "string" ? file : URL.createObjectURL(file)}
                     alt="Uploaded file"
                     width="100%"
                   />
@@ -172,14 +165,15 @@ const EmployeeForm = ({ title, buttonName, buttonClick, init }) => {
                       <FormControl fullWidth>
                         <InputLabel>직책</InputLabel>
                         <Select
-                          value={role2code[employee.role] || ""}
+                          name="role"
+                          value={employee.role}
                           label="role"
                           inputProps={{ name: "role" }}
                           onChange={handleInputChange}
                         >
                           <MenuItem value={"DOCTOR"}>의사</MenuItem>
                           <MenuItem value={"RN"}>간호사</MenuItem>
-                          <MenuItem value={"KLPN"}>조무사</MenuItem>
+                          <MenuItem value={"KLPN"}>간호조무사</MenuItem>
                           <MenuItem value={"ADMIN"}>관리자</MenuItem>
                         </Select>
                       </FormControl>
