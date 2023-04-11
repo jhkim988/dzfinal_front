@@ -29,6 +29,7 @@ import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
 import axios from 'axios';
 import "./style.css";
+import axiosClient from '../login/AxiosClient';
 
 
 
@@ -97,7 +98,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
 
   // 수납내역목록에서 데이터 선택하면 데이터가져오기
   const handleSelectedReceipt = (receipt_id, reception_id) => {
-    axios.get(`/api/receipt/selectedOneReceipt?reception_id=${reception_id}`)
+    axiosClient.get(`/api/receipt/selectedOneReceipt?reception_id=${reception_id}`)
       .then((response) => {
         console.log("선택한 데이터 정보: ", response.data);
         clickRowCallback(response.data);

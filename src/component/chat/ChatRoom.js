@@ -12,9 +12,9 @@ import {
 import { IconChevronLeft, IconSend } from "@tabler/icons";
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
-import axios from "axios";
 import { MqttContext } from "../waiting/MqttContextProvider";
 import moment from "moment";
+import axiosClient from './../login/AxiosClient';
 
 const ChatRoom = ({ room, onBackClick }) => {
   const { employ_id: participants_id } = JSON.parse(localStorage.getItem("userInfo"));
@@ -32,7 +32,7 @@ const ChatRoom = ({ room, onBackClick }) => {
   const isDisabled = !message.message.trim();
 
   useEffect(() => {
-    axios
+    axiosClient
       .get("api/chat/getchatroommessages", {
         params: {
           chatroom_id: room.chatroom_id,
@@ -70,7 +70,7 @@ const ChatRoom = ({ room, onBackClick }) => {
         chatroom_id: room.chatroom_id,
         participants_id,
       };
-      axios.put("/api/chat/exit", status);
+      axiosClient.put("/api/chat/exit", status);
     };
   }, []);
 
@@ -110,7 +110,7 @@ const ChatRoom = ({ room, onBackClick }) => {
     if (scrollTop === 0) {
       setPage((prevPage) => prevPage + 1);
 
-      axios
+      axiosClient
         .get("api/chat/getchatroommessages", {
           params: {
             chatroom_id: room.chatroom_id,
