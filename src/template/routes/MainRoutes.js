@@ -21,9 +21,11 @@ const Management = Loadable(
   lazy(() => import("../../component/management/Management"))
 );
 
-const Register = Loadable(
-  lazy(() => import("../../component/management/Register"))
+const EmployeeRegister = Loadable(
+  lazy(() => import('./../../component/management/EmployeeRegister'))
 );
+
+const EmployeeUpdate = Loadable(lazy(() => import ('./../../component/management/EmployeeUpdate')));
 
 const PwdChange = Loadable(
   lazy(() => import("../../component/pwd/PwdChange"))
@@ -84,9 +86,16 @@ const MainRoutes = {
       path: "register",
       element: (
         <AccessAllow authorities={["ADMIN"]}>
-          <Register />
+          <EmployeeRegister />
         </AccessAllow>
       ),
+    }, {
+      path: "pwdchange",
+      element: <PwdChange />,
+    },
+    {
+      path: "employee_update_form",
+      element: <EmployeeUpdate />,
     },
     {
       path: "logout",
