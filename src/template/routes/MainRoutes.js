@@ -89,6 +89,9 @@ const MainRoutes = {
           <EmployeeRegister />
         </AccessAllow>
       ),
+    }, {
+      path: "pwdchange",
+      element: <PwdChange />,
     },
     {
       path: "employee_update_form",

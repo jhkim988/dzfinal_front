@@ -5,6 +5,7 @@ import {
   IconSettings,
   IconUsers,
   IconDeviceTv,
+  IconLock
 } from "@tabler/icons";
 
 const icons = {
@@ -14,6 +15,7 @@ const icons = {
   IconSettings,
   IconUsers,
   IconDeviceTv,
+  IconLock
 };
 
 const menuItems = {
