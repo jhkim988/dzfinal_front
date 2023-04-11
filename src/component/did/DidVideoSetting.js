@@ -28,7 +28,6 @@ const DidVideoSetting = () => {
     axiosClient
       .get("/api/did/did_video")
       .then((response) => {
-        console.log(response.data);
         onAppend(response.data);
       })
       .catch((error) => {
@@ -37,27 +36,23 @@ const DidVideoSetting = () => {
   }, []);
 
   const handleFileSelect = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) {
+      setFile(null);
+      return;
+    }
+    setFile(selectedFile);
   };
 
-  const onLoad = () => {
+  const onUpload = () => {
+    if (!file) {
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
-
-    axiosClient
-      .post("/api/did/did_setting", formData, {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        if (response.data === true) {
-          setFile(null);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    onInsert(formData);
+    setFile(null);
   };
 
   return (
@@ -105,7 +100,12 @@ const DidVideoSetting = () => {
                 />
               </TableCell>
               <TableCell align="center" sx={{ width: "113px" }}>
-                <Button variant="contained" color="success" onClick={onLoad}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  disabled={!file}
+                  onClick={onUpload}
+                >
                   업로드
                 </Button>
               </TableCell>
@@ -136,7 +136,10 @@ const DidVideoSetting = () => {
                 videos.map((video, index) => (
                   <TableRow key={index}>
                     <TableCell align="right">
-                      <Checkbox checked={video.active} />
+                      <Checkbox
+                        checked={video.active}
+                        onClick={() => onToggle(video.id, video.active)}
+                      />
                     </TableCell>
                     <TableCell align="left" colSpan={4}>
                       <TextField
@@ -148,7 +151,12 @@ const DidVideoSetting = () => {
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <RemoveCircleOutlineIcon sx={{ color: red[500] }} />
+                      <RemoveCircleOutlineIcon
+                        sx={{ color: red[500] }}
+                        onClick={() => {
+                          onDelete(video.id);
+                        }}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

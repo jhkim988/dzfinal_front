@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import axiosClient from "./../../login/AxiosClient";
 
 const DID_Video_ACTION = {
@@ -30,51 +30,83 @@ export default function DID_VideoModel() {
   const [videos, dispatch] = useReducer(didVideoReducer, []);
 
   const onInsert = (video) => {
-    // axiosClient
-    //   .post("/api/did/did_subtitle", {
-    //     message: message,
-    //     active: 1,
-    //   })
-    //   .then((response) => {
-    //     dispatch({
-    //       type: DID_Video_ACTION.INSERT,
-    //       message: { id: response.data, message: message, active: true },
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axiosClient
+      .post("/api/did/did_video", video, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        dispatch({
+          type: DID_Video_ACTION.INSERT,
+          video: {
+            id: response.data,
+            video_name: video.get("file").name,
+            active: false,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const onToggle = (id, active) => {
-    // axiosClient
-    //   .put("/api/did/did_subtitle", {
-    //     id: id,
-    //     active: !active,
-    //   })
-    //   .then((response) => {
-    //     if (response.data === true) {
-    //       dispatch({
-    //         type: DID_Video_ACTION.TOGGLE,
-    //         id: id,
-    //         active: !active,
-    //       });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    if (active === true) {
+      axiosClient
+        .put("/api/did/did_video", {
+          id: id,
+          active: !active,
+        })
+        .then((response) => {
+          if (response.data === true) {
+            dispatch({
+              type: DID_Video_ACTION.TOGGLE,
+              id: id,
+              active: !active,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (active === false) {
+      const count = videos.filter((video) => video.active).length;
+
+      if (count === 0) {
+        axiosClient
+          .put("/api/did/did_video", {
+            id: id,
+            active: !active,
+          })
+          .then((response) => {
+            if (response.data === true) {
+              dispatch({
+                type: DID_Video_ACTION.TOGGLE,
+                id: id,
+                active: !active,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        alert("한개만 체크해주세요");
+        return;
+      }
+    }
   };
 
   const onDelete = (id) => {
-    // axiosClient
-    //   .delete("/api/did/did_subtitle", { params: { id: id } })
-    //   .then((response) => {
-    //     dispatch({ type: DID_Video_ACTION.DELETE, id });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axiosClient
+      .delete("/api/did/did_video", { params: { id: id } })
+      .then((response) => {
+        dispatch({ type: DID_Video_ACTION.DELETE, id });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const onAppend = (videoList) => {
