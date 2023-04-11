@@ -9,32 +9,21 @@ import {
     TableRow,
     Grid
 } from "@material-ui/core";
-import axios from 'axios';
-
+import axiosClient from '../login/AxiosClient';
 const Reservation_API_BASE_URL = "/api/reservation";
 
 
 //예약리스트 10개 이상이면 스크롤바 자동 생성
 //예약리스트 조회할 때 초진재진 구분 추가할 수도 있음
 
-const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, setReceptionData }) => {
-    const [reservation, setReservation] = useState([]);
-    //const [patient_id, setPatient_id] = useState(null);
-
-
+const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, setReceptionData, loadDailyReservationList, reservation, setReservation }) => {
     useEffect(() => {
-        axios.get(Reservation_API_BASE_URL)
-            .then((response) => {
-                setReservation(response.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        loadDailyReservationList();
     }, []);
 
     const handleReservationSelect = (reservation_id) => {
         // 선택된 예약 ID에 해당하는 예약 상세 정보를 가져오는 API 호출
-        axios.get(Reservation_API_BASE_URL + `/${reservation_id}`)
+        axiosClient.get(Reservation_API_BASE_URL + `/detail/${reservation_id}`)
             .then((response) => {
                 console.log("예약환자정보:", response.data);
                 console.log("환자번호:", response.data.patient_id);
@@ -72,7 +61,7 @@ const DailyReservationList = ({ setSelectedReservationDetails, setPatientData, s
                             {reservation.length === 0 && (
                                 <TableBody>
                                     <TableRow>
-                                    <TableCell colSpan={6} align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>금일 예약환자가 존재하지 않습니다.</TableCell>
+                                        <TableCell colSpan={6} align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>금일 예약환자가 존재하지 않습니다.</TableCell>
                                     </TableRow>
                                 </TableBody>
                             )}

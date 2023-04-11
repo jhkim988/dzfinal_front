@@ -3,14 +3,12 @@ import DidSubscribe from "./DidSubscribe";
 import DidVideo from "./DidVideo";
 import DidWaiting from "./DidWaiting";
 import { Grid, Paper } from "@mui/material";
-import axios from "axios";
 import mqtt from "mqtt";
 import { MqttContext } from "../waiting/MqttContextProvider";
 import Clinic1 from "./Clinic1";
 import Clinic2 from "./Clinic2";
 import Receipt from "./Receipt";
-
-
+import axiosClient from "../login/AxiosClient"
 
 // TODO: doctor_id 적용
 const autoCallInfo = {
@@ -62,11 +60,7 @@ const BigDID = ({ nextState }) => {
   }, []);
 
   useEffect(() => {
-    axios.get("/api/reception/today", {
-      headers: {
-        "Content-Type": "application/json",
-      }
-    }).then(({ data }) => {
+    axiosClient.get("/api/reception/today").then(({ data }) => {
       setData(data);
     });
   }, []);
