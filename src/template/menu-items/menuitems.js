@@ -5,7 +5,7 @@ import {
   IconSettings,
   IconUsers,
   IconDeviceTv,
-  IconLock
+  IconLock,
 } from "@tabler/icons";
 
 const icons = {
@@ -15,7 +15,7 @@ const icons = {
   IconSettings,
   IconUsers,
   IconDeviceTv,
-  IconLock
+  IconLock,
 };
 
 const menuItems = {
@@ -47,28 +47,36 @@ const menuItems = {
       breadcrumbs: false,
     },
     {
-      id: "video_did",
-      title: "VIDEO DID",
-      type: "item",
-      url: "/view",
-      icon: icons.IconDeviceTv,
-      breadcrumbs: false,
-    },
-    {
-      id: "big_did",
-      title: "BIG DID",
-      type: "item",
-      url: "/big_did",
-      icon: icons.IconDeviceTv,
-      breadcrumbs: false,
-    },
-    {
-      id: "did_setting",
-      title: "DID 설정",
-      type: "item",
-      url: "/did_setting",
-      icon: icons.IconSettings,
-      breadcrumbs: false,
+      id: "did",
+      title: "DID",
+      type: "collapse",
+      icon: icons.IconKey,
+      children: [
+        {
+          id: "video_did",
+          title: "VIDEO DID",
+          type: "item",
+          url: "/view",
+          icon: icons.IconDeviceTv,
+          breadcrumbs: false,
+        },
+        {
+          id: "big_did",
+          title: "BIG DID",
+          type: "item",
+          url: "/big_did",
+          icon: icons.IconDeviceTv,
+          breadcrumbs: false,
+        },
+        {
+          id: "did_setting",
+          title: "DID 설정",
+          type: "item",
+          url: "/did_setting",
+          icon: icons.IconSettings,
+          breadcrumbs: false,
+        },
+      ],
     },
     {
       id: "management",
