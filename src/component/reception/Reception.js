@@ -80,13 +80,13 @@ const Reception = () => {
     axiosClient
       .get(
         "/api/receipt/getReceiptList",
-        null,
         {
           params: {
             type,
             searchText,
             start_date: start?.format("YYYY-MM-DD"),
             end_date: end?.format("YYYY-MM-DD"),
+            currentPage: `${currentPage}`,
           },
           headers: {
             "Content-Type": "application/json",
