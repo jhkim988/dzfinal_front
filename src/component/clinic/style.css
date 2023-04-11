@@ -24,3 +24,11 @@
 .css-1rufdh7-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 8.5px 0px 8.5px 14px !important;
 }
+
+.css-1d3mh92 {
+  margin: 8px !important;
+}
+
+.css-5sfu98-MuiGrid-root > .MuiGrid-item {
+  padding-top: 0px !important;
+}
