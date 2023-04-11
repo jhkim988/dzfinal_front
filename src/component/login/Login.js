@@ -70,6 +70,8 @@ const LoginForm = () => {
           console.log(userInfo);
           movePageWithAuthority(auth.authorities);
         });
+      }).catch(err => {
+        alert("로그인 실패");
       });
   };
 

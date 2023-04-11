@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, InputAdornment, TextField, Typography } from "@mui/material";
+import "./style.css";
 
 const Patient = (props) => {
   const { reception, patient } = props;
@@ -16,6 +17,9 @@ const Patient = (props) => {
           value={reception || ""}
           label="접수번호"
           sx={{ marginLeft: 1, marginRight: 1 }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
         />
         <TextField
           disabled
@@ -23,6 +27,12 @@ const Patient = (props) => {
           value={patient.patient_name || ""}
           label="환자이름"
           sx={{ marginLeft: 1, marginRight: 1 }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
+          InputProps={{
+            style: { color: "black !important" },
+          }}
         />
         <TextField
           disabled
@@ -30,6 +40,9 @@ const Patient = (props) => {
           value={patient.treatment_reason || ""}
           label="내원사유"
           sx={{ marginLeft: 1, marginRight: 1, width: "100%" }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
         />
         {/* <TextField
           disabled
@@ -57,6 +70,9 @@ const Patient = (props) => {
             endAdornment: <InputAdornment position="end">cm</InputAdornment>,
           }}
           sx={{ marginLeft: 1, marginRight: 1 }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
         />
         <TextField
           disabled
@@ -67,6 +83,9 @@ const Patient = (props) => {
             endAdornment: <InputAdornment position="end">kg</InputAdornment>,
           }}
           sx={{ marginLeft: 1, marginRight: 1 }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
         />
         <TextField
           disabled
@@ -77,16 +96,26 @@ const Patient = (props) => {
             endAdornment: <InputAdornment position="end">kg/㎡</InputAdornment>,
           }}
           sx={{ marginLeft: 1, marginRight: 1, width: "260px" }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
         />
         <TextField
           disabled
           size="small"
-          value={`${patient.diastolic ?? ""}/${patient.systolic ?? ""}`}
+          value={
+            patient.diastolic && patient.systolic
+              ? `${patient.diastolic}/${patient.systolic}`
+              : ""
+          }
           label="혈압"
           InputProps={{
             endAdornment: <InputAdornment position="end">mmHg</InputAdornment>,
           }}
           sx={{ marginLeft: 1, marginRight: 1, width: "300px" }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
         />
         <TextField
           disabled
@@ -97,6 +126,9 @@ const Patient = (props) => {
             endAdornment: <InputAdornment position="end">mg/dL</InputAdornment>,
           }}
           sx={{ marginLeft: 1, marginRight: 1 }}
+          InputLabelProps={{
+            style: { color: "black" },
+          }}
         />
       </Box>
     </Box>

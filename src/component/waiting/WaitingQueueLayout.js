@@ -105,7 +105,7 @@ const WaitingQueueLayout = ({
 
   useEffect(() => {
     axiosClient.get("/api/reception/today").then(({ data }) => {
-      setData(data);
+      setData(data || []);
     });
   }, []);
 

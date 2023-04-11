@@ -17,10 +17,11 @@ import { MqttContext } from "../waiting/MqttContextProvider";
 import moment from "moment";
 
 const ChatRoom = ({ room, onBackClick }) => {
+  const { employ_id: participants_id } = JSON.parse(localStorage.getItem("userInfo"));
   const [message, setMessage] = useState({
     mode: "private",
     chatroom_id: room.chatroom_id,
-    from: 1, // 수정
+    from: participants_id, // 수정
     message: "",
     created_at: new Date().toISOString(),
   });
@@ -67,7 +68,7 @@ const ChatRoom = ({ room, onBackClick }) => {
       client.unsubscribe(`chat/${room.chatroom_id}`);
       const status = {
         chatroom_id: room.chatroom_id,
-        participants_id: 1,
+        participants_id,
       };
       axios.put("/api/chat/exit", status);
     };
@@ -93,7 +94,7 @@ const ChatRoom = ({ room, onBackClick }) => {
       const newMessage = {
         mode: "private",
         chatroom_id: room.chatroom_id,
-        from: 1, // 수정
+        from: participants_id, // 수정
         message: message.message,
         created_at: new Date().toISOString(),
       };
@@ -156,7 +157,7 @@ const ChatRoom = ({ room, onBackClick }) => {
           onScroll={handleMessagesScroll}
         >
           {messages.map((message, index) =>
-            message.from !== 1 ? ( // 수정
+            message.from !== participants_id ? ( // 수정
               <Card
                 key={index}
                 sx={{

@@ -15,13 +15,13 @@ import axiosClient from './../login/AxiosClient';
 const ChatList = ({ messageCount, setMessageCount }) => {
   const [chatRoom, setChatRoom] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
-
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  console.log(userInfo);
   const handleRowClick = (room) => {
     setSelectedRoom(room);
-
     const status = {
       chatroom_id: room.chatroom_id,
-      participants_id: 1, // 현재 사용자의 participants_id 값으로 대체
+      participants_id: userInfo.employ_id, // 현재 사용자의 participants_id 값으로 대체
     };
 
     axiosClient
@@ -51,7 +51,7 @@ const ChatList = ({ messageCount, setMessageCount }) => {
 
   useEffect(() => {
     axiosClient
-      .get(`api/chat/chatlist?participants_id=1`) //수정
+      .get(`api/chat/chatlist?participants_id=${userInfo.employ_id}`)
       .then((response) => {
         setChatRoom(response.data);
       })
