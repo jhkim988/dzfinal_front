@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -18,23 +17,20 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "dayjs/locale/ko";
-import axios from "axios";
-import axiosClient from './../login/AxiosClient';
 
 dayjs.locale("ko");
 
-const roleMapping = {
-  ADMIN: "관리자",
-  DOCTOR: "의사",
-  RN: "간호사",
-  KLPN: "간호조무사",
+const role2code = {
+  "의사": "DOCTOR",
+  "간호사": "RN",
+  "간호조무사": "KLPN",
+  "관리자":"ADMIN"
 }
 
-const Register = () => {
-  const navigate = useNavigate();
+const EmployeeForm = ({ title, buttonName, buttonClick, init }) => {
   const [file, setFile] = useState(null);
 
   const handleBoxClick = () => {
@@ -42,7 +38,8 @@ const Register = () => {
   };
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    if (!event.target.files[0]) return;
+    setFile(URL.createObjectURL(event.target.files[0]));
   };
 
   const [employee, setEmployee] = useState({
@@ -52,7 +49,10 @@ const Register = () => {
     role: "",
     birth: "",
   });
-
+  useEffect(() => {
+    setEmployee(init);
+    init.real_image && setFile(`/api/admin/getimage?real_image=${init.real_image}`);
+  }, [init])
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEmployee((prevEmployee) => ({
@@ -70,57 +70,15 @@ const Register = () => {
     }));
   };
 
-  const createEmployee = () => {
-    const formData = new FormData();
-    formData.append("file", file);
-    setEmployee(prev => ({ ...prev, role: roleMapping[prev.role] }));
-    const info = new Blob([JSON.stringify(employee)], {
-      type: "application/json",
-    });
-
-    formData.append("employee", info);
-  
-    axiosClient
-      .post("/api/admin/employee", formData, {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        if (response.data === true) {
-          alert("등록 완료");
-          setEmployee({
-            user_id: "",
-            employee_email: "",
-            employee_name: "",
-            role: "",
-            birth: "",
-          });
-          navigate("/management");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const registerClick = () => {
-    createSecurityUser().then(res => {
-      createEmployee();
-    });
-  }
-
-  const createSecurityUser = () => {
-    return axios.post("http://localhost:8081/user", {
-      username: employee.user_id,
-      password: employee.birth,
-      authority: [employee.role]
-    }, {
-      headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Authorization": `Basic ${btoa("client:secret")}`
-      }
-    });
+  const onReset = () => {
+    setFile(null);
+    setEmployee({
+      user_id: "",
+      employee_email: "",
+      employee_name: "",
+      role: null,
+      birth: "",
+    })
   }
 
   return (
@@ -129,7 +87,7 @@ const Register = () => {
       <Grid item xs={6}>
         <Paper elevation={3} sx={{ padding: 2 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <h1>사용자 등록</h1>
+            <h1>{title}</h1>
           </Box>
           <Grid container spacing={2} sx={{ marginTop: 5 }}>
             <Grid item xs={6}>
@@ -148,7 +106,7 @@ const Register = () => {
               >
                 {file ? (
                   <img
-                    src={URL.createObjectURL(file)}
+                    src={file}
                     alt="Uploaded file"
                     width="100%"
                   />
@@ -180,6 +138,7 @@ const Register = () => {
                         variant="outlined"
                         name="user_id"
                         onChange={handleInputChange}
+                        value={employee.user_id}
                         sx={{ width: "100%" }}
                       />
                     </TableCell>
@@ -191,6 +150,7 @@ const Register = () => {
                         variant="outlined"
                         name="employee_email"
                         onChange={handleInputChange}
+                        value={employee.employee_email}
                         sx={{ width: "100%" }}
                       />
                     </TableCell>
@@ -202,6 +162,7 @@ const Register = () => {
                         variant="outlined"
                         name="employee_name"
                         onChange={handleInputChange}
+                        value={employee.employee_name}
                         sx={{ width: "100%" }}
                       />
                     </TableCell>
@@ -211,7 +172,7 @@ const Register = () => {
                       <FormControl fullWidth>
                         <InputLabel>직책</InputLabel>
                         <Select
-                          value={employee.role}
+                          value={role2code[employee.role] || ""}
                           label="role"
                           inputProps={{ name: "role" }}
                           onChange={handleInputChange}
@@ -219,6 +180,7 @@ const Register = () => {
                           <MenuItem value={"DOCTOR"}>의사</MenuItem>
                           <MenuItem value={"RN"}>간호사</MenuItem>
                           <MenuItem value={"KLPN"}>조무사</MenuItem>
+                          <MenuItem value={"ADMIN"}>관리자</MenuItem>
                         </Select>
                       </FormControl>
                     </TableCell>
@@ -231,6 +193,7 @@ const Register = () => {
                           format="YYYY-MM-DD"
                           sx={{ width: "100%" }}
                           onChange={(value) => handleBirthdayChange(value)}
+                          value={dayjs(employee.birth)}
                         />
                       </LocalizationProvider>
                     </TableCell>
@@ -244,10 +207,10 @@ const Register = () => {
                   marginTop: 2,
                 }}
               >
-                <Button variant="contained" onClick={registerClick}>
-                  등록
+                <Button variant="contained" onClick={buttonClick({ file, employee, setEmployee })}>
+                  {buttonName}
                 </Button>
-                <Button variant="contained" color="error">
+                <Button variant="contained" color="error" onClick={onReset}>
                   취소
                 </Button>
               </Box>
@@ -260,4 +223,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default EmployeeForm;
