@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Grid, Button, Switch, Popper, Paper, List } from "@mui/material";
 import { Tooltip } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { DoctorFilterListItem } from "../reservation/ReservationCalendar";
-import { doctorData } from "../reservation/Reservation";
+import { DataContext } from "../loading/DataContextProvider";
 
 const CallButtonSet = ({
   callPatient,
@@ -13,6 +13,7 @@ const CallButtonSet = ({
   doctorFilter,
   setDoctorFilter,
 }) => {
+  const doctorData = React.useContext(DataContext);
   const filterIcon = useRef();
   const [openFilterSelector, setOpenFilterSelector] = useState(false);
   const [autoCallSwitch, setAutoCallSwitch] = useState(false);
@@ -20,6 +21,21 @@ const CallButtonSet = ({
     setAutoCallSwitch((prev) => !prev);
     setAutoCall(e.target.checked);
   };
+
+  useEffect(() => {
+    const click = e => {
+      if (filterIcon.current && filterIcon.current.contains(e.target)) {
+        setOpenFilterSelector(prev => !prev);
+      } else {
+        setOpenFilterSelector(false);
+      }
+    };
+    document.addEventListener('click', click);
+    return () => {
+      document.removeEventListener('click', click);
+    }
+  }, [])
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={6}>
@@ -39,25 +55,25 @@ const CallButtonSet = ({
         <FilterAltIcon
           sx={{ margin: "1", height: "100%" }}
           ref={filterIcon}
-          onClick={() => setOpenFilterSelector(!openFilterSelector)}
+          // onClick={() => setOpenFilterSelector(!openFilterSelector)}
         />
         <Popper
           open={openFilterSelector}
           anchorEl={filterIcon.current}
-          onClose={() => setOpenFilterSelector(false)}
+          // onClose={() => setOpenFilterSelector(false)}
           sx={{ zIndex: 2000 }}
         >
           <Paper>
             <List>
               {doctorData.map((doctor) => (
                 <DoctorFilterListItem
-                  key={`doctorFilterItem#${doctor.id}`}
+                  key={`doctorFilterItem#${doctor.employ_id}`}
                   doctor={doctor}
                   selectDoctor={doctorFilter}
                   onCheckListItemClick={() => {
                     setDoctorFilter((prev) => ({
                       ...prev,
-                      [doctor.id]: !prev[doctor.id],
+                      [doctor.employ_id]: !prev[doctor.employ_id],
                     }));
                   }}
                 />

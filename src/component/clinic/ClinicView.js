@@ -9,9 +9,9 @@ import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 import axiosClient from "./../login/AxiosClient";
-import AccessAllow from "./../login/AccessAllow";
 
 const ClinicView = () => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
   const [reception, setReception] = useState();
   const [patient, setPatient] = useState({});
   const [underlying, onInsert, onDelete, onAppend, onReset] = DiseaseModel();
@@ -90,13 +90,13 @@ const ClinicView = () => {
             );
           }}
           shouldAutoCall={({ data: { state, doctor_id } }) =>
-            state === "수납대기" && doctor_id === 1
+            state === "수납대기" && doctor_id === userInfo.employ_id
           }
           findNextAutoCall={({ state, doctor_id }) =>
-            state === "진료대기" && doctor_id === 1
+            state === "진료대기" && doctor_id === userInfo.employ_id
           }
           shouldDisableCallButton={({ state, doctor_id }) =>
-            state !== "진료대기" || doctor_id !== 1
+            state !== "진료대기" || doctor_id !== userInfo.employ_id
           }
         />
       </Grid>
