@@ -25,7 +25,7 @@ import { MqttContext } from "../waiting/MqttContextProvider";
 import axios from "axios";
 
 const ChatSection = () => {
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") === "undefined" ? "{}" : localStorage.getItem("userInfo"));
   const { current: client } = useContext(MqttContext);
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("md"));

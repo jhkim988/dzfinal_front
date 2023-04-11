@@ -1,6 +1,23 @@
 import axios from "axios";
 import { getLoginUserInfo } from "./Login";
 
+export const refreshAccessToken = () => {
+  const client_id = "client";
+  const client_secret = "secret";
+  const base64 = btoa(`${client_id}:${client_secret}`);
+  return axios
+    .post(`http://localhost:8081/oauth/token`, null, {
+      params: {
+        grant_type: "refresh_token",
+        refresh_token: auth.refresh_token,
+      },
+      headers: {
+        Authorization: `Basic ${base64}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+}
+
 const auth = localStorage.getItem("auth")
   ? JSON.parse(localStorage.getItem("auth"))
   : {};
@@ -17,24 +34,11 @@ axiosClient.interceptors.request.use((request) => {
   const auth = JSON.parse(localStorage.getItem("auth"));
   const tokenPayload = JSON.parse(atob(auth.access_token.split(".")[1]));
   if (new Date(tokenPayload.exp * 1000) < new Date()) {
-    const client_id = "client";
-    const client_secret = "secret";
-    const base64 = btoa(`${client_id}:${client_secret}`);
-    axios
-      .post(`http://localhost:8081/oauth/token`, null, {
-        params: {
-          grant_type: "refresh_token",
-          refresh_token: auth.refresh_token,
-        },
-        headers: {
-          Authorization: `Basic ${base64}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      })
-      .then(({ data }) => {
-        localStorage.setItem("auth", JSON.stringify({ ...auth, ...data }));
-        getLoginUserInfo();
-      });
+    refreshAccessToken()
+    .then(({ data }) => {
+      localStorage.setItem("auth", JSON.stringify({ ...auth, ...data }));
+      getLoginUserInfo();
+    });
   }
   return request;
 });
@@ -45,7 +49,15 @@ axiosClient.interceptors.response.use(
   },
   (err) => {
     if (err.response.status === 401 || err.response.status === 403) {
-      alert("권한이 없습니다.");
+      if (err.response.data.error_description.startsWith("Access token expired")) {
+        refreshAccessToken()
+          .then(({ data }) => {
+            localStorage.setItem("auth", JSON.stringify({ ...auth, ...data }));
+            window.location.reload();
+          });
+      } else {
+        alert("권한이 없습니다.");
+      }
     }
     return err;
   }

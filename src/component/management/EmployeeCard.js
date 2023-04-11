@@ -1,8 +1,10 @@
 import { Box, Button, Card, CardMedia, Grid, Paper } from "@mui/material";
 import React from "react";
 import axiosClient from "../login/AxiosClient";
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function EmployeeCard(props) {
+  const navigate = useNavigate();
   const { employee, setEmployees, employees } = props;
   const onDelete = () => {
     if (window.confirm("삭제 하시겠습니까?")) {
@@ -21,7 +23,6 @@ export default function EmployeeCard(props) {
         });
     }
   };
-
   return (
     <Grid item xs={6}>
       <Paper elevation={3}>
@@ -44,9 +45,14 @@ export default function EmployeeCard(props) {
                 <h2 style={{ color: "#757575" }}>{employee.employee_name}</h2>
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Button variant="contained" sx={{ marginRight: 2 }}>
-                  수정
-                </Button>
+                {/* <Link to={{
+                  pathname: `/employee_update_form`,
+                  state: { employ_id : employee.employ_id }
+                }}> */}
+                  <Button variant="contained" sx={{ marginRight: 2 }} onClick={() => navigate(`/employee_update_form`, {state: { employ_id : employee.employ_id }})}>
+                    수정
+                  </Button>
+                {/* </Link> */}
                 <Button variant="contained" color="error" onClick={onDelete}>
                   삭제
                 </Button>
@@ -55,13 +61,7 @@ export default function EmployeeCard(props) {
             <Box sx={{ display: "block" }}>
               <Box sx={{ marginTop: 1, marginBottom: 1 }}>
                 직책 :{" "}
-                {employee.role === "doctor"
-                  ? "의사"
-                  : employee.role === "rn"
-                  ? "간호사"
-                  : employee.role === "klpn"
-                  ? "조무사"
-                  : ""}
+                {employee.role}
                 <br />
                 <br />
                 아이디 : {employee.user_id}
