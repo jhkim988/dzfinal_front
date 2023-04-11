@@ -8,8 +8,8 @@ import Underlying from "./Underlying";
 import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
-import axiosClient from './../login/AxiosClient';
-import AccessAllow from './../login/AccessAllow';
+import axiosClient from "./../login/AxiosClient";
+import AccessAllow from "./../login/AccessAllow";
 
 const ClinicView = () => {
   const [reception, setReception] = useState();
@@ -48,25 +48,12 @@ const ClinicView = () => {
         .catch((error) => {
           console.log(error);
         });
-        setDiagnosis([]);
-        setPrescription([]);
-        setSymptom("");
-        setTreatment(false);
-        setClinic_request(false);
+    setDiagnosis([]);
+    setPrescription([]);
+    setSymptom("");
+    setTreatment(false);
+    setClinic_request(false);
   }, [reception]);
-
-  useEffect(() => {
-    patient?.patient_id &&
-      axiosClient
-        .get(`/api/clinic/mri/${patient.patient_id}/${pagination.currentPage}`)
-        .then((response) => {
-          setMri(response.data.mri);
-          setPagination(response.data.pagination);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-  }, [patient.patient_id]);
 
   const clickMedicalRecordInquiry = useCallback(
     (type, formattedDates, keyword, patient_id) => {
@@ -77,14 +64,14 @@ const ClinicView = () => {
       axiosClient
         .get(`/api/clinic/mri/${patient_id}/${pagination.currentPage}`)
         .then((response) => {
-          setMri(response.data);
+          setMri(response.data.mri);
           setPagination(response.data.pagination);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    []
+    [pagination.currentPage]
   );
 
   return (
@@ -102,15 +89,21 @@ const ClinicView = () => {
               patient_id
             );
           }}
-          shouldAutoCall={({ data: { state, doctor_id }}) => (state === "수납대기" && doctor_id === 1)}
-          findNextAutoCall={({ state, doctor_id }) => state === "진료대기" && doctor_id === 1}
-          shouldDisableCallButton={({ state, doctor_id }) => state !== "진료대기" || doctor_id !== 1}
+          shouldAutoCall={({ data: { state, doctor_id } }) =>
+            state === "수납대기" && doctor_id === 1
+          }
+          findNextAutoCall={({ state, doctor_id }) =>
+            state === "진료대기" && doctor_id === 1
+          }
+          shouldDisableCallButton={({ state, doctor_id }) =>
+            state !== "진료대기" || doctor_id !== 1
+          }
         />
       </Grid>
       <Grid item xs={5}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "37.9vh" }} elevation={3}>
               <MedicalRecordInquiry
                 mri={mri}
                 setMri={setMri}
@@ -125,10 +118,9 @@ const ClinicView = () => {
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "41.1vh" }} elevation={3}>
               <MedicalInfo
                 medicalInfo={medicalInfo}
-                mode={mode}
                 setMode={setMode}
                 setDiagnosis={setDiagnosis}
                 setPrescription={setPrescription}
@@ -143,7 +135,7 @@ const ClinicView = () => {
       <Grid item xs={5}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "37.9vh" }} elevation={3}>
               <Patient reception={reception} patient={patient} />
               <Grid container spacing={2} sx={{ marginTop: 1 }}>
                 <Grid item xs={6}>
@@ -156,7 +148,7 @@ const ClinicView = () => {
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "41vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "41.1vh" }} elevation={3}>
               <Clinic
                 setPatient={setPatient}
                 setReception={setReception}

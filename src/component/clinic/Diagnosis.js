@@ -129,6 +129,7 @@ const Diagnosis = ({
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginRight: 1 }}
           />
           <TextField
             size="small"
@@ -141,6 +142,7 @@ const Diagnosis = ({
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginLeft: 1 }}
           />
         </Box>
         <Box

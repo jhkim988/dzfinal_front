@@ -1,0 +1,15 @@
+@keyframes grow-shrink {
+  0% {
+    font-size: 16px;
+  }
+  50% {
+    font-size: 24px;
+  }
+  100% {
+    font-size: 16px;
+  }
+}
+
+.css-1qb9p1k-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+  -webkit-text-fill-color: black;
+}

@@ -12,7 +12,7 @@ import { useEffect, useState, useRef } from "react";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
-import axiosClient from './../login/AxiosClient';
+import axiosClient from "./../login/AxiosClient";
 
 const Prescription = ({
   handlePrescriptionAdd,
@@ -132,6 +132,7 @@ const Prescription = ({
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginRight: 1 }}
           />
           <TextField
             size="small"
@@ -144,6 +145,7 @@ const Prescription = ({
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            sx={{ marginLeft: 1 }}
           />
         </Box>
         <Box

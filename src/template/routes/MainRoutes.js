@@ -27,6 +27,11 @@ const EmployeeRegister = Loadable(
 
 const EmployeeUpdate = Loadable(lazy(() => import ('./../../component/management/EmployeeUpdate')));
 
+const PwdChange = Loadable(
+  lazy(() => import("../../component/pwd/PwdChange"))
+);
+
+
 const Logout = Loadable(lazy(() => import("../../component/login/Logout")));
 
 const MainRoutes = {
@@ -92,6 +97,10 @@ const MainRoutes = {
     {
       path: "logout",
       element: <Logout />,
+    },
+    {
+      path: "pwdchange",
+      element: <PwdChange />,
     },
   ],
 };

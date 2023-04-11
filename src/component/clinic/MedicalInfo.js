@@ -11,7 +11,6 @@ import {
 
 const MedicalInfo = ({
   medicalInfo,
-  mode,
   setMode,
   setDiagnosis,
   setPrescription,
@@ -84,6 +83,9 @@ const MedicalInfo = ({
               value={medicalInfo.created_at || ""}
               label="진료날짜"
               sx={{ marginLeft: 1, marginRight: 1 }}
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
             />
             <TextField
               disabled
@@ -91,6 +93,9 @@ const MedicalInfo = ({
               value={medicalInfo.employee_name || ""}
               label="담당의"
               sx={{ marginLeft: 1, marginRight: 1 }}
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
             />
             <TextField
               disabled
@@ -98,6 +103,9 @@ const MedicalInfo = ({
               value={medicalInfo.patient_name || ""}
               label="환자이름"
               sx={{ marginLeft: 1, marginRight: 1 }}
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
             />
             <TextField
               disabled
@@ -105,6 +113,9 @@ const MedicalInfo = ({
               value={medicalInfo.front_registration_number || ""}
               label="앞자리"
               sx={{ marginLeft: 1, marginRight: 1 }}
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
             />
           </Box>
           <Box sx={{ display: "flex", marginTop: 1 }}>
@@ -119,6 +130,9 @@ const MedicalInfo = ({
                 ),
               }}
               sx={{ marginLeft: 1, marginRight: 1 }}
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
             />
             <TextField
               disabled
@@ -131,6 +145,9 @@ const MedicalInfo = ({
                 ),
               }}
               sx={{ marginLeft: 1, marginRight: 1 }}
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
             />
             <TextField
               disabled
@@ -143,6 +160,9 @@ const MedicalInfo = ({
                 ),
               }}
               sx={{ marginLeft: 1, marginRight: 1, width: "260px" }}
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
             />
             <TextField
               disabled
@@ -159,6 +179,9 @@ const MedicalInfo = ({
                 ),
               }}
               sx={{ marginLeft: 1, marginRight: 1, width: "300px" }}
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
             />
             <TextField
               disabled
@@ -171,6 +194,9 @@ const MedicalInfo = ({
                 ),
               }}
               sx={{ marginLeft: 1, marginRight: 1 }}
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
             />
           </Box>
         </Grid>
@@ -214,8 +240,15 @@ const MedicalInfo = ({
         </Grid>
         <Grid item xs={12}>
           <Box sx={{ margin: 1, height: "100%" }}>
-            증상
-            <Box
+            <TextField
+              disabled
+              sx={{ width: "100%" }}
+              label="증상"
+              multiline
+              rows={2}
+              value={medicalInfo.symptom || ""}
+            />
+            {/* <Box
               sx={{
                 border: "1px solid gray",
                 borderRadius: 1,
@@ -224,7 +257,7 @@ const MedicalInfo = ({
               }}
             >
               {medicalInfo.symptom}
-            </Box>
+            </Box> */}
           </Box>
         </Grid>
       </Grid>
