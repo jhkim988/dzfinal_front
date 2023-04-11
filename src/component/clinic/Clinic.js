@@ -227,7 +227,7 @@ const Clinic = ({
             label="진료의뢰서"
           />
         </Box>
-        <Box>
+        <Box sx={{ marginBottom: 2 }}>
           <Stack spacing={2} direction="row">
             <Button variant="contained" onClick={onClick}>
               {mode !== 2 ? "등록" : "수정"}

@@ -207,7 +207,7 @@ const MedicalInfo = ({
               sx={{
                 border: "1px solid gray",
                 borderRadius: 1,
-                height: "130px",
+                height: "115px",
                 overflowY: "auto",
               }}
             >
@@ -226,7 +226,7 @@ const MedicalInfo = ({
               sx={{
                 border: "1px solid gray",
                 borderRadius: 1,
-                height: "130px",
+                height: "115px",
                 overflowY: "auto",
               }}
             >
@@ -248,16 +248,6 @@ const MedicalInfo = ({
               rows={2}
               value={medicalInfo.symptom || ""}
             />
-            {/* <Box
-              sx={{
-                border: "1px solid gray",
-                borderRadius: 1,
-                height: "50px",
-                overflowY: "auto",
-              }}
-            >
-              {medicalInfo.symptom}
-            </Box> */}
           </Box>
         </Grid>
       </Grid>
