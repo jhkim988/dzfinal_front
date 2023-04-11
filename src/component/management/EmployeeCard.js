@@ -61,13 +61,7 @@ export default function EmployeeCard(props) {
             <Box sx={{ display: "block" }}>
               <Box sx={{ marginTop: 1, marginBottom: 1 }}>
                 직책 :{" "}
-                {employee.role === "DOCTOR"
-                  ? "의사"
-                  : employee.role === "RN"
-                  ? "간호사"
-                  : employee.role === "KLPN"
-                  ? "조무사"
-                  : ""}
+                {employee.role}
                 <br />
                 <br />
                 아이디 : {employee.user_id}
