@@ -118,7 +118,7 @@ function Receipt({ receiptData }) {
           <>
             <ReceptionInformation user={user} />
             {/* 다음진료예약 */}
-            <Reservation />
+            <Reservation init={receiptData.patient}/>
             {/* 결제내역정보 */}
             <ReceiptDetails user={user} />
             <br />
