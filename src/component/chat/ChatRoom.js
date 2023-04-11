@@ -9,7 +9,7 @@ import {
   TextField,
   Toolbar,
 } from "@mui/material";
-import { IconChevronLeft } from "@tabler/icons";
+import { IconChevronLeft, IconSend } from "@tabler/icons";
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import axios from "axios";
@@ -29,6 +29,7 @@ const ChatRoom = ({ room, onBackClick }) => {
   const [page, setPage] = useState(1);
   const [scrollTop, setScrollTop] = useState(0);
   const { current: client } = useContext(MqttContext);
+  const isDisabled = !message.message.trim();
 
   useEffect(() => {
     axios
@@ -237,7 +238,7 @@ const ChatRoom = ({ room, onBackClick }) => {
               }))
             }
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              if (e.key === "Enter" && !isDisabled) {
                 e.preventDefault();
                 publish();
               }
@@ -245,8 +246,8 @@ const ChatRoom = ({ room, onBackClick }) => {
             sx={{ width: "100%" }}
           />
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Button variant="contained" onClick={publish}>
-              전송
+            <Button variant="contained" onClick={publish} disabled={isDisabled}>
+              <IconSend />
             </Button>
           </Box>
         </Box>
