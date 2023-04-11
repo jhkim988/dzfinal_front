@@ -216,7 +216,6 @@ const Clinic = ({
             }
             label="처치"
           />
-
           <FormControlLabel
             control={
               <Checkbox
@@ -228,7 +227,7 @@ const Clinic = ({
             label="진료의뢰서"
           />
         </Box>
-        <>
+        <Box>
           <Stack spacing={2} direction="row">
             <Button variant="contained" onClick={onClick}>
               {mode !== 2 ? "등록" : "수정"}
@@ -237,7 +236,7 @@ const Clinic = ({
               취소
             </Button>
           </Stack>
-        </>
+        </Box>
       </Box>
     </>
   );

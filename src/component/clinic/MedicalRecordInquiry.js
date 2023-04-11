@@ -175,7 +175,7 @@ const MedicalRecordInquiry = ({
         <TableContainer sx={{ height: "242px" }}>
           <Table
             sx={{
-              minWidth: 650,
+              minWidth: 630,
               "& td": { padding: 0 },
               "& th": { padding: 0, fontWeight: "bold" },
             }}
