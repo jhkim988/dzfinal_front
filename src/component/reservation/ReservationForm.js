@@ -4,7 +4,6 @@ import {
   Paper,
   Grid,
   Modal,
-  TextField,
   FormControl,
   InputLabel,
   Input,
@@ -140,15 +139,6 @@ const ReservationForm = ({
         >
           <Grid container>
             <Grid item xs={6} style={style}>
-              {/* <FormControl>
-                <InputLabel htmlFor="patient_name">예약자 성함</InputLabel>
-                <Input
-                  id="patient_name"
-                  name="patient_name"
-                  onChange={formOnChange}
-                  value={reservationFormData.patient_name}
-                />
-              </FormControl> */}
               <PatientAutoComplete
                 patient_name={reservationFormData.patient_name}
                 onSelect={(e, value) => {
@@ -162,8 +152,6 @@ const ReservationForm = ({
                 onInputChange={(e, value, reason) => {
                   if (reason === "input") {
                     setReservationFormData(prev => ({ ...prev, patient_name: value, patient_id: 0, phone_number1: "", phone_number2: "", phone_number3: "" }));
-                  } else if (reason === "reset") {
-                    setReservationFormData(prev => ({ ...prev, patient_name: "", patient_id: 0, phone_number1: "", phone_number2: "", phone_number3: "" }));
                   } else if (reason === "clear") {
                     setReservationFormData(prev => ({ ...prev, patient_name: "", patient_id: 0, phone_number1: "", phone_number2: "", phone_number3: "" }));
                   }
