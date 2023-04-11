@@ -10,3 +10,29 @@
 .css-10e3ze8-MuiStack-root {
   padding: 0px !important;
 }
+
+.css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+  -webkit-text-fill-color: black !important;
+  font-weight: bold;
+}
+
+.css-1rufdh7-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+  -webkit-text-fill-color: black !important;
+  font-weight: bold;
+}
+
+.css-1rufdh7-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 8.5px 0px 8.5px 14px !important;
+}
+
+.css-1d3mh92 {
+  margin: 8px !important;
+}
+
+.css-5sfu98-MuiGrid-root > .MuiGrid-item {
+  padding-top: 0px !important;
+}
+
+.css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall {
+  padding: 8.5px 14px;
+}

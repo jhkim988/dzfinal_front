@@ -1,16 +1,16 @@
 // import * as React from 'react';
 import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
-import axios from "axios";
 import React, { useEffect, useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
+import axiosClient from './../../login/AxiosClient';
 
 
 const Treatment = ({user, ref}) => {
 
     const [disease, setDisease] = useState([]);
     useEffect(() => {
-        axios.get(`/api/receipt/getDisease/${user.reception_id}`)
+        axiosClient.get(`/api/receipt/getDisease/${user.reception_id}`)
             .then(response => {
                 setDisease(response.data);
             })
@@ -18,7 +18,7 @@ const Treatment = ({user, ref}) => {
 
     const [drug, setDrug] = useState([]);
     useEffect(() => {
-        axios.get(`/api/receipt/getDrug/${user.reception_id}`)
+        axiosClient.get(`/api/receipt/getDrug/${user.reception_id}`)
             .then(response => {
                 setDrug(response.data);
             })

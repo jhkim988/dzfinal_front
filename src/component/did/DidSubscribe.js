@@ -20,7 +20,7 @@ import {
   import FormControl, { useFormControl } from '@mui/material/FormControl';
   import { tableCellClasses } from "@mui/material/TableCell";
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import axios from "axios";
+import axiosClient from "../login/AxiosClient";
 
 
 const DidView = () => {
@@ -30,11 +30,7 @@ const DidView = () => {
 
 
     useEffect(() => {
-        axios.get(`/api/view/getDidSubtitle`, {
-            headers: {
-              "Content-Type": "application/json",
-            }
-          })
+        axiosClient.get(`/api/view/getDidSubtitle`)
         .then(response => {
             setGetDidSubtitle(response.data);
         })

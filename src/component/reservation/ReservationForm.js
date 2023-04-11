@@ -4,7 +4,6 @@ import {
   Paper,
   Grid,
   Modal,
-  TextField,
   FormControl,
   InputLabel,
   Input,
@@ -14,10 +13,13 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import axios from "axios";
 import { offsetDate } from "./utils/dateUtils";
 import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
 import PatientAutoComplete from './../reception/PatientAutoComplete';
+import axiosClient from './../login/AxiosClient';
+import { useContext } from "react";
+import { DataContext } from "../loading/DataContextProvider";
+
 
 const style = { margin: "20px 0px" };
 
@@ -28,6 +30,7 @@ const ReservationForm = ({
   pickTime,
   requestSuccessCallback,
 }) => {
+  const doctorData = useContext(DataContext);
   const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const anchorRef = useRef(null);
@@ -52,7 +55,7 @@ const ReservationForm = ({
   }, [setReservationFormData]);
 
   const postReservation = useCallback((e) => {
-    axios.post("/api/reservation", reservationFormData, {
+    axiosClient.post("/api/reservation", reservationFormData, {
       headers: { 'Content-Type': 'application/json;charset=utf-8' }
     }).then((res) => {
       if (res.status === 200) {
@@ -63,7 +66,7 @@ const ReservationForm = ({
   }, [reservationFormData]);
 
   const putReservation = useCallback((e) => {
-    axios.put("/api/reservation", reservationFormData).then((res) => {
+    axiosClient.put("/api/reservation", reservationFormData).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
         requestSuccessCallback(reservationFormData, res.data);
@@ -88,7 +91,7 @@ const ReservationForm = ({
         doctor: reservationFormModal.doctor,
       });
     } else if (reservationFormModal.mode === "PUT") {
-      axios.get(`/api/reservation/${reservationFormModal.reservation_id}`)
+      axiosClient.get(`/api/reservation/${reservationFormModal.reservation_id}`)
         .then(({ data }) => {
           const data_date = new Date(data.wish_date);
           const wish_date = offsetDate(data_date);
@@ -139,15 +142,6 @@ const ReservationForm = ({
         >
           <Grid container>
             <Grid item xs={6} style={style}>
-              {/* <FormControl>
-                <InputLabel htmlFor="patient_name">예약자 성함</InputLabel>
-                <Input
-                  id="patient_name"
-                  name="patient_name"
-                  onChange={formOnChange}
-                  value={reservationFormData.patient_name}
-                />
-              </FormControl> */}
               <PatientAutoComplete
                 patient_name={reservationFormData.patient_name}
                 onSelect={(e, value) => {
@@ -161,8 +155,6 @@ const ReservationForm = ({
                 onInputChange={(e, value, reason) => {
                   if (reason === "input") {
                     setReservationFormData(prev => ({ ...prev, patient_name: value, patient_id: 0, phone_number1: "", phone_number2: "", phone_number3: "" }));
-                  } else if (reason === "reset") {
-                    setReservationFormData(prev => ({ ...prev, patient_name: "", patient_id: 0, phone_number1: "", phone_number2: "", phone_number3: "" }));
                   } else if (reason === "clear") {
                     setReservationFormData(prev => ({ ...prev, patient_name: "", patient_id: 0, phone_number1: "", phone_number2: "", phone_number3: "" }));
                   }
@@ -224,8 +216,7 @@ const ReservationForm = ({
                   onChange={formOnChange}
                   value={reservationFormData.doctor || 1}
                 >
-                  <MenuItem value="1">김더존</MenuItem>
-                  <MenuItem value="2">이을지</MenuItem>
+                  {doctorData.map((doctor) => (<MenuItem key={`ReservationForm#Doctor${doctor.employ_id}`} value={doctor.employ_id}>{doctor.employee_name}</MenuItem>))}
                 </Select>
               </FormControl>
             </Grid>

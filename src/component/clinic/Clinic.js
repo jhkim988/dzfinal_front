@@ -8,11 +8,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React from "react";
 import Diagnosis from "./Diagnosis";
 import Prescription from "./Prescription";
+import axiosClient from "./../login/AxiosClient";
 
 const Clinic = ({
   reception,
@@ -78,7 +77,7 @@ const Clinic = ({
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
 
-      axios
+      axiosClient
         .post("/api/clinic/clinic", {
           reception_id: reception,
           symptom: symptom,
@@ -88,7 +87,11 @@ const Clinic = ({
           disease_ids: diseaseIds,
           drug_ids: drugIds,
         })
-        .then((response) => {})
+        .then((resp) => {
+          if (resp.response.status === 500) {
+            alert(resp.response.data);
+          }
+        })
         .catch((error) => {
           console.log(error);
         });
@@ -100,7 +103,7 @@ const Clinic = ({
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
 
-      axios
+      axiosClient
         .post("/api/clinic/clinic", {
           reception_id: reception,
           symptom: symptom,
@@ -110,7 +113,11 @@ const Clinic = ({
           disease_ids: diseaseIds,
           drug_ids: drugIds,
         })
-        .then((response) => {})
+        .then((resp) => {
+          if (resp.response.data) {
+            alert(resp.response.data);
+          }
+        })
         .catch((error) => {
           console.log(error);
         });
@@ -122,7 +129,7 @@ const Clinic = ({
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
 
-      axios
+      axiosClient
         .put("/api/clinic/clinic", {
           reception_id: medicalInfo.reception_id,
           symptom: symptom,
@@ -209,7 +216,6 @@ const Clinic = ({
             }
             label="처치"
           />
-
           <FormControlLabel
             control={
               <Checkbox
@@ -221,7 +227,7 @@ const Clinic = ({
             label="진료의뢰서"
           />
         </Box>
-        <>
+        <Box sx={{ marginBottom: 2 }}>
           <Stack spacing={2} direction="row">
             <Button variant="contained" onClick={onClick}>
               {mode !== 2 ? "등록" : "수정"}
@@ -230,7 +236,7 @@ const Clinic = ({
               취소
             </Button>
           </Stack>
-        </>
+        </Box>
       </Box>
     </>
   );

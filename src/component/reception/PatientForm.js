@@ -11,8 +11,8 @@ import {
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import PopupPostCode from "./PopupPostCode";
-import axios from "axios";
 import PatientAutoComplete from "./PatientAutoComplete";
+import axiosClient from './../login/AxiosClient';
 
 const Patient_API_BASE_URL = "/api/patient";
 
@@ -38,7 +38,14 @@ const PatientForm = ({
     const [isChecked, setIsChecked] = useState(false);
     const [open, setOpen] = React.useState(false);
     const [patient_name, setPatient_name] = useState("");
-    const [autoCompleteList, setAutoCompleteList] = useState([]);
+
+    //예외처리
+    const [isFrontInvalid, setIsFrontInvalid] = useState(false);
+    const [isBackInvalid, setisBackInvalid] = useState(false);
+    const [isPhone1Invalid, setIsPhone1Invalid] = useState(false);
+    const [isPhone2Invalid, setIsPhone2Invalid] = useState(false);
+    const [isPhone3Invalid, setIsPhone3Invalid] = useState(false);
+
 
     //초기화
     const resetHandler = (event) => {
@@ -77,6 +84,41 @@ const PatientForm = ({
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'front_registration_number') {
+            if (value.length == 6 || value.length == 0) {
+                setIsFrontInvalid(false);
+            } else {
+                setIsFrontInvalid(true);
+            }
+        } else if (name === 'back_registration_number') {
+            if (value.length == 7 || value.length == 0) {
+                setisBackInvalid(false);
+            } else {
+                setisBackInvalid(true);
+            }
+        }
+
+        if (name === 'phone_number1') {
+            if (value.length == 3 || value == 0) {
+                setIsPhone1Invalid(false);
+            } else {
+                setIsPhone1Invalid(true);
+            }
+        } else if (name === 'phone_number2') {
+            if (value.length == 4 || value == 0) {
+                setIsPhone2Invalid(false);
+            } else {
+                setIsPhone2Invalid(true);
+            }
+        } else if (name === 'phone_number3') {
+            if (value.length == 4 || value == 0) {
+                setIsPhone3Invalid(false);
+            } else {
+                setIsPhone3Invalid(true);
+            }
+        }
+
         setPatientData((patientData) => ({
             ...patientData,
             ...selectedAddress,
@@ -88,13 +130,8 @@ const PatientForm = ({
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (
-            window.confirm(
-                patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?"
-            )
-        ) {
-            axios
-                .post(Patient_API_BASE_URL, patientData)
+        if (window.confirm(patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?")) {
+            axiosClient.post(Patient_API_BASE_URL, patientData)
                 .then((response) => {
                     alert(response.data.message);
                     console.log("patient_id:" + response.data.patient_id);
@@ -112,7 +149,7 @@ const PatientForm = ({
 
     const updatePatientInfo = () => {
         if (window.confirm("[ 환자번호 : " + patientData.patient_id + " ]" + patientData.patient_name + "님의 환자 정보를 수정하시겠습니까?")) {
-            axios.post(Patient_API_BASE_URL + "/update", patientData)
+            axiosClient.post(Patient_API_BASE_URL + "/update", patientData)
                 .then((response) => {
                     alert("환자 수정 성공");
                     setPatientData(prev => ({ ...response.data }));
@@ -142,7 +179,7 @@ const PatientForm = ({
     };
 
     const onSelect = (e, value) => {
-        axios
+        axiosClient
             .get(`/api/patient/${value.patient_id}`)
             .then(({ data }) => {
                 setPatientData(data);
@@ -156,19 +193,14 @@ const PatientForm = ({
             <Paper sx={{ height: "24vh" }} elevation={1}>
                 <Grid container>
                     <Grid item xs={12}>
-                        <div style={{ width: "100px", height: "10px", marginBottom: "5px" }}>
-                            <h5 style={{ marginTop: "5px", marginBottom: "5px" }}>
-                                환자 등록/수정
+                        <h5 style={{ marginTop: 0, marginBottom: 0 }}>
+                            환자 등록/수정
 
-                            </h5>
-                        </div>
+                        </h5>
                     </Grid>
                 </Grid>
-                <div style={{ marginTop: "1em", marginLeft: "1em" }}>
+                <div style={{ marginTop: "1vh", marginLeft: "0.7vw" }}>
                     <Grid container spacing={2}>
-                        {/* <Grid item xs={12}>
-              환자 등록/수정
-            </Grid> */}
                         <Grid item xs={4}>
                             <PatientAutoComplete
                                 patient_name={patientData.patient_name}
@@ -199,8 +231,10 @@ const PatientForm = ({
                                     onChange={handleChange}
                                     value={patientData.front_registration_number || ""}
                                     size="small"
+                                    error={isFrontInvalid}
+                                //helperText={isFrontInvalid ? "6자리를 초과" : ""}
                                 />
-                                <p style={{ margin: 5 }}>─</p>
+                                <p style={{ margin: 3 }}>─</p>
                                 <TextField
                                     onChange={handleChange}
                                     sx={{
@@ -212,6 +246,7 @@ const PatientForm = ({
                                     value={patientData.back_registration_number || ""}
                                     variant="outlined"
                                     size="small"
+                                    error={isBackInvalid}
                                 />
                             </Box>
                         </Grid>
@@ -222,7 +257,7 @@ const PatientForm = ({
                                         type="submit"
                                         onClick={handleSubmit}
                                         variant="contained"
-                                        style={{ width: "30px", height: "30px" }}
+                                        sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}
                                     >
                                         등록
                                     </Button>
@@ -233,7 +268,7 @@ const PatientForm = ({
                                             type="submit"
                                             onClick={handleSubmit}
                                             variant="contained"
-                                            style={{ width: "30px", height: "30px" }}
+                                            sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}
                                         >
                                             등록
                                         </Button>
@@ -244,7 +279,7 @@ const PatientForm = ({
                                             type="submit"
                                             onClick={updatePatientInfo}
                                             variant="contained"
-                                            style={{ width: "30px", height: "30px" }}
+                                            sx={{ width: "10vw", height: "3.5vh", marginLeft: 2 }}
                                         >
                                             수정
                                         </Button>
@@ -254,14 +289,14 @@ const PatientForm = ({
                                     variant="contained"
                                     color="error"
                                     onClick={resetHandler}
-                                    style={{ width: "30px", height: "30px", marginRight: "5px" }}
+                                    sx={{ width: "10vw", height: "3.5vh", marginLeft: 1 }}
                                 >
                                     취소
                                 </Button>
                             </Box>
                         </Grid>
                     </Grid>
-                    <Grid container spacing={2} sx={{ paddingTop: 1.5 }}>
+                    <Grid container spacing={2} sx={{ paddingTop: 0.5 }}>
                         <Grid item xs={7}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                 <TextField
@@ -279,8 +314,9 @@ const PatientForm = ({
                                     value={patientData.phone_number1 || ""}
                                     variant="outlined"
                                     size="small"
+                                    error={isPhone1Invalid}
                                 />
-                                <p style={{ margin: 5 }}>─</p>
+                                <p style={{ margin: 3 }}>─</p>
 
                                 <TextField
                                     sx={{
@@ -292,8 +328,9 @@ const PatientForm = ({
                                     value={patientData.phone_number2 || ""}
                                     variant="outlined"
                                     size="small"
+                                    error={isPhone2Invalid}
                                 />
-                                <p style={{ margin: 5 }}>─</p>
+                                <p style={{ margin: 3 }}>─</p>
                                 <TextField
                                     sx={{
                                         "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
@@ -304,6 +341,7 @@ const PatientForm = ({
                                     value={patientData.phone_number3 || ""}
                                     variant="outlined"
                                     size="small"
+                                    error={isPhone3Invalid}
                                 />
                             </Box>
                         </Grid>

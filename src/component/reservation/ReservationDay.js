@@ -1,5 +1,4 @@
-import React from "react";
-import { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useContext } from "react";
 import { Paper } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import {
@@ -14,17 +13,13 @@ import {
   ViewState,
   IntegratedGrouping,
 } from "@devexpress/dx-react-scheduler";
-import axios from "axios";
 import { compareDate, offsetDate } from './utils/dateUtils';
 import ReservationForm from './ReservationForm';
-import { doctorData, resources } from "./Reservation";
+import axiosClient from './../login/AxiosClient';
+import { DataContext } from './../loading/DataContextProvider';
+
 
 const cellHeight = 2.7;
-
-const appointmentBackground = {
-  '1': "#F29D94",
-  '2': "#BEDEF3",
-};
 
 const ReservationDay = ({
   viewDate,
@@ -32,6 +27,10 @@ const ReservationDay = ({
   setCalendarAppointments,
   setDaySchedule,
 }) => {
+  const doctorData = React.useContext(DataContext);
+  const resources = [
+    { fieldName: "doctor", title: "doctor", instances: doctorData.map((el) => ({ id: `${el.employ_id}`, text: el.employee_name, color: el.color })) }
+  ];
   const [reservationFormModal, setReservationFormModal] = useState({
     modalState: false,
     mode: 'POST', // POST or PUT
@@ -43,7 +42,7 @@ const ReservationDay = ({
   // month/week
   const loadCalendar = useCallback(() => {
     if (viewDate.viewCalendar === "month") {
-      axios
+      axiosClient
       .get(`/api/reservation/month`, {
         params: {
           start: offsetDate(viewDate.startDate),
@@ -61,14 +60,14 @@ const ReservationDay = ({
             id: idx,
             startDate,
             endDate,
-            title: `${doctorData.find(data => data.id === el.doctor).text}: ${el.count} 건`,
+            title: `${doctorData.find(data => `${data.employ_id}` === `${el.doctor}`)?.employee_name}: ${el.count} 건`,
             doctor: el.doctor,
           };
         });
         setCalendarAppointments(val);
       });
     } else if (viewDate.viewCalendar === "week") {
-      axios.get(`/api/reservation/week`, {
+      axiosClient.get(`/api/reservation/week`, {
         params: {
           start: offsetDate(viewDate.startDate),
           end: offsetDate(viewDate.endDate)
@@ -84,7 +83,7 @@ const ReservationDay = ({
             id: idx,
             startDate,
             endDate,
-            title: `${doctorData.find(data => data.id === el.doctor).text}: ${el.count} 건`,
+            title: `${doctorData.find(data => `${data.employ_id}` === `${el.doctor}`).employee_name}: ${el.count} 건`,
             doctor: el.doctor,
           };
         });
@@ -96,7 +95,7 @@ const ReservationDay = ({
   
   // day
   const loadDayAppointments = useCallback((dateStr) => {
-    axios.get(`/api/reservation/day?target=${dateStr}`)
+    axiosClient.get(`/api/reservation/day?target=${dateStr}`)
     .then(({data}) => {
       setDaySchedule(data.map((el, idx) => {
         const startDate = new Date(`${dateStr} ${el.wish_time}`);
@@ -125,6 +124,7 @@ const ReservationDay = ({
   }, []);
 
   const Appointment = ({ children, style, ...restProps }) => {
+    const doctorData = useContext(DataContext);
     const onClick = (e) => {
       setReservationFormModal({ modalState: true, mode: 'PUT', reservation_id: restProps.data.reservation_id });
     }
@@ -135,7 +135,7 @@ const ReservationDay = ({
         ...style,
         color: "white",
         padding: "5px",
-        backgroundColor: appointmentBackground[restProps.data.doctor] || "blue",
+        backgroundColor: `#${doctorData.find(d => `${d.employ_id}` === `${restProps.data.doctor}`).color}`,
         borderRadius: "8px",
       }}
       onClick={onClick}>

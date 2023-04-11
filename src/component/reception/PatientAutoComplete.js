@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Autocomplete, TextField, Typography } from "@mui/material";
 import axios from "axios";
+import axiosClient from "../login/AxiosClient";
 
 const PatientAutoComplete = ({ patient_name, onSelect, onInputChange, variant }) => {
   const [text, setText] = useState("");
@@ -9,7 +10,7 @@ const PatientAutoComplete = ({ patient_name, onSelect, onInputChange, variant })
   const autoCompleteRequest = (e, value) => {
     setText(value);
     if (value.length < 2) return;
-    axios
+    axiosClient
       .get(`/api/patient/list`, { params: { patient_name: value } })
       .then(({ data }) => {
         const formattedData = data.map((el) => ({
@@ -46,7 +47,7 @@ const PatientAutoComplete = ({ patient_name, onSelect, onInputChange, variant })
         if (reason === "input") {
           autoCompleteRequest(e, value);
         }
-        onInputChange(e,value,reason);
+        onInputChange(e, value, reason);
       }}
       disablePortal
       options={comboBoxData}

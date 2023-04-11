@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useState } from 'react';
 import ReactToPrint from "react-to-print";
-import axios from "axios";
+import axiosClient from './../login/AxiosClient';
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Treatment from "./modal/Treatment";
@@ -17,8 +17,8 @@ import {
 import { useReactToPrint } from "react-to-print";
 
 
-export default function BasicSelect({ user }) {
-  const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance } = user;
+export default function BasicSelect({user}) {
+  const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
   const [showCardForm, setShowCardForm] = useState(false); // 카드 결제 폼을 보여줄지 여부를 저장할 상태 값을 추가합니다.
   const [isCashPayment, setIsCashPayment] = useState(false); // 현금결제 상태 값을 추가합니다.
   const [isCardPayment, setIsCardPayment] = useState(false);
@@ -47,7 +47,7 @@ export default function BasicSelect({ user }) {
       if (modifyReceipt && user.mode !== "현금") {
         url = "/api/receipt/updateReceipt";
       }
-      const response = await axios.post(
+      const response = await axiosClient.post(
         url,
         {
           receipt_id: user.receipt_id,
@@ -159,7 +159,7 @@ export default function BasicSelect({ user }) {
       const updateUrl = "/api/receipt/updateReceipt";
   
       if (modifyReceipt) {
-        const response = await axios.post(
+        const response = await axiosClient.post(
           updateUrl,
           {
             receipt_id: user.receipt_id,
@@ -181,7 +181,7 @@ export default function BasicSelect({ user }) {
         console.log("Modify Payment successful", response.data);
         modifyReceipt(false);
       } else {
-        const response = await axios.post(
+        const response = await axiosClient.post(
           insertUrl,
           {
             receipt_id: user.receipt_id,
