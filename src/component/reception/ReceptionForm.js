@@ -1,4 +1,4 @@
-import { Button, MenuItem, Paper, TextField, Grid, Hidden, Tooltip, FormControl, OutlinedInput, InputAdornment } from '@mui/material';
+import { Button, MenuItem, Paper, TextField, Grid, Hidden, Tooltip, FormControl, OutlinedInput, InputAdornment, alertTitleClasses } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import axiosClient from './../login/AxiosClient';
@@ -84,7 +84,11 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     resetHandler(event);
                 })
                 .catch((error) => {
-                    alert("접수등록실패");
+                    if (!patient_id) {
+                        alert("환자등록 후 접수 등록이 가능합니다.");
+                    } else {
+                        alert("접수등록실패");
+                    }
                     console.error(error);
                 });
         } else {
@@ -107,7 +111,11 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     if (receptionData.reservation_id != 0) loadDailyReservationList();
                 })
                 .catch((error) => {
-                    alert("접수등록실패");
+                    if (!patient_id) {
+                        alert("환자등록 후 접수 등록이 가능합니다.");
+                    } else {   
+                       alert("접수등록실패");
+                    }
                     console.error(error);
                 });
         } else {
