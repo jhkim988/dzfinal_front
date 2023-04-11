@@ -78,16 +78,13 @@ const MedicalRecordInquiry = ({
     if (!type) return alert("분류를 정해주세요");
     setSearchMode(2);
     axiosClient
-      .post(
-        "/api/clinic/mri/search",
-        {
-          type: type,
-          start: formattedDates?.start || "",
-          end: formattedDates?.end || "",
-          keyword: keyword,
-          currentPage: currentPage,
-        }
-      )
+      .post("/api/clinic/mri/search", {
+        type: type,
+        start: formattedDates?.start || "",
+        end: formattedDates?.end || "",
+        keyword: keyword,
+        currentPage: currentPage,
+      })
       .then((response) => {
         setMri(response.data.mri);
         setPagination(response.data.pagination);

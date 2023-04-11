@@ -190,7 +190,7 @@ const PatientForm = ({
                                     value={patientData.front_registration_number || ""}
                                     size="small"
                                 />
-                                <p style={{ margin: 5 }}>─</p>
+                                <p style={{ margin: 3 }}>─</p>
                                 <TextField
                                     onChange={handleChange}
                                     sx={{
@@ -251,7 +251,7 @@ const PatientForm = ({
                             </Box>
                         </Grid>
                     </Grid>
-                    <Grid container spacing={2} sx={{ paddingTop: 1.5 }}>
+                    <Grid container spacing={2} sx={{ paddingTop: 0.5 }}>
                         <Grid item xs={7}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                                 <TextField
@@ -270,7 +270,7 @@ const PatientForm = ({
                                     variant="outlined"
                                     size="small"
                                 />
-                                <p style={{ margin: 5 }}>─</p>
+                                <p style={{ margin: 3 }}>─</p>
 
                                 <TextField
                                     sx={{
@@ -283,7 +283,7 @@ const PatientForm = ({
                                     variant="outlined"
                                     size="small"
                                 />
-                                <p style={{ margin: 5 }}>─</p>
+                                <p style={{ margin: 3 }}>─</p>
                                 <TextField
                                     sx={{
                                         "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
