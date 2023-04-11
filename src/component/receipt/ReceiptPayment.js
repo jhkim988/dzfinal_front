@@ -14,6 +14,8 @@ import {
   Select,
   OutlinedInput,
 } from "@mui/material";
+import { useReactToPrint } from "react-to-print";
+
 
 export default function BasicSelect({ user }) {
   const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance } = user;
@@ -241,6 +243,27 @@ export default function BasicSelect({ user }) {
     setClinicRequestModalOpen(false);
   };
 
+
+  // 프린트 기능
+  const componentRef = React.useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  //초기화
+  const resetHandler = (event) => {
+    setCard_number({
+      card_number1: "",
+      card_number2: "",
+      card_number3: "",
+      card_number4: "",
+    });
+    setCard_name({
+      card_name: "",
+    });
+};
+
   return (
     <>
       <Stack direction="row" spacing={1}>
@@ -278,15 +301,20 @@ export default function BasicSelect({ user }) {
         </Button>
         <Modal open={treatmentModalOpen} onClose={handleTreatmentModalClose}>
           <Box sx={style}>
-            <Treatment user={user} />
-            <Button onClick={handleTreatmentModalClose}> 확인 </Button>
+            <Treatment user={user} ref={componentRef}/>
+            <Button onClick={() => {
+              handleTreatmentModalClose();
+              handlePrint();
+            }}> 
+            확인 
+            </Button>
           </Box>
         </Modal>
 
         <Button
           sx={{ backgroundColor: "green", fontSize: "12px" }}
           variant="contained"
-          // disabled={user.clinic_request !== 0 && !isReceipt}
+          disabled={user.clinic_request !== 0 && !isReceipt}
           onClick={handleClinicRequestModalOpen}
         >
           진료의뢰서
@@ -296,7 +324,7 @@ export default function BasicSelect({ user }) {
           onClose={handleClinicRequestModalClose}
         >
           <Box sx={style}>
-            <ClinicRequest user={user} />
+            <ClinicRequest user={user} ref={componentRef} />
             <Button onClick={handleClinicRequestModalClose}> 확인 </Button>
           </Box>
         </Modal>
@@ -400,14 +428,7 @@ export default function BasicSelect({ user }) {
               disabled={!showCardForm}
               type="reset"
               variant="outlined"
-              onClick={() => {
-                setCard_name("");
-                setCard_number("");
-                setCard_number("");
-                setCard_number("");
-                setCard_number("");
-                
-              }}
+              onClick={resetHandler}
             >
               취소
             </Button>
@@ -425,9 +446,6 @@ export default function BasicSelect({ user }) {
               수정
             </Button>
 
-              <div>
-                환자아이디: {user.patient_id}
-              </div>
           </Stack>
         </Box>
         

@@ -84,32 +84,6 @@ function Receipt({ receiptData }) {
     });
   }, [receiptData]);
 
-
-  // useEffect(() => {
-  //   axios.get(`/api/receipt/selectReceiptDetail?reception_id=${reception_id}`)
-  //     .then(response => {
-  //       setUser({ ...response.data, InsuranceRatio, TreatmentPrice, ClinicPrice, insurance });
-  //     });
-  // }, [reception_id]);
-
-  
-    // <Paper elevation={3} style={{padding: "5px", height: "82vh"}}>
-    //         {/* <h2>수납하기</h2> */}
-    //           <br/>
-    //           {/* 접수정보 */}
-    //           <ReceptionInformation 
-    //             user={user}
-    //           />
-    //           <br/>
-    //           {/* 다음진료예약 */}
-    //           <Reservation />
-    //           {/* 결제내역정보 */}
-    //           <ReceiptDetails user={user}/>
-    //           <br/>
-    //           {/* 결제방식&처방전,진료의뢰서 */}
-    //           <ReceiptPayment user={user}/>
-    //       </Paper>
-
   return (
     <div style={{ height: "480px" }}>
       <div style={{height: "400px"}}>
