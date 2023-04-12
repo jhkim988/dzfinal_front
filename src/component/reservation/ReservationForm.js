@@ -17,6 +17,8 @@ import { offsetDate } from "./utils/dateUtils";
 import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
 import PatientAutoComplete from './../reception/PatientAutoComplete';
 import axiosClient from './../login/AxiosClient';
+import { useContext } from "react";
+import { DataContext } from "../loading/DataContextProvider";
 
 
 const style = { margin: "20px 0px" };
@@ -28,6 +30,7 @@ const ReservationForm = ({
   pickTime,
   requestSuccessCallback,
 }) => {
+  const doctorData = useContext(DataContext);
   const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const anchorRef = useRef(null);
@@ -213,8 +216,7 @@ const ReservationForm = ({
                   onChange={formOnChange}
                   value={reservationFormData.doctor || 1}
                 >
-                  <MenuItem value="1">김더존</MenuItem>
-                  <MenuItem value="2">이을지</MenuItem>
+                  {doctorData.map((doctor) => (<MenuItem key={`ReservationForm#Doctor${doctor.employ_id}`} value={doctor.employ_id}>{doctor.employee_name}</MenuItem>))}
                 </Select>
               </FormControl>
             </Grid>

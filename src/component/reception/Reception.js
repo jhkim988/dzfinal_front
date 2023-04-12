@@ -70,8 +70,9 @@ const Reception = () => {
   }
 
   // 수납내역목록 검색
+  // 페이징
   const receiptRecordSearch = (
-    { start, end, type, searchText },
+    { start, end, type, searchText, currentPage },
     callback
   ) => {
     console.log(start?.format("YYYY-MM-DD"));
@@ -85,6 +86,7 @@ const Reception = () => {
             searchText,
             start_date: start?.format("YYYY-MM-DD"),
             end_date: end?.format("YYYY-MM-DD"),
+            currentPage: `${currentPage}`,
           },
           headers: {
             "Content-Type": "application/json",
@@ -110,6 +112,7 @@ const Reception = () => {
     detail_address: "",
     clinic_request: 0,
     has_prescription: 0,
+    currentPage: 1,     // 페이징처리를 위해 추가
   });
 
   const loadDailyReservationList = () => {
@@ -143,7 +146,7 @@ const Reception = () => {
                   clickRowCallback={clickRowCallback}
                   receiptRecordSearch={receiptRecordSearch}
                   patient_id={patient_id}
-                // setSelectedOneReceipt={setSelectedOneReceipt}
+                  setSelectedOneReceipt={setSelectedOneReceipt}
                 />
               </Paper>
             </Grid>
@@ -193,9 +196,9 @@ const Reception = () => {
         </Grid>
 
         <Grid item xs={2.5}>
-          <Receipt
-            receiptData={receiptData}
-          // selectedOneReceipt={selectedOneReceipt}
+          <Receipt 
+            receiptData={receiptData} 
+            selectedOneReceipt={selectedOneReceipt}
           />
         </Grid>
       </Grid>

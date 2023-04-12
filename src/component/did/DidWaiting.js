@@ -4,9 +4,6 @@ import React from "react";
 // import './styles.css';
 
 
-
-
-
 const DidView = ({ data }) => {
 
     function MyFormHelperText() {}
@@ -124,7 +121,7 @@ const DidView = ({ data }) => {
                             }}
                         >
                             <OutlinedInput
-                            value={"잠시만 기다려주세요 🐒"}
+                            value={"잠시만 기다려주세요"}
                             inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
                             readOnly
                             />
@@ -151,7 +148,7 @@ const DidView = ({ data }) => {
                     {waitingPatientForms}
                     <FormControl sx={{ width: "33%", padding: "2.5px", }}>
                         <OutlinedInput
-                            placeholder={
+                            value={
                                 waitingPatients.length <= 5
                                     ? `외 0명`
                                     : `외 ${waitingPatients.length - 5}명`
@@ -184,7 +181,6 @@ const DidView = ({ data }) => {
                     <Typography variant="h2" sx={{ paddingBottom: "25px"}}>
                     2 진료실  |  이을지 의사
                     </Typography>
-                    { }
 
                     <Box component="form" noValidate autoComplete="off">
                     {data.filter((item) => item.state === "진료중" && item.doctor_id === 2).length > 0 ? (
@@ -212,7 +208,7 @@ const DidView = ({ data }) => {
                             }}
                         >
                             <OutlinedInput
-                            value={"잠시만 기다려주세요 🐒"}
+                            value={"잠시만 기다려주세요"}
                             inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
                             readOnly
                             />
@@ -239,7 +235,7 @@ const DidView = ({ data }) => {
                     {waitingPatientForms2}
                     <FormControl sx={{ width: "33%", padding: "2.5px", }}>
                         <OutlinedInput
-                            placeholder={
+                            value={
                                 waitingPatients2.length <= 5
                                     ? `외 0명`
                                     : `외 ${waitingPatients2.length - 5}명`
@@ -299,13 +295,14 @@ const DidView = ({ data }) => {
                         }}
                     >
                         <OutlinedInput
-                        value={"잠시만 기다려주세요 🐒"}
+                        value={"잠시만 기다려주세요"}
                         inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" }}}
                         readOnly
                         />
                         <MyFormHelperText />
                     </FormControl>
                     )}
+                    
                     {waitingReceipt.slice(0, 5).map((item, index) => (
                         <FormControl
                             sx={{
@@ -326,7 +323,7 @@ const DidView = ({ data }) => {
                     {waitingReceiptForms}
                     <FormControl sx={{ width: "33%", padding: "2.5px", }}>
                         <OutlinedInput
-                            placeholder={
+                            value={
                                 waitingReceipt.length <= 5
                                     ? `외 0명`
                                     : `외 ${waitingReceipt.length - 5}명`
