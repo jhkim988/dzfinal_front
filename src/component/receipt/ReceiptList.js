@@ -27,7 +27,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
-import axios from 'axios';
 import "./style.css";
 import axiosClient from '../login/AxiosClient';
 
@@ -50,7 +49,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
   };
 
   useEffect(() => {
-    receiptRecordSearch({ type: "patient_id", searchText: patient_id }, setReceiptList);
+    receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, setReceiptList);
   }, [patient_id]);
 
 
