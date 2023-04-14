@@ -206,6 +206,7 @@ export default function BasicSelect({user}) {
       setIsReceipt(true);
     } catch (error) {
       console.log(error);
+      alert("다시 시도해주세요.");
     }
   };
 

@@ -71,6 +71,8 @@ const Reception = () => {
 
   // 수납내역목록 검색
   // 페이징
+
+  
   const receiptRecordSearch = (
     { start, end, type, searchText, currentPage },
     callback

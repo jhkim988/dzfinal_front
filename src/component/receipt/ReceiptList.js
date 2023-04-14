@@ -36,6 +36,7 @@ import axiosClient from '../login/AxiosClient';
 const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSelectedOneReceipt }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
+  const [selectedReceipt, setSelectedReceipt] = useState([]); // 선택한 데이터 상태
 
   // 검색어
   const [searchText, setSearchText] = useState("");
@@ -49,10 +50,30 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
     setSearchRange(newValue);
   };
 
+  // useEffect(() => {
+  //   receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, setReceiptList);
+  // }, [patient_id]);
+  // 수납목록 데이터 선택 시 다른 목록들 사라지는 오류 해결
   useEffect(() => {
-    receiptRecordSearch({ type: "patient_id", searchText: patient_id }, setReceiptList);
+    // 선택한 데이터의 변경에 따라 receiptRecordSearch 함수 호출
+    if (selectedReceipt) {
+      receiptRecordSearch(
+        {
+          type: "patient_id",
+          searchText: patient_id,
+          currentPage: 1,
+          receiptId: selectedReceipt.id, // 선택한 데이터의 id를 추가하여 전달
+        },
+        setSelectedReceipt
+      );
+    } else {
+      // 선택한 데이터가 없으면 기존 로직대로 호출
+      receiptRecordSearch(
+        { type: "patient_id", searchText: patient_id, currentPage: 1 },
+        setSelectedReceipt
+      );
+    }
   }, [patient_id]);
-
 
   // 페이징
   const [page, setPage] = React.useState(1);
