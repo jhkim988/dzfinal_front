@@ -135,4 +135,4 @@ const Patient = (props) => {
   );
 };
 
-export default Patient;
+export default React.memo(Patient);

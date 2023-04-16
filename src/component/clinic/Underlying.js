@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   Box,
   Table,
@@ -13,15 +13,15 @@ import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOu
 import { red } from "@mui/material/colors";
 import axiosClient from "./../login/AxiosClient";
 
-const Underlying = ({ props, onInsert, patient }) => {
+const Underlying = ({ props, patient }) => {
   const [disease_code, setDisease_code] = useState("");
   const [disease_name, setDisease_name] = useState("");
   const [searchList, setSearchList] = useState([]);
-  const searchListRef = useRef();
+  const searchListRef = useRef(null);
   const [underlying, setUnderlying] = useState(props);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  function handleKeyUp(e) {
+  const handleKeyUp = (e) => {
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") {
       if (e.target.value.length >= 2) {
         axiosClient
@@ -37,16 +37,16 @@ const Underlying = ({ props, onInsert, patient }) => {
         setSearchList([]);
       }
     }
-  }
+  };
 
-  function hideSearchList() {
+  const hideSearchList = () => {
     setSearchList([]);
-  }
+  };
 
-  function resetInputValue() {
+  const resetInputValue = () => {
     setDisease_code("");
     setDisease_name("");
-  }
+  };
 
   const handleAdd = (disease) => {
     if (underlying.some((item) => item.disease_id === disease.disease_id)) {
@@ -65,7 +65,7 @@ const Underlying = ({ props, onInsert, patient }) => {
     }
   };
 
-  function handleRemove(disease_id) {
+  const handleRemove = (disease_id) => {
     console.log(patient.patient_id);
     axiosClient
       .delete("/api/clinic/disease", {
@@ -83,7 +83,7 @@ const Underlying = ({ props, onInsert, patient }) => {
       (disease) => disease.disease_id !== disease_id
     );
     setUnderlying(newUnderlying);
-  }
+  };
 
   const handleKeyDown = (e) => {
     const scrollRef = searchListRef.current;
@@ -129,18 +129,22 @@ const Underlying = ({ props, onInsert, patient }) => {
     setUnderlying(props);
   }, [props]);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (searchListRef.current && !searchListRef.current.contains(e.target)) {
-        setSearchList([]);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
+  // useEffect(() => {
+  //   const handleClickOutside = (e) => {
+  //     if (searchListRef.current && !searchListRef.current.contains(e.target)) {
+  //       setSearchList([]);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [searchList]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [searchListRef]);
+
+  const handleFocusOut = () => {
+    setSearchList([]);
+  };
 
   return (
     <Box sx={{ marginLeft: 1 }}>
@@ -160,6 +164,7 @@ const Underlying = ({ props, onInsert, patient }) => {
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
+            onBlur={handleFocusOut}
             sx={{ marginRight: 1 }}
           />
           <TextField
@@ -186,7 +191,7 @@ const Underlying = ({ props, onInsert, patient }) => {
             border: "1px solid black",
             borderRadius: 5,
             display: searchList.length === 0 ? "none" : "block",
-            height: "30vh",
+            maxHeight: "30vh",
             overflowY: "auto",
           }}
         >
@@ -253,4 +258,4 @@ const Underlying = ({ props, onInsert, patient }) => {
   );
 };
 
-export default Underlying;
+export default React.memo(Underlying);

@@ -101,18 +101,18 @@ const Prescription = ({
     }
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (searchListRef.current && !searchListRef.current.contains(e.target)) {
-        setSearchList([]);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
+  // useEffect(() => {
+  //   const handleClickOutside = (e) => {
+  //     if (searchListRef.current && !searchListRef.current.contains(e.target)) {
+  //       setSearchList([]);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [searchList]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [searchList]);
 
   return (
     <Box>
@@ -223,4 +223,4 @@ const Prescription = ({
   );
 };
 
-export default Prescription;
+export default React.memo(Prescription);

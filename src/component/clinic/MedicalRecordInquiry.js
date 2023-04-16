@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -41,19 +41,21 @@ const MedicalRecordInquiry = ({
     setType(e.target.value);
   };
 
-  const onClick = (reception_id) => {
-    setMedicalInfo({});
+  const onClick = useCallback(
+    (reception_id) => {
+      setMedicalInfo({});
 
-    axiosClient
-      .get(`/api/clinic/medicalinfo/${reception_id}`)
-      .then((response) => {
-        setMedicalInfo(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+      axiosClient
+        .get(`/api/clinic/medicalinfo/${reception_id}`)
+        .then((response) => {
+          setMedicalInfo(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    [setMedicalInfo]
+  );
 
   const [selectedDates, setSelectedDates] = useState({});
 
@@ -74,25 +76,28 @@ const MedicalRecordInquiry = ({
     setKeyword(e.target.value);
   };
 
-  const onSearchList = (currentPage) => {
-    if (!type) return alert("분류를 정해주세요");
-    setSearchMode(2);
-    axiosClient
-      .post("/api/clinic/mri/search", {
-        type: type,
-        start: formattedDates?.start || "",
-        end: formattedDates?.end || "",
-        keyword: keyword,
-        currentPage: currentPage,
-      })
-      .then((response) => {
-        setMri(response.data.mri);
-        setPagination(response.data.pagination);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  const onSearchList = useCallback(
+    (currentPage) => {
+      if (!type) return alert("분류를 정해주세요");
+      setSearchMode(2);
+      axiosClient
+        .post("/api/clinic/mri/search", {
+          type: type,
+          start: formattedDates?.start || "",
+          end: formattedDates?.end || "",
+          keyword: keyword,
+          currentPage: currentPage,
+        })
+        .then((response) => {
+          setMri(response.data.mri);
+          setPagination(response.data.pagination);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    [formattedDates, keyword, type]
+  );
 
   useEffect(() => {
     handleToggle(true);
@@ -114,17 +119,20 @@ const MedicalRecordInquiry = ({
     }
   };
 
-  const handlePageClick = (pageNumber) => {
-    axiosClient
-      .get(`/api/clinic/mri/${patient.patient_id}/${pageNumber}`)
-      .then((response) => {
-        setMri(response.data.mri);
-        setPagination(response.data.pagination);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  const handlePageClick = useCallback(
+    (pageNumber) => {
+      axiosClient
+        .get(`/api/clinic/mri/${patient.patient_id}/${pageNumber}`)
+        .then((response) => {
+          setMri(response.data.mri);
+          setPagination(response.data.pagination);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    [setMri, setPagination]
+  );
 
   return (
     <>
@@ -301,4 +309,4 @@ const MedicalRecordInquiry = ({
   );
 };
 
-export default MedicalRecordInquiry;
+export default React.memo(MedicalRecordInquiry);

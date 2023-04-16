@@ -35,7 +35,7 @@ const ClinicView = () => {
     next: false,
   });
 
-  useEffect(() => {
+  const onFetchPatient = useCallback(() => {
     reception &&
       axiosClient
         .get(`/api/clinic/${reception}`)
@@ -53,6 +53,10 @@ const ClinicView = () => {
     setSymptom("");
     setTreatment(false);
     setClinic_request(false);
+  }, []);
+
+  useEffect(() => {
+    onFetchPatient();
   }, [reception]);
 
   const clickMedicalRecordInquiry = useCallback(
@@ -150,20 +154,17 @@ const ClinicView = () => {
           <Grid item xs={12}>
             <Paper sx={{ width: "100%", height: "40.5vh" }} elevation={3}>
               <Clinic
-                setPatient={setPatient}
-                setReception={setReception}
                 reception={reception}
-                onReset={onReset}
                 mode={mode}
                 setMode={setMode}
                 medicalInfo={medicalInfo}
+                setMedicalInfo={setMedicalInfo}
                 diagnosis={diagnosis}
-                prescription={prescription}
                 setDiagnosis={setDiagnosis}
+                prescription={prescription}
                 setPrescription={setPrescription}
                 symptom={symptom}
                 setSymptom={setSymptom}
-                setMedicalInfo={setMedicalInfo}
                 treatment={treatment}
                 setTreatment={setTreatment}
                 clinic_request={clinic_request}
@@ -177,4 +178,4 @@ const ClinicView = () => {
   );
 };
 
-export default ClinicView;
+export default React.memo(ClinicView);

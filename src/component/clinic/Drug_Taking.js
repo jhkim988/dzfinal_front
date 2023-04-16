@@ -129,18 +129,18 @@ const DrugTaking = ({ props, patient }) => {
     setDrugTaking(props);
   }, [props]);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (searchListRef.current && !searchListRef.current.contains(e.target)) {
-        setSearchList([]);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
+  // useEffect(() => {
+  //   const handleClickOutside = (e) => {
+  //     if (searchListRef.current && !searchListRef.current.contains(e.target)) {
+  //       setSearchList([]);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [searchList]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [searchList]);
 
   return (
     <Box sx={{ marginRight: 1 }}>
@@ -249,4 +249,4 @@ const DrugTaking = ({ props, patient }) => {
   );
 };
 
-export default DrugTaking;
+export default React.memo(DrugTaking);

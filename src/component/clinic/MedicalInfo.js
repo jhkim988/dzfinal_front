@@ -255,4 +255,4 @@ const MedicalInfo = ({
   );
 };
 
-export default MedicalInfo;
+export default React.memo(MedicalInfo);

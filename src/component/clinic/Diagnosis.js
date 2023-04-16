@@ -11,8 +11,8 @@ import {
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
-import axiosClient from '../login/AxiosClient';
-
+import axiosClient from "../login/AxiosClient";
+import { useCallback } from "react";
 
 const Diagnosis = ({
   handleDiagnosisAdd,
@@ -99,18 +99,22 @@ const Diagnosis = ({
     }
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
+  const handleClickOutsideCallback = useCallback(
+    (e) => {
       if (searchListRef.current && !searchListRef.current.contains(e.target)) {
         setSearchList([]);
       }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
+    },
+    [searchList, setSearchList, searchListRef]
+  );
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [searchList]);
+  // useEffect(() => {
+  //   document.addEventListener("mousedown", handleClickOutsideCallback);
+
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutsideCallback);
+  //   };
+  // }, [handleClickOutsideCallback]);
 
   return (
     <Box>
@@ -221,4 +225,4 @@ const Diagnosis = ({
   );
 };
 
-export default Diagnosis;
+export default React.memo(Diagnosis);

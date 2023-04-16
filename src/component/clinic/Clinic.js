@@ -12,6 +12,7 @@ import React from "react";
 import Diagnosis from "./Diagnosis";
 import Prescription from "./Prescription";
 import axiosClient from "./../login/AxiosClient";
+import { useCallback } from "react";
 
 const Clinic = ({
   reception,
@@ -72,7 +73,7 @@ const Clinic = ({
     setClinic_request(event.target.checked);
   };
 
-  const onClick = () => {
+  const onClick = useCallback(() => {
     if (mode === 0) {
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
@@ -152,7 +153,7 @@ const Clinic = ({
     setDiagnosis([]);
     setPrescription([]);
     setMedicalInfo({});
-  };
+  }, []);
 
   const onCancel = () => {
     setMode(0);
@@ -242,4 +243,4 @@ const Clinic = ({
   );
 };
 
-export default Clinic;
+export default React.memo(Clinic);
