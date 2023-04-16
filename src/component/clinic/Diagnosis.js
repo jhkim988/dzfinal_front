@@ -18,8 +18,6 @@ const Diagnosis = ({
   handleDiagnosisAdd,
   handleDiagnosisRemove,
   diagnosis,
-  medicalInfo,
-  mode,
 }) => {
   const [disease_code, setDisease_code] = useState("");
   const [disease_name, setDisease_name] = useState("");
@@ -99,22 +97,18 @@ const Diagnosis = ({
     }
   };
 
-  const handleClickOutsideCallback = useCallback(
-    (e) => {
-      if (searchListRef.current && !searchListRef.current.contains(e.target)) {
-        setSearchList([]);
-      }
-    },
-    [searchList, setSearchList, searchListRef]
-  );
-
-  // useEffect(() => {
-  //   document.addEventListener("mousedown", handleClickOutsideCallback);
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutsideCallback);
-  //   };
-  // }, [handleClickOutsideCallback]);
+  const handleClickOutside = useCallback((e) => {
+    if (searchListRef.current && !searchListRef.current.contains(e.target) && searchList.length > 0) {
+      setSearchList([]);
+    }
+  }, [searchListRef, searchList, setSearchList]);
+  
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
 
   return (
     <Box>

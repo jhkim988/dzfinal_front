@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Box,
   Table,
@@ -129,18 +129,18 @@ const DrugTaking = ({ props, patient }) => {
     setDrugTaking(props);
   }, [props]);
 
-  // useEffect(() => {
-  //   const handleClickOutside = (e) => {
-  //     if (searchListRef.current && !searchListRef.current.contains(e.target)) {
-  //       setSearchList([]);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handleClickOutside);
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [searchList]);
+  const handleClickOutside = useCallback((e) => {
+    if (searchListRef.current && !searchListRef.current.contains(e.target) && searchList.length > 0) {
+      setSearchList([]);
+    }
+  }, [searchListRef, searchList, setSearchList]);
+  
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
 
   return (
     <Box sx={{ marginRight: 1 }}>

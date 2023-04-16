@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Box,
   Table,
@@ -18,8 +18,6 @@ const Prescription = ({
   handlePrescriptionAdd,
   handlePrescriptionRemove,
   prescription,
-  medicalInfo,
-  mode,
 }) => {
   const [drug_code, setDrug_code] = useState("");
   const [drug_name, setDrug_name] = useState("");
@@ -101,18 +99,18 @@ const Prescription = ({
     }
   };
 
-  // useEffect(() => {
-  //   const handleClickOutside = (e) => {
-  //     if (searchListRef.current && !searchListRef.current.contains(e.target)) {
-  //       setSearchList([]);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handleClickOutside);
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [searchList]);
+  const handleClickOutside = useCallback((e) => {
+    if (searchListRef.current && !searchListRef.current.contains(e.target) && searchList.length > 0) {
+      setSearchList([]);
+    }
+  }, [searchListRef, searchList, setSearchList]);
+  
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
 
   return (
     <Box>

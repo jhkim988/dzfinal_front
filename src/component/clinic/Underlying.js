@@ -129,22 +129,18 @@ const Underlying = ({ props, patient }) => {
     setUnderlying(props);
   }, [props]);
 
-  // useEffect(() => {
-  //   const handleClickOutside = (e) => {
-  //     if (searchListRef.current && !searchListRef.current.contains(e.target)) {
-  //       setSearchList([]);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handleClickOutside);
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [searchListRef]);
-
-  const handleFocusOut = () => {
-    setSearchList([]);
-  };
+  const handleClickOutside = useCallback((e) => {
+    if (searchListRef.current && !searchListRef.current.contains(e.target) && searchList.length > 0) {
+      setSearchList([]);
+    }
+  }, [searchListRef, searchList, setSearchList]);
+  
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
 
   return (
     <Box sx={{ marginLeft: 1 }}>
@@ -164,7 +160,6 @@ const Underlying = ({ props, patient }) => {
             onKeyUp={handleKeyUp}
             onFocus={handleKeyUp}
             onKeyDown={handleKeyDown}
-            onBlur={handleFocusOut}
             sx={{ marginRight: 1 }}
           />
           <TextField
