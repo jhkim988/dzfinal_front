@@ -28,9 +28,9 @@ const DidVideo = () => {
   }, [getDidVideo]);
 
   return (
-<div>
+<div alignItems="center">
   {getDidVideo ? (
-    <video width="1350px" height="735px" autoPlay loop controls>
+    <video width="100%" height="735px" autoPlay loop controls alignItems="center">
       <source src="/api/view/getDidVideo" type="video/mp4" />
     </video>
   ) : (
