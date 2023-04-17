@@ -8,7 +8,7 @@ import axiosClient from "./AxiosClient";
 const LoginImage = () => {
   return (
     <img
-      src={`loginImage2.png`}
+      src={`loginImage3.jpg`}
       alt={`로그인 이미지`}
       loading="lazy"
       style={{ width: "100%", height: "100vh" }}
