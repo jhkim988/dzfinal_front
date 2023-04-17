@@ -116,7 +116,7 @@ const MedicalRecordInquiry = ({
 
   const handlePageClick = (pageNumber) => {
     axiosClient
-      .get(`/api/clinic/mri/${1}/${pageNumber}`)
+      .get(`/api/clinic/mri/${patient.patient_id}/${pageNumber}`)
       .then((response) => {
         setMri(response.data.mri);
         setPagination(response.data.pagination);

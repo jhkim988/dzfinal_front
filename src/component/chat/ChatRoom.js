@@ -14,10 +14,12 @@ import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { MqttContext } from "../waiting/MqttContextProvider";
 import moment from "moment";
-import axiosClient from './../login/AxiosClient';
+import axiosClient from "../login/AxiosClient";
 
 const ChatRoom = ({ room, onBackClick }) => {
-  const { employ_id: participants_id } = JSON.parse(localStorage.getItem("userInfo"));
+  const { employ_id: participants_id } = JSON.parse(
+    localStorage.getItem("userInfo")
+  );
   const [message, setMessage] = useState({
     mode: "private",
     chatroom_id: room.chatroom_id,
@@ -30,10 +32,23 @@ const ChatRoom = ({ room, onBackClick }) => {
   const [scrollTop, setScrollTop] = useState(0);
   const { current: client } = useContext(MqttContext);
   const isDisabled = !message.message.trim();
+  const [thumbnail, setThumbnail] = useState([]);
 
   useEffect(() => {
     axiosClient
-      .get("api/chat/getchatroommessages", {
+      .get("/api/chat/getthumbnaillist")
+      .then((response) => {
+        console.log(response.data);
+        setThumbnail(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axiosClient
+      .get("/api/chat/getchatroommessages", {
         params: {
           chatroom_id: room.chatroom_id,
           page: page,
@@ -167,7 +182,14 @@ const ChatRoom = ({ room, onBackClick }) => {
               >
                 <Avatar sx={{ alignSelf: "center", marginRight: 1 }}>
                   <img
-                    src={`/api/chat/getthumbnail?thumbnail_image=${message.thumbnail_image}`}
+                    src={
+                      thumbnail.find((t) => t.employ_id === message.from)
+                        ? `/api/chat/getthumbnail?thumbnail_image=${
+                            thumbnail.find((t) => t.employ_id === message.from)
+                              .thumbnail_image
+                          }`
+                        : ""
+                    }
                     alt="사진"
                     style={{ width: "100%" }}
                   />

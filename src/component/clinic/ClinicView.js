@@ -103,7 +103,7 @@ const ClinicView = () => {
       <Grid item xs={5}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "37.9vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "40vh" }} elevation={3}>
               <MedicalRecordInquiry
                 mri={mri}
                 setMri={setMri}
@@ -118,7 +118,7 @@ const ClinicView = () => {
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "41.1vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "40.5vh" }} elevation={3}>
               <MedicalInfo
                 medicalInfo={medicalInfo}
                 setMode={setMode}
@@ -135,7 +135,7 @@ const ClinicView = () => {
       <Grid item xs={5}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "37.9vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "40vh" }} elevation={3}>
               <Patient reception={reception} patient={patient} />
               <Grid container spacing={2} sx={{ marginTop: 1 }}>
                 <Grid item xs={6}>
@@ -148,7 +148,7 @@ const ClinicView = () => {
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "41.1vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "40.5vh" }} elevation={3}>
               <Clinic
                 setPatient={setPatient}
                 setReception={setReception}

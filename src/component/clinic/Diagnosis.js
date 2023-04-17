@@ -10,8 +10,9 @@ import {
 } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
-import axiosClient from "axios";
 import { red } from "@mui/material/colors";
+import axiosClient from '../login/AxiosClient';
+
 
 const Diagnosis = ({
   handleDiagnosisAdd,

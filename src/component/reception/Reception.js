@@ -62,7 +62,6 @@ const Reception = () => {
         setPatientData(data.patient)
         setReceptionData(data.reception);
         setReceiptData(data);
-        console.log(data);
       });
     } catch (error) {
       console.log(error);
@@ -79,6 +78,7 @@ const Reception = () => {
   ) => {
     console.log(start?.format("YYYY-MM-DD"));
     console.log(end?.format("YYYY-MM-DD"));
+    console.log(currentPage);
     axiosClient
       .get(
         "/api/receipt/getReceiptList",
