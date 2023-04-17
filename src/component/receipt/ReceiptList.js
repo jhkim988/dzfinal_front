@@ -60,7 +60,8 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
           currentPage: 1,
           receiptId: selectedReceipt.id, // 선택한 데이터의 id를 추가하여 전달
         },
-        setSelectedReceipt
+        setSelectedReceipt,
+        setReceiptList
       );
     } else {
       // 선택한 데이터가 없으면 기존 로직대로 호출
