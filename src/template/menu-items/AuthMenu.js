@@ -34,11 +34,6 @@ const authitems = {
         },
       ],
     },
-    {
-      
-    },
   ],
-}
-;
-
+};
 export default authitems;

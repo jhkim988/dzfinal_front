@@ -20,10 +20,11 @@ import { MENU_OPEN, SET_MENU } from "../store/actions";
 
 // assets
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import Header from "./Header";
 
 // ==============================|| SIDEBAR MENU LIST ITEMS ||============================== //
 
-const NavItem = ({ item, level }) => {
+const NavItem = ({ item, level, toggleIcon, setToggleIcon }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const customization = useSelector((state) => state.customization);
@@ -62,6 +63,7 @@ const NavItem = ({ item, level }) => {
     dispatch({ type: MENU_OPEN, id });
     dispatch({ type: SET_MENU, opened: true });
     if (matchesSM) dispatch({ type: SET_MENU, opened: false });
+    setToggleIcon(!toggleIcon);
   };
 
   // active menu item on page load
