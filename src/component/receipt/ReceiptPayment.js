@@ -236,7 +236,6 @@ export default function BasicSelect({user}) {
           sx={{ fontSize: "12px" }}
           variant="contained"
           disabled={            
-            user.state === "진료중" || user.state === "진료대기"
             user.state === "진료중" || user.state === "진료대기" || !modifyReceipt
           }
           onClick={handleCardPayment}
