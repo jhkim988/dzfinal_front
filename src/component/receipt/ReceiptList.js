@@ -27,16 +27,15 @@ import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
-import axios from 'axios';
 import "./style.css";
-import useEnhancedEffect from '@mui/material/utils/useEnhancedEffect';
+import axiosClient from '../login/AxiosClient';
 
 
 
-
-const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
+const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSelectedOneReceipt }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
+  const [selectedReceipt, setSelectedReceipt] = useState([]); // 선택한 데이터 상태
 
   // 검색어
   const [searchText, setSearchText] = useState("");
@@ -50,13 +49,41 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
     setSearchRange(newValue);
   };
 
+  // useEffect(() => {
+  //   receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, setReceiptList);
+  // }, [patient_id]);
+  // 수납목록 데이터 선택 시 다른 목록들 사라지는 오류 해결
   useEffect(() => {
-    receiptRecordSearch({ type: "patient_id", searchText: patient_id }, setReceiptList);
+    // 선택한 데이터의 변경에 따라 receiptRecordSearch 함수 호출
+    if (selectedReceipt) {
+      receiptRecordSearch(
+        {
+          type: "patient_id",
+          searchText: patient_id,
+          currentPage: 1,
+          receiptId: selectedReceipt.id, // 선택한 데이터의 id를 추가하여 전달
+        },
+        setReceiptList
+      );
+    } else {
+      // 선택한 데이터가 없으면 기존 로직대로 호출
+      receiptRecordSearch(
+        { type: "patient_id", searchText: patient_id, currentPage: 1 },
+        setReceiptList
+      );
+    }
   }, [patient_id]);
 
+  // 페이징
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    console.log(page);
+    setPage(value);
+  };
+
   const getReceiptList = useCallback(() => {
-    receiptRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText }, setReceiptList);
-  }, [searchRange, type, searchText, setReceiptList, receiptRecordSearch]);
+    receiptRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText, currentPage: page }, setReceiptList);
+  }, [searchRange, type, searchText, page, setReceiptList, receiptRecordSearch]);
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
@@ -89,22 +116,9 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
   };
 
 
-
-  // useEffect(() => {
-  //   axios.get(`/api/receipt/getReceiptList?page=${page}`)
-  //   .then(response => {
-  //     setReceiptList(response.data.content);
-  //     setTotalPages(response.data.totalPages);
-  //   })
-  //   .catch(error => {
-  //     console.log(error);
-  //   });
-  // }, []);
-
-
   // 수납내역목록에서 데이터 선택하면 데이터가져오기
   const handleSelectedReceipt = (receipt_id, reception_id) => {
-    axios.get(`/api/receipt/selectedOneReceipt?reception_id=${reception_id}`)
+    axiosClient.get(`/api/receipt/selectedOneReceipt?reception_id=${reception_id}`)
       .then((response) => {
         console.log("선택한 데이터 정보: ", response.data);
         clickRowCallback(response.data);
@@ -115,24 +129,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
       })
   }
 
-  // 페이징처리
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
 
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  }
-
-  // useEffect(() => {
-  //   axios.get(`/api/receipt/getReceiptList?page=${page}`)
-  //     .then(response => {
-  //       setReceiptList(response.data.content);
-  //       setTotalPages(response.data.totalPages);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // }, [page]);
 
   return (
     <>
@@ -177,16 +174,6 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
                   variant: "outlined",
                 },
               }}
-              // renderInput={(startProps, endProps) => (
-              //   <Box sx={{
-              //     display: "flex",
-              //     alignItems: "center",
-              //   }}>
-              //     <TextField {...startProps} variant="outlined" sx={{ height: "20px" }} />
-              //     <Box sx={{ mx: 1 }}>~</Box>
-              //     <TextField {...endProps} variant="outlined" size="small" />
-              //   </Box>
-              // )}
             />
           </LocalizationProvider>
           <TextField
@@ -265,7 +252,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id }) => {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Stack spacing={2} style={{ bottom: '0' }}>
             {/* <Pagination count={5} /> */}
-            <Pagination count={5} page={page} onChange={handlePageChange} />
+            <Pagination count={10} page={page} onChange={handleChange} onClick={handleSearch}/>
           </Stack>
         </Box>
       </Paper>

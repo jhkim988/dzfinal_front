@@ -7,12 +7,12 @@ import axiosClient from "../login/AxiosClient";
 import { MqttContext } from "../waiting/MqttContextProvider";
 
 // TODO: doctor_id 적용
-const autoCallInfo = {
-  2: (data) => data.state === "진료대기",
-  3: (data) => data.state === "수납대기",
-}
+// const autoCallInfo = {
+//   2: (data) => data.state === "진료대기",
+//   3: (data) => data.state === "수납대기",
+// }
 
-const doctor_id = 1;
+// const doctor_id = 1;
 
 const MultiDID = ({ nextState }) => {
   const client = useContext(MqttContext);
@@ -70,20 +70,10 @@ const MultiDID = ({ nextState }) => {
         spacing={2}
         sx={{ justifyContent: "center", alignItems: "center" }}
       >
-        <Grid item xs={9}>
+        <Grid item xs={9.5}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Paper
-                elevation={3}
-                sx={{
-                  height: "79vh",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                <DidVideo />
-              </Paper>
+              <DidVideo />
             </Grid>
 
             <Grid item xs={12}>
@@ -95,7 +85,7 @@ const MultiDID = ({ nextState }) => {
                 <Paper
                   elevation={3}
                   sx={{
-                    height: "19vh",
+                    height: "15vh",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
@@ -109,7 +99,7 @@ const MultiDID = ({ nextState }) => {
           </Grid>
         </Grid>
 
-        <Grid item xs={3}>
+        <Grid item xs={2.5}>
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <DidWaiting 

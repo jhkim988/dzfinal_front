@@ -1,10 +1,12 @@
-import authitems from "./authitems";
-import menuitems from "./menuitems";
+import AuthMenu from "./AuthMenu";
+import MainMenu from "./MainMenu";
+import DidMenu from "./DidMenu";
+import AdminMenu from "./AdminMenu";
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [menuitems, authitems],
+  items: [MainMenu, DidMenu, AuthMenu, AdminMenu],
 };
 
 export default menuItems;

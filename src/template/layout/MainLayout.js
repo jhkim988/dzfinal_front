@@ -14,6 +14,7 @@ import Customization from "./Customization";
 // import navigation from "../menu-items/";
 import { drawerWidth } from "../store/constant";
 import { SET_MENU } from "../store/actions";
+import { useState } from "react";
 
 // styles
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -72,6 +73,7 @@ const MainLayout = () => {
   const handleLeftDrawerToggle = () => {
     dispatch({ type: SET_MENU, opened: !leftDrawerOpened });
   };
+  const [toggleIcon, setToggleIcon] = useState(false);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -91,7 +93,11 @@ const MainLayout = () => {
       >
         {/* 토글버튼 */}
         <Toolbar>
-          <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
+          <Header
+            handleLeftDrawerToggle={handleLeftDrawerToggle}
+            toggleIcon={toggleIcon}
+            setToggleIcon={setToggleIcon}
+          />
         </Toolbar>
       </AppBar>
 
@@ -99,6 +105,8 @@ const MainLayout = () => {
       <Sidebar
         drawerOpen={matchDownMd ? leftDrawerOpened : !leftDrawerOpened}
         drawerToggle={handleLeftDrawerToggle}
+        toggleIcon={toggleIcon}
+        setToggleIcon={setToggleIcon}
       />
 
       {/* main content */}
