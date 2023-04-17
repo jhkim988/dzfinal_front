@@ -70,7 +70,8 @@ const LoginForm = () => {
           console.log(userInfo);
           movePageWithAuthority(auth.authorities);
         });
-      }).catch(err => {
+      })
+      .catch((err) => {
         alert("로그인 실패");
       });
   };
@@ -96,11 +97,11 @@ const LoginForm = () => {
   }, []);
 
   const style = {
-    width: "80%", 
+    width: "80%",
     marginLeft: "10%",
     marginRight: "10%",
-    marginTop: "20px"
-  }
+    marginTop: "20px",
+  };
 
   return (
     <Paper
@@ -110,30 +111,26 @@ const LoginForm = () => {
       justifyContent="center"
     >
       <form onSubmit={login}>
-          <TextField
-            sx={style}
-            label="ID"
-            variant="outlined"
-            value={loginForm.username}
-            onChange={(e) => {
-              setLoginForm({ ...loginForm, username: e.target.value });
-            }}
-          />
-          <TextField
-            sx={style}
-            label="Password"
-            variant="outlined"
-            type="password"
-            value={loginForm.password}
-            onChange={(e) => {
-              setLoginForm({ ...loginForm, password: e.target.value });
-            }}
-          />
-        <Button
-          type="submit"
-          variant="contained"
+        <TextField
           sx={style}
-        >
+          label="ID"
+          variant="outlined"
+          value={loginForm.username}
+          onChange={(e) => {
+            setLoginForm({ ...loginForm, username: e.target.value });
+          }}
+        />
+        <TextField
+          sx={style}
+          label="Password"
+          variant="outlined"
+          type="password"
+          value={loginForm.password}
+          onChange={(e) => {
+            setLoginForm({ ...loginForm, password: e.target.value });
+          }}
+        />
+        <Button type="submit" variant="contained" sx={style}>
           로그인
         </Button>
       </form>
