@@ -30,7 +30,7 @@ const DidVideo = () => {
   return (
 <div>
   {getDidVideo ? (
-    <video width="1350px" height="735px" autoPlay loop controls>
+    <video width="100%" height="100%" autoPlay loop controls>
       <source src="/api/view/getDidVideo" type="video/mp4" />
     </video>
   ) : (
