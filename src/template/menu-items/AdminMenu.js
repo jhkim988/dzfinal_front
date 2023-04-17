@@ -3,7 +3,7 @@ import { IconUsers } from "@tabler/icons";
 const icons = { IconUsers };
 
 const AdminMenu = {
-  id: "adminmenui",
+  id: "adminmenu",
   type: "group",
   children: [
     {

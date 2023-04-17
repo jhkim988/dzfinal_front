@@ -15,7 +15,6 @@ const DidMenu = {
       title: "DID",
       type: "collapse",
       icon: icons.IconLayoutBoardSplit,
-
       children: [
         {
           id: "video_did",
