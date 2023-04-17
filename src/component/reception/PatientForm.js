@@ -36,6 +36,7 @@ const PatientForm = ({
     setSelectedAddress,
 }) => {
     const [isChecked, setIsChecked] = useState(false);
+
     const [open, setOpen] = React.useState(false);
     const [patient_name, setPatient_name] = useState("");
 
@@ -45,6 +46,7 @@ const PatientForm = ({
     const [isPhone1Invalid, setIsPhone1Invalid] = useState(false);
     const [isPhone2Invalid, setIsPhone2Invalid] = useState(false);
     const [isPhone3Invalid, setIsPhone3Invalid] = useState(false);
+    const [isGenderInvalid, setIsGenderInvalid] = useState(false);
 
 
     //초기화
@@ -119,10 +121,19 @@ const PatientForm = ({
             }
         }
 
+        if (name === 'gender') {
+            if (!value) {
+                setIsGenderInvalid(true);
+            } else {
+                setIsGenderInvalid(false);
+            }
+        }
+
         setPatientData((patientData) => ({
             ...patientData,
             ...selectedAddress,
             ...isChecked,
+            insurance: isChecked,
             [name]: value
         }));
         setPatient_name(event.target.value);
@@ -131,20 +142,27 @@ const PatientForm = ({
     const handleSubmit = (event) => {
         event.preventDefault();
         if (window.confirm(patientData.patient_name + "님의 환자 등록을 진행하시겠습니까?")) {
-            axiosClient.post(Patient_API_BASE_URL, patientData)
-                .then((response) => {
-                    alert(response.data.message);
-                    console.log("patient_id:" + response.data.patient_id);
-                    setPatient_id(response.data.patient_id);
-                })
-                .catch((error) => {
-                    alert("회원등록 실패. 다시 시도 바랍니다.");
-                    console.error(error);
-                });
+            if (patientData.gender === "") {
+                alert("환자 정보 입력값을 확인 바랍니다.");
+                setIsGenderInvalid(true);
+            } else {
+                setIsGenderInvalid(false);
+                axiosClient.post(Patient_API_BASE_URL, patientData)
+                    .then((response) => {
+                        alert(response.data.message);
+                        console.log("patient_id:" + response.data.patient_id);
+                        setPatient_id(response.data.patient_id);
+                    })
+                    .catch((error) => {
+                        alert("회원등록 실패. 다시 시도 바랍니다.");
+                        console.error(error);
+                    });
+            }
         } else {
             alert("환자 등록이 취소되었습니다. 다시 시도 바랍니다.");
             resetHandler();
         }
+
     };
 
     const updatePatientInfo = () => {
@@ -195,7 +213,6 @@ const PatientForm = ({
                     <Grid item xs={12}>
                         <h5 style={{ marginTop: 0, marginBottom: 0 }}>
                             환자 등록/수정
-
                         </h5>
                     </Grid>
                 </Grid>
@@ -216,39 +233,112 @@ const PatientForm = ({
                             />
                         </Grid>
                         <Grid item xs={5} sx={{ paddingLeft: 0 }}>
-                            <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                                <TextField
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    sx={{
-                                        "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
-                                            { padding: "0.5em", paddingLeft: "10px" },
-                                    }}
-                                    label="주민등록번호"
-                                    variant="outlined"
-                                    name="front_registration_number"
-                                    onChange={handleChange}
-                                    value={patientData.front_registration_number || ""}
-                                    size="small"
-                                    error={isFrontInvalid}
-                                //helperText={isFrontInvalid ? "6자리를 초과" : ""}
-                                />
-                                <p style={{ margin: 3 }}>─</p>
-                                <TextField
-                                    onChange={handleChange}
-                                    sx={{
-                                        marginRight: 0.5,
-                                        "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
-                                            { padding: "0.5em", paddingLeft: "10px" },
-                                    }}
-                                    name="back_registration_number"
-                                    value={patientData.back_registration_number || ""}
-                                    variant="outlined"
-                                    size="small"
-                                    error={isBackInvalid}
-                                />
-                            </Box>
+                            {/* 재진환자 주민등록번호 수정 불가능 */}
+                            {patientData.patient_id != null &&
+                                patientData.patient_id != 0 && (
+                                    <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+                                        <TextField
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            sx={{
+                                                "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                                    { padding: "0.5em", paddingLeft: "10px" },
+                                            }}
+                                            label="주민등록번호"
+                                            variant="outlined"
+                                            name="front_registration_number"
+                                            //onChange={handleChange}
+                                            value={patientData.front_registration_number || ""}
+                                            size="small"
+                                            readOnly={true}
+                                        />
+                                        <p style={{ margin: 3 }}>─</p>
+                                        <TextField
+                                            //onChange={handleChange}
+                                            sx={{
+                                                marginRight: 0.5,
+                                                "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                                    { padding: "0.5em", paddingLeft: "10px" },
+                                            }}
+                                            name="back_registration_number"
+                                            value={patientData.back_registration_number || ""}
+                                            variant="outlined"
+                                            size="small"
+                                            readOnly={true}
+                                        />
+                                    </Box>
+                                )}
+                            {/* 접수화면 접속 시 기본 화면 */}
+                            {patientData.patient_id == null && (
+                                <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+                                    <TextField
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        sx={{
+                                            "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                                { padding: "0.5em", paddingLeft: "10px" },
+                                        }}
+                                        label="주민등록번호"
+                                        variant="outlined"
+                                        name="front_registration_number"
+                                        onChange={handleChange}
+                                        value={patientData.front_registration_number || ""}
+                                        size="small"
+                                        error={isFrontInvalid}
+                                    />
+                                    <p style={{ margin: 3 }}>─</p>
+                                    <TextField
+                                        onChange={handleChange}
+                                        sx={{
+                                            marginRight: 0.5,
+                                            "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                                { padding: "0.5em", paddingLeft: "10px" },
+                                        }}
+                                        name="back_registration_number"
+                                        value={patientData.back_registration_number || ""}
+                                        variant="outlined"
+                                        size="small"
+                                        error={isBackInvalid}
+                                    />
+                                </Box>
+                            )}
+                            {patientData.patient_id != null &&
+                                patientData.patient_id == 0 && (
+                                    <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+                                        <TextField
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            sx={{
+                                                "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                                    { padding: "0.5em", paddingLeft: "10px" },
+                                            }}
+                                            label="주민등록번호"
+                                            variant="outlined"
+                                            name="front_registration_number"
+                                            onChange={handleChange}
+                                            value={patientData.front_registration_number || ""}
+                                            size="small"
+                                            error={isFrontInvalid}
+                                        />
+                                        <p style={{ margin: 3 }}>─</p>
+                                        <TextField
+                                            onChange={handleChange}
+                                            sx={{
+                                                marginRight: 0.5,
+                                                "& .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                                    { padding: "0.5em", paddingLeft: "10px" },
+                                            }}
+                                            name="back_registration_number"
+                                            value={patientData.back_registration_number || ""}
+                                            variant="outlined"
+                                            size="small"
+                                            error={isBackInvalid}
+                                        />
+                                    </Box>
+                                )}
                         </Grid>
                         <Grid item xs={2} sx={{ marginLeft: 0.5 }}>
                             <Box sx={{ display: "flex", justifyContent: "space-around" }}>
@@ -346,31 +436,84 @@ const PatientForm = ({
                             </Box>
                         </Grid>
                         <Grid item xs={2}>
-                            <TextField
-                                id="outlined-select-currency"
-                                select
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                sx={{
-                                    width: "100%",
-                                    height: 10,
-                                    ".css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
-                                        { padding: "0.5em", paddingLeft: "10px" },
-                                }}
-                                label="성별"
-                                size="small"
-                                name="gender"
-                                onChange={handleChange}
-                                value={patientData.gender || ""}
-                                style={{ width: "70px", height: "10px" }}
-                            >
-                                {gender.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            {patientData.patient_id == null && (
+                                <TextField
+                                    select
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    sx={{
+                                        width: "100%",
+                                        height: 10,
+                                        ".css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                            { padding: "0.5em", paddingLeft: "10px" },
+                                    }}
+                                    label="성별"
+                                    size="small"
+                                    name="gender"
+                                    onChange={handleChange}
+                                    value={patientData.gender || ""}
+                                    style={{ width: "70px", height: "10px" }}
+                                    error={isGenderInvalid}
+                                >
+                                    {gender.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            )}
+                            {patientData.patient_id != null &&
+                                patientData.patient_id == 0 && (
+                                    <TextField
+                                        select
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        sx={{
+                                            width: "100%",
+                                            height: 10,
+                                            ".css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                                { padding: "0.5em", paddingLeft: "10px" },
+                                        }}
+                                        label="성별"
+                                        size="small"
+                                        name="gender"
+                                        onChange={handleChange}
+                                        value={patientData.gender || ""}
+                                        style={{ width: "70px", height: "10px" }}
+                                        error={isGenderInvalid}
+                                    >
+                                        {gender.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                )}
+                            {/* 환자 정보 수정 시 성별 수정 불가능 */}
+                            {patientData.patient_id != null &&
+                                patientData.patient_id != 0 && (
+                                    <TextField
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        sx={{
+                                            width: "100%",
+                                            height: 10,
+                                            ".css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+                                                { padding: "0.5em", paddingLeft: "10px" },
+                                        }}
+                                        label="성별"
+                                        size="small"
+                                        name="gender"
+                                        value={patientData.gender || ""}
+                                        style={{ width: "70px", height: "10px" }}
+                                        readOnly={true}
+                                    >
+                                    </TextField>
+                                )}
+
                         </Grid>
                         <Grid item xs={3}>
                             <FormControlLabel
@@ -378,10 +521,10 @@ const PatientForm = ({
                                     <Checkbox
                                         checked={isChecked}
                                         onChange={handleCheck}
-                                        value={patientData.insurance === true ? 1 : 0}
+                                        value={patientData.insurance === 1 ? true : false}
+                                        name="insurance"
                                     />
                                 }
-                                name="insurance"
                                 label="보험여부"
                                 margin="dense"
                                 style={{ width: "110px" }}
