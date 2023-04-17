@@ -1,21 +1,5 @@
 import {
-    Box,
-    Button,
-    Checkbox,
-    Grid,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    TextField,
     Typography,
-    OutlinedInput,
-    FormHelperText,
   } from "@mui/material";
   import FormControl, { useFormControl } from '@mui/material/FormControl';
   import { tableCellClasses } from "@mui/material/TableCell";
@@ -48,7 +32,7 @@ const DidView = () => {
     
     return (
         <div>
-            <Typography style={{fontSize: "4.5rem" , fontWeight: "bold"}}>{getDidSubtitle[index]?.message}</Typography>
+            <Typography style={{fontSize: "3.5rem" , fontWeight: "bold"}}>{getDidSubtitle[index]?.message}</Typography>
            
         </div>
     );

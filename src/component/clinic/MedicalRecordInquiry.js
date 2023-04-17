@@ -21,7 +21,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import { Stack } from "@mui/system";
+import { Stack, padding } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
 import axiosClient from "../login/AxiosClient";
 import "./style.css";
@@ -116,7 +116,7 @@ const MedicalRecordInquiry = ({
 
   const handlePageClick = (pageNumber) => {
     axiosClient
-      .get(`/api/clinic/mri/${1}/${pageNumber}`)
+      .get(`/api/clinic/mri/${patient.patient_id}/${pageNumber}`)
       .then((response) => {
         setMri(response.data.mri);
         setPagination(response.data.pagination);
@@ -157,7 +157,13 @@ const MedicalRecordInquiry = ({
         <TextField
           label="검색어"
           size="small"
-          sx={{ marginRight: 1 }}
+          sx={{
+            marginRight: 1,
+            "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputSizeSmall":
+              {
+                padding: "10px 14px",
+              },
+          }}
           onChange={handleInputChange}
         />
         <Box sx={{ alignSelf: "center" }}>

@@ -17,6 +17,8 @@ import { offsetDate } from "./utils/dateUtils";
 import ReservationDateTimePickerModal from "./ReservationDateTimePickerModal";
 import PatientAutoComplete from './../reception/PatientAutoComplete';
 import axiosClient from './../login/AxiosClient';
+import { useContext } from "react";
+import { DataContext } from "../loading/DataContextProvider";
 
 
 const style = { margin: "20px 0px" };
@@ -27,7 +29,9 @@ const ReservationForm = ({
   pickDate,
   pickTime,
   requestSuccessCallback,
+  init,
 }) => {
+  const doctorData = useContext(DataContext);
   const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const anchorRef = useRef(null);
@@ -74,19 +78,23 @@ const ReservationForm = ({
   useEffect(() => {
     if (reservationFormModal.mode === "POST") {
       const date = pickDate ? pickDate.toISOString().slice(0, 10) : null;
-      setReservationFormData({
-        patient_id: 0,
-        patient_name: '',
-        phone_number1: '',
-        phone_number2: '',
-        phone_number3: '',
-        date_time: `${date} ${pickTime}`,
-        wish_date: date,
-        wish_time: pickTime,
-        state: "예약중",
-        treatment_reason: '',
-        doctor: reservationFormModal.doctor,
-      });
+      if (!init?.patient_id) {
+        setReservationFormData({
+          patient_id: 0,
+          patient_name: '',
+          phone_number1: '',
+          phone_number2: '',
+          phone_number3: '',
+          date_time: `${date} ${pickTime}`,
+          wish_date: date,
+          wish_time: pickTime,
+          state: "예약중",
+          treatment_reason: '',
+          doctor: reservationFormModal.doctor,
+        });  
+      } else {
+        setReservationFormData(prev => ({ ...prev, ...init, state: "예약중" }));
+      }
     } else if (reservationFormModal.mode === "PUT") {
       axiosClient.get(`/api/reservation/${reservationFormModal.reservation_id}`)
         .then(({ data }) => {
@@ -108,7 +116,7 @@ const ReservationForm = ({
           });
         });
     }
-  }, [reservationFormModal.modalState, pickDate, pickTime]);
+  }, [reservationFormModal.modalState, pickDate, pickTime, init]);
 
   return (
     <>
@@ -213,8 +221,7 @@ const ReservationForm = ({
                   onChange={formOnChange}
                   value={reservationFormData.doctor || 1}
                 >
-                  <MenuItem value="1">김더존</MenuItem>
-                  <MenuItem value="2">이을지</MenuItem>
+                  {doctorData.map((doctor) => (<MenuItem key={`ReservationForm#Doctor${doctor.employ_id}`} value={doctor.employ_id}>{doctor.employee_name}</MenuItem>))}
                 </Select>
               </FormControl>
             </Grid>

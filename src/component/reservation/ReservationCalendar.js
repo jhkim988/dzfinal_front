@@ -25,15 +25,11 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { compareDate } from "./utils/dateUtils";
-import { doctorData } from "./Reservation";
+import { useContext } from "react";
+import { DataContext } from "../loading/DataContextProvider";
 
 const cellHeight = 70;
 const height = `12vh`
-
-const appointmentBackground = {
-  1: "#F29D94",
-  2: "#BEDEF3",
-};
 
 const StyledMonthViewTimeTableCell = styled(MonthView.TimeTableCell)(
   ({ theme }) => ({
@@ -55,13 +51,15 @@ const StyledMonthViewTimeTableCell = styled(MonthView.TimeTableCell)(
   })
 );
 
-const Appointment = ({ children, style, setViewDate, ...restProps }) => (
+const Appointment = ({ children, style, setViewDate, ...restProps }) => {
+  const doctorData = useContext(DataContext);
+  return (
   <Appointments.Appointment
     {...restProps}
     style={{
       ...style,
       color: "white",
-      backgroundColor: appointmentBackground[restProps.data.doctor] || "blue",
+      backgroundColor: `#${doctorData.find(d => `${d.employ_id}` === `${restProps.data.doctor}`).color}`,
       padding: "5px",
       borderRadius: "8px",
       // height: 42.5,
@@ -73,7 +71,7 @@ const Appointment = ({ children, style, setViewDate, ...restProps }) => (
   >
   <div>{restProps.data.title}</div>
   </Appointments.Appointment>
-);
+)};
 
 const ReservationCalendar = ({
   viewDate,
@@ -81,12 +79,12 @@ const ReservationCalendar = ({
   calendarAppointments,
   setViewCalendar,
 }) => {
-  const [doctorFilter, setDoctorFilter] = useState({
-    1: true,
-    2: true,
-  });
+  const doctorData = useContext(DataContext);
+  const [doctorFilter, setDoctorFilter] = useState(doctorData.reduce((acc, cur) => {
+    acc[cur.employ_id] = true;
+    return acc;
+  }, {}));
   const [filterSelectorOpen, setFilterSelectorOpen] = useState(false);
-
   return (
     <Paper>
       <Scheduler
@@ -96,7 +94,7 @@ const ReservationCalendar = ({
           const startDate = new Date(appointment.startDate);
           if (viewDate.viewCalendar === 'month') {
             startDate.setHours(9);
-            startDate.setMinutes(appointment.doctor === '1' ? 0 : 1);
+            startDate.setMinutes(0);
             appointment.startDate = startDate;
           } else if (viewDate.viewCalendar === 'week') {
             const endDate = new Date(appointment.endDate);
@@ -143,10 +141,7 @@ const ReservationCalendar = ({
           startDayHour={9}
           endDayHour={18}
           cellDuration={60}
-          // timeScaleLayoutComponent={(props) => <WeekView.TimeScaleLayout {...props} height={700}/>} // timeScale height 전체 길이
           timeTableLayoutComponent={(props) => <WeekView.TimeTableLayout {...props} height={640}/>} // timeTable 전체 길이
-          // timeTableCellComponent={(props) => <WeekView.TimeTableCell {...props} style={{ height: 70 }}/>}
-          // timeScaleTickCellComponent={(props) => <WeekView.TimeScaleTickCell {...props} style={{ height: 60 }}/>}
           timeScaleLabelComponent={(props) =>
             props.time ? (
               <WeekView.TimeScaleLabel {...props} style={{ height: cellHeight }} />
@@ -236,6 +231,7 @@ const DoctorFilterSelector = ({
   doctorFilter,
   setDoctorFilter,
 }) => {
+  const doctorData = useContext(DataContext);
   const [loaded, isLoaded] = useState(false);
   const anchorRef = useRef();
   const onCheckListItemClick = useCallback((e) => {
@@ -253,6 +249,18 @@ const DoctorFilterSelector = ({
   };
   useEffect(() => {
     isLoaded(true);
+    const click = (e) => {
+      if (anchorRef.current && anchorRef.current.contains(e.target)) {
+        setFilterSelectorOpen(prev => !prev);
+      } else {
+        setFilterSelectorOpen(false);
+      }
+    };
+
+    document.addEventListener("click", click);
+    return () => {
+      document.removeEventListener("click", click);
+    };
   }, []);
 
   return (
@@ -260,9 +268,6 @@ const DoctorFilterSelector = ({
       <FilterAltIcon
         sx={{ marginRight: 3, zIndex: 3 }}
         ref={anchorRef}
-        onClick={(e) => {
-          setFilterSelectorOpen((prev) => !prev);
-        }}
       />
       {loaded ? (
         <Popper
@@ -275,9 +280,10 @@ const DoctorFilterSelector = ({
             <List>
               {doctorData.map((doctor) => (
                 <DoctorFilterListItem
-                  key={`doctorFilterItem#${doctor.id}`}
+                  key={`doctorFilterItem#${doctor.employ_id}`}
                   doctor={doctor}
                   selectDoctor={doctorFilter}
+                  value={doctor.employ_id}
                   onCheckListItemClick={onCheckListItemClick}
                 />
               ))}
@@ -301,12 +307,12 @@ export const DoctorFilterListItem = ({
       <ListItemButton>
         <ListItemIcon>
           <Checkbox
-            checked={selectDoctor[doctor.id]}
-            value={doctor.id}
+            checked={selectDoctor[doctor.employ_id]}
+            value={doctor.employ_id}
             onClick={onCheckListItemClick}
           />
         </ListItemIcon>
-        <ListItemText primary={doctor.text} />
+        <ListItemText primary={doctor.employee_name} />
       </ListItemButton>
     </ListItem>
   );

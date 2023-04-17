@@ -9,9 +9,9 @@ import Clinic from "./Clinic";
 import DiseaseModel from "./model/DiseaseModel";
 import WaitingQueueLayout from "./../waiting/WaitingQueueLayout";
 import axiosClient from "./../login/AxiosClient";
-import AccessAllow from "./../login/AccessAllow";
 
 const ClinicView = () => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
   const [reception, setReception] = useState();
   const [patient, setPatient] = useState({});
   const [underlying, onInsert, onDelete, onAppend, onReset] = DiseaseModel();
@@ -90,20 +90,20 @@ const ClinicView = () => {
             );
           }}
           shouldAutoCall={({ data: { state, doctor_id } }) =>
-            state === "수납대기" && doctor_id === 1
+            state === "수납대기" && doctor_id === userInfo.employ_id
           }
           findNextAutoCall={({ state, doctor_id }) =>
-            state === "진료대기" && doctor_id === 1
+            state === "진료대기" && doctor_id === userInfo.employ_id
           }
           shouldDisableCallButton={({ state, doctor_id }) =>
-            state !== "진료대기" || doctor_id !== 1
+            state !== "진료대기" || doctor_id !== userInfo.employ_id
           }
         />
       </Grid>
       <Grid item xs={5}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "37.9vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "40vh" }} elevation={3}>
               <MedicalRecordInquiry
                 mri={mri}
                 setMri={setMri}
@@ -118,7 +118,7 @@ const ClinicView = () => {
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "41.1vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "40.5vh" }} elevation={3}>
               <MedicalInfo
                 medicalInfo={medicalInfo}
                 setMode={setMode}
@@ -135,7 +135,7 @@ const ClinicView = () => {
       <Grid item xs={5}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "37.9vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "40vh" }} elevation={3}>
               <Patient reception={reception} patient={patient} />
               <Grid container spacing={2} sx={{ marginTop: 1 }}>
                 <Grid item xs={6}>
@@ -148,7 +148,7 @@ const ClinicView = () => {
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper sx={{ width: "100%", height: "41.1vh" }} elevation={3}>
+            <Paper sx={{ width: "100%", height: "40.5vh" }} elevation={3}>
               <Clinic
                 setPatient={setPatient}
                 setReception={setReception}
