@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ReactToPrint from "react-to-print";
 import axiosClient from './../login/AxiosClient';
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -19,6 +18,7 @@ import { useReactToPrint } from "react-to-print";
 
 export default function BasicSelect({user}) {
   const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
+  const [isReceipt, setIsReceipt] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false); // 카드 결제 폼을 보여줄지 여부를 저장할 상태 값을 추가합니다.
   const [isCashPayment, setIsCashPayment] = useState(false); // 현금결제 상태 값을 추가합니다.
   const [isCardPayment, setIsCardPayment] = useState(false);
@@ -26,6 +26,7 @@ export default function BasicSelect({user}) {
 
   const handleModifyReceipt = () => {
     setModifyReceipt(true);
+    setIsReceipt(true);
   };
 
   const handleCardPayment = () => {
@@ -33,8 +34,6 @@ export default function BasicSelect({user}) {
     setShowCardForm(true);
     // setShowCardForm(true); // 카드결제 버튼을 클릭하면 카드결제 폼을 보여주도록 상태 값을 변경합니다.
   };
-
-  const [isReceipt, setIsReceipt] = useState(false);
 
   const handleReceipt = () => {
     setIsReceipt(true);
@@ -86,17 +85,10 @@ export default function BasicSelect({user}) {
     setCard_name(event.target.value);
   };
 
-  // const handleChange = (event) => {
-  //   if (modifyReceipt) {
-  //     setCard_name(editCardValue);
-  //     setEditCardValue(event.target.value);
-  //   } else {
-  //     setCard_name(event.target.value);
-  //   }
-  // };
   const ariaLabel = { "aria-label": "description" };
 
-  const [card_number, setCard_number] = useState("");
+  // 카드번호 입력 & 수정하기
+  const [card_number, setCard_number] = useState(user.card_number || "");
   const handleCardNumber = (event) => {
     setCard_number(event.target.value);
     const { id, value } = event.target;
@@ -117,33 +109,6 @@ export default function BasicSelect({user}) {
     }
   };
 
-  function CardNumberInput() {
-    const [card_number, setCard_number] = useState({
-      card_number1: "",
-      card_number2: "",
-      card_number3: "",
-      card_number4: "",
-    });
-
-    const handleCardNumberChange = (e) => {
-      const { name, value } = e.target;
-      setCard_number((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    };
-
-    const formatCardNumber = (card) => {
-      const { card_number1, card_number2, card_number3, card_number4 } = card;
-      return `${card_number1}-${card_number2}-${card_number3}-${card_number4}`;
-    };
-
-    const handleCardNumberSubmit = (e) => {
-      e.preventDefault();
-      const cardNumber = formatCardNumber(card_number);
-      console.log(cardNumber);
-    };
-  }
 
   // 카드번호 가리기
   const [hidePassword, setHidePassword] = useState(true);
@@ -247,7 +212,6 @@ export default function BasicSelect({user}) {
 
   // 프린트 기능
   const componentRef = React.useRef();
-
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -265,6 +229,7 @@ export default function BasicSelect({user}) {
     });
 };
 
+
   return (
     <>
       <Stack direction="row" spacing={1}>
@@ -272,7 +237,7 @@ export default function BasicSelect({user}) {
           sx={{ fontSize: "12px" }}
           variant="contained"
           disabled={            
-             user.state === "진료중" || user.state === "진료대기"
+            user.state === "진료중" || user.state === "진료대기" || !isReceipt
           }
           onClick={handleCardPayment}
         >
@@ -283,7 +248,7 @@ export default function BasicSelect({user}) {
           variant="contained"
           onClick={handleCashPayment}
           disabled={
-             user.state === "진료중" || user.state === "진료대기"
+             user.state === "진료중" || user.state === "진료대기" || !isReceipt
           }
         >
           현금결제
@@ -366,54 +331,56 @@ export default function BasicSelect({user}) {
             noValidate
             autoComplete="off"
           >
-            <FormControl>
-              <InputLabel shrink={true} variant="outlined" sx={{ backgroundColor: "white" }}>카드번호</InputLabel>
-              <OutlinedInput
-                onChange={handleCardNumber}
-                disabled={!showCardForm}
-                type="number"
-                id="card_number1"
-                name="card_number1"
-                placeholder={user.card_number ? user.card_number.substring(0, 4) : "" }
-                inputProps={ariaLabel}
-              />
-            </FormControl>
-            <FormControl>
-              <InputLabel></InputLabel>
-              <OutlinedInput
-                onChange={handleCardNumber}
-                disabled={!showCardForm}
-                type={hidePassword ? "password" : "text"}
-                id="card_number2"
-                name="card_number2"
-                placeholder={ user.card_number ? user.card_number.substring(4, 8) : ""}
-                inputProps={ariaLabel}
-              />
-            </FormControl>
-            <FormControl>
-              <InputLabel></InputLabel>
-              <OutlinedInput
-                onChange={handleCardNumber}
-                disabled={!showCardForm}
-                type={hidePassword ? "password" : "text"}
-                id="card_number3"
-                name="card_number3"
-                placeholder={user.card_number ? user.card_number.substring(8, 12) : ""}
-                inputProps={ariaLabel}
-              />
-            </FormControl>
-            <FormControl>
-              <InputLabel></InputLabel>
-              <OutlinedInput
-                onChange={handleCardNumber}
-                disabled={!showCardForm}
-                type="number"
-                id="card_number4"
-                name="card_number4"
-                placeholder={user.card_number ? user.card_number.substring(12, 16) : ""}
-                inputProps={ariaLabel}
-              />
-            </FormControl>
+          <FormControl>
+            <InputLabel shrink={true} variant="outlined" sx={{ backgroundColor: "white" }}>
+              카드번호
+            </InputLabel>
+            <OutlinedInput
+              onChange={handleCardNumber}
+              disabled={!showCardForm}
+              type="text"
+              id="card_number1"
+              name="card_number1"
+              placeholder={user.card_number ? user.card_number.substring(0, 4) : ""}
+              inputProps={ariaLabel}
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel></InputLabel>
+            <OutlinedInput
+              onChange={handleCardNumber}
+              disabled={!showCardForm}
+              type={hidePassword ? "password" : "text"}
+              id="card_number2"
+              name="card_number2"
+              placeholder={user.card_number ? user.card_number.substring(4, 8) : ""}
+              inputProps={ariaLabel}
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel></InputLabel>
+            <OutlinedInput
+              onChange={handleCardNumber}
+              disabled={!showCardForm}
+              type={hidePassword ? "password" : "text"}
+              id="card_number3"
+              name="card_number3"
+              placeholder={user.card_number ? user.card_number.substring(8, 12) : ""}
+              inputProps={ariaLabel}
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel></InputLabel>
+            <OutlinedInput
+              onChange={handleCardNumber}
+              disabled={!showCardForm}
+              type="text"
+              id="card_number4"
+              name="card_number4"
+              placeholder={user.card_number ? user.card_number.substring(12, 16) : ""}
+              inputProps={ariaLabel}
+            />
+          </FormControl>
           </Box>
           <br />
           <Stack spacing={2} direction="row" sx={{ display: "flex" }}>
