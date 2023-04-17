@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
+import axiosClient from "../login/AxiosClient";
+import { Grid, Paper } from "@mui/material";
 
 const DidVideo = () => {
-  const [getDidVideo, setGetDidVideo] = useState([]);
+  const [getDidVideo, setGetDidVideo] = useState(null);
+
+  const noVideo = "설정한 비디오가 존재하지 않습니다!"
 
   useEffect(() => {
-    axios
+    // axios
+    axiosClient
       .get(`/api/view/getDidVideo`, {
         headers: {
           "Content-Type": "application/json",
@@ -16,16 +21,34 @@ const DidVideo = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (getDidVideo) {
+      console.log(getDidVideo.video_real_name);
+    }
+  }, [getDidVideo]);
 
   return (
-    <div>
-      {/* <h1>비디오 출력 부분</h1> */}
-      비디오 이름: { getDidVideo.video_real_name }
-      <video width="1436px" height="751px" autoplay loop controls>
-        <source src="/api/view/getDidVideo" type="video/mp4" />
-      </video>
-      <br />
-    </div>
+<div>
+  {getDidVideo ? (
+    <video width="1350px" height="735px" autoPlay loop controls>
+      <source src="/api/view/getDidVideo" type="video/mp4" />
+    </video>
+  ) : (
+    <Paper
+      elevation={3}
+      sx={{
+        height: "83vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div style={{ fontWeight: "bold", fontSize: "80px", textAlign: "center", color: "#ff3d00" }}>
+        {noVideo}
+      </div>
+    </Paper>
+  )}
+</div>
   );
 };
 

@@ -210,8 +210,8 @@ const PwdChange = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                    <Button variant="contained" onClick={onSubmit} >확인</Button>
-                                    <Button variant="contained" color="error" onClick={resetHandelr}>취소</Button>
+                                    <Button variant="contained" onClick={onSubmit} style={{ width: "100px", marginLeft: "10px" }}>확인</Button>
+                                    <Button variant="contained" color="error" onClick={resetHandelr} style={{ width: "100px", marginRight: "10px" }}>취소</Button>
                                 </Box>
 
                             </Grid>

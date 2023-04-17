@@ -38,7 +38,14 @@ const PatientForm = ({
     const [isChecked, setIsChecked] = useState(false);
     const [open, setOpen] = React.useState(false);
     const [patient_name, setPatient_name] = useState("");
-    const [autoCompleteList, setAutoCompleteList] = useState([]);
+
+    //예외처리
+    const [isFrontInvalid, setIsFrontInvalid] = useState(false);
+    const [isBackInvalid, setisBackInvalid] = useState(false);
+    const [isPhone1Invalid, setIsPhone1Invalid] = useState(false);
+    const [isPhone2Invalid, setIsPhone2Invalid] = useState(false);
+    const [isPhone3Invalid, setIsPhone3Invalid] = useState(false);
+
 
     //초기화
     const resetHandler = (event) => {
@@ -77,6 +84,41 @@ const PatientForm = ({
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'front_registration_number') {
+            if (value.length == 6 || value.length == 0) {
+                setIsFrontInvalid(false);
+            } else {
+                setIsFrontInvalid(true);
+            }
+        } else if (name === 'back_registration_number') {
+            if (value.length == 7 || value.length == 0) {
+                setisBackInvalid(false);
+            } else {
+                setisBackInvalid(true);
+            }
+        }
+
+        if (name === 'phone_number1') {
+            if (value.length == 3 || value == 0) {
+                setIsPhone1Invalid(false);
+            } else {
+                setIsPhone1Invalid(true);
+            }
+        } else if (name === 'phone_number2') {
+            if (value.length == 4 || value == 0) {
+                setIsPhone2Invalid(false);
+            } else {
+                setIsPhone2Invalid(true);
+            }
+        } else if (name === 'phone_number3') {
+            if (value.length == 4 || value == 0) {
+                setIsPhone3Invalid(false);
+            } else {
+                setIsPhone3Invalid(true);
+            }
+        }
+
         setPatientData((patientData) => ({
             ...patientData,
             ...selectedAddress,
@@ -189,6 +231,8 @@ const PatientForm = ({
                                     onChange={handleChange}
                                     value={patientData.front_registration_number || ""}
                                     size="small"
+                                    error={isFrontInvalid}
+                                //helperText={isFrontInvalid ? "6자리를 초과" : ""}
                                 />
                                 <p style={{ margin: 3 }}>─</p>
                                 <TextField
@@ -202,6 +246,7 @@ const PatientForm = ({
                                     value={patientData.back_registration_number || ""}
                                     variant="outlined"
                                     size="small"
+                                    error={isBackInvalid}
                                 />
                             </Box>
                         </Grid>
@@ -269,6 +314,7 @@ const PatientForm = ({
                                     value={patientData.phone_number1 || ""}
                                     variant="outlined"
                                     size="small"
+                                    error={isPhone1Invalid}
                                 />
                                 <p style={{ margin: 3 }}>─</p>
 
@@ -282,6 +328,7 @@ const PatientForm = ({
                                     value={patientData.phone_number2 || ""}
                                     variant="outlined"
                                     size="small"
+                                    error={isPhone2Invalid}
                                 />
                                 <p style={{ margin: 3 }}>─</p>
                                 <TextField
@@ -294,6 +341,7 @@ const PatientForm = ({
                                     value={patientData.phone_number3 || ""}
                                     variant="outlined"
                                     size="small"
+                                    error={isPhone3Invalid}
                                 />
                             </Box>
                         </Grid>

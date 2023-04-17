@@ -1,19 +1,10 @@
-import { Button, MenuItem, Paper, TextField, Grid, Hidden, Tooltip } from '@mui/material';
+import { Button, MenuItem, Paper, TextField, Grid, Hidden, Tooltip, FormControl, OutlinedInput, InputAdornment, alertTitleClasses } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import axiosClient from './../login/AxiosClient';
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-const doctors = [
-    {
-        value: '1',
-        label: '김더존'
-    },
-    {
-        value: '2',
-        label: '이을지'
-    }
-];
+import { DataContext } from '../loading/DataContextProvider';
 
 const examinationTextField = {
     maringTop: "2px",
@@ -25,8 +16,7 @@ const examinationTextField = {
 const Reception_API_BASE_URL = "/api/reception";
 
 const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData, loadDailyReservationList }) => {
-    //console.log(patient_id);
-
+    const doctorData = React.useContext(DataContext);
     const resetHandler = (event) => {
         setReceptionData({
             patient_id: '',
@@ -94,7 +84,11 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     resetHandler(event);
                 })
                 .catch((error) => {
-                    alert("접수등록실패");
+                    if (!patient_id) {
+                        alert("환자등록 후 접수 등록이 가능합니다.");
+                    } else {
+                        alert("접수등록실패");
+                    }
                     console.error(error);
                 });
         } else {
@@ -117,7 +111,11 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     if (receptionData.reservation_id != 0) loadDailyReservationList();
                 })
                 .catch((error) => {
-                    alert("접수등록실패");
+                    if (!patient_id) {
+                        alert("환자등록 후 접수 등록이 가능합니다.");
+                    } else {   
+                       alert("접수등록실패");
+                    }
                     console.error(error);
                 });
         } else {
@@ -251,6 +249,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                     name="systolic"
                                     onChange={handleChange}
                                     value={receptionData.systolic || ''}
+                                    endAdornment={<InputAdornment position="end">mmHg</InputAdornment>}
                                     variant="outlined"
                                     size='small' />
                             </Grid>
@@ -273,7 +272,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                         shrink: true
                                     }}
                                     sx={examinationTextField}
-                                    label="혈당"
+                                    label="혈당 [mg/dl]"
                                     name="blood_sugar"
                                     onChange={handleChange}
                                     value={receptionData.blood_sugar || ''}
@@ -301,9 +300,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                         '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
                                     }}
                                 >
-                                    {doctors.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
+                                    {doctorData.map((option) => (
+                                        <MenuItem key={`ReceptionForm#${option.employ_id}`} value={option.employ_id}>
+                                            {option.employee_name}
                                         </MenuItem>
                                     ))}
                                 </TextField>
@@ -439,7 +438,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                             shrink: true
                                         }}
                                         sx={examinationTextField}
-                                        label="혈당"
+                                        label="혈당 [mg/dl]"
                                         name="blood_sugar"
                                         onChange={handleChange}
                                         value={receptionData.blood_sugar || ''}
@@ -467,9 +466,9 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                                             '.css-jvc7vx-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': { padding: "0.5em", paddingLeft: "10px" }
                                         }}
                                     >
-                                        {doctors.map((option) => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
+                                        {doctorData.map((option) => (
+                                            <MenuItem key={`ReceptionFormUpdate#${option.employ_id}`} value={option.employ_id}>
+                                                {option.employee_name}
                                             </MenuItem>
                                         ))}
                                     </TextField>
