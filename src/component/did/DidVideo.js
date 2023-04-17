@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import YouTube from "react-youtube";
+// import axios from "axios";
+import axiosClient from "../login/AxiosClient";
+import { Grid, Paper } from "@mui/material";
 
 const DidVideo = () => {
   const [getDidVideo, setGetDidVideo] = useState(null);
 
-  const opts = {
-    height: "740px",
-    width: "1436px",
-    playerVars: {
-      autoplay: 1,
-    },
-  };
-
-  const videoId = "UIV52pBSTN8"; // YouTube 비디오 ID
-
+  const noVideo = "설정한 비디오가 존재하지 않습니다!"
 
   useEffect(() => {
-    axios
+    // axios
+    axiosClient
       .get(`/api/view/getDidVideo`, {
         headers: {
           "Content-Type": "application/json",
@@ -35,15 +28,27 @@ const DidVideo = () => {
   }, [getDidVideo]);
 
   return (
-    <div>
-      {getDidVideo ? (
-        <video width="1436px" height="740px" autoplay loop controls>
-          <source src="/api/view/getDidVideo" type="video/mp4" />
-        </video>
-      ) : (
-        <YouTube videoId={videoId} opts={opts} />
-      )}
-    </div>
+<div>
+  {getDidVideo ? (
+    <video width="1350px" height="735px" autoPlay loop controls>
+      <source src="/api/view/getDidVideo" type="video/mp4" />
+    </video>
+  ) : (
+    <Paper
+      elevation={3}
+      sx={{
+        height: "83vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div style={{ fontWeight: "bold", fontSize: "80px", textAlign: "center", color: "#ff3d00" }}>
+        {noVideo}
+      </div>
+    </Paper>
+  )}
+</div>
   );
 };
 

@@ -97,7 +97,7 @@ const DidView = ({ data }) => {
 
                     <Box component="form" noValidate autoComplete="off">
                     {data.filter((item) => item.state === "진료중" && item.doctor_id === 1).length > 0 ? (
-                    data.filter((item) => item.state === "진료중" && item.doctor_id === 1).map((item, index) => (
+                     data.filter((item) => item.state === "진료중" && item.doctor_id === 1).map((item, index) => (
                         <FormControl
                             sx={{
                                 width: "100%",
@@ -107,7 +107,7 @@ const DidView = ({ data }) => {
                         >
                         <OutlinedInput
                             value={`${item.patient_name}(${item.front_registration_number})`}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                         />
                         <MyFormHelperText />
@@ -122,7 +122,7 @@ const DidView = ({ data }) => {
                         >
                             <OutlinedInput
                             value={"잠시만 기다려주세요"}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                             />
                             <MyFormHelperText />
@@ -194,7 +194,7 @@ const DidView = ({ data }) => {
                         >
                         <OutlinedInput
                             value={`${item.patient_name}(${item.front_registration_number})`}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                         />
                         <MyFormHelperText />
@@ -209,7 +209,7 @@ const DidView = ({ data }) => {
                         >
                             <OutlinedInput
                             value={"잠시만 기다려주세요"}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                             />
                             <MyFormHelperText />
@@ -281,7 +281,7 @@ const DidView = ({ data }) => {
                         >
                         <OutlinedInput
                             value={`${item.patient_name}(${item.front_registration_number})`}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                         />
                         <MyFormHelperText />
@@ -296,7 +296,7 @@ const DidView = ({ data }) => {
                     >
                         <OutlinedInput
                         value={"잠시만 기다려주세요"}
-                        inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" }}}
+                        inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" }}}
                         readOnly
                         />
                         <MyFormHelperText />
