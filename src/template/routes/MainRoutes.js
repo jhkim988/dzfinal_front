@@ -22,15 +22,14 @@ const Management = Loadable(
 );
 
 const EmployeeRegister = Loadable(
-  lazy(() => import('./../../component/management/EmployeeRegister'))
+  lazy(() => import("./../../component/management/EmployeeRegister"))
 );
 
-const EmployeeUpdate = Loadable(lazy(() => import ('./../../component/management/EmployeeUpdate')));
-
-const PwdChange = Loadable(
-  lazy(() => import("../../component/pwd/PwdChange"))
+const EmployeeUpdate = Loadable(
+  lazy(() => import("./../../component/management/EmployeeUpdate"))
 );
 
+const PwdChange = Loadable(lazy(() => import("../../component/pwd/PwdChange")));
 
 const Logout = Loadable(lazy(() => import("../../component/login/Logout")));
 
@@ -62,10 +61,6 @@ const MainRoutes = {
         </AccessAllow>
       ),
     },
-    // {
-    //   path: "view",
-    //   element: <DID />,
-    // },
     {
       path: "did_setting",
       element: (
@@ -89,7 +84,8 @@ const MainRoutes = {
           <EmployeeRegister />
         </AccessAllow>
       ),
-    }, {
+    },
+    {
       path: "pwdchange",
       element: <PwdChange />,
     },
