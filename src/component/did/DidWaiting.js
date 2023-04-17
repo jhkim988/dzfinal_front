@@ -14,7 +14,7 @@ const DidView = ({ data }) => {
         <FormControl
             sx={{
                 width: "33%",
-                padding: "2.5px",
+                padding: "1px",
             }}
             key={waitingPatients.length + index}
         >
@@ -33,7 +33,7 @@ const DidView = ({ data }) => {
         <FormControl
             sx={{
                 width: "33%",
-                padding: "2.5px",
+                padding: "1px",
             }}
             key={waitingPatients2.length + index}
         >
@@ -53,7 +53,7 @@ const DidView = ({ data }) => {
         <FormControl
             sx={{
                 width: "33%",
-                padding: "2.5px",
+                padding: "1px",
             }}
             key={waitingReceipt.length + index}
         >
@@ -85,8 +85,8 @@ const DidView = ({ data }) => {
                             height: "32vh",
                             display: "flex",
                             justifyContent: "space-between",
-                            padding: "0 16px",
-                            margin: "0 8px",
+                            padding: "0 06px",
+                            margin: "0 3px",
                             alignItems: "center",
                         }}
                 >
@@ -97,17 +97,17 @@ const DidView = ({ data }) => {
 
                     <Box component="form" noValidate autoComplete="off">
                     {data.filter((item) => item.state === "진료중" && item.doctor_id === 1).length > 0 ? (
-                    data.filter((item) => item.state === "진료중" && item.doctor_id === 1).map((item, index) => (
+                     data.filter((item) => item.state === "진료중" && item.doctor_id === 1).map((item, index) => (
                         <FormControl
                             sx={{
                                 width: "100%",
-                                padding: "2.5px", 
+                                padding: "1px", 
                             }}
                             key={index}
                         >
                         <OutlinedInput
                             value={`${item.patient_name}(${item.front_registration_number})`}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                         />
                         <MyFormHelperText />
@@ -117,12 +117,12 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                             width: "100%",
-                            padding: "2.5px",
+                            padding: "1px",
                             }}
                         >
                             <OutlinedInput
                             value={"잠시만 기다려주세요"}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                             />
                             <MyFormHelperText />
@@ -133,7 +133,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                                 width: "33%",
-                                padding: "2.5px",
+                                padding: "1px",
                             }}
                             key={index}
                         >
@@ -146,7 +146,7 @@ const DidView = ({ data }) => {
                         </FormControl>
                     ))}
                     {waitingPatientForms}
-                    <FormControl sx={{ width: "33%", padding: "2.5px", }}>
+                    <FormControl sx={{ width: "33%", padding: "1px", }}>
                         <OutlinedInput
                             value={
                                 waitingPatients.length <= 5
@@ -172,8 +172,8 @@ const DidView = ({ data }) => {
                             height: "32vh",
                             display: "flex",
                             justifyContent: "space-between",
-                            padding: "0 16px",
-                            margin: "0 8px",
+                            padding: "0 06px",
+                            margin: "0 3px",
                             alignItems: "center",
                         }}
                 >
@@ -188,13 +188,13 @@ const DidView = ({ data }) => {
                         <FormControl
                         sx={{
                             width: "100%",
-                            padding: "2.5px",
+                            padding: "1px",
                         }}
                         key={index}
                         >
                         <OutlinedInput
                             value={`${item.patient_name}(${item.front_registration_number})`}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                         />
                         <MyFormHelperText />
@@ -204,12 +204,12 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                             width: "100%",
-                            padding: "2.5px",
+                            padding: "1px",
                             }}
                         >
                             <OutlinedInput
                             value={"잠시만 기다려주세요"}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                             />
                             <MyFormHelperText />
@@ -220,7 +220,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                                 width: "33%",
-                                padding: "2.5px",
+                                padding: "1px",
                             }}
                             key={index}
                         >
@@ -233,7 +233,7 @@ const DidView = ({ data }) => {
                         </FormControl>
                     ))}
                     {waitingPatientForms2}
-                    <FormControl sx={{ width: "33%", padding: "2.5px", }}>
+                    <FormControl sx={{ width: "33%", padding: "1px", }}>
                         <OutlinedInput
                             value={
                                 waitingPatients2.length <= 5
@@ -259,8 +259,8 @@ const DidView = ({ data }) => {
                             height: "32vh",
                             display: "flex",
                             justifyContent: "space-between",
-                            padding: "0 16px",
-                            margin: "0 8px",
+                            padding: "0 06px",
+                            margin: "0 3px",
                             alignItems: "center",
                         }}
                 >
@@ -275,13 +275,13 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                                 width: "100%",
-                                padding: "2.5px",
+                                padding: "1px",
                             }}
                             key={index}
                         >
                         <OutlinedInput
                             value={`${item.patient_name}(${item.front_registration_number})`}
-                            inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" } }}
+                            inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" } }}
                             readOnly
                         />
                         <MyFormHelperText />
@@ -291,12 +291,12 @@ const DidView = ({ data }) => {
                     <FormControl
                         sx={{
                         width: "100%",
-                        padding: "2.5px",
+                        padding: "1px",
                         }}
                     >
                         <OutlinedInput
                         value={"잠시만 기다려주세요"}
-                        inputProps={{ style: { textAlign: "center", fontSize: "20px", fontWeight: "bold" }}}
+                        inputProps={{ style: { textAlign: "center", fontSize: "30px", fontWeight: "bold" }}}
                         readOnly
                         />
                         <MyFormHelperText />
@@ -307,7 +307,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                             width: "33%",
-                            padding: "2.5px",
+                            padding: "1px",
                             }}
                             key={index}
                         >
@@ -321,7 +321,7 @@ const DidView = ({ data }) => {
                     ))}
 
                     {waitingReceiptForms}
-                    <FormControl sx={{ width: "33%", padding: "2.5px", }}>
+                    <FormControl sx={{ width: "33%", padding: "1px", }}>
                         <OutlinedInput
                             value={
                                 waitingReceipt.length <= 5

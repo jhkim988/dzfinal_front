@@ -29,6 +29,7 @@ const ReservationForm = ({
   pickDate,
   pickTime,
   requestSuccessCallback,
+  init,
 }) => {
   const doctorData = useContext(DataContext);
   const [dateTimePickerModal, setDateTimePickerModal] = useState(false);
@@ -77,19 +78,23 @@ const ReservationForm = ({
   useEffect(() => {
     if (reservationFormModal.mode === "POST") {
       const date = pickDate ? pickDate.toISOString().slice(0, 10) : null;
-      setReservationFormData({
-        patient_id: 0,
-        patient_name: '',
-        phone_number1: '',
-        phone_number2: '',
-        phone_number3: '',
-        date_time: `${date} ${pickTime}`,
-        wish_date: date,
-        wish_time: pickTime,
-        state: "예약중",
-        treatment_reason: '',
-        doctor: reservationFormModal.doctor,
-      });
+      if (!init?.patient_id) {
+        setReservationFormData({
+          patient_id: 0,
+          patient_name: '',
+          phone_number1: '',
+          phone_number2: '',
+          phone_number3: '',
+          date_time: `${date} ${pickTime}`,
+          wish_date: date,
+          wish_time: pickTime,
+          state: "예약중",
+          treatment_reason: '',
+          doctor: reservationFormModal.doctor,
+        });  
+      } else {
+        setReservationFormData(prev => ({ ...prev, ...init, state: "예약중" }));
+      }
     } else if (reservationFormModal.mode === "PUT") {
       axiosClient.get(`/api/reservation/${reservationFormModal.reservation_id}`)
         .then(({ data }) => {
@@ -111,7 +116,7 @@ const ReservationForm = ({
           });
         });
     }
-  }, [reservationFormModal.modalState, pickDate, pickTime]);
+  }, [reservationFormModal.modalState, pickDate, pickTime, init]);
 
   return (
     <>

@@ -186,103 +186,116 @@ const MedicalRecordInquiry = ({
         </Box>
       </Box>
       <Box sx={{ m: 1, marginTop: 2 }}>
-        <TableContainer sx={{ height: "242px" }}>
-          <Table
+        {mri.length === 0 ? (
+          <Box
             sx={{
-              minWidth: 630,
-              "& td": { padding: 0 },
-              "& th": { padding: 0, fontWeight: "bold" },
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "242px",
             }}
-            size="small"
           >
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">이름</TableCell>
-                <TableCell align="center">담당의</TableCell>
-                <TableCell align="center">진단명</TableCell>
-                <TableCell align="center">처방약</TableCell>
-                <TableCell align="center">진단날짜</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {mri &&
-                mri.length > 0 &&
-                mri.map((row) => (
-                  <TableRow
-                    key={row.reception_id}
-                    hover
-                    sx={{
-                      "&:hover": {
-                        backgroundColor: "#90caf9 !important",
-                      },
-                      "&:last-child td, &:last-child th": { border: 0 },
-                    }}
-                    onClick={() => onClick(row.reception_id)}
-                  >
-                    <TableCell scope="row" align="center">
-                      {row.patient_name}
-                    </TableCell>
-                    <TableCell align="center">{row.employee_name}</TableCell>
-                    <Tooltip
-                      title={
-                        row.diagnosisList.length > 0 && (
-                          <div>
-                            {row.diagnosisList.map((diagnosis) => (
-                              <div key={diagnosis.disease_code}>
-                                [{diagnosis.disease_code}]{" "}
-                                {diagnosis.disease_name}
-                              </div>
-                            ))}
-                          </div>
-                        )
-                      }
+            진료 데이터가 없습니다.
+          </Box>
+        ) : (
+          <TableContainer sx={{ height: "242px" }}>
+            <Table
+              sx={{
+                minWidth: 630,
+                "& td": { padding: 0 },
+                "& th": { padding: 0, fontWeight: "bold" },
+              }}
+              size="small"
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">이름</TableCell>
+                  <TableCell align="center">담당의</TableCell>
+                  <TableCell align="center">진단명</TableCell>
+                  <TableCell align="center">처방약</TableCell>
+                  <TableCell align="center">진단날짜</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {mri &&
+                  mri.length > 0 &&
+                  mri.map((row) => (
+                    <TableRow
+                      key={row.reception_id}
+                      hover
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "#90caf9 !important",
+                        },
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
+                      onClick={() => onClick(row.reception_id)}
                     >
-                      <TableCell align="center">
-                        {row.diagnosisList.length > 0 &&
-                          `[${
-                            row.diagnosisList[0].disease_code
-                          }]${row.diagnosisList[0].disease_name.substring(
-                            0,
-                            5
-                          )}...`}
-                        {row.diagnosisList.length > 1 &&
-                          ` 외${row.diagnosisList.length - 1}`}
+                      <TableCell scope="row" align="center">
+                        {row.patient_name}
                       </TableCell>
-                    </Tooltip>
-                    <Tooltip
-                      title={
-                        row.prescriptionList.length > 0 && (
-                          <div>
-                            {row.prescriptionList.map((prescription) => (
-                              <div key={prescription.drug_code}>
-                                [{prescription.drug_code}]{" "}
-                                {prescription.drug_name}
-                              </div>
-                            ))}
-                          </div>
-                        )
-                      }
-                    >
+                      <TableCell align="center">{row.employee_name}</TableCell>
+                      <Tooltip
+                        title={
+                          row.diagnosisList.length > 0 && (
+                            <div>
+                              {row.diagnosisList.map((diagnosis) => (
+                                <div key={diagnosis.disease_code}>
+                                  [{diagnosis.disease_code}]{" "}
+                                  {diagnosis.disease_name}
+                                </div>
+                              ))}
+                            </div>
+                          )
+                        }
+                      >
+                        <TableCell align="center">
+                          {row.diagnosisList.length > 0 &&
+                            `[${
+                              row.diagnosisList[0].disease_code
+                            }]${row.diagnosisList[0].disease_name.substring(
+                              0,
+                              5
+                            )}...`}
+                          {row.diagnosisList.length > 1 &&
+                            ` 외${row.diagnosisList.length - 1}`}
+                        </TableCell>
+                      </Tooltip>
+                      <Tooltip
+                        title={
+                          row.prescriptionList.length > 0 && (
+                            <div>
+                              {row.prescriptionList.map((prescription) => (
+                                <div key={prescription.drug_code}>
+                                  [{prescription.drug_code}]{" "}
+                                  {prescription.drug_name}
+                                </div>
+                              ))}
+                            </div>
+                          )
+                        }
+                      >
+                        <TableCell align="center">
+                          {row.prescriptionList.length > 0 &&
+                            `[${
+                              row.prescriptionList[0].drug_code
+                            }]${row.prescriptionList[0].drug_name.substring(
+                              0,
+                              5
+                            )}...`}
+                          {row.prescriptionList.length > 1 &&
+                            ` 외${row.prescriptionList.length - 1}`}
+                        </TableCell>
+                      </Tooltip>
                       <TableCell align="center">
-                        {row.prescriptionList.length > 0 &&
-                          `[${
-                            row.prescriptionList[0].drug_code
-                          }]${row.prescriptionList[0].drug_name.substring(
-                            0,
-                            5
-                          )}...`}
-                        {row.prescriptionList.length > 1 &&
-                          ` 외${row.prescriptionList.length - 1}`}
+                        {row.created_at.substring(0, 10)}
                       </TableCell>
-                    </Tooltip>
-                    <TableCell align="center">
-                      {row.created_at.substring(0, 10)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Stack spacing={2}>
