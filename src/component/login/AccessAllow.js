@@ -28,11 +28,12 @@ const AccessAllow = ({ authorities, children }) => {
   const back = () => {
     navigate(-1);
   };
-
   useEffect(() => {
+    setIsChecked(false);
     const auth = JSON.parse(localStorage.getItem("auth"));
     if (!auth) {
       back();
+      alert("권한이 없습니다.");
       setIsChecked(false);
     } else if (isIntersection(auth.authorities, authorities)) {
       const access_token_obj = JSON.parse(atob(auth.access_token.split(".")[1]));

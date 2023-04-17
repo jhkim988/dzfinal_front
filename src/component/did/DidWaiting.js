@@ -14,7 +14,7 @@ const DidView = ({ data }) => {
         <FormControl
             sx={{
                 width: "33%",
-                padding: "2.5px",
+                padding: "1px",
             }}
             key={waitingPatients.length + index}
         >
@@ -33,7 +33,7 @@ const DidView = ({ data }) => {
         <FormControl
             sx={{
                 width: "33%",
-                padding: "2.5px",
+                padding: "1px",
             }}
             key={waitingPatients2.length + index}
         >
@@ -53,7 +53,7 @@ const DidView = ({ data }) => {
         <FormControl
             sx={{
                 width: "33%",
-                padding: "2.5px",
+                padding: "1px",
             }}
             key={waitingReceipt.length + index}
         >
@@ -85,8 +85,8 @@ const DidView = ({ data }) => {
                             height: "32vh",
                             display: "flex",
                             justifyContent: "space-between",
-                            padding: "0 16px",
-                            margin: "0 8px",
+                            padding: "0 06px",
+                            margin: "0 3px",
                             alignItems: "center",
                         }}
                 >
@@ -101,7 +101,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                                 width: "100%",
-                                padding: "2.5px", 
+                                padding: "1px", 
                             }}
                             key={index}
                         >
@@ -117,7 +117,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                             width: "100%",
-                            padding: "2.5px",
+                            padding: "1px",
                             }}
                         >
                             <OutlinedInput
@@ -133,7 +133,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                                 width: "33%",
-                                padding: "2.5px",
+                                padding: "1px",
                             }}
                             key={index}
                         >
@@ -146,7 +146,7 @@ const DidView = ({ data }) => {
                         </FormControl>
                     ))}
                     {waitingPatientForms}
-                    <FormControl sx={{ width: "33%", padding: "2.5px", }}>
+                    <FormControl sx={{ width: "33%", padding: "1px", }}>
                         <OutlinedInput
                             value={
                                 waitingPatients.length <= 5
@@ -172,8 +172,8 @@ const DidView = ({ data }) => {
                             height: "32vh",
                             display: "flex",
                             justifyContent: "space-between",
-                            padding: "0 16px",
-                            margin: "0 8px",
+                            padding: "0 06px",
+                            margin: "0 3px",
                             alignItems: "center",
                         }}
                 >
@@ -188,7 +188,7 @@ const DidView = ({ data }) => {
                         <FormControl
                         sx={{
                             width: "100%",
-                            padding: "2.5px",
+                            padding: "1px",
                         }}
                         key={index}
                         >
@@ -204,7 +204,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                             width: "100%",
-                            padding: "2.5px",
+                            padding: "1px",
                             }}
                         >
                             <OutlinedInput
@@ -220,7 +220,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                                 width: "33%",
-                                padding: "2.5px",
+                                padding: "1px",
                             }}
                             key={index}
                         >
@@ -233,7 +233,7 @@ const DidView = ({ data }) => {
                         </FormControl>
                     ))}
                     {waitingPatientForms2}
-                    <FormControl sx={{ width: "33%", padding: "2.5px", }}>
+                    <FormControl sx={{ width: "33%", padding: "1px", }}>
                         <OutlinedInput
                             value={
                                 waitingPatients2.length <= 5
@@ -259,8 +259,8 @@ const DidView = ({ data }) => {
                             height: "32vh",
                             display: "flex",
                             justifyContent: "space-between",
-                            padding: "0 16px",
-                            margin: "0 8px",
+                            padding: "0 06px",
+                            margin: "0 3px",
                             alignItems: "center",
                         }}
                 >
@@ -275,7 +275,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                                 width: "100%",
-                                padding: "2.5px",
+                                padding: "1px",
                             }}
                             key={index}
                         >
@@ -291,7 +291,7 @@ const DidView = ({ data }) => {
                     <FormControl
                         sx={{
                         width: "100%",
-                        padding: "2.5px",
+                        padding: "1px",
                         }}
                     >
                         <OutlinedInput
@@ -307,7 +307,7 @@ const DidView = ({ data }) => {
                         <FormControl
                             sx={{
                             width: "33%",
-                            padding: "2.5px",
+                            padding: "1px",
                             }}
                             key={index}
                         >
@@ -321,7 +321,7 @@ const DidView = ({ data }) => {
                     ))}
 
                     {waitingReceiptForms}
-                    <FormControl sx={{ width: "33%", padding: "2.5px", }}>
+                    <FormControl sx={{ width: "33%", padding: "1px", }}>
                         <OutlinedInput
                             value={
                                 waitingReceipt.length <= 5
