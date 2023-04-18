@@ -36,3 +36,7 @@
 .css-11f7gl5-MuiInputBase-input-MuiOutlinedInput-input.MuiInputBase-inputSizeSmall {
   padding: 8.5px 14px;
 }
+
+.css-129ez9h-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+  -webkit-text-fill-color: black !important;
+}

@@ -90,8 +90,10 @@ const Clinic = ({
           drug_ids: drugIds,
         })
         .then((resp) => {
-          if (resp.response.status === 500) {
-            alert(resp.response.data);
+          if (resp.data === true) {
+            alert("진료 완료");
+          } else if (resp.response.status === 500) {
+            alert("오류");
           }
         })
         .catch((error) => {
@@ -116,8 +118,10 @@ const Clinic = ({
           drug_ids: drugIds,
         })
         .then((resp) => {
-          if (resp.response.data) {
-            alert(resp.response.data);
+          if (resp.data === true) {
+            alert("진료 완료");
+          } else if (resp.response.status === 500) {
+            alert("오류");
           }
         })
         .catch((error) => {
@@ -141,7 +145,13 @@ const Clinic = ({
           disease_ids: diseaseIds,
           drug_ids: drugIds,
         })
-        .then((response) => {})
+        .then((response) => {
+          if (response.data === true) {
+            alert("진료 수정");
+          } else {
+            alert("오류");
+          }
+        })
         .catch((error) => {
           console.log(error);
         });
