@@ -11,6 +11,7 @@ import axiosClient from './../login/AxiosClient';
 const Reservation_API_BASE_URL = "/api/reservation";
 
 const Reception = () => {
+  const [initReceiptList, setInitReceiptList] = useState([]);
   const [patient_id, setPatient_id] = useState(null);
   const [selectedReservationDetails, setSelectedReservationDetails] = useState(
     {}
@@ -55,13 +56,15 @@ const Reception = () => {
   // DailyReservation
   const [reservation, setReservation] = useState([]);
 
-  const clickRowCallback = async ({ reception_id, patient_id }) => {
+  const clickRowCallback = async ({ reception_id, patient_id, state }) => {
     setPatient_id(patient_id);
     try {
       axiosClient.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
         setPatientData(data.patient)
         setReceptionData(data.reception);
         setReceiptData(data);
+        
+        receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, setInitReceiptList);
       });
     } catch (error) {
       console.log(error);
@@ -149,6 +152,8 @@ const Reception = () => {
                   receiptRecordSearch={receiptRecordSearch}
                   patient_id={patient_id}
                   setSelectedOneReceipt={setSelectedOneReceipt}
+                  initReceiptList={initReceiptList}
+                  setReceiptData={setReceiptData}
                 />
               </Paper>
             </Grid>

@@ -10,9 +10,6 @@ import {
   MenuItem, 
   Paper, 
   TextField,
-  DeleteIcon,
-  IconButton,
-  Tooltip,
   } from '@mui/material';
 import {
   Table,
@@ -32,7 +29,7 @@ import axiosClient from '../login/AxiosClient';
 
 
 
-const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSelectedOneReceipt }) => {
+const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSelectedOneReceipt, initReceiptList, setReceiptData }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
   const [selectedReceipt, setSelectedReceipt] = useState([]); // 선택한 데이터 상태
@@ -49,30 +46,35 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
     setSearchRange(newValue);
   };
 
-  // useEffect(() => {
-  //   receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, setReceiptList);
-  // }, [patient_id]);
-  // 수납목록 데이터 선택 시 다른 목록들 사라지는 오류 해결
   useEffect(() => {
-    // 선택한 데이터의 변경에 따라 receiptRecordSearch 함수 호출
-    if (selectedReceipt) {
-      receiptRecordSearch(
-        {
-          type: "patient_id",
-          searchText: patient_id,
-          currentPage: 1,
-          receiptId: selectedReceipt.id, // 선택한 데이터의 id를 추가하여 전달
-        },
-        setReceiptList
-      );
-    } else {
-      // 선택한 데이터가 없으면 기존 로직대로 호출
-      receiptRecordSearch(
-        { type: "patient_id", searchText: patient_id, currentPage: 1 },
-        setReceiptList
-      );
-    }
-  }, [patient_id]);
+    setReceiptList(initReceiptList);
+  }, [initReceiptList]);
+
+  // useEffect(() => {
+  //   // 선택한 데이터의 변경에 따라 receiptRecordSearch 함수 호출
+  //   if (selectedReceipt) {
+  //     receiptRecordSearch(
+  //       {
+  //         type: "patient_id",
+  //         searchText: patient_id,
+  //         currentPage: 1,
+  //       },
+  //       setSelectedReceipt
+  //     );
+  //   } else {
+  //     // 선택한 데이터가 없으면 기존 데이터들을 유지하면서 호출
+  //     receiptRecordSearch(
+  //       {
+  //         start: null, // start 값에 null 전달하여 기존 값 유지
+  //         end: null, // end 값에 null 전달하여 기존 값 유지
+  //         type: "patient_id",
+  //         searchText: patient_id,
+  //         currentPage: 1,
+  //       },
+  //       setReceiptList
+  //     );
+  //   }
+  // }, [patient_id]); // selectedReceipt 추가
 
   // 페이징
   const [page, setPage] = React.useState(1);
@@ -117,16 +119,10 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
 
 
   // 수납내역목록에서 데이터 선택하면 데이터가져오기
-  const handleSelectedReceipt = (receipt_id, reception_id) => {
-    axiosClient.get(`/api/receipt/selectedOneReceipt?reception_id=${reception_id}`)
-      .then((response) => {
-        console.log("선택한 데이터 정보: ", response.data);
-        clickRowCallback(response.data);
-        //  handleSelectedInformation(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
+  const handleSelectedReceipt = ({receipt_id, reception_id}) => {
+      axiosClient.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+        setReceiptData(data);
+      });
   }
 
 
@@ -212,7 +208,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
                   return (
                     <TableRow key={idx}
                       hover={true}
-                      onClick={() => handleSelectedReceipt(receiptList[idx].receipt_id, receiptList[idx].reception_id)}>
+                      onClick={() => handleSelectedReceipt(receiptList[idx])}>
                       <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
                         {receiptList[idx].doctor === 1 ? "김을지" : "이더존"}
                       </TableCell>

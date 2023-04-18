@@ -1,7 +1,7 @@
 import { Box, Grid, OutlinedInput, Paper, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import React from "react";
-// import './styles.css';
+import './css/style.css';
 
 
 const DidView = ({ data }) => {
