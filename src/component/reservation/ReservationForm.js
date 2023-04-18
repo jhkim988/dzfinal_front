@@ -61,6 +61,7 @@ const ReservationForm = ({
     }).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
+        setDateTimePickerModal(false);
         requestSuccessCallback(reservationFormData, res.data);
       }
     });
@@ -70,6 +71,7 @@ const ReservationForm = ({
     axiosClient.put("/api/reservation", reservationFormData).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
+        setDateTimePickerModal(false);
         requestSuccessCallback(reservationFormData, res.data);
       }
     });

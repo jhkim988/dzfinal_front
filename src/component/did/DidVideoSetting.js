@@ -133,8 +133,8 @@ const DidVideoSetting = () => {
           >
             <TableBody>
               {videos &&
-                videos.map((video, index) => (
-                  <TableRow key={index}>
+                videos.map((video) => (
+                  <TableRow key={video.id}>
                     <TableCell align="right">
                       <Checkbox
                         checked={video.active}

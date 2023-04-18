@@ -18,7 +18,11 @@ const ReservationDatePicker = ({
   const requestAbortController = useRef(null);
   const [impossible, setImpossible] = useState(new Set());
   const [viewPickerDate, setViewPickerDate] = useState(pickDate ? offsetDateObj(pickDate) : new Date());
-  useEffect(() => { setViewPickerDate(pickDate ? offsetDateObj(pickDate) : new Date()) }, [pickDate]);
+  const [dateValue, setDateValue] = useState(pickDate ? offsetDateObj(pickDate) : new Date());
+  useEffect(() => {
+    setViewPickerDate(pickDate ? offsetDateObj(pickDate) : new Date());
+    setDateValue(pickDate ? offsetDateObj(pickDate) : new Date());
+  }, [pickDate]);
 
   const getImpossible = useCallback((doctor, year, month) => {
     const controller = new AbortController();
@@ -32,6 +36,7 @@ const ReservationDatePicker = ({
   
   const onMonthChange = useCallback(({ $y, $M }) => {
     setViewPickerDate(null);
+    setDateValue(prev => new Date($y, $M, prev.getDate()));
     if (requestAbortController.current) {
       requestAbortController.current.abort();
     }
@@ -39,7 +44,7 @@ const ReservationDatePicker = ({
   }, []);
   
   useEffect(() => {
-    getImpossible(doctor, viewPickerDate.getYear()+1900, viewPickerDate.getMonth()+1);
+    getImpossible(doctor, dateValue.getYear()+1900, dateValue.getMonth()+1);
     return () => requestAbortController.current?.abort();
   }, [doctor, getImpossible]);
 
@@ -66,7 +71,8 @@ const ReservationDatePicker = ({
           onChange={({ $d }) => {
             const date = new Date($d);
             const offsetDateStr = offsetDate(date);
-            setViewPickerDate(date)
+            setViewPickerDate(date);
+            setDateValue(date);
             setReservationFormData((prev) => ({...prev, wish_date: offsetDateStr, date_time: `${offsetDateStr} ${prev.wish_time}`}))
           }}
       />

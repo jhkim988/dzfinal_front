@@ -8,7 +8,7 @@ const Clinic1 = ({ data }) => {
 
     // (진료대기)1 진료실 호출할 사람들을 담음
     const waitingPatients = data.filter((item) => item.state === "진료대기" && item.doctor_id === 1 && item.state !== "진료중");
-
+    console.log(waitingPatients);
     return (
         <div>
             <Paper 
@@ -152,7 +152,7 @@ const Clinic1 = ({ data }) => {
                                     >
                                         {item ? (
                                             <OutlinedInput
-                                                value={`${item.patient_name}(${item.front_registration_number})`}
+                                                value={`${item.patient_name}(${item.front_registration_number})` || ''}
                                                 inputProps={{ style: { height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />
@@ -172,7 +172,7 @@ const Clinic1 = ({ data }) => {
                             
                             <Grid item xs={6}>
                             {[...Array(4)].map((_, index) => {
-                                const item = waitingPatients[index+3];
+                                const item = waitingPatients[index+4];
                                 return (
                                     <FormControl
                                         sx={{
@@ -183,7 +183,7 @@ const Clinic1 = ({ data }) => {
                                     >
                                         {item ? (
                                             <OutlinedInput
-                                                value={`${item.patient_name}(${item.front_registration_number})`}
+                                                value={`${item.patient_name}(${item.front_registration_number})` || ''}
                                                 inputProps={{ style: { height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />

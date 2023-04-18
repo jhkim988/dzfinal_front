@@ -36,7 +36,7 @@ const Prescription = ({
         axiosClient
           .get(
             `/api/clinic/drug/${e.target.name}/${encodeURIComponent(
-              searchText
+              e.target.value
             )}`
           )
           .then((response) => {

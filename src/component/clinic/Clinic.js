@@ -14,6 +14,8 @@ import Prescription from "./Prescription";
 import axiosClient from "./../login/AxiosClient";
 
 const Clinic = ({
+  setPatient,
+  setReception,
   reception,
   mode,
   setMode,
@@ -146,6 +148,8 @@ const Clinic = ({
     }
 
     setMode(0);
+    setReception();
+    setPatient({});
     setSymptom("");
     setTreatment(false);
     setClinic_request(false);
@@ -156,6 +160,8 @@ const Clinic = ({
 
   const onCancel = () => {
     setMode(0);
+    setReception();
+    setPatient({});
     setSymptom("");
     setTreatment(false);
     setClinic_request(false);

@@ -23,6 +23,7 @@ const cellHeight = 2.7;
 
 const ReservationDay = ({
   viewDate,
+  setViewDate,
   daySchedule,
   setCalendarAppointments,
   setDaySchedule,
@@ -146,6 +147,7 @@ const ReservationDay = ({
   const requestSuccessCallback = useCallback(({ wish_date }) => {
     loadCalendar();
     loadDayAppointments(wish_date);
+    setViewDate(wish_date);
   }, []);
 
   return (

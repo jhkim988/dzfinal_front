@@ -29,7 +29,7 @@ import { useContext } from "react";
 import { DataContext } from "../loading/DataContextProvider";
 
 const cellHeight = 70;
-const height = `12vh`
+const height = `12vh`;
 
 const StyledMonthViewTimeTableCell = styled(MonthView.TimeTableCell)(
   ({ theme }) => ({
@@ -54,24 +54,29 @@ const StyledMonthViewTimeTableCell = styled(MonthView.TimeTableCell)(
 const Appointment = ({ children, style, setViewDate, ...restProps }) => {
   const doctorData = useContext(DataContext);
   return (
-  <Appointments.Appointment
-    {...restProps}
-    style={{
-      ...style,
-      color: "white",
-      backgroundColor: `#${doctorData.find(d => `${d.employ_id}` === `${restProps.data.doctor}`).color}`,
-      padding: "5px",
-      borderRadius: "8px",
-      // height: 42.5,
-      height: '90%'
-    }}
-    onClick={() => {
-      setViewDate(restProps.data.startDate);
-    }}
-  >
-  <div>{restProps.data.title}</div>
-  </Appointments.Appointment>
-)};
+    <Appointments.Appointment
+      {...restProps}
+      style={{
+        ...style,
+        color: "white",
+        backgroundColor: `#${
+          doctorData.find(
+            (d) => `${d.employ_id}` === `${restProps.data.doctor}`
+          ).color
+        }`,
+        padding: "5px",
+        borderRadius: "8px",
+        // height: 42.5,
+        height: "90%",
+      }}
+      onClick={() => {
+        setViewDate(restProps.data.startDate);
+      }}
+    >
+      <div>{restProps.data.title}</div>
+    </Appointments.Appointment>
+  );
+};
 
 const ReservationCalendar = ({
   viewDate,
@@ -80,36 +85,44 @@ const ReservationCalendar = ({
   setViewCalendar,
 }) => {
   const doctorData = useContext(DataContext);
-  const [doctorFilter, setDoctorFilter] = useState(doctorData.reduce((acc, cur) => {
-    acc[cur.employ_id] = true;
-    return acc;
-  }, {}));
+  const [doctorFilter, setDoctorFilter] = useState(
+    doctorData.reduce((acc, cur) => {
+      acc[cur.employ_id] = true;
+      return acc;
+    }, {})
+  );
   const [filterSelectorOpen, setFilterSelectorOpen] = useState(false);
-  return (
-    <Paper>
-      <Scheduler
-        data={calendarAppointments.filter(
-          (appointment) => doctorFilter[appointment.doctor]
-        ).map((appointment) => {
+  const [appointmentData, setAppointmentData] = useState([]);
+  useEffect(() => {
+    setAppointmentData(() => {
+      const ret = calendarAppointments
+        .filter((appointment) => doctorFilter[appointment.doctor])
+        .map((appointment) => {
           const startDate = new Date(appointment.startDate);
-          if (viewDate.viewCalendar === 'month') {
+          if (viewDate.viewCalendar === "month") {
             startDate.setHours(9);
             startDate.setMinutes(0);
             appointment.startDate = startDate;
-          } else if (viewDate.viewCalendar === 'week') {
+          } else if (viewDate.viewCalendar === "week") {
             const endDate = new Date(appointment.endDate);
-            if (startDate.getHours() === endDate.getHours()) {
-              startDate.setMinutes(appointment.doctor === '1' ? 0 : 30);
-              endDate.setMinutes(appointment.doctor === '1' ? 15 : 45);  
-            } else {
-              endDate.setHours(endDate.getHours()-1);
+            if (startDate.getHours() !== endDate.getHours()) {
+              endDate.setHours(endDate.getHours() - 1);
             }
+            startDate.setMinutes(appointment.doctor === "1" ? 0 : 30);
+            endDate.setMinutes(appointment.doctor === "1" ? 15 : 45);
             appointment.startDate = startDate;
             appointment.endDate = endDate;
           }
           return appointment;
-        })}
-      >
+        });
+      // console.log(ret);
+      return ret;
+    });
+  }, [viewDate.viewCalendar, calendarAppointments, doctorFilter]);
+  console.log(appointmentData);
+  return (
+    <Paper>
+      <Scheduler data={appointmentData}>
         <ViewState
           currentDate={viewDate.viewDate}
           currentViewName={viewDate.viewCalendar}
@@ -141,18 +154,28 @@ const ReservationCalendar = ({
           startDayHour={9}
           endDayHour={18}
           cellDuration={60}
-          timeTableLayoutComponent={(props) => <WeekView.TimeTableLayout {...props} height={640}/>} // timeTable 전체 길이
+          timeTableLayoutComponent={(props) => (
+            <WeekView.TimeTableLayout {...props} height={640} />
+          )} // timeTable 전체 길이
           timeScaleLabelComponent={(props) =>
             props.time ? (
-              <WeekView.TimeScaleLabel {...props} style={{ height: cellHeight }} />
+              <WeekView.TimeScaleLabel
+                {...props}
+                style={{ height: cellHeight }}
+              />
             ) : (
-              <WeekView.TimeScaleLabel {...props} style={{ height: cellHeight/2 }} />
+              <WeekView.TimeScaleLabel
+                {...props}
+                style={{ height: cellHeight / 2 }}
+              />
             )
           }
           timeTableRowComponent={(props) => (
             <WeekView.TimeTableRow {...props} style={{ height: cellHeight }} />
           )}
-          timeTableCellComponent={(props) => <WeekCell {...props} setViewDate={setViewDate}/>}
+          timeTableCellComponent={(props) => (
+            <WeekCell {...props} setViewDate={setViewDate} />
+          )}
         />
         <ViewSwitcher
           switcherComponent={React.memo(({ ...restProps }) => {
@@ -173,7 +196,11 @@ const ReservationCalendar = ({
             );
           })}
         />
-        <Appointments appointmentComponent={(props) => <Appointment {...props} setViewDate={setViewDate}/>}/>
+        <Appointments
+          appointmentComponent={(props) => (
+            <Appointment {...props} setViewDate={setViewDate} />
+          )}
+        />
       </Scheduler>
     </Paper>
   );
@@ -251,7 +278,7 @@ const DoctorFilterSelector = ({
     isLoaded(true);
     const click = (e) => {
       if (anchorRef.current && anchorRef.current.contains(e.target)) {
-        setFilterSelectorOpen(prev => !prev);
+        setFilterSelectorOpen((prev) => !prev);
       } else {
         setFilterSelectorOpen(false);
       }
@@ -265,10 +292,7 @@ const DoctorFilterSelector = ({
 
   return (
     <>
-      <FilterAltIcon
-        sx={{ marginRight: 3, zIndex: 3 }}
-        ref={anchorRef}
-      />
+      <FilterAltIcon sx={{ marginRight: 3, zIndex: 3 }} ref={anchorRef} />
       {loaded ? (
         <Popper
           open={filterSelectorOpen}
@@ -352,9 +376,15 @@ const MonthCell = ({ startDate, setViewDate, ...restProps }) => {
 
 const WeekCell = ({ setViewDate, ...restProps }) => {
   const { startDate } = restProps;
-  const onClick = e => {
+  const onClick = (e) => {
     setViewDate(new Date(e.currentTarget.dataset.date));
-  }
-  return <WeekView.TimeTableCell {...restProps} data-date={startDate} onClick={onClick}/>
-}
+  };
+  return (
+    <WeekView.TimeTableCell
+      {...restProps}
+      data-date={startDate}
+      onClick={onClick}
+    />
+  );
+};
 export default ReservationCalendar;
