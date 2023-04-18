@@ -156,7 +156,11 @@ const ChatRoom = ({ room, onBackClick }) => {
         >
           <Toolbar>
             <Button color="inherit" onClick={onBackClick}>
-              <IconChevronLeft /> 목록 보기
+              <IconChevronLeft />
+              목록 보기{" "}
+              {room.chatroom_name
+                ? `(${room.chatroom_name})`
+                : `(${room.employee_names[0]})`}
             </Button>
           </Toolbar>
         </AppBar>
