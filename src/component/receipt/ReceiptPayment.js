@@ -144,7 +144,7 @@ export default function BasicSelect({user}) {
         );
         alert("수납정보가 변경되었습니다.");
         console.log("Modify Payment successful", response.data);
-        modifyReceipt(false);
+        modifyReceipt(!modifyReceipt);
       } else {
         const response = await axiosClient.post(
           insertUrl,
@@ -171,7 +171,6 @@ export default function BasicSelect({user}) {
       setIsReceipt(true);
     } catch (error) {
       console.log(error);
-      alert("다시 시도해주세요.");
     }
   };
 
@@ -237,7 +236,7 @@ export default function BasicSelect({user}) {
           sx={{ fontSize: "12px" }}
           variant="contained"
           disabled={            
-            user.state === "진료중" || user.state === "진료대기"
+            user.state === "진료중" || user.state === "진료대기" || !modifyReceipt
           }
           onClick={handleCardPayment}
         >
@@ -248,7 +247,7 @@ export default function BasicSelect({user}) {
           variant="contained"
           onClick={handleCashPayment}
           disabled={
-             user.state === "진료중" || user.state === "진료대기" 
+             user.state === "진료중" || user.state === "진료대기" || !modifyReceipt
           }
         >
           현금결제
