@@ -2,7 +2,6 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  useMemo,
   useRef,
   useContext,
 } from "react";
@@ -20,11 +19,8 @@ const WaitingQueueLayout = ({
   findNextAutoCall,
   shouldDisableCallButton,
 }) => {
-  // const client = useRef();
   const client = useContext(MqttContext);
-
   const [data, setData] = useState([]);
-  // const [selected, setSelected] = useState(null);
   const selected = useRef();
   const autoCall = useRef(false);
   const setAutoCall = (flag) => (autoCall.current = flag);
@@ -117,7 +113,7 @@ const WaitingQueueLayout = ({
     });
   }, []);
 
-  const disabledCallButton = !selected.current ? true : shouldDisableCallButton(selected.current);
+  const disabledCallButton = !selected.current ? true : shouldDisableCallButton({ waitingData: data, selected: selected.current || { }});
 
   return (
     <Paper elevation={2} sx={{ height: "82vh" }}>

@@ -154,7 +154,7 @@ const PatientForm = ({
                         setPatient_id(response.data.patient_id);
                     })
                     .catch((error) => {
-                        alert("회원등록 실패. 다시 시도 바랍니다.");
+                        alert("환자등록 실패. 다시 시도 바랍니다.");
                         console.error(error);
                     });
             }

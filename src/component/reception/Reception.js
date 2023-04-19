@@ -124,6 +124,7 @@ const Reception = () => {
   const loadDailyReservationList = () => {
     axiosClient.get(Reservation_API_BASE_URL)
       .then((response) => {
+        console.log(response.data);
         setReservation(response.data || []);
       })
       .catch((error) => {
@@ -140,7 +141,9 @@ const Reception = () => {
             clickRowCallback={clickRowCallback}
             shouldAutoCall={({ data: { state } }) => state === "수납완료"}
             findNextAutoCall={({ state }) => state === "수납대기"}
-            shouldDisableCallButton={({ state }) => state !== "수납대기"}
+            shouldDisableCallButton={({ waitingData, selected: { state } }) =>
+            state !== "수납대기"
+            || waitingData.some(({ state }) => state === "수납중")}
           />
         </Grid>
 
