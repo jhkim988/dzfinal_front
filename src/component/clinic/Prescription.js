@@ -158,7 +158,7 @@ const Prescription = ({
             border: "1px solid black",
             borderRadius: 5,
             display: searchList.length === 0 ? "none" : "block",
-            height: "30vh",
+            maxHeight: "30vh",
             overflowY: "auto",
           }}
         >

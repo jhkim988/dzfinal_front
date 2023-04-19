@@ -11,8 +11,7 @@ import {
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { red } from "@mui/material/colors";
-import axiosClient from '../login/AxiosClient';
-
+import axiosClient from "../login/AxiosClient";
 
 const Diagnosis = ({
   handleDiagnosisAdd,
@@ -156,7 +155,7 @@ const Diagnosis = ({
             border: "1px solid black",
             borderRadius: 5,
             display: searchList.length === 0 ? "none" : "block",
-            height: "30vh",
+            maxHeight: "30vh",
             overflowY: "auto",
           }}
         >
