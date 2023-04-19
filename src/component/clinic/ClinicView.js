@@ -154,6 +154,7 @@ const ClinicView = () => {
                 setReception={setReception}
                 reception={reception}
                 onReset={onReset}
+                setDrug_taking={setDrug_taking}
                 mode={mode}
                 setMode={setMode}
                 medicalInfo={medicalInfo}
