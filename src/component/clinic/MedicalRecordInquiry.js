@@ -184,17 +184,17 @@ const MedicalRecordInquiry = ({
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              height: "242px",
+              height: "300px",
             }}
           >
             진료 데이터가 없습니다.
           </Box>
         ) : (
-          <TableContainer sx={{ height: "242px" }}>
+          <TableContainer sx={{ height: "300px" }}>
             <Table
               sx={{
-                minWidth: 630,
-                "& td": { padding: 0 },
+                minWidth: "250px",
+                "& td": { padding: "2.9px 0px" },
                 "& th": { padding: 0, fontWeight: "bold" },
               }}
               size="small"
