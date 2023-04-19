@@ -30,7 +30,11 @@ const AccessAllow = ({ authorities, children }) => {
   };
   useEffect(() => {
     setIsChecked(false);
+  }, []);
+  useEffect(() => {
+    setIsChecked(false);
     const auth = JSON.parse(localStorage.getItem("auth"));
+    console.log(auth.authorities, authorities);
     if (!auth) {
       back();
       alert("권한이 없습니다.");
@@ -61,7 +65,8 @@ const AccessAllow = ({ authorities, children }) => {
       setIsChecked(false);
     }
   }, [authorities]);
-  return <>{isChecked ? children : <></>}</>;
+  console.log(isChecked, authorities);
+  return <>{isChecked ? children : null}</>;
 };
 
 export default AccessAllow;
