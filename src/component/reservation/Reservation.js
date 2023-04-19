@@ -33,4 +33,4 @@ const ReservationLayout = () => {
   );
 };
 
-export default React.memo(ReservationLayout);
+export default ReservationLayout;

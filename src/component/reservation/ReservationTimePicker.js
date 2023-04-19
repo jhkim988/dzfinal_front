@@ -88,4 +88,4 @@ const ReservationTimePicker = ({
   );
 };
 
-export default React.memo(ReservationTimePicker);
+export default ReservationTimePicker;

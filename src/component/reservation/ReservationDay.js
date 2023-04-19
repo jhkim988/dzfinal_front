@@ -212,4 +212,4 @@ const ReservationDay = ({
   );
 };
 
-export default React.memo(ReservationDay);
+export default ReservationDay;

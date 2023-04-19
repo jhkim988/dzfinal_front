@@ -178,7 +178,7 @@ const ReservationCalendar = ({
           )}
         />
         <ViewSwitcher
-          switcherComponent={React.memo(({ ...restProps }) => {
+          switcherComponent={({ ...restProps }) => {
             return (
               <>
                 <DoctorFilterSelector
@@ -194,7 +194,7 @@ const ReservationCalendar = ({
                 />
               </>
             );
-          })}
+          }}
         />
         <Appointments
           appointmentComponent={(props) => (
