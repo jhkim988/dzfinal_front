@@ -145,7 +145,7 @@ const ReservationDay = ({
   )};
 
   const requestSuccessCallback = useCallback(({ wish_date }) => {
-    loadCalendar();
+    loadCalendar(viewDate);
     loadDayAppointments(wish_date);
     setViewDate(wish_date);
   }, []);
