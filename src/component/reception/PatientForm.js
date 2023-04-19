@@ -35,7 +35,7 @@ const PatientForm = ({
     selectedAddress,
     setSelectedAddress,
 }) => {
-    const [isChecked, setIsChecked] = useState(false);
+    // const [isChecked, setIsChecked] = useState(false);
 
     const [open, setOpen] = React.useState(false);
     const [patient_name, setPatient_name] = useState("");
@@ -60,7 +60,7 @@ const PatientForm = ({
             phone_number2: "",
             phone_number3: "",
             detail_address: "",
-            insurance: "true",
+            insurance: false,
         });
         setSelectedAddress({
             zip_code: "",
@@ -81,7 +81,8 @@ const PatientForm = ({
     }
 
     const handleCheck = (event) => {
-        setIsChecked(event.target.checked);
+        // setIsChecked(event.target.checked);
+        setPatientData(prev => ({...prev, insurance: event.target.checked }))
     };
 
     const handleChange = (event) => {
@@ -132,8 +133,6 @@ const PatientForm = ({
         setPatientData((patientData) => ({
             ...patientData,
             ...selectedAddress,
-            ...isChecked,
-            insurance: isChecked,
             [name]: value
         }));
         setPatient_name(event.target.value);
@@ -202,7 +201,6 @@ const PatientForm = ({
             .then(({ data }) => {
                 setPatientData(data);
                 setReceptionData(prev => ({ ...prev, ...data }));
-                setIsChecked(Boolean(data.insurance));
             });
     }
 
@@ -519,7 +517,7 @@ const PatientForm = ({
                             <FormControlLabel
                                 control={
                                     <Checkbox
-                                        checked={isChecked}
+                                        checked={patientData.insurance}
                                         onChange={handleCheck}
                                         value={patientData.insurance === 1 ? true : false}
                                         name="insurance"

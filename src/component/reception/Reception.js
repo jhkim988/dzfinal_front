@@ -28,11 +28,10 @@ const Reception = () => {
     phone_number1: "",
     phone_number2: "",
     phone_number3: "",
-    insurance: "",
     zip_code: "",
     address: "",
     detail_address: "",
-    insurance: "true",
+    insurance: false,
   });
   const [receptionData, setReceptionData] = useState({
     doctor: "",
@@ -62,7 +61,7 @@ const Reception = () => {
     setPatient_id(patient_id);
     try {
       axiosClient.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
-        setPatientData(data.patient)
+        setPatientData(data.patient);
         setReceptionData(data.reception);
         setReceiptData(data);
         receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, (data) => {
