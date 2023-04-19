@@ -41,7 +41,7 @@ const ReservationDay = ({
   const [pickDate, setPickDate] = useState(new Date());
   const [pickTime, setPickTime] = useState('');
   // month/week
-  const loadCalendar = useCallback(() => {
+  const loadCalendar = useCallback((viewDate) => {
     if (viewDate.viewCalendar === "month") {
       axiosClient
       .get(`/api/reservation/month`, {
@@ -91,8 +91,8 @@ const ReservationDay = ({
         setCalendarAppointments(val);
       })
     }
-  }, [setCalendarAppointments, viewDate.startDate, viewDate.endDate, viewDate.viewCalendar]);
-  useEffect(loadCalendar, [loadCalendar, setCalendarAppointments, viewDate.startDate, viewDate.endDate, viewDate.viewCalendar]);
+  }, [doctorData, setCalendarAppointments]);
+  useEffect(() => loadCalendar(viewDate), [loadCalendar, setCalendarAppointments, viewDate]);
   
   // day
   const loadDayAppointments = useCallback((dateStr) => {
@@ -106,7 +106,7 @@ const ReservationDay = ({
         }));
       })
     }, []);
-  useEffect(() => loadDayAppointments(offsetDate(viewDate.viewDate)), [viewDate.viewDate]);
+  useEffect(() => loadDayAppointments(offsetDate(viewDate.viewDate)), [loadDayAppointments, viewDate.viewDate]);
 
   const clickEmptyCell = useCallback((e) => {
     const dateObj = new Date(e.currentTarget.dataset.datetime);
