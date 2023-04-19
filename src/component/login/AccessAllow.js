@@ -23,22 +23,17 @@ const check_token = () => {
 }
 
 const AccessAllow = ({ authorities, children }) => {
-  const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
   const back = () => {
     navigate(-1);
+    alert("권한이 없습니다.");
   };
-  useEffect(() => {
-    setIsChecked(false);
-  }, []);
-  useEffect(() => {
-    setIsChecked(false);
+
     const auth = JSON.parse(localStorage.getItem("auth"));
     console.log(auth.authorities, authorities);
     if (!auth) {
       back();
-      alert("권한이 없습니다.");
-      setIsChecked(false);
+      return null;
     } else if (isIntersection(auth.authorities, authorities)) {
       const access_token_obj = JSON.parse(atob(auth.access_token.split(".")[1]));
       if (access_token_obj.exp * 1000 < new Date().getTime()) {
@@ -46,27 +41,25 @@ const AccessAllow = ({ authorities, children }) => {
           localStorage.setItem("auth", JSON.stringify({ ...auth, ...data }));
           getLoginUserInfo();
           check_token().then((response) => {
-            setIsChecked(true);
+
           }).catch(error => {
             back();
-            setIsChecked(false);
+            return null;
           });
         });
       } else {
         check_token().then((response) => {
-          setIsChecked(true);
+
         }).catch(error => {
           back();
-          setIsChecked(false);
+          return null;
         });  
       }
     } else {
       back();
-      setIsChecked(false);
+      return null;
     }
-  }, [authorities]);
-  console.log(isChecked, authorities);
-  return <>{isChecked ? children : null}</>;
+  return <>{children}</>;
 };
 
 export default AccessAllow;
