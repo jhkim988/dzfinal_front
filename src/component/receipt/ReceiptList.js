@@ -10,15 +10,13 @@ import {
   MenuItem, 
   Paper, 
   TextField,
-  } from '@mui/material';
-import {
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
-} from "@material-ui/core";
+  TableRow,
+  } from '@mui/material';
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
@@ -188,48 +186,53 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
           </Button>
         </Box>
 
-        <TableContainer component={Paper} style={{ padding: 2 }}>
-          <Table sx={{ maxWidth: 100 }} size="small" aria-label="a dense table">
+        <TableContainer component={Paper} sx={{ height: 280 }}>
+          <Table sx={{
+                minWidth: "250px",
+                "& td": { padding: "1.1vh 0px" },
+                "& th": { padding: "1.1vh 0px", fontWeight: "bold" },
+              }}>
             <TableHead>
               <TableRow>
-                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>의사</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>환자이름(휴대전화)</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>주민등록번호</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>질병명</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>처방명</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>수납액</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>결제</TableCell>
-                <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>수납일</TableCell>
+                <TableCell align="center">의사</TableCell>
+                <TableCell align="center">환자이름(휴대전화)</TableCell>
+                <TableCell align="center">주민등록번호</TableCell>
+                <TableCell align="center">질병명</TableCell>
+                <TableCell align="center">처방명</TableCell>
+                <TableCell align="center">수납액</TableCell>
+                <TableCell align="center">결제</TableCell>
+                <TableCell align="center">수납일</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {[...Array(Math.max(5, receiptList.length))].map((_, idx) => {
                 if (idx < receiptList.length) {
                   return (
-                    <TableRow key={idx}
+                    <TableRow key={`ReceiptList#${idx}`}
                       hover={true}
-                      onClick={() => handleSelectedReceipt(receiptList[idx])}>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
+                      onClick={() => handleSelectedReceipt(receiptList[idx])}
+                    >
+                      <TableCell align="center">
                         {receiptList[idx].doctor === 1 ? "김을지" : "이더존"}
                       </TableCell>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{`${receiptList[idx].patient_name}(${receiptList[idx].phone_number3})`}</TableCell>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].front_registration_number}</TableCell>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
+                      <TableCell align="center">{`${receiptList[idx].patient_name}(${receiptList[idx].phone_number3})`}</TableCell>
+                      <TableCell align="center">{receiptList[idx].front_registration_number}</TableCell>
+                      <TableCell align="center">
                         {receiptList[idx].disease_count > 1 ? `${receiptList[idx].disease_name} 외 ${receiptList[idx].disease_count - 1} 건` : `${receiptList[idx].disease_name}`}
                       </TableCell>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>
+                      <TableCell align="center">
                         {/* <Tooltip> */}
                           {receiptList[idx].prescription_count > 1 ? `${receiptList[idx].drug_name} 외 ${receiptList[idx].prescription_count - 1} 건` : `${receiptList[idx].drug_name}`}
                         {/* </Tooltip> */}
                       </TableCell>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].total_amount}</TableCell>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].mode}</TableCell>
-                      <TableCell align="center" style={{ paddingTop: 4, paddingLeft: 2, paddingRight: 2 }}>{receiptList[idx].created_at}</TableCell>
+                      <TableCell align="center">{receiptList[idx].total_amount}</TableCell>
+                      <TableCell align="center">{receiptList[idx].mode}</TableCell>
+                      <TableCell align="center">{receiptList[idx].created_at}</TableCell>
                     </TableRow>
                   );
                 } else {
                   return (
-                    <TableRow key={idx} hover={true}>
+                    <TableRow key={`ReceiptList#${idx}EMPTY`} hover={true}>
                       <TableCell align="right">&nbsp;</TableCell>
                       <TableCell align="right">&nbsp;</TableCell>
                       <TableCell align="right">&nbsp;</TableCell>
