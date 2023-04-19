@@ -83,9 +83,6 @@ const Reception = () => {
     { start, end, type, searchText, currentPage },
     callback
   ) => {
-    console.log(start?.format("YYYY-MM-DD"));
-    console.log(end?.format("YYYY-MM-DD"));
-    console.log(currentPage);
     axiosClient
       .get(
         "/api/receipt/getReceiptList",
