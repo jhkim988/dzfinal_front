@@ -27,10 +27,11 @@ import axiosClient from '../login/AxiosClient';
 
 
 
-const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSelectedOneReceipt, initReceiptList, setReceiptData }) => {
+const ReceiptList = ({ receiptRecordSearch, initReceiptList, initTotalCount, setReceiptData }) => {
   const [receiptList, setReceiptList] = useState([]);
   const [type, setType] = useState("");
   const [selectedReceipt, setSelectedReceipt] = useState([]); // 선택한 데이터 상태
+  const [totalCount, setTotalCount] = useState(10);
 
   // 검색어
   const [searchText, setSearchText] = useState("");
@@ -47,6 +48,9 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
   useEffect(() => {
     setReceiptList(initReceiptList);
   }, [initReceiptList]);
+  useEffect(() => {
+    setTotalCount(initTotalCount);
+  }, [initTotalCount])
 
   // useEffect(() => {
   //   // 선택한 데이터의 변경에 따라 receiptRecordSearch 함수 호출
@@ -77,22 +81,27 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
   // 페이징
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
-    console.log(page);
+    console.log("handleChange Call", value);
     setPage(value);
+    getReceiptList({ start: searchRange[0], end: searchRange[1], type, searchText, currentPage: value });
+
   };
 
-  const getReceiptList = useCallback(() => {
-    receiptRecordSearch({ start: searchRange[0], end: searchRange[1], type, searchText, currentPage: page }, setReceiptList);
-  }, [searchRange, type, searchText, page, setReceiptList, receiptRecordSearch]);
+  const getReceiptList = useCallback(({ start, end, type, searchText, currentPage }) => {
+    receiptRecordSearch({ start, end, type, searchText, currentPage }, (data) => {
+      setReceiptList(data.list);
+      setTotalCount(data.totalCount);
+    });
+  }, [setReceiptList, receiptRecordSearch]);
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
 
   const handleSearch = () => {
-    getReceiptList();
+    setPage(1);
+    getReceiptList({ start: searchRange[0], end: searchRange[1], type, searchText, currentPage: 1 });
   }
-
 
   // 데이터피커 가운데 글자 사라지게 하기
   useEffect(() => {
@@ -251,7 +260,7 @@ const ReceiptList = ({ clickRowCallback, receiptRecordSearch, patient_id, setSel
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Stack spacing={2} style={{ bottom: '0' }}>
             {/* <Pagination count={5} /> */}
-            <Pagination count={10} page={page} onChange={handleChange} onClick={handleSearch}/>
+            <Pagination count={Math.ceil(totalCount/10)} page={page} onChange={handleChange}/>
           </Stack>
         </Box>
       </Paper>

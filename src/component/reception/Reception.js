@@ -53,6 +53,8 @@ const Reception = () => {
     receipt: {},
   });
 
+  const [initTotalCount, setInitTotalCount] = useState(0);
+
   // DailyReservation
   const [reservation, setReservation] = useState([]);
 
@@ -63,8 +65,10 @@ const Reception = () => {
         setPatientData(data.patient)
         setReceptionData(data.reception);
         setReceiptData(data);
-        
-        receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, setInitReceiptList);
+        receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, (data) => {
+          setInitReceiptList(data.list);
+          setInitTotalCount(data.totalCount);
+        });
       });
     } catch (error) {
       console.log(error);
@@ -149,6 +153,7 @@ const Reception = () => {
               <Paper elevation={3}>
                 <ReceiptList
                   clickRowCallback={clickRowCallback}
+                  initTotalCount={initTotalCount}
                   receiptRecordSearch={receiptRecordSearch}
                   patient_id={patient_id}
                   setSelectedOneReceipt={setSelectedOneReceipt}
