@@ -126,6 +126,12 @@ const MedicalRecordInquiry = ({
       });
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      onSearchList(1);
+    }
+  };
+
   return (
     <>
       <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
@@ -164,6 +170,7 @@ const MedicalRecordInquiry = ({
                 padding: "10px 14px",
               },
           }}
+          onKeyUp={handleKeyDown}
           onChange={handleInputChange}
         />
         <Box sx={{ alignSelf: "center" }}>

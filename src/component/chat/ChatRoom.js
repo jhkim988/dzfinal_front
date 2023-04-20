@@ -17,12 +17,13 @@ import moment from "moment";
 import axiosClient from "../login/AxiosClient";
 
 const ChatRoom = ({ room, onBackClick }) => {
-  const { employ_id: participants_id } = JSON.parse(
+  const { employ_id: participants_id, employee_name } = JSON.parse(
     localStorage.getItem("userInfo")
   );
   const [message, setMessage] = useState({
     mode: "private",
     chatroom_id: room.chatroom_id,
+    employee_name: employee_name,
     from: participants_id, // 수정
     message: "",
     created_at: new Date().toISOString(),
@@ -108,6 +109,7 @@ const ChatRoom = ({ room, onBackClick }) => {
       const newMessage = {
         mode: "private",
         chatroom_id: room.chatroom_id,
+        employee_name: employee_name,
         from: participants_id, // 수정
         message: message.message,
         created_at: new Date().toISOString(),
@@ -126,7 +128,7 @@ const ChatRoom = ({ room, onBackClick }) => {
         .get("api/chat/getchatroommessages", {
           params: {
             chatroom_id: room.chatroom_id,
-            last: messages[0].chat_id
+            last: messages[0].chat_id,
           },
         })
         .then((response) => {
