@@ -101,7 +101,7 @@ const ReservationCalendar = ({
         .map((appointment) => {
           const startDate = new Date(appointment.startDate);
           if (viewDate.viewCalendar === "month") {
-            startDate.setHours(9);
+            startDate.setHours(appointment.doctor === "1" ? 9 : 10);
             startDate.setMinutes(0);
             appointment.startDate = startDate;
           } else if (viewDate.viewCalendar === "week") {

@@ -18,6 +18,7 @@ const WaitingQueueLayout = ({
   shouldAutoCall,
   findNextAutoCall,
   shouldDisableCallButton,
+  onCall,
 }) => {
   const client = useContext(MqttContext);
   const [data, setData] = useState([]);
@@ -46,6 +47,7 @@ const WaitingQueueLayout = ({
       }),
       { qos: 1 }
     );
+    onCall && onCall(nextState);
   };
 
   const mqttWaitingController = {

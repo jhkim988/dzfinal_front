@@ -85,10 +85,8 @@ const ClinicView = () => {
             reception_id,
             patient_name,
             patient_id,
-            state,
           }) => {
             setReception(reception_id);
-            setState(state);
             clickMedicalRecordInquiry(
               "patient_name",
               { start: "2000-01-01", end: "2100-12-31" },
@@ -107,6 +105,7 @@ const ClinicView = () => {
             || state !== "진료대기"
             || doctor_id !== userInfo.employ_id
           }
+          onCall={setState}
         />
       </Grid>
       <Grid item xs={5}>
