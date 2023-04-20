@@ -15,7 +15,7 @@ const examinationTextField = {
 
 const Reception_API_BASE_URL = "/api/reception";
 
-const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData, loadDailyReservationList }) => {
+const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientData, setPatientData, loadDailyReservationList, setSelectedAddress }) => {
     const doctorData = React.useContext(DataContext);
     const resetHandler = (event) => {
         setReceptionData({
@@ -43,12 +43,10 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
             detail_address: '',
             insurance: ''
         });
-        // setSelectedAddress({
-        //     zip_code: '',
-        //     address: ''
-
-        // });
-
+        setSelectedAddress({
+            zip_code: '',
+            address: ''
+        });
     };
 
     const handleChange = (event) => {
