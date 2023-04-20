@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosClient from './../login/AxiosClient';
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -16,7 +16,7 @@ import {
 import { useReactToPrint } from "react-to-print";
 
 
-export default function BasicSelect({user}) {
+export default function BasicSelect({user, initCard}) {
   const { ClinicPrice, TreatmentPrice, InsuranceRatio, insurance} = user;
   const [isReceipt, setIsReceipt] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false); // 카드 결제 폼을 보여줄지 여부를 저장할 상태 값을 추가합니다.
@@ -229,6 +229,10 @@ export default function BasicSelect({user}) {
 };
 
 
+  useEffect(() => {
+    setCard_number(initCard);
+  }, [initCard])
+
   return (
     <>
       <Stack direction="row" spacing={1}>
@@ -340,7 +344,7 @@ export default function BasicSelect({user}) {
               type="text"
               id="card_number1"
               name="card_number1"
-              placeholder={user.card_number ? user.card_number.substring(0, 4) : ""}
+              value={card_number ? card_number.substring(0, 4) : ""}
               inputProps={ariaLabel}
             />
           </FormControl>
@@ -352,7 +356,7 @@ export default function BasicSelect({user}) {
               type={hidePassword ? "password" : "text"}
               id="card_number2"
               name="card_number2"
-              placeholder={user.card_number ? user.card_number.substring(4, 8) : ""}
+              value={card_number ? card_number.substring(4, 8) : ""}
               inputProps={ariaLabel}
             />
           </FormControl>
@@ -364,7 +368,7 @@ export default function BasicSelect({user}) {
               type={hidePassword ? "password" : "text"}
               id="card_number3"
               name="card_number3"
-              placeholder={user.card_number ? user.card_number.substring(8, 12) : ""}
+              value={card_number ? card_number.substring(8, 12) : ""}
               inputProps={ariaLabel}
             />
           </FormControl>
@@ -376,7 +380,7 @@ export default function BasicSelect({user}) {
               type="text"
               id="card_number4"
               name="card_number4"
-              placeholder={user.card_number ? user.card_number.substring(12, 16) : ""}
+              value={card_number ? card_number.substring(12, 16) : ""}
               inputProps={ariaLabel}
             />
           </FormControl>
