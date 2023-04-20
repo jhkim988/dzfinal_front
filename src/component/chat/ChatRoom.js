@@ -28,7 +28,6 @@ const ChatRoom = ({ room, onBackClick }) => {
     created_at: new Date().toISOString(),
   });
   const [messages, setMessages] = useState([]);
-  const [scrollTop, setScrollTop] = useState(0);
   const { current: client } = useContext(MqttContext);
   const isDisabled = !message.message.trim();
   const [thumbnail, setThumbnail] = useState([]);
@@ -57,8 +56,6 @@ const ChatRoom = ({ room, onBackClick }) => {
       })
       .then((response) => {
         setMessages(response.data.reverse());
-        setPrevHeight(messagesBox.current.scrollHeight);
-        messagesBox.current.scrollTop = messagesBox.current.scrollHeight;
       })
       .catch((error) => {
         console.log(error);
@@ -95,8 +92,8 @@ const ChatRoom = ({ room, onBackClick }) => {
   useEffect(() => {
     messagesBox.current.scrollTop =
       messagesBox.current.scrollHeight - prevHeight;
-    setPrevHeight(messagesBox.current.scrollHeight - prevHeight);
-  }, []);
+      setPrevHeight(messagesBox.current.scrollHeight - prevHeight);
+  }, [messages]);
 
   // useEffect(() => {
   //   const messagesBox = document.getElementById("messages-box");
@@ -141,6 +138,7 @@ const ChatRoom = ({ room, onBackClick }) => {
           },
         })
         .then((response) => {
+          if (response.data.length === 0) return;
           setMessages((prevMessages) => [
             ...response.data.reverse(),
             ...prevMessages,
