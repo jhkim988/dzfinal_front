@@ -99,7 +99,7 @@ function Receipt({ receiptData }) {
             <ReceiptDetails user={user} />
             <br />
             {/* 결제방식&처방전,진료의뢰서 */}
-            <ReceiptPayment initCard={receiptData.receipt.card_number} user={user} />
+            <ReceiptPayment initCard={receiptData?.receipt?.card_number} user={user} />
           </>
       </Paper>
       
