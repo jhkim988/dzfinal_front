@@ -61,6 +61,7 @@ const ReservationForm = ({
     }).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
+        setDateTimePickerModal(false);
         requestSuccessCallback(reservationFormData, res.data);
       }
     });
@@ -70,6 +71,7 @@ const ReservationForm = ({
     axiosClient.put("/api/reservation", reservationFormData).then((res) => {
       if (res.status === 200) {
         setReservationFormModal(prev => ({ ...prev, modalState: false }));
+        setDateTimePickerModal(false);
         requestSuccessCallback(reservationFormData, res.data);
       }
     });
@@ -219,9 +221,15 @@ const ReservationForm = ({
                   label="doctor"
                   name="doctor"
                   onChange={formOnChange}
-                  value={reservationFormData.doctor || 1}
+                  value={reservationFormData.doctor || doctorData[0].employ_id}
                 >
-                  {doctorData.map((doctor) => (<MenuItem key={`ReservationForm#Doctor${doctor.employ_id}`} value={doctor.employ_id}>{doctor.employee_name}</MenuItem>))}
+                  {doctorData.map((doctor) => (
+                    <MenuItem
+                      key={`ReservationForm#Doctor${doctor.employ_id}`}
+                      value={doctor.employ_id}
+                    >
+                      {doctor.employee_name}
+                    </MenuItem>))}
                 </Select>
               </FormControl>
             </Grid>

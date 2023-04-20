@@ -22,6 +22,7 @@ const ReservationLayout = () => {
         <Grid item xs={4}>
           <ReservationDay
             viewDate={viewDate}
+            setViewDate={setViewDate}
             daySchedule={daySchedule}
             setDaySchedule={setDaySchedule}
             setCalendarAppointments={setCalendarAppointments}
@@ -32,4 +33,4 @@ const ReservationLayout = () => {
   );
 };
 
-export default React.memo(ReservationLayout);
+export default ReservationLayout;

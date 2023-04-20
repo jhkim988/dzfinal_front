@@ -1,44 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
-import {
-  Avatar,
-  Badge,
-  Box,
-  Button,
-  ButtonBase,
-  Dialog,
-  TextField,
-} from "@mui/material";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import { Avatar, Box, ButtonBase } from "@mui/material";
 import { IconArrowBarRight, IconArrowBarToLeft } from "@tabler/icons";
-import ChatList from "../../component/chat/ChatList";
-import MailIcon from "@mui/icons-material/Mail";
 import LogoSection from "../../template/layout/LogoSection";
 import ChatSection from "../../component/chat/ChatSection";
 import UserInfoSection from "../../component/login/UserInfoSection";
 
-const Header = ({ handleLeftDrawerToggle }) => {
+const Header = ({ handleLeftDrawerToggle, toggleIcon, setToggleIcon }) => {
   const theme = useTheme();
-  const [toggleIcon, setToggleIcon] = useState(false);
-  const [open, setOpen] = React.useState(false);
-
-  const openModal = () => {
-    setOpen(true);
-  };
-
-  const closeModal = () => {
-    setOpen(false);
-  };
 
   const handleToggleIcon = () => {
     setToggleIcon(!toggleIcon);
     handleLeftDrawerToggle();
   };
 
-  // const handleChatList = () => {
-
-  // }
   return (
     <>
       {/* logo & toggler button */}

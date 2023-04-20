@@ -13,3 +13,9 @@
 .css-1qb9p1k-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
   -webkit-text-fill-color: black;
 }
+
+.css-1qb9p1k-MuiInputBase-input-MuiOutlinedInput-input{
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+

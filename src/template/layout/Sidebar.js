@@ -6,7 +6,13 @@ import { BrowserView } from "react-device-detect";
 import MenuList from "./MenuList";
 import { drawerWidth } from "../store/constant";
 
-const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
+const Sidebar = ({
+  drawerOpen,
+  drawerToggle,
+  window,
+  toggleIcon,
+  setToggleIcon,
+}) => {
   const theme = useTheme();
   const matchUpMd = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -26,7 +32,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
             paddingRight: "16px",
           }}
         >
-          <MenuList />
+          <MenuList toggleIcon={toggleIcon} setToggleIcon={setToggleIcon} />
         </PerfectScrollbar>
       </BrowserView>
     </>

@@ -95,4 +95,4 @@ const CallButtonSet = ({
   );
 };
 
-export default React.memo(CallButtonSet);
+export default CallButtonSet;

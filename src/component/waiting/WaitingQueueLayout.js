@@ -2,7 +2,6 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  useMemo,
   useRef,
   useContext,
 } from "react";
@@ -20,11 +19,9 @@ const WaitingQueueLayout = ({
   findNextAutoCall,
   shouldDisableCallButton,
 }) => {
-  // const client = useRef();
   const client = useContext(MqttContext);
-
   const [data, setData] = useState([]);
-  const [selected, setSelected] = useState(null);
+  const selected = useRef();
   const autoCall = useRef(false);
   const setAutoCall = (flag) => (autoCall.current = flag);
   const [doctorFilter, setDoctorFilter] = useState({
@@ -37,7 +34,7 @@ const WaitingQueueLayout = ({
 
   useEffect(() => {
     setAutoCallNext(data.find(findNextAutoCall));
-  }, [data]);
+  }, [data, findNextAutoCall]);
 
   // mqtt call Patient
   const callPatient = (reception_id) => {
@@ -45,7 +42,7 @@ const WaitingQueueLayout = ({
       "waiting",
       JSON.stringify({
         method: "PUT",
-        data: { ...selected, reception_id, state: nextState },
+        data: { ...selected.current, reception_id, state: nextState },
       }),
       { qos: 1 }
     );
@@ -64,11 +61,14 @@ const WaitingQueueLayout = ({
         );
         return [...ret];
       });
+      if (selected.current && `${selected.current.reception_id}` === `${payload.data.reception_id}`) {
+        selected.current = ({...selected.current, state: payload.data.state});
+      }
       // autoCall
       if (autoCall.current && shouldAutoCall(payload)) {
         const next = autoCallNext.current;
         if (next) {
-          setSelected(`${next}`);
+          selected.current = next;
           clickRowCallback && clickRowCallback(next);
           callPatient(next.reception_id);
         }
@@ -84,22 +84,26 @@ const WaitingQueueLayout = ({
   const mqttEventListener = useCallback((topic, payload, packet) => {
     if (topic === "waiting") {
       payload = JSON.parse(payload);
-      console.log("message", payload);
+      console.log("mqtt payload: ", payload);
       mqttWaitingController[payload.method](payload);
     }
   }, []);
 
   useEffect(() => {
-    console.log("client", client);
-    client.current.subscribe("waiting", { qos: 1 });
-    client.current.on("message", mqttEventListener);
+    const clientCurrent = client.current;
+    clientCurrent.subscribe("waiting", { qos: 1 });
+    clientCurrent.on("message", mqttEventListener);
+    return () => {
+      clientCurrent.unsubscribe("waiting");
+      clientCurrent.removeListener("message", mqttEventListener);
+    }
   }, []);
 
   const onRowClick = (e) => {
     const selectData = data.find(
       (d) => `${d.reception_id}` === `${e.currentTarget.dataset.reception_id}`
     );
-    setSelected(selectData);
+    selected.current = selectData;
     clickRowCallback && clickRowCallback(selectData);
   };
 
@@ -109,10 +113,7 @@ const WaitingQueueLayout = ({
     });
   }, []);
 
-  const disabledCallButton = useMemo(() => {
-    if (!selected) return true;
-    return shouldDisableCallButton(selected);
-  }, [data, selected]);
+  const disabledCallButton = !selected.current ? true : shouldDisableCallButton({ waitingData: data, selected: selected.current || { }});
 
   return (
     <Paper elevation={2} sx={{ height: "82vh" }}>
@@ -120,7 +121,7 @@ const WaitingQueueLayout = ({
         <Grid item xs={12}>
           <CallButtonSet
             callPatient={callPatient}
-            selected={selected}
+            selected={selected.current}
             setAutoCall={setAutoCall}
             disabledCallButton={disabledCallButton}
             doctorFilter={doctorFilter}
@@ -130,7 +131,7 @@ const WaitingQueueLayout = ({
         <Grid item xs={12} sx={{ height: "70vh" }}>
           <WaitingQueue
             data={data}
-            selected={selected}
+            selected={selected.current}
             onRowClick={onRowClick}
             initPanel={initPanel}
             autoCall={autoCall}
