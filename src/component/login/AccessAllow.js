@@ -4,6 +4,8 @@ import axios from "axios";
 import { refreshAccessToken } from "./AxiosClient";
 import { getLoginUserInfo } from './Login';
 
+export const AUTHIP = `http://192.168.0.193:8081`
+
 const isIntersection = (arr1, arr2) => {
   return arr1.some((v) => arr2.includes(v));
 };
@@ -13,7 +15,7 @@ const check_token = () => {
   const client_secret = "secret";
   let auth = JSON.parse(localStorage.getItem("auth"));
   return axios
-  .post(`http://localhost:8081/oauth/check_token`, null, {
+  .post(`${AUTHIP}/oauth/check_token`, null, {
     params: { token: auth.access_token },
     headers: {
       "Content-Type": "application/json;charset=utf-8",

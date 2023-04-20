@@ -102,15 +102,15 @@ const ReservationCalendar = ({
           const startDate = new Date(appointment.startDate);
           if (viewDate.viewCalendar === "month") {
             startDate.setHours(9);
-            startDate.setMinutes(0);
+            startDate.setMinutes(`${appointment.doctor}` === "1" ? 0 : 1);
             appointment.startDate = startDate;
           } else if (viewDate.viewCalendar === "week") {
             const endDate = new Date(appointment.endDate);
             if (startDate.getHours() !== endDate.getHours()) {
               endDate.setHours(endDate.getHours() - 1);
             }
-            startDate.setMinutes(appointment.doctor === "1" ? 0 : 30);
-            endDate.setMinutes(appointment.doctor === "1" ? 15 : 45);
+            startDate.setMinutes(`${appointment.doctor}` === "1" ? 0 : 30);
+            endDate.setMinutes(`${appointment.doctor}` === "1" ? 15 : 45);
             appointment.startDate = startDate;
             appointment.endDate = endDate;
           }

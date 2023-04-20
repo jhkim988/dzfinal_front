@@ -107,6 +107,7 @@ const ClinicView = () => {
             || state !== "진료대기"
             || doctor_id !== userInfo.employ_id
           }
+          onCall={setState}
         />
       </Grid>
       <Grid item xs={5}>

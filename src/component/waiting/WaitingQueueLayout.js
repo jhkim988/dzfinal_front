@@ -18,6 +18,7 @@ const WaitingQueueLayout = ({
   shouldAutoCall,
   findNextAutoCall,
   shouldDisableCallButton,
+  onCall,
 }) => {
   const client = useContext(MqttContext);
   const [data, setData] = useState([]);
@@ -46,6 +47,7 @@ const WaitingQueueLayout = ({
       }),
       { qos: 1 }
     );
+    onCall && onCall(nextState);
   };
 
   const mqttWaitingController = {
@@ -93,10 +95,10 @@ const WaitingQueueLayout = ({
     const clientCurrent = client.current;
     clientCurrent.subscribe("waiting", { qos: 1 });
     clientCurrent.on("message", mqttEventListener);
-    return () => {
-      clientCurrent.unsubscribe("waiting");
-      clientCurrent.removeListener("message", mqttEventListener);
-    }
+    // return () => {
+    //   clientCurrent.unsubscribe("waiting");
+    //   clientCurrent.removeListener("message", mqttEventListener);
+    // }
   }, []);
 
   const onRowClick = (e) => {

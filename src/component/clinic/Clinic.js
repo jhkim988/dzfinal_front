@@ -79,11 +79,13 @@ const Clinic = ({
   };
 
   const onClick = () => {
-    if (state !== "진료중") {
-      alert("진료중인 환자가 없습니다.");
-      return;
-    }
+    console.log(mode+ "/"+ state);
     if (mode === 0) {
+      if (state !== "진료중") {
+        alert("진료중인 환자가 없습니다.");
+        return;
+      }
+
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
 
@@ -140,10 +142,6 @@ const Clinic = ({
           console.log(error);
         });
     } else if (mode === 2) {
-      if (state !== "진료중") {
-        alert("진료중인 환자가 없습니다.");
-        return;
-      }
       setSymptom(medicalInfo.symptom);
       setDiagnosis(medicalInfo.diagnosis);
       setPrescription(medicalInfo.prescription);
