@@ -158,7 +158,7 @@ const Clinic1 = ({ data }) => {
                                             />
                                         ) : (
                                             <OutlinedInput
-                                                // value={"1 진료실 대기자"}
+                                                value={""}
                                                 inputProps={{ style: { color: "#bdbdbd", height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold",} }}
                                                 readOnly
                                             />
@@ -189,7 +189,7 @@ const Clinic1 = ({ data }) => {
                                             />
                                         ) : (
                                             <OutlinedInput
-                                                // value={"1 진료실 대기자"}
+                                                value={""}
                                                 inputProps={{ style: { color: "#bdbdbd", height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />

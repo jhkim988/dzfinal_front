@@ -6,7 +6,8 @@ const genRanHex = (size) =>
     .map(() => Math.floor(Math.random() * 16).toString(16))
     .join("");
 // const mqttURL = `mqtt://192.168.0.132:8083/mqtt`;
-const mqttURL = `mqtt://localhost:8083/mqtt`;
+const mqttURL = `mqtt://192.168.0.197:8083/mqtt`;
+// const mqttURL = `mqtt://localhost:8083/mqtt`;
 const mqttOptions = {
   clean: true,
   connectTimeout: 30 * 1000,

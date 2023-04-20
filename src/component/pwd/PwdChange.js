@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import axiosClient from './../login/AxiosClient';
 import { useState } from "react";
 import axios from "axios";
+import { AUTHIP } from "../login/AccessAllow";
 
 const PwdChange = () => {
     const init = {
@@ -51,7 +52,7 @@ const PwdChange = () => {
     }
 
     const onSubmit = () => {
-        axios.put(`http://localhost:8081/changePwd/${employeeInfo.user_id}`, input)
+        axios.put(`${AUTHIP}/changePwd/${employeeInfo.user_id}`, input)
             .then((response) => {
                 alert("성공");
 

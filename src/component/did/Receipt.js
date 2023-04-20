@@ -160,7 +160,7 @@ const Receipt = ({ data }) => {
                                             />
                                         ) : (
                                             <OutlinedInput
-                                                // value={"수납 대기자"}
+                                                value={""}
                                                 inputProps={{ style: { color: "#bdbdbd", height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />
@@ -191,7 +191,7 @@ const Receipt = ({ data }) => {
                                             />
                                         ) : (
                                             <OutlinedInput
-                                                // value={"수납 대기자"}
+                                                value={""}
                                                 inputProps={{ style: { color: "#bdbdbd", height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />

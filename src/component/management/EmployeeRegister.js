@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import EmployeeForm from "./EmployeeForm";
 import axiosClient from "../login/AxiosClient";
+import { AUTHIP } from './../login/AccessAllow';
 
 const roleMapping = {
   ADMIN: "관리자",
@@ -56,7 +57,7 @@ const EmployeeRegister = () => {
 
   const createSecurityUser = ({employee}) => {
     return axios.post(
-      "http://localhost:8081/user",
+      `${`${AUTHIP}/user`}`,
       {
         username: employee.user_id,
         password: employee.birth,
