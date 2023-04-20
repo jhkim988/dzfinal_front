@@ -1,12 +1,13 @@
 import axios from "axios";
 import { getLoginUserInfo } from "./Login";
+import { AUTHIP } from "./AccessAllow";
 
 export const refreshAccessToken = () => {
   const client_id = "client";
   const client_secret = "secret";
   const base64 = btoa(`${client_id}:${client_secret}`);
   return axios
-    .post(`http://localhost:8081/oauth/token`, null, {
+    .post(`${AUTHIP}/oauth/check_token`, null, {
       params: {
         grant_type: "refresh_token",
         refresh_token: auth.refresh_token,

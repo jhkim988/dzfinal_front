@@ -154,13 +154,13 @@ const Receipt = ({ data }) => {
                                     >
                                         {item ? (
                                             <OutlinedInput
-                                                value={`${item.patient_name}(${item.front_registration_number})`}
+                                                value={`${item.patient_name}(${item.front_registration_number})` || ''}
                                                 inputProps={{ style: { height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />
                                         ) : (
                                             <OutlinedInput
-                                                // value={"수납 대기자"}
+                                                value={""}
                                                 inputProps={{ style: { color: "#bdbdbd", height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />
@@ -174,7 +174,7 @@ const Receipt = ({ data }) => {
                             
                             <Grid item xs={6}>
                             {[...Array(4)].map((_, index) => {
-                                const item = waitingReceipt[index+3];
+                                const item = waitingReceipt[index+4];
                                 return (
                                     <FormControl
                                         sx={{
@@ -185,13 +185,13 @@ const Receipt = ({ data }) => {
                                     >
                                         {item ? (
                                             <OutlinedInput
-                                                value={`${item.patient_name}(${item.front_registration_number})`}
+                                                value={`${item.patient_name}(${item.front_registration_number})` || ''}
                                                 inputProps={{ style: { height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />
                                         ) : (
                                             <OutlinedInput
-                                                // value={"수납 대기자"}
+                                                value={""}
                                                 inputProps={{ style: { color: "#bdbdbd", height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />

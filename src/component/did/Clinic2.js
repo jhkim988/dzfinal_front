@@ -152,13 +152,13 @@ const Clinic2 = ({ data }) => {
                                     >
                                         {item ? (
                                             <OutlinedInput
-                                                value={`${item.patient_name}(${item.front_registration_number})`}
+                                                value={`${item.patient_name}(${item.front_registration_number})` || ''}
                                                 inputProps={{ style: { height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />
                                         ) : (
                                             <OutlinedInput
-                                                // value={"2 진료실 대기자"}
+                                                value={""}
                                                 inputProps={{ style: { color: "#bdbdbd", height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />
@@ -172,7 +172,7 @@ const Clinic2 = ({ data }) => {
                             
                             <Grid item xs={6}>
                             {[...Array(4)].map((_, index) => {
-                                const item = waitingPatients2[index+3];
+                                const item = waitingPatients2[index+4];
                                 return (
                                     <FormControl
                                         sx={{
@@ -183,13 +183,13 @@ const Clinic2 = ({ data }) => {
                                     >
                                         {item ? (
                                             <OutlinedInput
-                                                value={`${item.patient_name}(${item.front_registration_number})`}
+                                                value={`${item.patient_name}(${item.front_registration_number})` || ''}
                                                 inputProps={{ style: { height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />
                                         ) : (
                                             <OutlinedInput
-                                                // value={"2 진료실 대기자"}
+                                                value={""}
                                                 inputProps={{ style: { color: "#bdbdbd", height: "60px", textAlign: "center", fontSize: "30px", fontWeight: "bold", } }}
                                                 readOnly
                                             />

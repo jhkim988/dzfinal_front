@@ -4,6 +4,7 @@ import { TextField, Button, Stack } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "./AxiosClient";
+import { AUTHIP } from "./AccessAllow";
 
 const LoginImage = () => {
   return (
@@ -48,7 +49,7 @@ const LoginForm = () => {
   const login = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:8081/oauth/token`, null, {
+      .post(`${AUTHIP}/oauth/token`, null, {
         params,
         headers,
       })

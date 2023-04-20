@@ -18,7 +18,6 @@ const ReservationDateTimePickerModal = ({
       : setReservationFormData({ ...reservationFormData, date_time: '' });
     setDateTimePickerModal(false);
   }, [setReservationFormData, setDateTimePickerModal, reservationFormData]);
-  console.log("dateTimePickerModal: ", dateTimePickerModal);
   return (
     <>
       <Popper open={dateTimePickerModal} onClose={() => setDateTimePickerModal(false)} placement="right-end" anchorEl={anchorEl} sx={{ zIndex: 2000 }}>

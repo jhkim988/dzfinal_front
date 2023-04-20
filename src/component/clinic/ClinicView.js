@@ -34,6 +34,7 @@ const ClinicView = () => {
     prev: false,
     next: false,
   });
+  const [state, setState] = useState();
 
   const onFetchPatient = useCallback(() => {
     reception &&
@@ -84,8 +85,14 @@ const ClinicView = () => {
         <WaitingQueueLayout
           initPanel="2"
           nextState="진료중"
-          clickRowCallback={({ reception_id, patient_name, patient_id }) => {
+          clickRowCallback={({
+            reception_id,
+            patient_name,
+            patient_id,
+            state,
+          }) => {
             setReception(reception_id);
+            setState(state);
             clickMedicalRecordInquiry(
               "patient_name",
               { start: "2000-01-01", end: "2100-12-31" },
@@ -99,9 +106,12 @@ const ClinicView = () => {
           findNextAutoCall={({ state, doctor_id }) =>
             state === "진료대기" && doctor_id === userInfo.employ_id
           }
-          shouldDisableCallButton={({ state, doctor_id }) =>
-            state !== "진료대기" || doctor_id !== userInfo.employ_id
+          shouldDisableCallButton={({ waitingData, selected: { state, doctor_id }}) =>
+            waitingData.some(({ state, doctor_id }) => state === "진료중" && doctor_id === userInfo.employ_id)
+            || state !== "진료대기"
+            || doctor_id !== userInfo.employ_id
           }
+          onCall={setState}
         />
       </Grid>
       <Grid item xs={5}>
@@ -154,7 +164,13 @@ const ClinicView = () => {
           <Grid item xs={12}>
             <Paper sx={{ width: "100%", height: "40.5vh" }} elevation={3}>
               <Clinic
+                state={state}
+                setState={setState}
+                setPatient={setPatient}
+                setReception={setReception}
                 reception={reception}
+                onReset={onReset}
+                setDrug_taking={setDrug_taking}
                 mode={mode}
                 setMode={setMode}
                 medicalInfo={medicalInfo}

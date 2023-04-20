@@ -31,7 +31,6 @@ const ChatRoom = ({ room, onBackClick }) => {
     created_at: new Date().toISOString(),
   });
   const [messages, setMessages] = useState([]);
-  const [page, setPage] = useState(1);
   const [scrollTop, setScrollTop] = useState(0);
   const { current: client } = useContext(MqttContext);
   const isDisabled = !message.message.trim();
@@ -55,7 +54,7 @@ const ChatRoom = ({ room, onBackClick }) => {
       .get("/api/chat/getchatroommessages", {
         params: {
           chatroom_id: room.chatroom_id,
-          page: page,
+          last: 0,
         },
       })
       .then((response) => {
@@ -127,13 +126,11 @@ const ChatRoom = ({ room, onBackClick }) => {
   const handleMessagesScroll = (event) => {
     const { scrollTop } = event.target;
     if (scrollTop === 0) {
-      setPage((prevPage) => prevPage + 1);
-
       axiosClient
         .get("api/chat/getchatroommessages", {
           params: {
             chatroom_id: room.chatroom_id,
-            page: page,
+            last: messages[0].chat_id
           },
         })
         .then((response) => {
@@ -175,7 +172,11 @@ const ChatRoom = ({ room, onBackClick }) => {
         >
           <Toolbar>
             <Button color="inherit" onClick={onBackClick}>
-              <IconChevronLeft /> 목록 보기
+              <IconChevronLeft />
+              목록 보기{" "}
+              {room.chatroom_name
+                ? `(${room.chatroom_name})`
+                : `(${room.employee_names[0]})`}
             </Button>
           </Toolbar>
         </AppBar>

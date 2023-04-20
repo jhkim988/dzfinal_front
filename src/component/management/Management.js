@@ -7,16 +7,12 @@ import axiosClient from './../login/AxiosClient';
 
 const Management = () => {
   const [employees, setEmployees] = useState([]);
-
   useEffect(() => {
     axiosClient
       .get("/api/admin/employee")
       .then((response) => {
         setEmployees(response.data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
   }, []);
 
   return (

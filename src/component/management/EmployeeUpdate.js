@@ -4,6 +4,7 @@ import { useLocation } from "react-router";
 import { useNavigate } from "react-router";
 import axiosClient from "../login/AxiosClient";
 import EmployeeForm from "./EmployeeForm";
+import { AUTHIP } from "../login/AccessAllow";
 
 const roleMapping = {
   ADMIN: "관리자",
@@ -78,7 +79,7 @@ const EmployeeUpdate = () => {
 
   const updateSecurityUser = (employee) => {
     return axios.put(
-      `http://localhost:8081/user/${employee.user_id}`,
+      `${AUTHIP}/user/${employee.user_id}`,
       {
         authority: [employee.role],
       },

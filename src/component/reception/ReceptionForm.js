@@ -82,6 +82,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     alert(response.data.message);
                     console.log(response.data);
                     resetHandler(event);
+                    loadDailyReservationList();
                 })
                 .catch((error) => {
                     if (!patient_id) {
@@ -108,7 +109,7 @@ const ReceptionForm = ({ patient_id, receptionData, setReceptionData, patientDat
                     alert(response.data.message);
                     console.log(response.data);
                     resetHandler(event);
-                    if (receptionData.reservation_id != 0) loadDailyReservationList();
+                    loadDailyReservationList();
                 })
                 .catch((error) => {
                     if (!patient_id) {
