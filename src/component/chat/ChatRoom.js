@@ -10,7 +10,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import { IconChevronLeft, IconSend } from "@tabler/icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useContext } from "react";
 import { MqttContext } from "../waiting/MqttContextProvider";
 import moment from "moment";
@@ -32,6 +32,8 @@ const ChatRoom = ({ room, onBackClick }) => {
   const { current: client } = useContext(MqttContext);
   const isDisabled = !message.message.trim();
   const [thumbnail, setThumbnail] = useState([]);
+  const [prevHeight, setPrevHeight] = useState(0);
+  const messagesBox = useRef();
 
   useEffect(() => {
     axiosClient
@@ -55,6 +57,8 @@ const ChatRoom = ({ room, onBackClick }) => {
       })
       .then((response) => {
         setMessages(response.data.reverse());
+        setPrevHeight(messagesBox.current.scrollHeight);
+        messagesBox.current.scrollTop = messagesBox.current.scrollHeight;
       })
       .catch((error) => {
         console.log(error);
@@ -89,19 +93,26 @@ const ChatRoom = ({ room, onBackClick }) => {
   }, []);
 
   useEffect(() => {
-    const messagesBox = document.getElementById("messages-box");
-    messagesBox.scrollTop = messagesBox.scrollHeight;
+    messagesBox.current.scrollTop =
+      messagesBox.current.scrollHeight - prevHeight;
+    setPrevHeight(messagesBox.current.scrollHeight - prevHeight);
+  }, []);
 
-    // 스크롤 탑 위치값 저장
-    setScrollTop(messagesBox.scrollTop);
-  }, [messages]);
+  // useEffect(() => {
+  //   const messagesBox = document.getElementById("messages-box");
+  //   messagesBox.scrollTop = messagesBox.scrollHeight - prevHeight;
+  //   setPrevHeight(messagesBox.scrollTop);
 
-  useEffect(() => {
-    const messagesBox = document.getElementById("messages-box");
+  // 스크롤 탑 위치값 저장
+  // setScrollTop(messagesBox.scrollTop);
+  // }, [messages]);
 
-    // 스크롤 탑 위치 재설정
-    messagesBox.scrollTop = scrollTop;
-  }, [scrollTop]);
+  // useEffect(() => {
+  //   const messagesBox = document.getElementById("messages-box");
+
+  //   // 스크롤 탑 위치 재설정
+  //   messagesBox.scrollTop = scrollTop;
+  // }, [scrollTop]);
 
   const publish = () => {
     if (client) {
@@ -126,7 +137,7 @@ const ChatRoom = ({ room, onBackClick }) => {
         .get("api/chat/getchatroommessages", {
           params: {
             chatroom_id: room.chatroom_id,
-            last: messages[0].chat_id
+            last: messages[0].chat_id,
           },
         })
         .then((response) => {
@@ -134,13 +145,10 @@ const ChatRoom = ({ room, onBackClick }) => {
             ...response.data.reverse(),
             ...prevMessages,
           ]);
-          setScrollTop(event.target.scrollTop + event.target.scrollHeight);
         })
         .catch((error) => {
           console.log(error);
         });
-    } else {
-      setScrollTop(scrollTop);
     }
   };
 
@@ -170,6 +178,7 @@ const ChatRoom = ({ room, onBackClick }) => {
             height: "400px",
             overflowY: "auto",
           }}
+          ref={messagesBox}
           onScroll={handleMessagesScroll}
         >
           {messages.map((message, index) =>
