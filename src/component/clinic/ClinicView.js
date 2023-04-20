@@ -102,8 +102,10 @@ const ClinicView = () => {
           findNextAutoCall={({ state, doctor_id }) =>
             state === "진료대기" && doctor_id === userInfo.employ_id
           }
-          shouldDisableCallButton={({ state, doctor_id }) =>
-            state !== "진료대기" || doctor_id !== userInfo.employ_id
+          shouldDisableCallButton={({ waitingData, selected: { state, doctor_id }}) =>
+            waitingData.some(({ state, doctor_id }) => state === "진료중" && doctor_id === userInfo.employ_id)
+            || state !== "진료대기"
+            || doctor_id !== userInfo.employ_id
           }
         />
       </Grid>
@@ -163,6 +165,7 @@ const ClinicView = () => {
                 setReception={setReception}
                 reception={reception}
                 onReset={onReset}
+                setDrug_taking={setDrug_taking}
                 mode={mode}
                 setMode={setMode}
                 medicalInfo={medicalInfo}

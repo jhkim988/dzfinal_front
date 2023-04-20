@@ -93,6 +93,7 @@ const ReservationCalendar = ({
   );
   const [filterSelectorOpen, setFilterSelectorOpen] = useState(false);
   const [appointmentData, setAppointmentData] = useState([]);
+  const [viewState, setViewState] = useState("month");
   useEffect(() => {
     setAppointmentData(() => {
       const ret = calendarAppointments
@@ -118,14 +119,14 @@ const ReservationCalendar = ({
       // console.log(ret);
       return ret;
     });
-  }, [viewDate.viewCalendar, calendarAppointments, doctorFilter]);
-  console.log(appointmentData);
+    setViewState(viewDate.viewCalendar);
+  }, [calendarAppointments, doctorFilter]);
   return (
     <Paper>
       <Scheduler data={appointmentData}>
         <ViewState
           currentDate={viewDate.viewDate}
-          currentViewName={viewDate.viewCalendar}
+          currentViewName={viewState}
         />
         <Toolbar />
         <TodayButton
@@ -178,7 +179,7 @@ const ReservationCalendar = ({
           )}
         />
         <ViewSwitcher
-          switcherComponent={React.memo(({ ...restProps }) => {
+          switcherComponent={({ ...restProps }) => {
             return (
               <>
                 <DoctorFilterSelector
@@ -194,7 +195,7 @@ const ReservationCalendar = ({
                 />
               </>
             );
-          })}
+          }}
         />
         <Appointments
           appointmentComponent={(props) => (

@@ -28,11 +28,10 @@ const Reception = () => {
     phone_number1: "",
     phone_number2: "",
     phone_number3: "",
-    insurance: "",
     zip_code: "",
     address: "",
     detail_address: "",
-    insurance: "true",
+    insurance: false,
   });
   const [receptionData, setReceptionData] = useState({
     doctor: "",
@@ -53,6 +52,8 @@ const Reception = () => {
     receipt: {},
   });
 
+  const [initTotalCount, setInitTotalCount] = useState(0);
+
   // DailyReservation
   const [reservation, setReservation] = useState([]);
 
@@ -60,11 +61,13 @@ const Reception = () => {
     setPatient_id(patient_id);
     try {
       axiosClient.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
-        setPatientData(data.patient)
+        setPatientData(data.patient);
         setReceptionData(data.reception);
         setReceiptData(data);
-        
-        receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, setInitReceiptList);
+        receiptRecordSearch({ type: "patient_id", searchText: patient_id, currentPage: 1 }, (data) => {
+          setInitReceiptList(data.list);
+          setInitTotalCount(data.totalCount);
+        });
       });
     } catch (error) {
       console.log(error);
@@ -79,9 +82,6 @@ const Reception = () => {
     { start, end, type, searchText, currentPage },
     callback
   ) => {
-    console.log(start?.format("YYYY-MM-DD"));
-    console.log(end?.format("YYYY-MM-DD"));
-    console.log(currentPage);
     axiosClient
       .get(
         "/api/receipt/getReceiptList",
@@ -123,6 +123,7 @@ const Reception = () => {
   const loadDailyReservationList = () => {
     axiosClient.get(Reservation_API_BASE_URL)
       .then((response) => {
+        console.log(response.data);
         setReservation(response.data || []);
       })
       .catch((error) => {
@@ -139,7 +140,9 @@ const Reception = () => {
             clickRowCallback={clickRowCallback}
             shouldAutoCall={({ data: { state } }) => state === "수납완료"}
             findNextAutoCall={({ state }) => state === "수납대기"}
-            shouldDisableCallButton={({ state }) => state !== "수납대기"}
+            shouldDisableCallButton={({ waitingData, selected: { state } }) =>
+            state !== "수납대기"
+            || waitingData.some(({ state }) => state === "수납중")}
           />
         </Grid>
 
@@ -149,6 +152,7 @@ const Reception = () => {
               <Paper elevation={3}>
                 <ReceiptList
                   clickRowCallback={clickRowCallback}
+                  initTotalCount={initTotalCount}
                   receiptRecordSearch={receiptRecordSearch}
                   patient_id={patient_id}
                   setSelectedOneReceipt={setSelectedOneReceipt}

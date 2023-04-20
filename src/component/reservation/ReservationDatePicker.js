@@ -41,12 +41,12 @@ const ReservationDatePicker = ({
       requestAbortController.current.abort();
     }
     getImpossible(doctor, $y, $M+1);
-  }, []);
+  }, [doctor, getImpossible]);
   
   useEffect(() => {
     getImpossible(doctor, dateValue.getYear()+1900, dateValue.getMonth()+1);
     return () => requestAbortController.current?.abort();
-  }, [doctor, getImpossible]);
+  }, [dateValue, doctor, getImpossible]);
 
   return (
     <Paper
@@ -101,4 +101,4 @@ const ServerDay = ({impossible = new Set(), day, outsideCurrentMonth, ...others}
   />
 }
 
-export default React.memo(ReservationDatePicker);
+export default ReservationDatePicker;

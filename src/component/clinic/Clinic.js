@@ -20,6 +20,7 @@ const Clinic = ({
   setReception,
   reception,
   onReset,
+  setDrug_taking,
   mode,
   setMode,
   medicalInfo,
@@ -176,6 +177,8 @@ const Clinic = ({
     setState("");
     setReception();
     setPatient({});
+    onReset();
+    setDrug_taking([]);
     setSymptom("");
     setTreatment(false);
     setClinic_request(false);
@@ -189,6 +192,8 @@ const Clinic = ({
     setState("");
     setReception();
     setPatient({});
+    onReset();
+    setDrug_taking([]);
     setSymptom("");
     setTreatment(false);
     setClinic_request(false);
