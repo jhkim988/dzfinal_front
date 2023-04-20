@@ -34,6 +34,7 @@ const ClinicView = () => {
     prev: false,
     next: false,
   });
+  const [state, setState] = useState();
 
   useEffect(() => {
     reception &&
@@ -80,8 +81,14 @@ const ClinicView = () => {
         <WaitingQueueLayout
           initPanel="2"
           nextState="진료중"
-          clickRowCallback={({ reception_id, patient_name, patient_id }) => {
+          clickRowCallback={({
+            reception_id,
+            patient_name,
+            patient_id,
+            state,
+          }) => {
             setReception(reception_id);
+            setState(state);
             clickMedicalRecordInquiry(
               "patient_name",
               { start: "2000-01-01", end: "2100-12-31" },
@@ -152,6 +159,8 @@ const ClinicView = () => {
           <Grid item xs={12}>
             <Paper sx={{ width: "100%", height: "40.5vh" }} elevation={3}>
               <Clinic
+                state={state}
+                setState={setState}
                 setPatient={setPatient}
                 setReception={setReception}
                 reception={reception}

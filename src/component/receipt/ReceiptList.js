@@ -1,14 +1,14 @@
-import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
-import { 
-  Select, 
-  Box, 
-  FormControl, 
-  Button, 
-  Pagination, 
-  InputLabel, 
-  MenuItem, 
-  Paper, 
+import * as React from "react";
+import { useState, useEffect, useCallback } from "react";
+import {
+  Select,
+  Box,
+  FormControl,
+  Button,
+  Pagination,
+  InputLabel,
+  MenuItem,
+  Paper,
   TextField,
   Table,
   TableBody,
@@ -23,7 +23,7 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { Stack } from "@mui/system";
 import koLocale from "dayjs/locale/ko";
 import "./style.css";
-import axiosClient from '../login/AxiosClient';
+import axiosClient from "../login/AxiosClient";
 
 
 
@@ -124,15 +124,14 @@ const ReceiptList = ({ receiptRecordSearch, initReceiptList, initTotalCount, set
     }
   };
 
-
   // 수납내역목록에서 데이터 선택하면 데이터가져오기
-  const handleSelectedReceipt = ({receipt_id, reception_id}) => {
-      axiosClient.get(`/api/reception/detail/${reception_id}`).then(({ data }) => {
+  const handleSelectedReceipt = ({ receipt_id, reception_id }) => {
+    axiosClient
+      .get(`/api/reception/detail/${reception_id}`)
+      .then(({ data }) => {
         setReceiptData(data);
       });
-  }
-
-
+  };
 
   return (
     <>
@@ -141,11 +140,7 @@ const ReceiptList = ({ receiptRecordSearch, initReceiptList, initTotalCount, set
         <Box sx={{ display: "flex" }}>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel>분류</InputLabel>
-            <Select
-              value={type}
-              onChange={handleTypeChange}
-              size="small"
-            >
+            <Select value={type} onChange={handleTypeChange} size="small">
               <MenuItem value={"patient_name"}>환자이름</MenuItem>
               <MenuItem value={"reception_id"}>접수번호</MenuItem>
             </Select>
@@ -182,7 +177,11 @@ const ReceiptList = ({ receiptRecordSearch, initReceiptList, initTotalCount, set
           <TextField
             label="검색어"
             size="small"
-            sx={{ alignSelf: "center", paddingLeft:"10px", paddingRight: "10px", }}
+            sx={{
+              alignSelf: "center",
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            }}
             value={searchText}
             onChange={handleSearchTextChange}
           />
@@ -231,7 +230,11 @@ const ReceiptList = ({ receiptRecordSearch, initReceiptList, initTotalCount, set
                       </TableCell>
                       <TableCell align="center">
                         {/* <Tooltip> */}
-                          {receiptList[idx].prescription_count > 1 ? `${receiptList[idx].drug_name} 외 ${receiptList[idx].prescription_count - 1} 건` : `${receiptList[idx].drug_name}`}
+                        {receiptList[idx].prescription_count > 1
+                          ? `${receiptList[idx].drug_name} 외 ${
+                              receiptList[idx].prescription_count - 1
+                            } 건`
+                          : `${receiptList[idx].drug_name}`}
                         {/* </Tooltip> */}
                       </TableCell>
                       <TableCell align="center">{receiptList[idx].total_amount}</TableCell>
@@ -258,7 +261,7 @@ const ReceiptList = ({ receiptRecordSearch, initReceiptList, initTotalCount, set
           </Table>
         </TableContainer>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Stack spacing={2} style={{ bottom: '0' }}>
+          <Stack spacing={2} style={{ bottom: "0" }}>
             {/* <Pagination count={5} /> */}
             <Pagination count={Math.ceil(totalCount/10)} page={page} onChange={handleChange}/>
           </Stack>

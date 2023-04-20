@@ -14,6 +14,8 @@ import Prescription from "./Prescription";
 import axiosClient from "./../login/AxiosClient";
 
 const Clinic = ({
+  state,
+  setState,
   setPatient,
   setReception,
   reception,
@@ -22,16 +24,16 @@ const Clinic = ({
   mode,
   setMode,
   medicalInfo,
-  setMedicalInfo,
   diagnosis,
-  setDiagnosis,
   prescription,
+  setDiagnosis,
   setPrescription,
   symptom,
   setSymptom,
+  setMedicalInfo,
   treatment,
-  clinic_request,
   setTreatment,
+  clinic_request,
   setClinic_request,
 }) => {
   const handleDiagnosisAdd = (disease) => {
@@ -77,6 +79,10 @@ const Clinic = ({
   };
 
   const onClick = () => {
+    if (state !== "진료중") {
+      alert("진료중인 환자가 없습니다.");
+      return;
+    }
     if (mode === 0) {
       const diseaseIds = diagnosis.map((disease) => disease.disease_id);
       const drugIds = prescription.map((drug) => drug.drug_id);
@@ -102,6 +108,10 @@ const Clinic = ({
           console.log(error);
         });
     } else if (mode === 1) {
+      if (state !== "진료중") {
+        alert("진료중인 환자가 없습니다.");
+        return;
+      }
       setSymptom(medicalInfo.symptom);
       setDiagnosis(medicalInfo.diagnosis);
       setClinic_request(medicalInfo.clinic_request);
@@ -130,6 +140,10 @@ const Clinic = ({
           console.log(error);
         });
     } else if (mode === 2) {
+      if (state !== "진료중") {
+        alert("진료중인 환자가 없습니다.");
+        return;
+      }
       setSymptom(medicalInfo.symptom);
       setDiagnosis(medicalInfo.diagnosis);
       setPrescription(medicalInfo.prescription);
@@ -160,6 +174,7 @@ const Clinic = ({
     }
 
     setMode(0);
+    setState("");
     setReception();
     setPatient({});
     onReset();
@@ -174,6 +189,7 @@ const Clinic = ({
 
   const onCancel = () => {
     setMode(0);
+    setState("");
     setReception();
     setPatient({});
     onReset();
