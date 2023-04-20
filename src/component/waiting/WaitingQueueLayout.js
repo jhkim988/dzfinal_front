@@ -95,10 +95,10 @@ const WaitingQueueLayout = ({
     const clientCurrent = client.current;
     clientCurrent.subscribe("waiting", { qos: 1 });
     clientCurrent.on("message", mqttEventListener);
-    return () => {
-      clientCurrent.unsubscribe("waiting");
-      clientCurrent.removeListener("message", mqttEventListener);
-    }
+    // return () => {
+    //   clientCurrent.unsubscribe("waiting");
+    //   clientCurrent.removeListener("message", mqttEventListener);
+    // }
   }, []);
 
   const onRowClick = (e) => {
